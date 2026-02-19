@@ -9,7 +9,7 @@
     <IsPackable>true</IsPackable>
     <PackageId>Incursa.TestDocs.Cli</PackageId>
     <PackAsTool>true</PackAsTool>
-    <ToolCommandName>bravellian-testdocs</ToolCommandName>
+    <ToolCommandName>incursa-testdocs</ToolCommandName>
     <PackageType>DotnetTool</PackageType>
     <Description>Generate test documentation from XML docs for MSTest, xUnit, and NUnit.</Description>
     <Authors>Incursa</Authors>

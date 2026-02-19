@@ -28,7 +28,7 @@ dotnet run --project tools/testdocs/src/TestDocs.Cli -- generate
 
 ```powershell
 dotnet tool install --global Incursa.TestDocs.Cli
-bravellian-testdocs generate
+incursa-testdocs generate
 ```
 
 Options:

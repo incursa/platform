@@ -9,14 +9,14 @@
     <IsPackable>true</IsPackable>
     <PackageId>Incursa.Platform.SchemaMigrations.Cli</PackageId>
     <PackAsTool>true</PackAsTool>
-    <ToolCommandName>bravellian-schema</ToolCommandName>
+    <ToolCommandName>incursa-schema</ToolCommandName>
     <PackageType>DotnetTool</PackageType>
     <Description>CLI for applying Incursa Platform schema migrations to SQL Server or Postgres.</Description>
     <Authors>Incursa</Authors>
     <Company>Incursa</Company>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>bravellian;schema;migrations;sqlserver;postgres</PackageTags>
+    <PackageTags>incursa;schema;migrations;sqlserver;postgres</PackageTags>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 

@@ -166,7 +166,7 @@ public sealed class CorrelationModelTests
         result.SpanId.ShouldBe(context.SpanId);
         result.CreatedAtUtc.ShouldBe(createdAt);
         result.Tags.ShouldNotBeNull();
-        result.Tags!["tenant"].ShouldBe("bravellian");
+        result.Tags!["tenant"].ShouldBe("incursa");
     }
 
     private sealed class FixedCorrelationIdGenerator : ICorrelationIdGenerator

@@ -5,8 +5,8 @@ Run the latest Incursa Platform schema migrations against SQL Server or Postgres
 ## Usage
 
 ```
-bravellian-schema --provider sqlserver --connection-string "<connection string>" --schema infra
-bravellian-schema --provider postgres --connection-string "<connection string>" --schema infra
+incursa-schema --provider sqlserver --connection-string "<connection string>" --schema infra
+incursa-schema --provider postgres --connection-string "<connection string>" --schema infra
 ```
 
 Optional flags:
@@ -16,6 +16,6 @@ Optional flags:
 ## Examples
 
 ```
-bravellian-schema -p sqlserver -c "Server=.;Database=Incursa;Trusted_Connection=True;" -s infra
-bravellian-schema -p postgres -c "Host=localhost;Database=bravellian;Username=postgres;Password=postgres" --include-control-plane
+incursa-schema -p sqlserver -c "Server=.;Database=Incursa;Trusted_Connection=True;" -s infra
+incursa-schema -p postgres -c "Host=localhost;Database=incursa;Username=postgres;Password=postgres" --include-control-plane
 ```

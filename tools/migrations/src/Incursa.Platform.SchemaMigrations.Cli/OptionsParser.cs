@@ -107,7 +107,7 @@ internal static class OptionsParser
         ArgumentNullException.ThrowIfNull(writer);
 
         writer.WriteLine("Usage:");
-        writer.WriteLine("  bravellian-schema --provider <sqlserver|postgres> --connection-string <value> [--schema <name>] [--include-control-plane]");
+        writer.WriteLine("  incursa-schema --provider <sqlserver|postgres> --connection-string <value> [--schema <name>] [--include-control-plane]");
         writer.WriteLine();
         writer.WriteLine("Options:");
         writer.WriteLine("  -p, --provider             Required. sqlserver or postgres.");
