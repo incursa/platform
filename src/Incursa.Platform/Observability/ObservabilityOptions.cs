@@ -30,9 +30,9 @@ public sealed class ObservabilityOptions
     public bool EnableLogging { get; set; }
 
     /// <summary>
-    /// Gets or sets the metrics prefix. Default: "bravellian.platform".
+    /// Gets or sets the metrics prefix. Default: "incursa.platform".
     /// </summary>
-    public string MetricsPrefix { get; set; } = "bravellian.platform";
+    public string MetricsPrefix { get; set; } = "incursa.platform";
 
     /// <summary>
     /// Gets or sets the watchdog options.

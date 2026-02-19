@@ -29,48 +29,48 @@ internal static class PlatformMeters
 
     // Watchdog & Heartbeat
     internal static readonly Counter<long> WatchdogHeartbeatTotal =
-        Meter.CreateCounter<long>("bravellian.platform.watchdog.heartbeat_total", unit: "items", description: "Total number of watchdog heartbeats.");
+        Meter.CreateCounter<long>("incursa.platform.watchdog.heartbeat_total", unit: "items", description: "Total number of watchdog heartbeats.");
 
     internal static readonly Counter<long> WatchdogAlertsTotal =
-        Meter.CreateCounter<long>("bravellian.platform.watchdog.alerts_total", unit: "items", description: "Total number of watchdog alerts raised.");
+        Meter.CreateCounter<long>("incursa.platform.watchdog.alerts_total", unit: "items", description: "Total number of watchdog alerts raised.");
 
     // Scheduler
     internal static readonly Counter<long> SchedulerJobsDueTotal =
-        Meter.CreateCounter<long>("bravellian.platform.scheduler.jobs_due_total", unit: "items", description: "Total number of jobs that became due.");
+        Meter.CreateCounter<long>("incursa.platform.scheduler.jobs_due_total", unit: "items", description: "Total number of jobs that became due.");
 
     internal static readonly Counter<long> SchedulerJobsExecutedTotal =
-        Meter.CreateCounter<long>("bravellian.platform.scheduler.jobs_executed_total", unit: "items", description: "Total number of jobs executed.");
+        Meter.CreateCounter<long>("incursa.platform.scheduler.jobs_executed_total", unit: "items", description: "Total number of jobs executed.");
 
     internal static readonly Histogram<double> SchedulerJobDelay =
-        Meter.CreateHistogram<double>("bravellian.platform.scheduler.job_delay", unit: "s", description: "Job delay: start time - due time.");
+        Meter.CreateHistogram<double>("incursa.platform.scheduler.job_delay", unit: "s", description: "Job delay: start time - due time.");
 
     internal static readonly Histogram<double> SchedulerJobRuntime =
-        Meter.CreateHistogram<double>("bravellian.platform.scheduler.job_runtime", unit: "s", description: "Job execution duration.");
+        Meter.CreateHistogram<double>("incursa.platform.scheduler.job_runtime", unit: "s", description: "Job execution duration.");
 
     // Outbox
     internal static readonly Counter<long> OutboxEnqueuedTotal =
-        Meter.CreateCounter<long>("bravellian.platform.outbox.enqueued_total", unit: "items", description: "Total number of messages enqueued to outbox.");
+        Meter.CreateCounter<long>("incursa.platform.outbox.enqueued_total", unit: "items", description: "Total number of messages enqueued to outbox.");
 
     internal static readonly Counter<long> OutboxDequeuedTotal =
-        Meter.CreateCounter<long>("bravellian.platform.outbox.dequeued_total", unit: "items", description: "Total number of messages dequeued from outbox.");
+        Meter.CreateCounter<long>("incursa.platform.outbox.dequeued_total", unit: "items", description: "Total number of messages dequeued from outbox.");
 
     internal static readonly UpDownCounter<long> OutboxInflight =
-        Meter.CreateUpDownCounter<long>("bravellian.platform.outbox.inflight", unit: "items", description: "Number of in-flight outbox messages.");
+        Meter.CreateUpDownCounter<long>("incursa.platform.outbox.inflight", unit: "items", description: "Number of in-flight outbox messages.");
 
     // Inbox
     internal static readonly Counter<long> InboxReceivedTotal =
-        Meter.CreateCounter<long>("bravellian.platform.inbox.received_total", unit: "items", description: "Total number of messages received by inbox.");
+        Meter.CreateCounter<long>("incursa.platform.inbox.received_total", unit: "items", description: "Total number of messages received by inbox.");
 
     internal static readonly Counter<long> InboxProcessedTotal =
-        Meter.CreateCounter<long>("bravellian.platform.inbox.processed_total", unit: "items", description: "Total number of messages processed by inbox.");
+        Meter.CreateCounter<long>("incursa.platform.inbox.processed_total", unit: "items", description: "Total number of messages processed by inbox.");
 
     internal static readonly Counter<long> InboxDeadletteredTotal =
-        Meter.CreateCounter<long>("bravellian.platform.inbox.deadlettered_total", unit: "items", description: "Total number of messages dead-lettered.");
+        Meter.CreateCounter<long>("incursa.platform.inbox.deadlettered_total", unit: "items", description: "Total number of messages dead-lettered.");
 
     // Processing Loop / QoS
     internal static readonly Counter<long> QosRetryTotal =
-        Meter.CreateCounter<long>("bravellian.platform.qos.retry_total", unit: "items", description: "Total number of QoS retries.");
+        Meter.CreateCounter<long>("incursa.platform.qos.retry_total", unit: "items", description: "Total number of QoS retries.");
 
     internal static readonly Histogram<double> QosRetryDelay =
-        Meter.CreateHistogram<double>("bravellian.platform.qos.retry_delay", unit: "s", description: "QoS retry delay duration.");
+        Meter.CreateHistogram<double>("incursa.platform.qos.retry_delay", unit: "s", description: "QoS retry delay duration.");
 }

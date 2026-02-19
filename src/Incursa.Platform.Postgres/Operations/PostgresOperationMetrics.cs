@@ -26,19 +26,19 @@ internal static class PostgresOperationMetrics
     private static readonly Meter Meter = MeterProvider.Meter;
 
     private static readonly Counter<long> OperationStartedTotal =
-        Meter.CreateCounter<long>("bravellian.platform.operations.started_total", unit: "items", description: "Total number of operations started.");
+        Meter.CreateCounter<long>("incursa.platform.operations.started_total", unit: "items", description: "Total number of operations started.");
 
     private static readonly Counter<long> OperationProgressUpdatedTotal =
-        Meter.CreateCounter<long>("bravellian.platform.operations.progress_updated_total", unit: "items", description: "Total number of operation progress updates.");
+        Meter.CreateCounter<long>("incursa.platform.operations.progress_updated_total", unit: "items", description: "Total number of operation progress updates.");
 
     private static readonly Counter<long> OperationEventAddedTotal =
-        Meter.CreateCounter<long>("bravellian.platform.operations.event_added_total", unit: "items", description: "Total number of operation events appended.");
+        Meter.CreateCounter<long>("incursa.platform.operations.event_added_total", unit: "items", description: "Total number of operation events appended.");
 
     private static readonly Counter<long> OperationCompletedTotal =
-        Meter.CreateCounter<long>("bravellian.platform.operations.completed_total", unit: "items", description: "Total number of operations completed.");
+        Meter.CreateCounter<long>("incursa.platform.operations.completed_total", unit: "items", description: "Total number of operations completed.");
 
     private static readonly Counter<long> OperationSnapshotReadTotal =
-        Meter.CreateCounter<long>("bravellian.platform.operations.snapshot_read_total", unit: "items", description: "Total number of operation snapshots retrieved.");
+        Meter.CreateCounter<long>("incursa.platform.operations.snapshot_read_total", unit: "items", description: "Total number of operation snapshots retrieved.");
 
     public static void RecordStarted()
     {

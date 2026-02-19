@@ -61,7 +61,7 @@ builder.Services.AddPostgresPlatformMultiDatabaseWithDiscovery(enableSchemaDeplo
 
 ## Documentation
 
-- https://github.com/bravellian/platform
+- https://github.com/incursa/platform
 - docs/INDEX.md
 - docs/outbox-quickstart.md
 - docs/inbox-quickstart.md

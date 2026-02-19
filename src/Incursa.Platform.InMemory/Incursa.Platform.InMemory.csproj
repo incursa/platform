@@ -13,12 +13,12 @@
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>In-memory provider for Incursa.Platform.</Description>
-    <PackageProjectUrl>https://github.com/bravellian/platform</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/incursa/platform</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/bravellian/platform</RepositoryUrl>
+    <RepositoryUrl>https://github.com/incursa/platform</RepositoryUrl>
     <PackageIcon>nuget_logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>For support, contact oss@bravellian.com</PackageReleaseNotes>
+    <PackageReleaseNotes>For support, contact nuget@incursa.com</PackageReleaseNotes>
     <NuspecProperties>id=$(PackageId);version=$(Version);authors=$(Authors)</NuspecProperties>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>

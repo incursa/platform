@@ -25,10 +25,10 @@ internal static class PostgresAuditMetrics
     private static readonly Meter Meter = MeterProvider.Meter;
 
     private static readonly Counter<long> AuditWrittenTotal =
-        Meter.CreateCounter<long>("bravellian.platform.audit.written_total", unit: "items", description: "Total number of audit events written.");
+        Meter.CreateCounter<long>("incursa.platform.audit.written_total", unit: "items", description: "Total number of audit events written.");
 
     private static readonly Counter<long> AuditReadTotal =
-        Meter.CreateCounter<long>("bravellian.platform.audit.read_total", unit: "items", description: "Total number of audit events read.");
+        Meter.CreateCounter<long>("incursa.platform.audit.read_total", unit: "items", description: "Total number of audit events read.");
 
     public static void RecordWritten(string? outcome)
     {

@@ -69,5 +69,5 @@ public sealed class IndexModel : PageModel
 
 ## Documentation
 
-- https://github.com/bravellian/platform
+- https://github.com/incursa/platform
 - docs/modularity-quickstart.md

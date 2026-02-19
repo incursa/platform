@@ -11,9 +11,9 @@
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>Exactly-once execution workflow with idempotency coordination.</Description>
-    <PackageProjectUrl>https://github.com/bravellian/platform</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/incursa/platform</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/bravellian/platform</RepositoryUrl>
+    <RepositoryUrl>https://github.com/incursa/platform</RepositoryUrl>
     <PackageIcon>nuget_logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>

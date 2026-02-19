@@ -13,12 +13,12 @@
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>SQL Server provider for Incursa.Platform.</Description>
-    <PackageProjectUrl>https://github.com/bravellian/platform</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/incursa/platform</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/bravellian/platform</RepositoryUrl>
+    <RepositoryUrl>https://github.com/incursa/platform</RepositoryUrl>
     <PackageIcon>nuget_logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>For support, contact oss@bravellian.com</PackageReleaseNotes>
+    <PackageReleaseNotes>For support, contact nuget@incursa.com</PackageReleaseNotes>
     <NuspecProperties>id=$(PackageId);version=$(Version);authors=$(Authors)</NuspecProperties>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
@@ -60,7 +60,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bravellian.Generators" Version="2025.12.15.1154" PrivateAssets="all" />
+    <PackageReference Include="Incursa.Generators" Version="2026.2.19.38" PrivateAssets="all" />
     <PackageReference Include="Cronos" Version="0.11.1" />
     <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="dbup" Version="5.0.41" />

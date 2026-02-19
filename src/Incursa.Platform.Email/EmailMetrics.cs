@@ -30,37 +30,37 @@ public static class EmailMetrics
     private static readonly Meter Meter = MeterProvider.Meter;
 
     private static readonly Counter<long> EmailQueuedTotal =
-        Meter.CreateCounter<long>("bravellian.platform.email.queued_total", unit: "items", description: "Total number of emails queued.");
+        Meter.CreateCounter<long>("incursa.platform.email.queued_total", unit: "items", description: "Total number of emails queued.");
 
     private static readonly Counter<long> EmailAttemptedTotal =
-        Meter.CreateCounter<long>("bravellian.platform.email.attempted_total", unit: "items", description: "Total number of email send attempts.");
+        Meter.CreateCounter<long>("incursa.platform.email.attempted_total", unit: "items", description: "Total number of email send attempts.");
 
     private static readonly Counter<long> EmailSucceededTotal =
-        Meter.CreateCounter<long>("bravellian.platform.email.succeeded_total", unit: "items", description: "Total number of emails sent successfully.");
+        Meter.CreateCounter<long>("incursa.platform.email.succeeded_total", unit: "items", description: "Total number of emails sent successfully.");
 
     private static readonly Counter<long> EmailFailedTotal =
-        Meter.CreateCounter<long>("bravellian.platform.email.failed_total", unit: "items", description: "Total number of emails that failed permanently.");
+        Meter.CreateCounter<long>("incursa.platform.email.failed_total", unit: "items", description: "Total number of emails that failed permanently.");
 
     private static readonly Counter<long> EmailSuppressedTotal =
-        Meter.CreateCounter<long>("bravellian.platform.email.suppressed_total", unit: "items", description: "Total number of emails suppressed.");
+        Meter.CreateCounter<long>("incursa.platform.email.suppressed_total", unit: "items", description: "Total number of emails suppressed.");
 
     private static readonly Counter<long> EmailBouncedTotal =
-        Meter.CreateCounter<long>("bravellian.platform.email.bounced_total", unit: "items", description: "Total number of emails that bounced.");
+        Meter.CreateCounter<long>("incursa.platform.email.bounced_total", unit: "items", description: "Total number of emails that bounced.");
 
     private static readonly Counter<long> WebhookReceivedTotal =
-        Meter.CreateCounter<long>("bravellian.platform.email.webhook_received_total", unit: "items", description: "Total number of email webhooks received.");
+        Meter.CreateCounter<long>("incursa.platform.email.webhook_received_total", unit: "items", description: "Total number of email webhooks received.");
 
     private static readonly Counter<long> EmailDeliveryEventTotal =
-        Meter.CreateCounter<long>("bravellian.platform.email.delivery_event_total", unit: "items", description: "Total number of email delivery events recorded.");
+        Meter.CreateCounter<long>("incursa.platform.email.delivery_event_total", unit: "items", description: "Total number of email delivery events recorded.");
 
     private static readonly Histogram<long> EmailBodyBytes =
-        Meter.CreateHistogram<long>("bravellian.platform.email.body_bytes", unit: "bytes", description: "Total email body size.");
+        Meter.CreateHistogram<long>("incursa.platform.email.body_bytes", unit: "bytes", description: "Total email body size.");
 
     private static readonly Histogram<long> EmailAttachmentBytes =
-        Meter.CreateHistogram<long>("bravellian.platform.email.attachment_bytes", unit: "bytes", description: "Total email attachment size (raw bytes).");
+        Meter.CreateHistogram<long>("incursa.platform.email.attachment_bytes", unit: "bytes", description: "Total email attachment size (raw bytes).");
 
     private static readonly Histogram<long> EmailTotalBytes =
-        Meter.CreateHistogram<long>("bravellian.platform.email.total_bytes", unit: "bytes", description: "Total email size (body + base64 attachments).");
+        Meter.CreateHistogram<long>("incursa.platform.email.total_bytes", unit: "bytes", description: "Total email size (body + base64 attachments).");
 
     /// <summary>
     /// Records a queued email.

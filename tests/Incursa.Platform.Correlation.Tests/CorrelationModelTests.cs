@@ -154,7 +154,7 @@ public sealed class CorrelationModelTests
             "trace-serialize",
             "span-serialize",
             createdAt,
-            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) { ["tenant"] = "bravellian" });
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) { ["tenant"] = "incursa" });
 
         var values = serializer.Serialize(context);
         var result = serializer.Deserialize(values);
