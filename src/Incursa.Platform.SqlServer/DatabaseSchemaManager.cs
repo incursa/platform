@@ -1,0 +1,1982 @@
+// Copyright (c) Incursa
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using Dapper;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging.Abstractions;
+
+namespace Incursa.Platform;
+/// <summary>
+/// Manages database schema creation and verification for the Platform components.
+/// </summary>
+internal static class DatabaseSchemaManager
+{
+    private static readonly Regex WhitespaceRegex = new(@"\s+", RegexOptions.Compiled, TimeSpan.FromSeconds(1));
+    private static readonly string[] BatchSeparators = { "\nGO\n", "\nGO\r\n", "\rGO\r", "GO" };
+
+    /// <summary>
+    /// Ensures that the required database schema exists for the outbox functionality.
+    /// </summary>
+    /// <param name="connectionString">The database connection string.</param>
+    /// <param name="schemaName">The schema name (default: "infra").</param>
+    /// <param name="tableName">The table name (default: "Outbox").</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public static async Task EnsureOutboxSchemaAsync(string connectionString, string schemaName = "infra", string tableName = "Outbox")
+    {
+        await SqlServerSchemaMigrations.ApplyOutboxAsync(
+            connectionString,
+            schemaName,
+            tableName,
+            NullLogger.Instance,
+            CancellationToken.None).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Ensures that the required database schema exists for the outbox join functionality.
+    /// </summary>
+    /// <param name="connectionString">The database connection string.</param>
+    /// <param name="schemaName">The schema name (default: "infra").</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public static async Task EnsureOutboxJoinSchemaAsync(string connectionString, string schemaName = "infra")
+    {
+        await SqlServerSchemaMigrations.ApplyOutboxJoinAsync(
+            connectionString,
+            schemaName,
+            "Outbox",
+            NullLogger.Instance,
+            CancellationToken.None).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Ensures that the required database schema exists for the distributed lock functionality.
+    /// </summary>
+    /// <param name="connectionString">The database connection string.</param>
+    /// <param name="schemaName">The schema name (default: "infra").</param>
+    /// <param name="tableName">The table name (default: "DistributedLock").</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public static async Task EnsureDistributedLockSchemaAsync(string connectionString, string schemaName = "infra", string tableName = "DistributedLock")
+    {
+        await SqlServerSchemaMigrations.ApplyDistributedLockAsync(
+            connectionString,
+            schemaName,
+            tableName,
+            NullLogger.Instance,
+            CancellationToken.None).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Ensures that the required database schema exists for the lease functionality.
+    /// </summary>
+    /// <param name="connectionString">The database connection string.</param>
+    /// <param name="schemaName">The schema name (default: "infra").</param>
+    /// <param name="tableName">The table name (default: "Lease").</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public static async Task EnsureLeaseSchemaAsync(string connectionString, string schemaName = "infra", string tableName = "Lease")
+    {
+        await SqlServerSchemaMigrations.ApplyLeaseAsync(
+            connectionString,
+            schemaName,
+            tableName,
+            NullLogger.Instance,
+            CancellationToken.None).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Ensures that the required database schema exists for the inbox functionality.
+    /// </summary>
+    /// <param name="connectionString">The database connection string.</param>
+    /// <param name="schemaName">The schema name (default: "infra").</param>
+    /// <param name="tableName">The table name (default: "Inbox").</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public static async Task EnsureInboxSchemaAsync(string connectionString, string schemaName = "infra", string tableName = "Inbox")
+    {
+        await SqlServerSchemaMigrations.ApplyInboxAsync(
+            connectionString,
+            schemaName,
+            tableName,
+            NullLogger.Instance,
+            CancellationToken.None).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Ensures that the required database schema exists for the scheduler functionality.
+    /// </summary>
+    /// <param name="connectionString">The database connection string.</param>
+    /// <param name="schemaName">The schema name (default: "infra").</param>
+    /// <param name="jobsTableName">The jobs table name (default: "Jobs").</param>
+    /// <param name="jobRunsTableName">The job runs table name (default: "JobRuns").</param>
+    /// <param name="timersTableName">The timers table name (default: "Timers").</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public static async Task EnsureSchedulerSchemaAsync(string connectionString, string schemaName = "infra", string jobsTableName = "Jobs", string jobRunsTableName = "JobRuns", string timersTableName = "Timers")
+    {
+        await SqlServerSchemaMigrations.ApplySchedulerAsync(
+            connectionString,
+            schemaName,
+            jobsTableName,
+            jobRunsTableName,
+            timersTableName,
+            NullLogger.Instance,
+            CancellationToken.None).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Ensures that the required database schema exists for the fanout functionality.
+    /// </summary>
+    /// <param name="connectionString">The database connection string.</param>
+    /// <param name="schemaName">The schema name (default: "infra").</param>
+    /// <param name="policyTableName">The policy table name (default: "FanoutPolicy").</param>
+    /// <param name="cursorTableName">The cursor table name (default: "FanoutCursor").</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public static async Task EnsureFanoutSchemaAsync(string connectionString, string schemaName = "infra", string policyTableName = "FanoutPolicy", string cursorTableName = "FanoutCursor")
+    {
+        await SqlServerSchemaMigrations.ApplyFanoutAsync(
+            connectionString,
+            schemaName,
+            policyTableName,
+            cursorTableName,
+            NullLogger.Instance,
+            CancellationToken.None).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Ensures that the required database schema exists for external side-effect tracking.
+    /// </summary>
+    /// <param name="connectionString">The database connection string.</param>
+    /// <param name="schemaName">The schema name (default: "infra").</param>
+    /// <param name="tableName">The table name (default: "ExternalSideEffect").</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public static async Task EnsureExternalSideEffectsSchemaAsync(
+        string connectionString,
+        string schemaName = "infra",
+        string tableName = "ExternalSideEffect")
+    {
+        await SqlServerSchemaMigrations.ApplyExternalSideEffectsAsync(
+            connectionString,
+            schemaName,
+            tableName,
+            NullLogger.Instance,
+            CancellationToken.None).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Ensures that the required database schema exists for idempotency tracking.
+    /// </summary>
+    /// <param name="connectionString">The database connection string.</param>
+    /// <param name="schemaName">The schema name (default: "infra").</param>
+    /// <param name="tableName">The table name (default: "Idempotency").</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public static async Task EnsureIdempotencySchemaAsync(
+        string connectionString,
+        string schemaName = "infra",
+        string tableName = "Idempotency")
+    {
+        await SqlServerSchemaMigrations.ApplyIdempotencyAsync(
+            connectionString,
+            schemaName,
+            tableName,
+            NullLogger.Instance,
+            CancellationToken.None).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Ensures that the required database schema exists for email outbox storage.
+    /// </summary>
+    /// <param name="connectionString">The database connection string.</param>
+    /// <param name="schemaName">The schema name (default: "infra").</param>
+    /// <param name="tableName">The table name (default: "EmailOutbox").</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public static async Task EnsureEmailOutboxSchemaAsync(
+        string connectionString,
+        string schemaName = "infra",
+        string tableName = "EmailOutbox")
+    {
+        await SqlServerSchemaMigrations.ApplyEmailOutboxAsync(
+            connectionString,
+            schemaName,
+            tableName,
+            NullLogger.Instance,
+            CancellationToken.None).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Ensures that a schema exists in the database.
+    /// </summary>
+    /// <param name="connection">The database connection.</param>
+    /// <param name="schemaName">The schema name.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    private static async Task EnsureSchemaExistsAsync(SqlConnection connection, string schemaName)
+    {
+        const string sql = """
+
+                        IF NOT EXISTS (SELECT 1 FROM sys.schemas WHERE name = @SchemaName)
+                        BEGIN
+                            EXEC('CREATE SCHEMA [' + @SchemaName + ']')
+                        END
+            """;
+
+        await connection.ExecuteAsync(sql, new { SchemaName = schemaName }).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Ensures the GuidIdList table type exists in the database.
+    /// </summary>
+    /// <param name="connection">The database connection.</param>
+    /// <param name="schemaName">The schema name.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    private static async Task EnsureGuidIdListTypeAsync(SqlConnection connection, string schemaName)
+    {
+        var sql = GetGuidIdListTypeScript(schemaName);
+
+        await connection.ExecuteAsync(sql).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Ensures the StringIdList table type exists in the database.
+    /// </summary>
+    /// <param name="connection">The database connection.</param>
+    /// <param name="schemaName">The schema name.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    private static async Task EnsureStringIdListTypeAsync(SqlConnection connection, string schemaName)
+    {
+        var sql = GetStringIdListTypeScript(schemaName);
+
+        await connection.ExecuteAsync(sql).ConfigureAwait(false);
+    }
+
+    private static string GetGuidIdListTypeScript(string schemaName)
+    {
+        return $"""
+            IF TYPE_ID('[{schemaName}].[GuidIdList]') IS NULL
+            BEGIN
+                CREATE TYPE [{schemaName}].[GuidIdList] AS TABLE (
+                    Id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY
+                );
+            END
+            """;
+    }
+
+    private static string GetStringIdListTypeScript(string schemaName)
+    {
+        return $"""
+            IF TYPE_ID('[{schemaName}].[StringIdList]') IS NULL
+            BEGIN
+                CREATE TYPE [{schemaName}].[StringIdList] AS TABLE (
+                    Id VARCHAR(64) NOT NULL PRIMARY KEY
+                );
+            END
+            """;
+    }
+
+    /// <summary>
+    /// Checks if a table exists in the specified schema.
+    /// </summary>
+    /// <param name="connection">The database connection.</param>
+    /// <param name="schemaName">The schema name.</param>
+    /// <param name="tableName">The table name.</param>
+    /// <returns>True if the table exists, false otherwise.</returns>
+    private static async Task<bool> TableExistsAsync(SqlConnection connection, string schemaName, string tableName)
+    {
+        const string sql = """
+
+                        SELECT COUNT(1)
+                        FROM INFORMATION_SCHEMA.TABLES
+                        WHERE TABLE_SCHEMA = @SchemaName AND TABLE_NAME = @TableName
+            """;
+
+        var count = await connection.QuerySingleAsync<int>(sql, new { SchemaName = schemaName, TableName = tableName }).ConfigureAwait(false);
+        return count > 0;
+    }
+
+    /// <summary>
+    /// Executes a SQL script, handling GO statements.
+    /// </summary>
+    /// <param name="connection">The database connection.</param>
+    /// <param name="script">The SQL script to execute.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    private static async Task ExecuteScriptAsync(SqlConnection connection, string script)
+    {
+        // Split by GO statements and execute each batch separately
+        var batches = script.Split(BatchSeparators, StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (var batch in batches)
+        {
+            var trimmedBatch = batch.Trim();
+            if (!string.IsNullOrEmpty(trimmedBatch))
+            {
+                await connection.ExecuteAsync(trimmedBatch).ConfigureAwait(false);
+            }
+        }
+    }
+
+    internal static IReadOnlyDictionary<string, string> GetSchemaVersionsForSnapshot()
+    {
+        return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["outbox"] = ComputeSchemaHash(GetOutboxSchemaScripts()),
+            ["inbox"] = ComputeSchemaHash(GetInboxSchemaScripts()),
+            ["scheduler"] = ComputeSchemaHash(GetSchedulerSchemaScripts()),
+            ["fanout"] = ComputeSchemaHash(GetFanoutSchemaScripts()),
+            ["idempotency"] = ComputeSchemaHash(GetIdempotencySchemaScripts()),
+            ["email_outbox"] = ComputeSchemaHash(GetEmailOutboxSchemaScripts()),
+        };
+    }
+
+    private static string ComputeSchemaHash(IEnumerable<string> scripts)
+    {
+        var builder = new StringBuilder();
+
+        foreach (var script in scripts)
+        {
+            builder.AppendLine(script);
+        }
+
+        var normalized = NormalizeScriptsForHash(builder.ToString());
+        var hash = SHA256.HashData(Encoding.UTF8.GetBytes(normalized));
+        return Convert.ToHexString(hash);
+    }
+
+    private static string NormalizeScriptsForHash(string scriptsText)
+    {
+        // Normalize line endings to '\n' for deterministic processing
+        var normalizedLineEndings = scriptsText
+            .Replace("\r\n", "\n", StringComparison.Ordinal)
+            .Replace("\r", "\n", StringComparison.Ordinal);
+
+        var resultBuilder = new StringBuilder();
+        var lines = normalizedLineEndings.Split('\n');
+
+        foreach (var line in lines)
+        {
+            // Trim leading/trailing whitespace and collapse internal whitespace to single spaces
+            var trimmedLine = line.Trim();
+            if (trimmedLine.Length == 0)
+            {
+                continue;
+            }
+
+            var normalizedLine = WhitespaceRegex.Replace(trimmedLine, " ").Trim();
+            if (normalizedLine.Length == 0)
+            {
+                continue;
+            }
+
+            if (resultBuilder.Length > 0)
+            {
+                resultBuilder.Append('\n');
+            }
+
+            resultBuilder.Append(normalizedLine);
+        }
+
+        return resultBuilder.ToString();
+    }
+
+    private static IEnumerable<string> GetOutboxSchemaScripts()
+    {
+        foreach (var script in SqlServerSchemaMigrations.GetOutboxScriptsForSnapshot())
+        {
+            yield return script;
+        }
+    }
+
+    private static IEnumerable<string> GetInboxSchemaScripts()
+    {
+        foreach (var script in SqlServerSchemaMigrations.GetInboxScriptsForSnapshot())
+        {
+            yield return script;
+        }
+    }
+
+    private static IEnumerable<string> GetSchedulerSchemaScripts()
+    {
+        foreach (var script in SqlServerSchemaMigrations.GetSchedulerScriptsForSnapshot())
+        {
+            yield return script;
+        }
+    }
+
+    private static IEnumerable<string> GetFanoutSchemaScripts()
+    {
+        foreach (var script in SqlServerSchemaMigrations.GetFanoutScriptsForSnapshot())
+        {
+            yield return script;
+        }
+    }
+
+    private static IEnumerable<string> GetIdempotencySchemaScripts()
+    {
+        foreach (var script in SqlServerSchemaMigrations.GetIdempotencyScriptsForSnapshot())
+        {
+            yield return script;
+        }
+    }
+
+    private static IEnumerable<string> GetEmailOutboxSchemaScripts()
+    {
+        foreach (var script in SqlServerSchemaMigrations.GetEmailOutboxScriptsForSnapshot())
+        {
+            yield return script;
+        }
+    }
+
+    /// <summary>
+    /// Gets the SQL script to create the Outbox table.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <param name="tableName">The table name.</param>
+    /// <returns>The SQL create script.</returns>
+    private static string GetOutboxCreateScript(string schemaName, string tableName)
+    {
+        return $"""
+
+            CREATE TABLE [{schemaName}].[{tableName}] (
+                -- Core Fields
+                Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+                Payload NVARCHAR(MAX) NOT NULL,
+                Topic NVARCHAR(255) NOT NULL,
+                CreatedAt DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+
+                -- Processing Status & Auditing
+                IsProcessed BIT NOT NULL DEFAULT 0,
+                ProcessedAt DATETIMEOFFSET NULL,
+                ProcessedBy NVARCHAR(100) NULL, -- e.g., machine name or instance ID
+
+                -- For Robustness & Error Handling
+                RetryCount INT NOT NULL DEFAULT 0,
+                LastError NVARCHAR(MAX) NULL,
+
+                -- For Idempotency & Tracing
+                MessageId UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), -- A stable ID for the message consumer
+                CorrelationId NVARCHAR(255) NULL, -- To trace a message through multiple systems
+
+                -- For Delayed Processing
+                DueTimeUtc DATETIMEOFFSET(3) NULL, -- Optional timestamp indicating when the message should become eligible for processing
+
+                -- Work Queue Pattern Columns
+                Status TINYINT NOT NULL DEFAULT 0, -- 0=Ready, 1=InProgress, 2=Done, 3=Failed
+                LockedUntil DATETIMEOFFSET(3) NULL,
+                OwnerToken UNIQUEIDENTIFIER NULL
+            );
+
+            -- An index to efficiently query for work queue claiming
+            CREATE INDEX IX_{tableName}_WorkQueue ON [{schemaName}].[{tableName}](Status, CreatedAt)
+                INCLUDE(Id, LockedUntil, DueTimeUtc)
+                WHERE Status = 0;
+            """;
+    }
+
+    /// <summary>
+    /// Gets the SQL script to create the OutboxJoin table.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <returns>The SQL create script.</returns>
+    private static string GetOutboxJoinCreateScript(string schemaName)
+    {
+        return $"""
+
+            CREATE TABLE [{schemaName}].[OutboxJoin] (
+                -- Core Fields
+                JoinId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+                PayeWaiveTenantId BIGINT NOT NULL,
+                ExpectedSteps INT NOT NULL,
+                CompletedSteps INT NOT NULL DEFAULT 0,
+                FailedSteps INT NOT NULL DEFAULT 0,
+                Status TINYINT NOT NULL DEFAULT 0, -- 0=Pending, 1=Completed, 2=Failed, 3=Cancelled
+
+                -- Timestamps
+                CreatedUtc DATETIMEOFFSET(3) NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+                LastUpdatedUtc DATETIMEOFFSET(3) NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+
+                -- Optional metadata (JSON)
+                Metadata NVARCHAR(MAX) NULL
+            );
+
+            -- Index for querying joins by tenant and status
+            CREATE INDEX IX_OutboxJoin_TenantStatus ON [{schemaName}].[OutboxJoin](PayeWaiveTenantId, Status);
+            """;
+    }
+
+    /// <summary>
+    /// Gets the SQL script to create the OutboxJoinMember table.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <returns>The SQL create script.</returns>
+    private static string GetOutboxJoinMemberCreateScript(string schemaName)
+    {
+        return $"""
+
+            CREATE TABLE [{schemaName}].[OutboxJoinMember] (
+                JoinId UNIQUEIDENTIFIER NOT NULL,
+                OutboxMessageId UNIQUEIDENTIFIER NOT NULL,
+                CreatedUtc DATETIMEOFFSET(3) NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+                CompletedAt DATETIMEOFFSET(3) NULL,
+                FailedAt DATETIMEOFFSET(3) NULL,
+
+                -- Composite primary key
+                CONSTRAINT PK_OutboxJoinMember PRIMARY KEY (JoinId, OutboxMessageId),
+
+                -- Foreign key to OutboxJoin (cascades deletes)
+                CONSTRAINT FK_OutboxJoinMember_Join FOREIGN KEY (JoinId)
+                    REFERENCES [{schemaName}].[OutboxJoin](JoinId) ON DELETE CASCADE,
+
+                -- Foreign key to Outbox (enforces referential integrity and cascades deletes)
+                CONSTRAINT FK_OutboxJoinMember_Outbox FOREIGN KEY (OutboxMessageId)
+                    REFERENCES [{schemaName}].[Outbox](Id) ON DELETE CASCADE
+            );
+
+            -- Index for reverse lookup: find all joins for a given message
+            CREATE INDEX IX_OutboxJoinMember_MessageId ON [{schemaName}].[OutboxJoinMember](OutboxMessageId);
+            """;
+    }
+
+    /// <summary>
+    /// Gets the SQL script to create the Jobs table.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <param name="tableName">The table name.</param>
+    /// <returns>The SQL create script.</returns>
+    private static string GetJobsCreateScript(string schemaName, string tableName)
+    {
+        return $"""
+
+            CREATE TABLE [{schemaName}].[{tableName}] (
+                Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+                JobName NVARCHAR(100) NOT NULL,
+                CronSchedule NVARCHAR(100) NOT NULL, -- e.g., "0 */5 * * * *" for every 5 minutes
+                Topic NVARCHAR(255) NOT NULL,
+                Payload NVARCHAR(MAX) NULL,
+                IsEnabled BIT NOT NULL DEFAULT 1,
+
+                -- State tracking for the scheduler
+                NextDueTime DATETIMEOFFSET NULL,
+                LastRunTime DATETIMEOFFSET NULL,
+                LastRunStatus NVARCHAR(20) NULL
+            );
+
+            -- Unique index to prevent duplicate job definitions
+            CREATE UNIQUE INDEX UQ_{tableName}_JobName ON [{schemaName}].[{tableName}](JobName);
+            """;
+    }
+
+    /// <summary>
+    /// Gets the SQL script to create the Timers table.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <param name="tableName">The table name.</param>
+    /// <returns>The SQL create script.</returns>
+    private static string GetTimersCreateScript(string schemaName, string tableName)
+    {
+        return $"""
+
+            CREATE TABLE [{schemaName}].[{tableName}] (
+                -- Core Fields
+                Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+                DueTime DATETIMEOFFSET NOT NULL,
+                Payload NVARCHAR(MAX) NOT NULL,
+                Topic NVARCHAR(255) NOT NULL,
+
+                -- For tracing back to business logic
+                CorrelationId NVARCHAR(255) NULL,
+
+                -- Processing State Management
+                Status NVARCHAR(20) NOT NULL DEFAULT 'Pending', -- Pending, Claimed, Processed, Failed
+                ClaimedBy NVARCHAR(100) NULL,
+                ClaimedAt DATETIMEOFFSET NULL,
+                RetryCount INT NOT NULL DEFAULT 0,
+
+                -- Auditing
+                CreatedAt DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+                ProcessedAt DATETIMEOFFSET NULL,
+                LastError NVARCHAR(MAX) NULL
+            );
+
+            -- A critical index to find the next due timers efficiently.
+            CREATE INDEX IX_{tableName}_GetNext ON [{schemaName}].[{tableName}](Status, DueTime)
+                INCLUDE(Id, Topic) -- Include columns needed to start processing
+                WHERE Status = 'Pending';
+            """;
+    }
+
+    /// <summary>
+    /// Gets the SQL script to create the JobRuns table.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <param name="tableName">The table name.</param>
+    /// <param name="jobsTableName">The jobs table name for foreign key reference.</param>
+    /// <returns>The SQL create script.</returns>
+    private static string GetJobRunsCreateScript(string schemaName, string tableName, string jobsTableName)
+    {
+        return $"""
+
+            CREATE TABLE [{schemaName}].[{tableName}] (
+                Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+                JobId UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES [{schemaName}].[{jobsTableName}](Id),
+                ScheduledTime DATETIMEOFFSET NOT NULL,
+
+                -- Processing State Management
+                Status NVARCHAR(20) NOT NULL DEFAULT 'Pending', -- Pending, Claimed, Running, Succeeded, Failed
+                ClaimedBy NVARCHAR(100) NULL,
+                ClaimedAt DATETIMEOFFSET NULL,
+                RetryCount INT NOT NULL DEFAULT 0,
+
+                -- Auditing and Results
+                StartTime DATETIMEOFFSET NULL,
+                EndTime DATETIMEOFFSET NULL,
+                Output NVARCHAR(MAX) NULL,
+                LastError NVARCHAR(MAX) NULL
+            );
+
+            -- Index to find pending job runs that are due
+            CREATE INDEX IX_{tableName}_GetNext ON [{schemaName}].[{tableName}](Status, ScheduledTime)
+                WHERE Status = 'Pending';
+            """;
+    }
+
+    /// <summary>
+    /// Gets the SQL script to create the DistributedLock table.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <param name="tableName">The table name.</param>
+    /// <returns>The SQL create script.</returns>
+    private static string GetDistributedLockCreateScript(string schemaName, string tableName)
+    {
+        return $"""
+
+            CREATE TABLE [{schemaName}].[{tableName}](
+                [ResourceName] SYSNAME NOT NULL CONSTRAINT PK_{tableName} PRIMARY KEY,
+                [OwnerToken] UNIQUEIDENTIFIER NULL,
+                [LeaseUntil] DATETIMEOFFSET(3) NULL,
+                [FencingToken] BIGINT NOT NULL CONSTRAINT DF_{tableName}_Fence DEFAULT(0),
+                [ContextJson] NVARCHAR(MAX) NULL,
+                [Version] ROWVERSION NOT NULL
+            );
+
+            CREATE INDEX IX_{tableName}_OwnerToken ON [{schemaName}].[{tableName}]([OwnerToken])
+                WHERE [OwnerToken] IS NOT NULL;
+            """;
+    }
+
+    /// <summary>
+    /// Gets the SQL script to create the Lease table.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <param name="tableName">The table name.</param>
+    /// <returns>The SQL create script.</returns>
+    private static string GetLeaseCreateScript(string schemaName, string tableName)
+    {
+        return $"""
+
+            CREATE TABLE [{schemaName}].[{tableName}](
+                [Name] SYSNAME NOT NULL CONSTRAINT PK_{tableName} PRIMARY KEY,
+                [Owner] SYSNAME NULL,
+                [LeaseUntilUtc] DATETIMEOFFSET(3) NULL,
+                [LastGrantedUtc] DATETIMEOFFSET(3) NULL,
+                [Version] ROWVERSION NOT NULL
+            );
+            """;
+    }
+
+    /// <summary>
+    /// Ensures distributed lock stored procedures exist.
+    /// </summary>
+    /// <param name="connection">The database connection.</param>
+    /// <param name="schemaName">The schema name.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    private static async Task EnsureDistributedLockStoredProceduresAsync(SqlConnection connection, string schemaName)
+    {
+        var acquireProc = GetLockAcquireStoredProcedure(schemaName);
+        var renewProc = GetLockRenewStoredProcedure(schemaName);
+        var releaseProc = GetLockReleaseStoredProcedure(schemaName);
+        var cleanupProc = GetLockCleanupStoredProcedure(schemaName);
+
+        await ExecuteScriptAsync(connection, acquireProc).ConfigureAwait(false);
+        await ExecuteScriptAsync(connection, renewProc).ConfigureAwait(false);
+        await ExecuteScriptAsync(connection, releaseProc).ConfigureAwait(false);
+        await ExecuteScriptAsync(connection, cleanupProc).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Ensures lease stored procedures exist.
+    /// </summary>
+    /// <param name="connection">The database connection.</param>
+    /// <param name="schemaName">The schema name.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    private static async Task EnsureLeaseStoredProceduresAsync(SqlConnection connection, string schemaName)
+    {
+        var acquireProc = GetLeaseAcquireStoredProcedure(schemaName);
+        var renewProc = GetLeaseRenewStoredProcedure(schemaName);
+
+        await ExecuteScriptAsync(connection, acquireProc).ConfigureAwait(false);
+        await ExecuteScriptAsync(connection, renewProc).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Ensures outbox stored procedures exist.
+    /// </summary>
+    /// <param name="connection">The database connection.</param>
+    /// <param name="schemaName">The schema name.</param>
+    /// <param name="tableName">The table name.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    private static async Task EnsureOutboxStoredProceduresAsync(SqlConnection connection, string schemaName, string tableName)
+    {
+        // Create work queue stored procedures
+        await CreateOutboxWorkQueueProceduresAsync(connection, schemaName, tableName).ConfigureAwait(false);
+
+        // Create cleanup stored procedure
+        var cleanupProc = GetOutboxCleanupStoredProcedure(schemaName, tableName);
+        await ExecuteScriptAsync(connection, cleanupProc).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Ensures inbox stored procedures exist.
+    /// </summary>
+    /// <param name="connection">The database connection.</param>
+    /// <param name="schemaName">The schema name.</param>
+    /// <param name="tableName">The table name.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    private static async Task EnsureInboxStoredProceduresAsync(SqlConnection connection, string schemaName, string tableName)
+    {
+        // Create work queue stored procedures
+        await CreateInboxWorkQueueProceduresAsync(connection, schemaName, tableName).ConfigureAwait(false);
+
+        // Create cleanup stored procedure
+        var cleanupProc = GetInboxCleanupStoredProcedure(schemaName, tableName);
+        await ExecuteScriptAsync(connection, cleanupProc).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Gets the Lock_Acquire stored procedure script.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <returns>The stored procedure script.</returns>
+    private static string GetLockAcquireStoredProcedure(string schemaName)
+    {
+        return $"""
+
+            CREATE OR ALTER PROCEDURE [{schemaName}].[Lock_Acquire]
+                @ResourceName SYSNAME,
+                @OwnerToken UNIQUEIDENTIFIER,
+                @LeaseSeconds INT,
+                @ContextJson NVARCHAR(MAX) = NULL,
+                @UseGate BIT = 0,
+                @GateTimeoutMs INT = 200,
+                @Acquired BIT OUTPUT,
+                @FencingToken BIGINT OUTPUT
+            AS
+            BEGIN
+                SET NOCOUNT ON; SET XACT_ABORT ON;
+
+                DECLARE @now DATETIMEOFFSET(3) = SYSDATETIMEOFFSET();
+                DECLARE @newLease DATETIMEOFFSET(3) = DATEADD(SECOND, @LeaseSeconds, @now);
+                DECLARE @rc INT;
+                DECLARE @LockResourceName NVARCHAR(255) = CONCAT('lease:', @ResourceName);
+
+                -- Optional micro critical section to serialize row upsert under high contention
+                IF (@UseGate = 1)
+                BEGIN
+                    EXEC @rc = sp_getapplock
+                        @Resource    = @LockResourceName,
+                        @LockMode    = 'Exclusive',
+                        @LockOwner   = 'Session',
+                        @LockTimeout = @GateTimeoutMs,
+                        @DbPrincipal = 'public';
+                    IF (@rc < 0)
+                    BEGIN
+                        SET @Acquired = 0; SET @FencingToken = NULL;
+                        RETURN;
+                    END
+                END
+
+                BEGIN TRAN;
+
+                -- Ensure row exists, holding a key-range lock to avoid races on insert
+                IF NOT EXISTS (SELECT 1 FROM [{schemaName}].[DistributedLock] WITH (UPDLOCK, HOLDLOCK)
+                               WHERE ResourceName = @ResourceName)
+                BEGIN
+                    INSERT [{schemaName}].[DistributedLock] (ResourceName, OwnerToken, LeaseUntil, ContextJson)
+                    VALUES (@ResourceName, NULL, NULL, NULL);
+                END
+
+                -- Take or re-take the lease (re-entrant allowed)
+                UPDATE dl WITH (UPDLOCK, ROWLOCK)
+                   SET OwnerToken =
+                         CASE WHEN dl.OwnerToken = @OwnerToken THEN dl.OwnerToken ELSE @OwnerToken END,
+                       LeaseUntil = @newLease,
+                       ContextJson = @ContextJson,
+                       FencingToken =
+                         CASE WHEN dl.OwnerToken = @OwnerToken
+                              THEN dl.FencingToken + 1         -- re-entrant renew-on-acquire bumps too
+                              ELSE dl.FencingToken + 1         -- new owner bumps
+                         END
+                  FROM [{schemaName}].[DistributedLock] dl
+                 WHERE dl.ResourceName = @ResourceName
+                   AND (dl.OwnerToken IS NULL OR dl.LeaseUntil IS NULL OR dl.LeaseUntil <= @now OR dl.OwnerToken = @OwnerToken);
+
+                IF @@ROWCOUNT = 1
+                BEGIN
+                    SELECT @FencingToken = FencingToken
+                      FROM [{schemaName}].[DistributedLock]
+                     WHERE ResourceName = @ResourceName;
+                    SET @Acquired = 1;
+                END
+                ELSE
+                BEGIN
+                    SET @Acquired = 0; SET @FencingToken = NULL;
+                END
+
+                COMMIT TRAN;
+
+                IF (@UseGate = 1)
+                    EXEC sp_releaseapplock
+                         @Resource  = @LockResourceName,
+                         @LockOwner = 'Session';
+            END
+            """;
+    }
+
+    /// <summary>
+    /// Gets the Lock_Renew stored procedure script.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <returns>The stored procedure script.</returns>
+    private static string GetLockRenewStoredProcedure(string schemaName)
+    {
+        return $"""
+
+            CREATE OR ALTER PROCEDURE [{schemaName}].[Lock_Renew]
+                @ResourceName SYSNAME,
+                @OwnerToken UNIQUEIDENTIFIER,
+                @LeaseSeconds INT,
+                @Renewed BIT OUTPUT,
+                @FencingToken BIGINT OUTPUT
+            AS
+            BEGIN
+                SET NOCOUNT ON;
+
+                DECLARE @now DATETIMEOFFSET(3) = SYSDATETIMEOFFSET();
+                DECLARE @newLease DATETIMEOFFSET(3) = DATEADD(SECOND, @LeaseSeconds, @now);
+
+                UPDATE dl WITH (UPDLOCK, ROWLOCK)
+                   SET LeaseUntil = @newLease,
+                       FencingToken = dl.FencingToken + 1
+                  FROM [{schemaName}].[DistributedLock] dl
+                 WHERE dl.ResourceName = @ResourceName
+                   AND dl.OwnerToken   = @OwnerToken
+                   AND dl.LeaseUntil   > @now;
+
+                IF @@ROWCOUNT = 1
+                BEGIN
+                    SELECT @FencingToken = FencingToken
+                      FROM [{schemaName}].[DistributedLock]
+                     WHERE ResourceName = @ResourceName;
+                    SET @Renewed = 1;
+                END
+                ELSE
+                BEGIN
+                    SET @Renewed = 0; SET @FencingToken = NULL;
+                END
+            END
+            """;
+    }
+
+    /// <summary>
+    /// Gets the Lock_Release stored procedure script.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <returns>The stored procedure script.</returns>
+    private static string GetLockReleaseStoredProcedure(string schemaName)
+    {
+        return $"""
+
+            CREATE OR ALTER PROCEDURE [{schemaName}].[Lock_Release]
+                @ResourceName SYSNAME,
+                @OwnerToken UNIQUEIDENTIFIER
+            AS
+            BEGIN
+                SET NOCOUNT ON;
+
+                UPDATE [{schemaName}].[DistributedLock] WITH (UPDLOCK, ROWLOCK)
+                   SET OwnerToken = NULL,
+                       LeaseUntil = NULL,
+                       ContextJson = NULL
+                 WHERE ResourceName = @ResourceName
+                   AND OwnerToken   = @OwnerToken;
+            END
+            """;
+    }
+
+    /// <summary>
+    /// Gets the Lock_CleanupExpired stored procedure script.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <returns>The stored procedure script.</returns>
+    private static string GetLockCleanupStoredProcedure(string schemaName)
+    {
+        return $"""
+
+            CREATE OR ALTER PROCEDURE [{schemaName}].[Lock_CleanupExpired]
+            AS
+            BEGIN
+                SET NOCOUNT ON;
+                UPDATE [{schemaName}].[DistributedLock]
+                   SET OwnerToken = NULL, LeaseUntil = NULL, ContextJson = NULL
+                 WHERE LeaseUntil IS NOT NULL AND LeaseUntil <= SYSDATETIMEOFFSET();
+            END
+            """;
+    }
+
+    /// <summary>
+    /// Gets the Lease_Acquire stored procedure script.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <returns>The stored procedure script.</returns>
+    private static string GetLeaseAcquireStoredProcedure(string schemaName)
+    {
+        return $"""
+
+            CREATE OR ALTER PROCEDURE [{schemaName}].[Lease_Acquire]
+                @Name SYSNAME,
+                @Owner SYSNAME,
+                @LeaseSeconds INT,
+                @Acquired BIT OUTPUT,
+                @ServerUtcNow DATETIMEOFFSET(3) OUTPUT,
+                @LeaseUntilUtc DATETIMEOFFSET(3) OUTPUT
+            AS
+            BEGIN
+                SET NOCOUNT ON; SET XACT_ABORT ON;
+
+                DECLARE @now DATETIMEOFFSET(3) = SYSDATETIMEOFFSET();
+                DECLARE @newLease DATETIMEOFFSET(3) = DATEADD(SECOND, @LeaseSeconds, @now);
+
+                SET @ServerUtcNow = @now;
+                SET @Acquired = 0;
+                SET @LeaseUntilUtc = NULL;
+
+                BEGIN TRAN;
+
+                -- Ensure row exists atomically
+                MERGE [{schemaName}].[Lease] AS target
+                USING (SELECT @Name AS Name) AS source
+                ON (target.Name = source.Name)
+                WHEN NOT MATCHED THEN
+                    INSERT (Name, Owner, LeaseUntilUtc, LastGrantedUtc)
+                    VALUES (source.Name, NULL, NULL, NULL);
+
+                -- Try to acquire lease if free or expired
+                UPDATE l WITH (UPDLOCK, ROWLOCK)
+                   SET Owner = @Owner,
+                       LeaseUntilUtc = @newLease,
+                       LastGrantedUtc = @now
+                  FROM [{schemaName}].[Lease] l
+                 WHERE l.Name = @Name
+                   AND (l.Owner IS NULL OR l.LeaseUntilUtc IS NULL OR l.LeaseUntilUtc <= @now);
+
+                IF @@ROWCOUNT = 1
+                BEGIN
+                    SET @Acquired = 1;
+                    SET @LeaseUntilUtc = @newLease;
+                END
+
+                COMMIT TRAN;
+            END
+            """;
+    }
+
+    /// <summary>
+    /// Gets the Lease_Renew stored procedure script.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <returns>The stored procedure script.</returns>
+    private static string GetLeaseRenewStoredProcedure(string schemaName)
+    {
+        return $"""
+
+            CREATE OR ALTER PROCEDURE [{schemaName}].[Lease_Renew]
+                @Name SYSNAME,
+                @Owner SYSNAME,
+                @LeaseSeconds INT,
+                @Renewed BIT OUTPUT,
+                @ServerUtcNow DATETIMEOFFSET(3) OUTPUT,
+                @LeaseUntilUtc DATETIMEOFFSET(3) OUTPUT
+            AS
+            BEGIN
+                SET NOCOUNT ON;
+
+                DECLARE @now DATETIMEOFFSET(3) = SYSDATETIMEOFFSET();
+                DECLARE @newLease DATETIMEOFFSET(3) = DATEADD(SECOND, @LeaseSeconds, @now);
+
+                SET @ServerUtcNow = @now;
+                SET @Renewed = 0;
+                SET @LeaseUntilUtc = NULL;
+
+                UPDATE l WITH (UPDLOCK, ROWLOCK)
+                   SET LeaseUntilUtc = @newLease,
+                       LastGrantedUtc = @now
+                  FROM [{schemaName}].[Lease] l
+                 WHERE l.Name = @Name
+                   AND l.Owner = @Owner
+                   AND l.LeaseUntilUtc > @now;
+
+                IF @@ROWCOUNT = 1
+                BEGIN
+                    SET @Renewed = 1;
+                    SET @LeaseUntilUtc = @newLease;
+                END
+            END
+            """;
+    }
+
+    /// <summary>
+    /// Gets the Outbox_Cleanup stored procedure script.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <param name="tableName">The table name.</param>
+    /// <returns>The stored procedure script.</returns>
+    private static string GetOutboxCleanupStoredProcedure(string schemaName, string tableName)
+    {
+        return $"""
+
+            CREATE OR ALTER PROCEDURE [{schemaName}].[{tableName}_Cleanup]
+                @RetentionSeconds INT
+            AS
+            BEGIN
+                SET NOCOUNT ON;
+                DECLARE @cutoffTime DATETIMEOFFSET = DATEADD(SECOND, -@RetentionSeconds, SYSDATETIMEOFFSET());
+
+                DELETE FROM [{schemaName}].[{tableName}]
+                 WHERE IsProcessed = 1
+                   AND ProcessedAt IS NOT NULL
+                   AND ProcessedAt < @cutoffTime;
+
+                SELECT @@ROWCOUNT AS DeletedCount;
+            END
+            """;
+    }
+
+    /// <summary>
+    /// Gets the Inbox_Cleanup stored procedure script.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <param name="tableName">The table name.</param>
+    /// <returns>The stored procedure script.</returns>
+    private static string GetInboxCleanupStoredProcedure(string schemaName, string tableName)
+    {
+        return $"""
+
+            CREATE OR ALTER PROCEDURE [{schemaName}].[{tableName}_Cleanup]
+                @RetentionSeconds INT
+            AS
+            BEGIN
+                SET NOCOUNT ON;
+                DECLARE @cutoffTime DATETIMEOFFSET(3) = DATEADD(SECOND, -@RetentionSeconds, SYSDATETIMEOFFSET());
+
+                DELETE FROM [{schemaName}].[{tableName}]
+                 WHERE Status = 'Done'
+                   AND ProcessedUtc IS NOT NULL
+                   AND ProcessedUtc < @cutoffTime;
+
+                SELECT @@ROWCOUNT AS DeletedCount;
+            END
+            """;
+    }
+
+    /// <summary>
+    /// Gets the SQL script to create the Inbox table.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <param name="tableName">The table name.</param>
+    /// <returns>The SQL create script.</returns>
+    private static string GetInboxCreateScript(string schemaName, string tableName)
+    {
+        return $"""
+
+            CREATE TABLE [{schemaName}].[{tableName}] (
+                -- Core identification
+                MessageId VARCHAR(64) NOT NULL PRIMARY KEY,
+                Source VARCHAR(64) NOT NULL,
+                Hash BINARY(32) NULL,
+
+                -- Timing tracking
+                FirstSeenUtc DATETIMEOFFSET(3) NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+                LastSeenUtc DATETIMEOFFSET(3) NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+                ProcessedUtc DATETIMEOFFSET(3) NULL,
+                DueTimeUtc DATETIMEOFFSET(3) NULL,
+
+                -- Processing status
+                Attempts INT NOT NULL DEFAULT 0,
+                Status VARCHAR(16) NOT NULL DEFAULT 'Seen'
+                    CONSTRAINT CK_{tableName}_Status CHECK (Status IN ('Seen', 'Processing', 'Done', 'Dead')),
+                LastError NVARCHAR(MAX) NULL,
+
+                -- Work Queue Pattern Columns
+                LockedUntil DATETIMEOFFSET(3) NULL,
+                OwnerToken UNIQUEIDENTIFIER NULL,
+                Topic VARCHAR(128) NULL,
+                Payload NVARCHAR(MAX) NULL
+            );
+
+            -- Index for querying processed messages efficiently
+            CREATE INDEX IX_{tableName}_ProcessedUtc ON [{schemaName}].[{tableName}](ProcessedUtc)
+                WHERE ProcessedUtc IS NOT NULL;
+
+            -- Index for querying by status
+            CREATE INDEX IX_{tableName}_Status ON [{schemaName}].[{tableName}](Status);
+
+            -- Index for efficient cleanup of old processed messages
+            CREATE INDEX IX_{tableName}_Status_ProcessedUtc ON [{schemaName}].[{tableName}](Status, ProcessedUtc)
+                WHERE Status = 'Done' AND ProcessedUtc IS NOT NULL;
+
+            -- Work queue index for claiming messages
+            CREATE INDEX IX_{tableName}_WorkQueue ON [{schemaName}].[{tableName}](Status, LastSeenUtc)
+                INCLUDE(MessageId, OwnerToken)
+                WHERE Status IN ('Seen', 'Processing');
+            """;
+    }
+
+    /// <summary>
+    /// Gets the SQL script to create the OutboxState table for fencing token management.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <returns>The SQL create script.</returns>
+    private static string GetOutboxStateCreateScript(string schemaName)
+    {
+        return $"""
+
+            CREATE TABLE [{schemaName}].[OutboxState] (
+                Id INT NOT NULL CONSTRAINT PK_OutboxState PRIMARY KEY,
+                CurrentFencingToken BIGINT NOT NULL DEFAULT(0),
+                LastDispatchAt DATETIMEOFFSET(3) NULL
+            );
+
+            -- Insert initial state row
+            INSERT [{schemaName}].[OutboxState] (Id, CurrentFencingToken, LastDispatchAt)
+            VALUES (1, 0, NULL);
+            """;
+    }
+
+    /// <summary>
+    /// Gets the SQL script to create the SchedulerState table for fencing token management.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <returns>The SQL create script.</returns>
+    private static string GetSchedulerStateCreateScript(string schemaName)
+    {
+        return $"""
+
+            CREATE TABLE [{schemaName}].[SchedulerState] (
+                Id INT NOT NULL CONSTRAINT PK_SchedulerState PRIMARY KEY,
+                CurrentFencingToken BIGINT NOT NULL DEFAULT(0),
+                LastRunAt DATETIMEOFFSET(3) NULL
+            );
+
+            -- Insert initial state row
+            INSERT [{schemaName}].[SchedulerState] (Id, CurrentFencingToken, LastRunAt)
+            VALUES (1, 0, NULL);
+            """;
+    }
+
+    /// <summary>
+    /// Ensures that the work queue pattern columns and stored procedures exist for the outbox table.
+    /// This method is now a wrapper around EnsureOutboxSchemaAsync for backward compatibility.
+    /// </summary>
+    /// <param name="connectionString">The database connection string.</param>
+    /// <param name="schemaName">The schema name (default: "infra").</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public static async Task EnsureWorkQueueSchemaAsync(string connectionString, string schemaName = "infra")
+    {
+        // The work queue pattern is now built into the standard Outbox schema
+        await EnsureOutboxSchemaAsync(connectionString, schemaName, "Outbox").ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Creates the Outbox work queue stored procedures individually.
+    /// </summary>
+    /// <param name="connection">The SQL connection.</param>
+    /// <param name="schemaName">The schema name.</param>
+    /// <param name="tableName">The table name.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    private static async Task CreateOutboxWorkQueueProceduresAsync(SqlConnection connection, string schemaName, string tableName)
+    {
+        foreach (var procedure in GetOutboxWorkQueueProcedures(schemaName, tableName))
+        {
+            await connection.ExecuteAsync(procedure).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Creates the Inbox work queue stored procedures individually.
+    /// </summary>
+    /// <param name="connection">The SQL connection.</param>
+    /// <param name="schemaName">The schema name.</param>
+    /// <param name="tableName">The table name.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    private static async Task CreateInboxWorkQueueProceduresAsync(SqlConnection connection, string schemaName, string tableName)
+    {
+        foreach (var procedure in GetInboxWorkQueueProcedures(schemaName, tableName))
+        {
+            await connection.ExecuteAsync(procedure).ConfigureAwait(false);
+        }
+    }
+
+    private static string[] GetOutboxWorkQueueProcedures(string schemaName, string tableName)
+    {
+        return new[]
+        {
+            $"""
+            CREATE OR ALTER PROCEDURE [{schemaName}].[{tableName}_Claim]
+                            @OwnerToken UNIQUEIDENTIFIER,
+                            @LeaseSeconds INT,
+                            @BatchSize INT = 50
+                          AS
+                          BEGIN
+                            SET NOCOUNT ON;
+                            DECLARE @now DATETIMEOFFSET(3) = SYSUTCDATETIME();
+                            DECLARE @until DATETIMEOFFSET(3) = DATEADD(SECOND, @LeaseSeconds, @now);
+
+                            WITH cte AS (
+                                SELECT TOP (@BatchSize) Id
+                                FROM [{schemaName}].[{tableName}] WITH (READPAST, UPDLOCK, ROWLOCK)
+                                WHERE Status = 0
+                                    AND (LockedUntil IS NULL OR LockedUntil <= @now)
+                                    AND (DueTimeUtc IS NULL OR DueTimeUtc <= @now)
+                                ORDER BY CreatedAt
+                            )
+                            UPDATE o SET Status = 1, OwnerToken = @OwnerToken, LockedUntil = @until
+                            OUTPUT inserted.Id
+                            FROM [{schemaName}].[{tableName}] o JOIN cte ON cte.Id = o.Id;
+                          END
+            """,
+
+            $"""
+            CREATE OR ALTER PROCEDURE [{schemaName}].[{tableName}_Ack]
+                            @OwnerToken UNIQUEIDENTIFIER,
+                            @Ids [{schemaName}].[GuidIdList] READONLY
+                          AS
+                          BEGIN
+                            SET NOCOUNT ON;
+
+                            -- Mark outbox messages as dispatched
+                            UPDATE o SET Status = 2, OwnerToken = NULL, LockedUntil = NULL, IsProcessed = 1, ProcessedAt = SYSUTCDATETIME()
+                            FROM [{schemaName}].[{tableName}] o JOIN @Ids i ON i.Id = o.Id
+                            WHERE o.OwnerToken = @OwnerToken AND o.Status = 1;
+
+                            -- Only proceed with join updates if any messages were actually acknowledged
+                            -- and OutboxJoin tables exist (i.e., join feature is enabled)
+                            IF @@ROWCOUNT > 0 AND OBJECT_ID(N'[{schemaName}].[OutboxJoinMember]', N'U') IS NOT NULL
+                            BEGIN
+                                -- First, mark the join members as completed (idempotent via WHERE clause)
+                                -- This prevents race conditions by ensuring a member can only be marked once
+                                UPDATE m
+                                SET CompletedAt = SYSUTCDATETIME()
+                                FROM [{schemaName}].[OutboxJoinMember] m
+                                INNER JOIN @Ids i
+                                    ON m.OutboxMessageId = i.Id
+                                WHERE m.CompletedAt IS NULL
+                                    AND m.FailedAt IS NULL;
+
+                                -- Then, increment counter ONLY for joins with members that were just marked
+                                -- Using @@ROWCOUNT from previous UPDATE ensures we only count newly marked members
+                                IF @@ROWCOUNT > 0
+                                BEGIN
+                                    UPDATE j
+                                    SET
+                                        CompletedSteps = CompletedSteps + 1,
+                                        LastUpdatedUtc = SYSUTCDATETIME()
+                                    FROM [{schemaName}].[OutboxJoin] j
+                                    INNER JOIN [{schemaName}].[OutboxJoinMember] m
+                                        ON j.JoinId = m.JoinId
+                                    INNER JOIN @Ids i
+                                        ON m.OutboxMessageId = i.Id
+                                    WHERE m.CompletedAt IS NOT NULL
+                                        AND m.FailedAt IS NULL
+                                        AND m.CompletedAt >= DATEADD(SECOND, -1, SYSDATETIMEOFFSET())
+                                        AND (j.CompletedSteps + j.FailedSteps) < j.ExpectedSteps;
+                                END
+                            END
+                          END
+            """,
+
+            $"""
+            CREATE OR ALTER PROCEDURE [{schemaName}].[{tableName}_Abandon]
+                            @OwnerToken UNIQUEIDENTIFIER,
+                            @Ids [{schemaName}].[GuidIdList] READONLY,
+                            @LastError NVARCHAR(MAX) = NULL,
+                            @DueTimeUtc DATETIMEOFFSET(3) = NULL
+                          AS
+                          BEGIN
+                            SET NOCOUNT ON;
+                            DECLARE @now DATETIMEOFFSET(3) = SYSUTCDATETIME();
+                            UPDATE o SET
+                                Status = 0,
+                                OwnerToken = NULL,
+                                LockedUntil = NULL,
+                                RetryCount = RetryCount + 1,
+                                LastError = ISNULL(@LastError, o.LastError),
+                                DueTimeUtc = COALESCE(@DueTimeUtc, o.DueTimeUtc, @now)
+                            FROM [{schemaName}].[{tableName}] o JOIN @Ids i ON i.Id = o.Id
+                            WHERE o.OwnerToken = @OwnerToken AND o.Status = 1;
+                          END
+            """,
+
+            $"""
+            CREATE OR ALTER PROCEDURE [{schemaName}].[{tableName}_Fail]
+                            @OwnerToken UNIQUEIDENTIFIER,
+                            @Ids [{schemaName}].[GuidIdList] READONLY,
+                            @LastError NVARCHAR(MAX) = NULL,
+                            @ProcessedBy NVARCHAR(100) = NULL
+                          AS
+                          BEGIN
+                            SET NOCOUNT ON;
+
+                            -- Mark outbox messages as failed
+                            UPDATE o SET
+                                Status = 3,
+                                OwnerToken = NULL,
+                                LockedUntil = NULL,
+                                LastError = ISNULL(@LastError, o.LastError),
+                                ProcessedBy = ISNULL(@ProcessedBy, o.ProcessedBy)
+                            FROM [{schemaName}].[{tableName}] o JOIN @Ids i ON i.Id = o.Id
+                            WHERE o.OwnerToken = @OwnerToken AND o.Status = 1;
+
+                            -- Only proceed with join updates if any messages were actually failed
+                            -- and OutboxJoin tables exist (i.e., join feature is enabled)
+                            IF @@ROWCOUNT > 0 AND OBJECT_ID(N'[{schemaName}].[OutboxJoinMember]', N'U') IS NOT NULL
+                            BEGIN
+                                -- First, mark the join members as failed (idempotent via WHERE clause)
+                                -- This prevents race conditions by ensuring a member can only be marked once
+                                UPDATE m
+                                SET FailedAt = SYSUTCDATETIME()
+                                FROM [{schemaName}].[OutboxJoinMember] m
+                                INNER JOIN @Ids i
+                                    ON m.OutboxMessageId = i.Id
+                                WHERE m.CompletedAt IS NULL
+                                    AND m.FailedAt IS NULL;
+
+                                -- Then, increment counter ONLY for joins with members that were just marked
+                                -- Using @@ROWCOUNT from previous UPDATE ensures we only count newly marked members
+                                IF @@ROWCOUNT > 0
+                                BEGIN
+                                    UPDATE j
+                                    SET
+                                        FailedSteps = FailedSteps + 1,
+                                        LastUpdatedUtc = SYSUTCDATETIME()
+                                    FROM [{schemaName}].[OutboxJoin] j
+                                    INNER JOIN [{schemaName}].[OutboxJoinMember] m
+                                        ON j.JoinId = m.JoinId
+                                    INNER JOIN @Ids i
+                                        ON m.OutboxMessageId = i.Id
+                                    WHERE m.CompletedAt IS NULL
+                                        AND m.FailedAt IS NOT NULL
+                                        AND m.FailedAt >= DATEADD(SECOND, -1, SYSDATETIMEOFFSET())
+                                        AND (j.CompletedSteps + j.FailedSteps) < j.ExpectedSteps;
+                                END
+                            END
+                          END
+            """,
+
+            $"""
+            CREATE OR ALTER PROCEDURE [{schemaName}].[{tableName}_ReapExpired]
+                          AS
+                          BEGIN
+                            SET NOCOUNT ON;
+                            UPDATE [{schemaName}].[{tableName}] SET Status = 0, OwnerToken = NULL, LockedUntil = NULL
+                            WHERE Status = 1 AND LockedUntil IS NOT NULL AND LockedUntil <= SYSUTCDATETIME();
+                            SELECT @@ROWCOUNT AS ReapedCount;
+                          END
+            """,
+        };
+    }
+
+    private static string[] GetInboxWorkQueueProcedures(string schemaName, string tableName)
+    {
+        return new[]
+        {
+            $"""
+            CREATE OR ALTER PROCEDURE [{schemaName}].[{tableName}_Claim]
+                            @OwnerToken UNIQUEIDENTIFIER,
+                            @LeaseSeconds INT,
+                            @BatchSize INT = 50
+                          AS
+                          BEGIN
+                            SET NOCOUNT ON;
+                            DECLARE @now DATETIMEOFFSET(3) = SYSUTCDATETIME();
+                            DECLARE @until DATETIMEOFFSET(3) = DATEADD(SECOND, @LeaseSeconds, @now);
+
+                            WITH cte AS (
+                                SELECT TOP (@BatchSize) MessageId
+                                FROM [{schemaName}].[{tableName}] WITH (READPAST, UPDLOCK, ROWLOCK)
+                                WHERE Status IN ('Seen', 'Processing')
+                                    AND (LockedUntil IS NULL OR LockedUntil <= @now)
+                                    AND (DueTimeUtc IS NULL OR DueTimeUtc <= @now)
+                                ORDER BY LastSeenUtc
+                            )
+                            UPDATE i SET Status = 'Processing', OwnerToken = @OwnerToken, LockedUntil = @until, LastSeenUtc = @now
+                            OUTPUT inserted.MessageId
+                            FROM [{schemaName}].[{tableName}] i JOIN cte ON cte.MessageId = i.MessageId;
+                          END
+            """,
+
+            $"""
+            CREATE OR ALTER PROCEDURE [{schemaName}].[{tableName}_Ack]
+                            @OwnerToken UNIQUEIDENTIFIER,
+                            @Ids [{schemaName}].[StringIdList] READONLY
+                          AS
+                          BEGIN
+                            SET NOCOUNT ON;
+                            UPDATE i SET Status = 'Done', OwnerToken = NULL, LockedUntil = NULL, ProcessedUtc = SYSUTCDATETIME(), LastSeenUtc = SYSUTCDATETIME()
+                            FROM [{schemaName}].[{tableName}] i JOIN @Ids ids ON ids.Id = i.MessageId
+                            WHERE i.OwnerToken = @OwnerToken AND i.Status = 'Processing';
+                          END
+            """,
+
+            $"""
+            CREATE OR ALTER PROCEDURE [{schemaName}].[{tableName}_Abandon]
+                            @OwnerToken UNIQUEIDENTIFIER,
+                            @Ids [{schemaName}].[StringIdList] READONLY,
+                            @LastError NVARCHAR(MAX) = NULL,
+                            @DueTimeUtc DATETIMEOFFSET(3) = NULL
+                          AS
+                          BEGIN
+                            SET NOCOUNT ON;
+                            UPDATE i SET
+                                Status = 'Seen',
+                                OwnerToken = NULL,
+                                LockedUntil = NULL,
+                                LastSeenUtc = SYSUTCDATETIME(),
+                                Attempts = Attempts + 1,
+                                LastError = ISNULL(@LastError, i.LastError),
+                                DueTimeUtc = ISNULL(@DueTimeUtc, i.DueTimeUtc)
+                            FROM [{schemaName}].[{tableName}] i JOIN @Ids ids ON ids.Id = i.MessageId
+                            WHERE i.OwnerToken = @OwnerToken AND i.Status = 'Processing';
+                          END
+            """,
+
+            $"""
+            CREATE OR ALTER PROCEDURE [{schemaName}].[{tableName}_Fail]
+                            @OwnerToken UNIQUEIDENTIFIER,
+                            @Ids [{schemaName}].[StringIdList] READONLY,
+                            @Reason NVARCHAR(MAX) = NULL
+                          AS
+                          BEGIN
+                            SET NOCOUNT ON;
+                            UPDATE i SET
+                                Status = 'Dead',
+                                OwnerToken = NULL,
+                                LockedUntil = NULL,
+                                LastSeenUtc = SYSUTCDATETIME(),
+                                LastError = ISNULL(@Reason, i.LastError)
+                            FROM [{schemaName}].[{tableName}] i JOIN @Ids ids ON ids.Id = i.MessageId
+                            WHERE i.OwnerToken = @OwnerToken AND i.Status = 'Processing';
+                          END
+            """,
+
+            $"""
+            CREATE OR ALTER PROCEDURE [{schemaName}].[{tableName}_ReapExpired]
+                          AS
+                          BEGIN
+                            SET NOCOUNT ON;
+                            UPDATE [{schemaName}].[{tableName}] SET Status = 'Seen', OwnerToken = NULL, LockedUntil = NULL, LastSeenUtc = SYSUTCDATETIME()
+                            WHERE Status = 'Processing' AND LockedUntil IS NOT NULL AND LockedUntil <= SYSUTCDATETIME();
+                            SELECT @@ROWCOUNT AS ReapedCount;
+                          END
+            """,
+        };
+    }
+
+    /// <summary>
+    /// Ensures that the required database schema exists for the inbox work queue functionality.
+    /// This method is now a wrapper around EnsureInboxSchemaAsync for backward compatibility.
+    /// </summary>
+    /// <param name="connectionString">The database connection string.</param>
+    /// <param name="schemaName">The schema name (default: "infra").</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public static async Task EnsureInboxWorkQueueSchemaAsync(string connectionString, string schemaName = "infra")
+    {
+        // The work queue pattern is now built into the standard Inbox schema
+        await EnsureInboxSchemaAsync(connectionString, schemaName, "Inbox").ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Gets the SQL script to create the FanoutPolicy table.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <param name="tableName">The table name.</param>
+    /// <returns>The SQL create script.</returns>
+    private static string GetFanoutPolicyCreateScript(string schemaName, string tableName)
+    {
+        return $"""
+
+            CREATE TABLE [{schemaName}].[{tableName}] (
+                -- Primary key columns
+                FanoutTopic NVARCHAR(100) NOT NULL,
+                WorkKey NVARCHAR(100) NOT NULL,
+
+                -- Policy settings
+                DefaultEverySeconds INT NOT NULL,
+                JitterSeconds INT NOT NULL DEFAULT 60,
+
+                -- Auditing
+                CreatedAt DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+                UpdatedAt DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+
+                CONSTRAINT PK_{tableName} PRIMARY KEY (FanoutTopic, WorkKey)
+            );
+
+            -- Index for efficient lookups by topic (all work keys for a topic)
+            CREATE INDEX IX_{tableName}_FanoutTopic ON [{schemaName}].[{tableName}](FanoutTopic);
+            """;
+    }
+
+    /// <summary>
+    /// Gets the SQL script to create the FanoutCursor table.
+    /// </summary>
+    /// <param name="schemaName">The schema name.</param>
+    /// <param name="tableName">The table name.</param>
+    /// <returns>The SQL create script.</returns>
+    private static string GetFanoutCursorCreateScript(string schemaName, string tableName)
+    {
+        return $"""
+
+            CREATE TABLE [{schemaName}].[{tableName}] (
+                -- Primary key columns
+                FanoutTopic NVARCHAR(100) NOT NULL,
+                WorkKey NVARCHAR(100) NOT NULL,
+                ShardKey NVARCHAR(256) NOT NULL,
+
+                -- Cursor data
+                LastCompletedAt DATETIMEOFFSET NULL,
+
+                -- Auditing
+                CreatedAt DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+                UpdatedAt DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+
+                CONSTRAINT PK_{tableName} PRIMARY KEY (FanoutTopic, WorkKey, ShardKey)
+            );
+
+            -- Index for efficient queries by topic and work key (all shards for a topic/work combination)
+            CREATE INDEX IX_{tableName}_TopicWork ON [{schemaName}].[{tableName}](FanoutTopic, WorkKey);
+
+            -- Index for finding stale cursors that need processing
+            CREATE INDEX IX_{tableName}_LastCompleted ON [{schemaName}].[{tableName}](LastCompletedAt)
+                WHERE LastCompletedAt IS NOT NULL;
+            """;
+    }
+
+    /// <summary>
+    /// Ensures that the required database schema exists for the metrics functionality in application databases.
+    /// </summary>
+    /// <param name="connectionString">The database connection string.</param>
+    /// <param name="schemaName">The schema name (default: "infra").</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public static async Task EnsureMetricsSchemaAsync(string connectionString, string schemaName = "infra")
+    {
+        await SqlServerSchemaMigrations.ApplyMetricsAsync(
+            connectionString,
+            schemaName,
+            NullLogger.Instance,
+            CancellationToken.None).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Ensures that the required database schema exists for the metrics functionality in the central database.
+    /// </summary>
+    /// <param name="connectionString">The database connection string.</param>
+    /// <param name="schemaName">The schema name (default: "infra").</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public static async Task EnsureCentralMetricsSchemaAsync(string connectionString, string schemaName = "infra")
+    {
+        await SqlServerSchemaMigrations.ApplyCentralMetricsAsync(
+            connectionString,
+            schemaName,
+            NullLogger.Instance,
+            CancellationToken.None).ConfigureAwait(false);
+    }
+
+    public static async Task ApplyTenantBundleAsync(string connectionString, string schemaName = "infra")
+    {
+        await SqlServerSchemaMigrations.ApplyTenantBundleAsync(
+            connectionString,
+            schemaName,
+            NullLogger.Instance,
+            CancellationToken.None).ConfigureAwait(false);
+    }
+
+    public static async Task ApplyControlPlaneBundleAsync(string connectionString, string schemaName = "infra")
+    {
+        await SqlServerSchemaMigrations.ApplyControlPlaneBundleAsync(
+            connectionString,
+            schemaName,
+            NullLogger.Instance,
+            CancellationToken.None).ConfigureAwait(false);
+    }
+
+    private static async Task EnsureMetricsStoredProceduresAsync(SqlConnection connection, string schemaName)
+    {
+        var spUpsertSeries = GetSpUpsertSeriesScript(schemaName);
+        await ExecuteScriptAsync(connection, spUpsertSeries).ConfigureAwait(false);
+
+        var spUpsertMetricPoint = GetSpUpsertMetricPointMinuteScript(schemaName);
+        await ExecuteScriptAsync(connection, spUpsertMetricPoint).ConfigureAwait(false);
+    }
+
+    private static async Task EnsureCentralMetricsStoredProceduresAsync(SqlConnection connection, string schemaName)
+    {
+        var spUpsertSeries = GetSpUpsertSeriesCentralScript(schemaName);
+        await ExecuteScriptAsync(connection, spUpsertSeries).ConfigureAwait(false);
+
+        var spUpsertMetricPoint = GetSpUpsertMetricPointHourlyScript(schemaName);
+        await ExecuteScriptAsync(connection, spUpsertMetricPoint).ConfigureAwait(false);
+    }
+
+    private static string GetMetricDefCreateScript(string schemaName)
+    {
+        return $"""
+            CREATE TABLE [{schemaName}].[MetricDef] (
+              MetricDefId   INT IDENTITY PRIMARY KEY,
+              Name          NVARCHAR(128) NOT NULL UNIQUE,
+              Unit          NVARCHAR(32)  NOT NULL,
+              AggKind       NVARCHAR(16)  NOT NULL,
+              Description   NVARCHAR(512) NOT NULL
+            );
+            """;
+    }
+
+    private static string GetMetricSeriesCreateScript(string schemaName)
+    {
+        return $$"""
+            CREATE TABLE [{{schemaName}}].[MetricSeries] (
+              SeriesId      BIGINT IDENTITY PRIMARY KEY,
+              MetricDefId   INT NOT NULL REFERENCES [{{schemaName}}].[MetricDef](MetricDefId),
+              Service       NVARCHAR(64) NOT NULL,
+              InstanceId    UNIQUEIDENTIFIER NOT NULL,
+              TagsJson      NVARCHAR(1024) NOT NULL DEFAULT (N'{}'),
+              TagHash       VARBINARY(32) NOT NULL,
+              CreatedUtc    DATETIMEOFFSET(3) NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+              CONSTRAINT UQ_MetricSeries UNIQUE (MetricDefId, Service, InstanceId, TagHash)
+            );
+            """;
+    }
+
+    private static string GetMetricPointMinuteCreateScript(string schemaName)
+    {
+        return $"""
+            CREATE TABLE [{schemaName}].[MetricPointMinute] (
+              SeriesId        BIGINT       NOT NULL REFERENCES [{schemaName}].[MetricSeries](SeriesId),
+              BucketStartUtc  DATETIMEOFFSET(0) NOT NULL,
+              BucketSecs      SMALLINT     NOT NULL,
+              ValueSum        FLOAT        NULL,
+              ValueCount      INT          NULL,
+              ValueMin        FLOAT        NULL,
+              ValueMax        FLOAT        NULL,
+              ValueLast       FLOAT        NULL,
+              P50             FLOAT        NULL,
+              P95             FLOAT        NULL,
+              P99             FLOAT        NULL,
+              InsertedUtc     DATETIMEOFFSET(3) NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+              CONSTRAINT PK_MetricPointMinute PRIMARY KEY (SeriesId, BucketStartUtc, BucketSecs)
+            );
+
+            CREATE INDEX IX_MetricPointMinute_ByTime ON [{schemaName}].[MetricPointMinute] (BucketStartUtc)
+              INCLUDE (SeriesId, ValueSum, ValueCount, P95);
+            """;
+    }
+
+    private static string GetCentralMetricSeriesCreateScript(string schemaName)
+    {
+        return $"""
+            CREATE TABLE [{schemaName}].[MetricSeries] (
+              SeriesId      BIGINT IDENTITY PRIMARY KEY,
+              MetricDefId   INT NOT NULL REFERENCES [{schemaName}].[MetricDef](MetricDefId),
+              DatabaseId    UNIQUEIDENTIFIER NULL,
+              Service       NVARCHAR(64) NOT NULL,
+              TagsJson      NVARCHAR(1024) NOT NULL DEFAULT N'{"{"}"{"}"}',
+              TagHash       VARBINARY(32)  NOT NULL,
+              CreatedUtc    DATETIMEOFFSET(3)   NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+              CONSTRAINT UQ_MetricSeries UNIQUE (MetricDefId, DatabaseId, Service, TagHash)
+            );
+            """;
+    }
+
+    private static string GetMetricPointHourlyCreateScript(string schemaName)
+    {
+        return $"""
+            CREATE TABLE [{schemaName}].[MetricPointHourly] (
+              SeriesId        BIGINT       NOT NULL REFERENCES [{schemaName}].[MetricSeries](SeriesId),
+              BucketStartUtc  DATETIMEOFFSET(0) NOT NULL,
+              BucketSecs      INT          NOT NULL,
+              ValueSum        FLOAT        NULL,
+              ValueCount      INT          NULL,
+              ValueMin        FLOAT        NULL,
+              ValueMax        FLOAT        NULL,
+              ValueLast       FLOAT        NULL,
+              P50             FLOAT        NULL,
+              P95             FLOAT        NULL,
+              P99             FLOAT        NULL,
+              InsertedUtc     DATETIMEOFFSET(3) NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+              CONSTRAINT PK_MetricPointHourly PRIMARY KEY NONCLUSTERED (SeriesId, BucketStartUtc, BucketSecs)
+            );
+
+            BEGIN TRY
+              DECLARE @csSql NVARCHAR(MAX) = N'CREATE CLUSTERED COLUMNSTORE INDEX CCI_MetricPointHourly ON [{schemaName}].[MetricPointHourly];';
+              EXEC sp_executesql @csSql;
+            END TRY
+            BEGIN CATCH
+              IF ERROR_MESSAGE() LIKE '%COLUMNSTORE%' OR ERROR_NUMBER() IN (40536, 35345, 35337, 35339)
+              BEGIN
+                IF NOT EXISTS (
+                    SELECT 1 FROM sys.indexes
+                    WHERE name = 'IX_MetricPointHourly_ByTime'
+                      AND object_id = OBJECT_ID(N'[{schemaName}].[MetricPointHourly]', N'U'))
+                BEGIN
+                  CREATE INDEX IX_MetricPointHourly_ByTime ON [{schemaName}].[MetricPointHourly] (BucketStartUtc)
+                    INCLUDE (SeriesId, ValueSum, ValueCount, P95);
+                END
+              END
+              ELSE
+              BEGIN
+                THROW;
+              END
+            END CATCH
+            """;
+    }
+
+    private static string GetExporterHeartbeatCreateScript(string schemaName)
+    {
+        return $"""
+            CREATE TABLE [{schemaName}].[ExporterHeartbeat] (
+              InstanceId    NVARCHAR(100) NOT NULL PRIMARY KEY,
+              LastFlushUtc  DATETIMEOFFSET(3)  NOT NULL,
+              LastError     NVARCHAR(512) NULL
+            );
+            """;
+    }
+
+    private static string GetSpUpsertSeriesScript(string schemaName)
+    {
+        return $"""
+            CREATE OR ALTER PROCEDURE [{schemaName}].[SpUpsertSeries]
+              @Name NVARCHAR(128),
+              @Unit NVARCHAR(32),
+              @AggKind NVARCHAR(16),
+              @Description NVARCHAR(512),
+              @Service NVARCHAR(64),
+              @InstanceId UNIQUEIDENTIFIER,
+              @TagsJson NVARCHAR(1024),
+              @TagHash VARBINARY(32),
+              @SeriesId BIGINT OUTPUT
+            AS
+            BEGIN
+              SET NOCOUNT ON;
+              DECLARE @MetricDefId INT;
+
+              SELECT @MetricDefId = MetricDefId FROM [{schemaName}].[MetricDef] WHERE Name = @Name;
+              IF @MetricDefId IS NULL
+              BEGIN
+                INSERT INTO [{schemaName}].[MetricDef](Name, Unit, AggKind, Description)
+                VALUES(@Name, @Unit, @AggKind, @Description);
+                SET @MetricDefId = SCOPE_IDENTITY();
+              END
+
+              MERGE [{schemaName}].[MetricSeries] WITH (HOLDLOCK) AS T
+              USING (SELECT @MetricDefId AS MetricDefId, @Service AS Service, @InstanceId AS InstanceId, @TagHash AS TagHash) AS S
+                ON (T.MetricDefId = S.MetricDefId AND T.Service = S.Service AND T.InstanceId = S.InstanceId AND T.TagHash = S.TagHash)
+              WHEN MATCHED THEN
+                UPDATE SET TagsJson = @TagsJson
+              WHEN NOT MATCHED THEN
+                INSERT (MetricDefId, Service, InstanceId, TagsJson, TagHash)
+                VALUES(@MetricDefId, @Service, @InstanceId, @TagsJson, @TagHash);
+
+              SELECT @SeriesId = SeriesId FROM [{schemaName}].[MetricSeries]
+              WHERE MetricDefId = @MetricDefId AND Service = @Service AND InstanceId = @InstanceId AND TagHash = @TagHash;
+            END
+            """;
+    }
+
+    private static string GetSpUpsertMetricPointMinuteScript(string schemaName)
+    {
+        return $"""
+            CREATE OR ALTER PROCEDURE [{schemaName}].[SpUpsertMetricPointMinute]
+              @SeriesId BIGINT,
+              @BucketStartUtc DATETIMEOFFSET(0),
+              @BucketSecs SMALLINT,
+              @ValueSum FLOAT,
+              @ValueCount INT,
+              @ValueMin FLOAT,
+              @ValueMax FLOAT,
+              @ValueLast FLOAT,
+              @P50 FLOAT = NULL,
+              @P95 FLOAT = NULL,
+              @P99 FLOAT = NULL
+            AS
+            BEGIN
+              SET NOCOUNT ON;
+
+              DECLARE @LockRes INT;
+              DECLARE @ResourceName NVARCHAR(255) = CONCAT('infra:mpm:', @SeriesId, ':', CONVERT(VARCHAR(19), @BucketStartUtc, 126), ':', @BucketSecs);
+
+              EXEC @LockRes = sp_getapplock
+                @Resource = @ResourceName,
+                @LockMode = 'Exclusive',
+                @LockTimeout = 5000,
+                @DbPrincipal = 'public';
+
+              IF @LockRes < 0 RETURN;
+
+              IF EXISTS (SELECT 1 FROM [{schemaName}].[MetricPointMinute] WITH (UPDLOCK, HOLDLOCK)
+                         WHERE SeriesId = @SeriesId AND BucketStartUtc = @BucketStartUtc AND BucketSecs = @BucketSecs)
+              BEGIN
+                -- Do not update percentiles on merge; percentiles cannot be accurately combined
+                UPDATE [{schemaName}].[MetricPointMinute]
+                  SET ValueSum   = ISNULL(ValueSum,0)   + ISNULL(@ValueSum,0),
+                      ValueCount = ISNULL(ValueCount,0) + ISNULL(@ValueCount,0),
+                      ValueMin   = CASE WHEN ValueMin IS NULL OR @ValueMin < ValueMin THEN @ValueMin ELSE ValueMin END,
+                      ValueMax   = CASE WHEN ValueMax IS NULL OR @ValueMax > ValueMax THEN @ValueMax ELSE ValueMax END,
+                      ValueLast  = @ValueLast,
+                      InsertedUtc = SYSDATETIMEOFFSET()
+                WHERE SeriesId = @SeriesId AND BucketStartUtc = @BucketStartUtc AND BucketSecs = @BucketSecs;
+              END
+              ELSE
+              BEGIN
+                INSERT INTO [{schemaName}].[MetricPointMinute](SeriesId, BucketStartUtc, BucketSecs,
+                  ValueSum, ValueCount, ValueMin, ValueMax, ValueLast, P50, P95, P99)
+                VALUES(@SeriesId, @BucketStartUtc, @BucketSecs,
+                  @ValueSum, @ValueCount, @ValueMin, @ValueMax, @ValueLast, @P50, @P95, @P99);
+              END
+
+              EXEC sp_releaseapplock @Resource = @ResourceName, @DbPrincipal='public';
+            END
+            """;
+    }
+
+    private static string GetSpUpsertSeriesCentralScript(string schemaName)
+    {
+        return $"""
+            CREATE OR ALTER PROCEDURE [{schemaName}].[SpUpsertSeriesCentral]
+              @Name NVARCHAR(128),
+              @Unit NVARCHAR(32),
+              @AggKind NVARCHAR(16),
+              @Description NVARCHAR(512),
+              @DatabaseId UNIQUEIDENTIFIER,
+              @Service NVARCHAR(64),
+              @TagsJson NVARCHAR(1024),
+              @TagHash VARBINARY(32),
+              @SeriesId BIGINT OUTPUT
+            AS
+            BEGIN
+              SET NOCOUNT ON;
+              DECLARE @MetricDefId INT;
+
+              SELECT @MetricDefId = MetricDefId FROM [{schemaName}].[MetricDef] WHERE Name = @Name;
+              IF @MetricDefId IS NULL
+              BEGIN
+                INSERT INTO [{schemaName}].[MetricDef](Name, Unit, AggKind, Description)
+                VALUES(@Name, @Unit, @AggKind, @Description);
+                SET @MetricDefId = SCOPE_IDENTITY();
+              END
+
+              MERGE [{schemaName}].[MetricSeries] WITH (HOLDLOCK) AS T
+              USING (SELECT @MetricDefId AS MetricDefId, @DatabaseId AS DatabaseId, @Service AS Service, @TagHash AS TagHash) AS S
+                ON (T.MetricDefId = S.MetricDefId AND T.DatabaseId = S.DatabaseId AND T.Service = S.Service AND T.TagHash = S.TagHash)
+              WHEN MATCHED THEN
+                UPDATE SET TagsJson = @TagsJson
+              WHEN NOT MATCHED THEN
+                INSERT (MetricDefId, DatabaseId, Service, TagsJson, TagHash)
+                VALUES(@MetricDefId, @DatabaseId, @Service, @TagsJson, @TagHash);
+
+              SELECT @SeriesId = SeriesId FROM [{schemaName}].[MetricSeries]
+              WHERE MetricDefId = @MetricDefId AND DatabaseId = @DatabaseId AND Service = @Service AND TagHash = @TagHash;
+            END
+            """;
+    }
+
+    private static string GetSpUpsertMetricPointHourlyScript(string schemaName)
+    {
+        return $"""
+            CREATE OR ALTER PROCEDURE [{schemaName}].[SpUpsertMetricPointHourly]
+              @SeriesId BIGINT,
+              @BucketStartUtc DATETIMEOFFSET(0),
+              @BucketSecs INT,
+              @ValueSum FLOAT,
+              @ValueCount INT,
+              @ValueMin FLOAT,
+              @ValueMax FLOAT,
+              @ValueLast FLOAT,
+              @P50 FLOAT = NULL,
+              @P95 FLOAT = NULL,
+              @P99 FLOAT = NULL
+            AS
+            BEGIN
+              SET NOCOUNT ON;
+
+              DECLARE @LockRes INT;
+              DECLARE @ResourceName NVARCHAR(255) = CONCAT('infra:mph:', @SeriesId, ':', CONVERT(VARCHAR(19), @BucketStartUtc, 126), ':', @BucketSecs);
+
+              EXEC @LockRes = sp_getapplock
+                @Resource = @ResourceName,
+                @LockMode = 'Exclusive',
+                @LockTimeout = 5000,
+                @DbPrincipal = 'public';
+
+              IF @LockRes < 0 RETURN;
+
+              IF EXISTS (SELECT 1 FROM [{schemaName}].[MetricPointHourly] WITH (UPDLOCK, HOLDLOCK)
+                         WHERE SeriesId = @SeriesId AND BucketStartUtc = @BucketStartUtc AND BucketSecs = @BucketSecs)
+              BEGIN
+                -- Do not update percentiles on merge; percentiles cannot be accurately combined
+                UPDATE [{schemaName}].[MetricPointHourly]
+                  SET ValueSum   = ISNULL(ValueSum,0)   + ISNULL(@ValueSum,0),
+                      ValueCount = ISNULL(ValueCount,0) + ISNULL(@ValueCount,0),
+                      ValueMin   = CASE WHEN ValueMin IS NULL OR @ValueMin < ValueMin THEN @ValueMin ELSE ValueMin END,
+                      ValueMax   = CASE WHEN ValueMax IS NULL OR @ValueMax > ValueMax THEN @ValueMax ELSE ValueMax END,
+                      ValueLast  = @ValueLast,
+                      InsertedUtc = SYSDATETIMEOFFSET()
+                WHERE SeriesId = @SeriesId AND BucketStartUtc = @BucketStartUtc AND BucketSecs = @BucketSecs;
+              END
+              ELSE
+              BEGIN
+                INSERT INTO [{schemaName}].[MetricPointHourly](SeriesId, BucketStartUtc, BucketSecs,
+                  ValueSum, ValueCount, ValueMin, ValueMax, ValueLast, P50, P95, P99)
+                VALUES(@SeriesId, @BucketStartUtc, @BucketSecs,
+                  @ValueSum, @ValueCount, @ValueMin, @ValueMax, @ValueLast, @P50, @P95, @P99);
+              END
+
+              EXEC sp_releaseapplock @Resource = @ResourceName, @DbPrincipal='public';
+            END
+            """;
+    }
+
+    /// <summary>
+    /// Migrates existing Inbox tables to add the LastError column if it doesn't exist.
+    /// This supports upgrading from the old schema to the new work queue pattern.
+    /// </summary>
+    /// <param name="connection">The database connection.</param>
+    /// <param name="schemaName">The schema name.</param>
+    /// <param name="tableName">The table name.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    private static async Task MigrateInboxLastErrorColumnAsync(SqlConnection connection, string schemaName, string tableName)
+    {
+        var sql = $"""
+            IF COL_LENGTH('[{schemaName}].[{tableName}]', 'LastError') IS NULL
+            BEGIN
+                ALTER TABLE [{schemaName}].[{tableName}] ADD LastError NVARCHAR(MAX) NULL;
+            END
+            """;
+
+        await connection.ExecuteAsync(sql).ConfigureAwait(false);
+    }
+}

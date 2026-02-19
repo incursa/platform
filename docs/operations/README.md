@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`Bravellian.Platform.Operations` provides provider-agnostic primitives for tracking short-lived system jobs and long-running operations. It focuses on immutable identifiers, status transitions, and correlation-friendly metadata without prescribing a storage schema.
+`Incursa.Platform.Operations` provides provider-agnostic primitives for tracking short-lived system jobs and long-running operations. It focuses on immutable identifiers, status transitions, and correlation-friendly metadata without prescribing a storage schema.
 
 ## Concepts
 
@@ -133,5 +133,5 @@ public sealed class WebhookHandler
 
 ## Observability glue
 
-Use `Bravellian.Platform.Observability` to emit coordinated operation + audit events.
+Use `Incursa.Platform.Observability` to emit coordinated operation + audit events.
 `PlatformEventNames` includes `operation.started`, `operation.completed`, and `operation.failed` with standard tags.

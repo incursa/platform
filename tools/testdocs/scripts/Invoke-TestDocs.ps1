@@ -11,7 +11,7 @@ $resolvedRepoRoot = if ($RepoRoot) {
     (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
 }
 
-$solutionPath = Join-Path $resolvedRepoRoot "tools/testdocs/TestDocs.sln"
+$solutionPath = Join-Path $resolvedRepoRoot "tools/testdocs/TestDocs.slnx"
 $projectPath = Join-Path $resolvedRepoRoot "tools/testdocs/src/TestDocs.Cli"
 $outDir = Join-Path $resolvedRepoRoot "docs/testing/generated"
 

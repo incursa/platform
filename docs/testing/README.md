@@ -10,7 +10,7 @@ This folder describes the XML doc schema for MSTest, xUnit, and NUnit tests and 
 2. Use optional tags only when they are already supported by the test name/body.
 3. Run the generator locally to refresh `docs/testing/generated/`.
 
-Optional: install the analyzer package `Bravellian.TestDocs.Analyzers` to get warnings for missing/placeholder metadata.
+Optional: install the analyzer package `Incursa.TestDocs.Analyzers` to get warnings for missing/placeholder metadata.
 
 Local generation:
 

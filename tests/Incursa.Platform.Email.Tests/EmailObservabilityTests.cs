@@ -1,0 +1,117 @@
+// Copyright (c) Incursa
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System.Text.Json;
+using Incursa.Platform.Audit;
+using Incursa.Platform.Correlation;
+using Incursa.Platform.Observability;
+using Incursa.Platform.Operations;
+using Shouldly;
+
+namespace Incursa.Platform.Email.Tests;
+
+public sealed class EmailObservabilityTests
+{
+    /// <summary>When enqueue Emits Queued Audit Event, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for enqueue Emits Queued Audit Event.</intent>
+    /// <scenario>Given enqueue Emits Queued Audit Event.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
+    [Fact]
+    public async Task Enqueue_EmitsQueuedAuditEvent()
+    {
+        var timeProvider = new ManualTimeProvider(DateTimeOffset.UtcNow);
+        var harness = new InMemoryOutboxHarness(timeProvider);
+        var sink = new TestEmailDeliverySink();
+        var emitter = new RecordingEventEmitter();
+        var outbox = new EmailOutbox(harness, sink, emitter);
+        var message = EmailFixtures.CreateMessage(messageKey: "obs-queued");
+
+        await outbox.EnqueueAsync(message, CancellationToken.None);
+
+        emitter.AuditEvents.ShouldContain(e => e.Name == PlatformEventNames.EmailQueued);
+        var payload = JsonDocument.Parse(emitter.AuditEvents.Last().DataJson ?? "{}");
+        payload.RootElement.GetProperty(PlatformTagKeys.MessageKey).GetString().ShouldBe("obs-queued");
+    }
+
+    /// <summary>When processor Emits Attempt And Sent Audit Events, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for processor Emits Attempt And Sent Audit Events.</intent>
+    /// <scenario>Given processor Emits Attempt And Sent Audit Events.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
+    [Fact]
+    public async Task Processor_EmitsAttemptAndSentAuditEvents()
+    {
+        var timeProvider = new ManualTimeProvider(DateTimeOffset.UtcNow);
+        var harness = new InMemoryOutboxHarness(timeProvider);
+        var sink = new TestEmailDeliverySink();
+        var sender = new StubEmailSender(EmailSendResult.Success("msg-obs"));
+        var idempotency = new InMemoryIdempotencyStore();
+        var emitter = new RecordingEventEmitter();
+        var processor = new EmailOutboxProcessor(harness, sender, idempotency, sink, eventEmitter: emitter, timeProvider: timeProvider);
+        var message = EmailFixtures.CreateMessage(messageKey: "obs-sent");
+
+        await harness.EnqueueAsync(EmailOutboxDefaults.Topic, JsonSerializer.Serialize(message), message.MessageKey, null, CancellationToken.None);
+
+        await processor.ProcessOnceAsync(CancellationToken.None);
+
+        emitter.AuditEvents.ShouldContain(e => e.Name == PlatformEventNames.EmailAttempted);
+        emitter.AuditEvents.ShouldContain(e => e.Name == PlatformEventNames.EmailSent);
+    }
+
+    private sealed class RecordingEventEmitter : IPlatformEventEmitter
+    {
+        public List<AuditEvent> AuditEvents { get; } = new();
+
+        public Task<OperationId> EmitOperationStartedAsync(
+            string name,
+            CorrelationContext? correlationContext,
+            OperationId? parentOperationId,
+            IReadOnlyDictionary<string, string>? tags,
+            CancellationToken cancellationToken)
+        {
+            return Task.FromResult(OperationId.NewId());
+        }
+
+        public Task EmitOperationCompletedAsync(
+            OperationId operationId,
+            OperationStatus status,
+            string? message,
+            CorrelationContext? correlationContext,
+            IReadOnlyDictionary<string, string>? tags,
+            CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task EmitAuditEventAsync(AuditEvent auditEvent, CancellationToken cancellationToken)
+        {
+            AuditEvents.Add(auditEvent);
+            return Task.CompletedTask;
+        }
+    }
+
+    private sealed class StubEmailSender : IOutboundEmailSender
+    {
+        private readonly Queue<EmailSendResult> results;
+
+        public StubEmailSender(params EmailSendResult[] results)
+        {
+            this.results = new Queue<EmailSendResult>(results);
+        }
+
+        public Task<EmailSendResult> SendAsync(OutboundEmailMessage message, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(results.Dequeue());
+        }
+    }
+}

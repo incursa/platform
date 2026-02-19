@@ -1,0 +1,157 @@
+// Copyright (c) Incursa
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+
+namespace Incursa.Platform;
+/// <summary>
+/// Background service that registers fanout topics as recurring jobs with the scheduler.
+/// This service runs once during startup to ensure all fanout topics are scheduled.
+/// </summary>
+internal sealed class FanoutJobRegistrationService : BackgroundService
+{
+    private readonly IServiceProvider serviceProvider;
+    private readonly FanoutTopicOptions options;
+    private readonly ILogger<FanoutJobRegistrationService> logger;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FanoutJobRegistrationService"/> class.
+    /// </summary>
+    /// <param name="serviceProvider">Service provider for resolving dependencies.</param>
+    /// <param name="options">Fanout topic options for this registration.</param>
+    public FanoutJobRegistrationService(IServiceProvider serviceProvider, FanoutTopicOptions options)
+    {
+        this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+        this.options = options ?? throw new ArgumentNullException(nameof(options));
+        logger = serviceProvider.GetRequiredService<ILogger<FanoutJobRegistrationService>>();
+    }
+
+    /// <inheritdoc/>
+    [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Registration failures are logged without crashing the host.")]
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        try
+        {
+            // Wait for schema deployment to complete if enabled
+            var schemaCompletion = serviceProvider.GetService(typeof(IDatabaseSchemaCompletion)) as IDatabaseSchemaCompletion;
+            if (schemaCompletion != null)
+            {
+                await schemaCompletion.SchemaDeploymentCompleted.ConfigureAwait(false);
+            }
+
+            // Register the fanout job with the scheduler
+            using var scope = serviceProvider.CreateScope();
+            var scheduler = scope.ServiceProvider.GetRequiredService<ISchedulerClient>();
+
+            var jobName = options.WorkKey is null
+                ? $"fanout-{options.FanoutTopic}"
+                : $"fanout-{options.FanoutTopic}-{options.WorkKey}";
+
+            var payload = JsonSerializer.Serialize(new FanoutJobHandler.FanoutJobPayload(
+                options.FanoutTopic,
+                options.WorkKey));
+
+            await scheduler.CreateOrUpdateJobAsync(
+                jobName: jobName,
+                topic: "fanout.coordinate",
+                cronSchedule: options.Cron,
+                payload: payload,
+                cancellationToken: stoppingToken).ConfigureAwait(false);
+
+            logger.LogInformation(
+                "Registered fanout job {JobName} for topic {FanoutTopic}:{WorkKey} with schedule {CronSchedule}",
+                jobName,
+                options.FanoutTopic,
+                options.WorkKey,
+                options.Cron);
+
+            // Store the policy in the database for the planner to use
+            var policyRepository = scope.ServiceProvider.GetRequiredService<IFanoutPolicyRepository>();
+            await EnsurePolicyAsync(policyRepository, stoppingToken).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(
+                ex,
+                "Failed to register fanout job for topic {FanoutTopic}:{WorkKey}",
+                options.FanoutTopic,
+                options.WorkKey);
+
+            // Don't rethrow - we don't want to crash the application, just log the error
+        }
+    }
+
+    [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Policy upsert logs failures and continues.")]
+    private async Task EnsurePolicyAsync(IFanoutPolicyRepository policyRepository, CancellationToken cancellationToken)
+    {
+        try
+        {
+            // Check if policy already exists - if so, we're done
+            var existing = await policyRepository.GetCadenceAsync(
+                options.FanoutTopic,
+                options.WorkKey ?? "default",
+                cancellationToken).ConfigureAwait(false);
+
+            // Policy already exists, no need to insert
+            if (existing.everySeconds > 0)
+            {
+                logger.LogDebug(
+                    "Fanout policy already exists for {FanoutTopic}:{WorkKey}",
+                    options.FanoutTopic,
+                    options.WorkKey);
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogDebug(
+                ex,
+                "Policy check failed, will attempt to insert policy for {FanoutTopic}:{WorkKey}",
+                options.FanoutTopic,
+                options.WorkKey);
+        }
+
+        // Insert the policy (this method should handle upserts or ignore conflicts)
+        try
+        {
+            await InsertPolicyAsync(policyRepository, cancellationToken).ConfigureAwait(false);
+            logger.LogDebug(
+                "Ensured fanout policy exists for {FanoutTopic}:{WorkKey}",
+                options.FanoutTopic,
+                options.WorkKey);
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(
+                ex,
+                "Failed to ensure fanout policy for {FanoutTopic}:{WorkKey}",
+                options.FanoutTopic,
+                options.WorkKey);
+        }
+    }
+
+    private async Task InsertPolicyAsync(IFanoutPolicyRepository policyRepository, CancellationToken cancellationToken)
+    {
+        // Use the repository interface to insert the policy instead of direct SQL access
+        await policyRepository.SetCadenceAsync(
+            options.FanoutTopic,
+            options.WorkKey ?? "default",
+            options.DefaultEverySeconds,
+            options.JitterSeconds,
+            cancellationToken).ConfigureAwait(false);
+    }
+}

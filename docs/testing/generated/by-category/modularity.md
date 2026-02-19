@@ -2,68 +2,68 @@
 
 Total tests: 13
 
-- **Bravellian.Platform.Tests:Bravellian.Platform.Tests.Modularity.ModuleSystemTests.Engine_descriptors_must_use_module_key**
+- **Incursa.Platform.Tests:Incursa.Platform.Tests.Modularity.ModuleSystemTests.Engine_descriptors_must_use_module_key**
   - Summary: When an engine descriptor uses a different module key, then AddModuleServices throws.
   - Intent: Guard against mismatched module and engine descriptor keys.
   - Tags: (none)
-  - Source: [tests/Bravellian.Platform.Tests/Modularity/ModuleSystemTests.cs#L174](tests/Bravellian.Platform.Tests/Modularity/ModuleSystemTests.cs#L174)
-- **Bravellian.Platform.Tests:Bravellian.Platform.Tests.Modularity.ModuleSystemTests.Module_keys_must_be_unique**
+  - Source: [tests/Incursa.Platform.Tests/Modularity/ModuleSystemTests.cs#L174](tests/Incursa.Platform.Tests/Modularity/ModuleSystemTests.cs#L174)
+- **Incursa.Platform.Tests:Incursa.Platform.Tests.Modularity.ModuleSystemTests.Module_keys_must_be_unique**
   - Summary: When multiple modules share the same key, then AddModuleServices throws an InvalidOperationException.
   - Intent: Enforce unique module keys during registration.
   - Tags: (none)
-  - Source: [tests/Bravellian.Platform.Tests/Modularity/ModuleSystemTests.cs#L110](tests/Bravellian.Platform.Tests/Modularity/ModuleSystemTests.cs#L110)
-- **Bravellian.Platform.Tests:Bravellian.Platform.Tests.Modularity.ModuleSystemTests.Module_keys_must_be_url_safe**
+  - Source: [tests/Incursa.Platform.Tests/Modularity/ModuleSystemTests.cs#L110](tests/Incursa.Platform.Tests/Modularity/ModuleSystemTests.cs#L110)
+- **Incursa.Platform.Tests:Incursa.Platform.Tests.Modularity.ModuleSystemTests.Module_keys_must_be_url_safe**
   - Summary: When a module key contains a slash, then AddModuleServices throws with a URL-safety message.
   - Intent: Ensure module keys are URL-safe for routing and metadata.
   - Tags: (none)
-  - Source: [tests/Bravellian.Platform.Tests/Modularity/ModuleSystemTests.cs#L142](tests/Bravellian.Platform.Tests/Modularity/ModuleSystemTests.cs#L142)
-- **Bravellian.Platform.Tests:Bravellian.Platform.Tests.Modularity.ModuleSystemTests.Modules_are_registered_in_di**
+  - Source: [tests/Incursa.Platform.Tests/Modularity/ModuleSystemTests.cs#L142](tests/Incursa.Platform.Tests/Modularity/ModuleSystemTests.cs#L142)
+- **Incursa.Platform.Tests:Incursa.Platform.Tests.Modularity.ModuleSystemTests.Modules_are_registered_in_di**
   - Summary: When module services are added, then the module definition is registered in DI.
   - Intent: Ensure module definitions are accessible through the service provider.
   - Tags: (none)
-  - Source: [tests/Bravellian.Platform.Tests/Modularity/ModuleSystemTests.cs#L77](tests/Bravellian.Platform.Tests/Modularity/ModuleSystemTests.cs#L77)
-- **Bravellian.Platform.Tests:Bravellian.Platform.Tests.Modularity.ModuleSystemTests.Modules_register_services_and_health**
+  - Source: [tests/Incursa.Platform.Tests/Modularity/ModuleSystemTests.cs#L77](tests/Incursa.Platform.Tests/Modularity/ModuleSystemTests.cs#L77)
+- **Incursa.Platform.Tests:Incursa.Platform.Tests.Modularity.ModuleSystemTests.Modules_register_services_and_health**
   - Summary: When a module is registered with its required configuration, then its services and health checks are added to DI.
   - Intent: Verify that module registration wires up services and health checks.
   - Tags: (none)
-  - Source: [tests/Bravellian.Platform.Tests/Modularity/ModuleSystemTests.cs#L42](tests/Bravellian.Platform.Tests/Modularity/ModuleSystemTests.cs#L42)
-- **Bravellian.Platform.Tests:Bravellian.Platform.Tests.Modularity.ModuleSystemTests.Registering_module_type_is_idempotent**
+  - Source: [tests/Incursa.Platform.Tests/Modularity/ModuleSystemTests.cs#L42](tests/Incursa.Platform.Tests/Modularity/ModuleSystemTests.cs#L42)
+- **Incursa.Platform.Tests:Incursa.Platform.Tests.Modularity.ModuleSystemTests.Registering_module_type_is_idempotent**
   - Summary: When the same module type is registered twice, then the second registration is ignored without error.
   - Intent: Confirm ModuleRegistry.RegisterModule is idempotent for identical types.
   - Tags: (none)
-  - Source: [tests/Bravellian.Platform.Tests/Modularity/ModuleSystemTests.cs#L230](tests/Bravellian.Platform.Tests/Modularity/ModuleSystemTests.cs#L230)
-- **Bravellian.Platform.Tests:Bravellian.Platform.Tests.Modularity.ModuleSystemTests.Webhook_metadata_allows_fanout**
+  - Source: [tests/Incursa.Platform.Tests/Modularity/ModuleSystemTests.cs#L230](tests/Incursa.Platform.Tests/Modularity/ModuleSystemTests.cs#L230)
+- **Incursa.Platform.Tests:Incursa.Platform.Tests.Modularity.ModuleSystemTests.Webhook_metadata_allows_fanout**
   - Summary: When two modules register identical webhook metadata, then both engines are registered for fanout.
   - Intent: Allow multiple webhook engines to handle the same provider/event pair.
   - Tags: (none)
-  - Source: [tests/Bravellian.Platform.Tests/Modularity/ModuleSystemTests.cs#L200](tests/Bravellian.Platform.Tests/Modularity/ModuleSystemTests.cs#L200)
-- **Bravellian.Platform.Tests:Bravellian.Platform.Tests.Modularity.RazorPagesConfigurationTests.ConfigureRazorModulePages_invokes_module_configuration**
+  - Source: [tests/Incursa.Platform.Tests/Modularity/ModuleSystemTests.cs#L200](tests/Incursa.Platform.Tests/Modularity/ModuleSystemTests.cs#L200)
+- **Incursa.Platform.Tests:Incursa.Platform.Tests.Modularity.RazorPagesConfigurationTests.ConfigureRazorModulePages_invokes_module_configuration**
   - Summary: When ConfigureRazorModulePages runs for a registered module, then RazorPagesOptions can be resolved from the service provider.
   - Intent: Confirm that module Razor configuration wires up Razor pages options in DI.
   - Tags: (none)
-  - Source: [tests/Bravellian.Platform.Tests/Modularity/RazorPagesConfigurationTests.cs#L81](tests/Bravellian.Platform.Tests/Modularity/RazorPagesConfigurationTests.cs#L81)
-- **Bravellian.Platform.Tests:Bravellian.Platform.Tests.Modularity.RazorPagesConfigurationTests.ConfigureRazorModulePages_registers_application_parts**
+  - Source: [tests/Incursa.Platform.Tests/Modularity/RazorPagesConfigurationTests.cs#L81](tests/Incursa.Platform.Tests/Modularity/RazorPagesConfigurationTests.cs#L81)
+- **Incursa.Platform.Tests:Incursa.Platform.Tests.Modularity.RazorPagesConfigurationTests.ConfigureRazorModulePages_registers_application_parts**
   - Summary: When ConfigureRazorModulePages is invoked for a registered Razor module, then its assembly is added to the Razor application parts.
   - Intent: Verify that Razor module assemblies are registered with Razor pages.
   - Tags: (none)
-  - Source: [tests/Bravellian.Platform.Tests/Modularity/RazorPagesConfigurationTests.cs#L43](tests/Bravellian.Platform.Tests/Modularity/RazorPagesConfigurationTests.cs#L43)
-- **Bravellian.Platform.Tests:Bravellian.Platform.Tests.Modularity.RequiredServiceValidationTests.Discovery_service_resolve_engine_throws_when_factory_returns_null**
+  - Source: [tests/Incursa.Platform.Tests/Modularity/RazorPagesConfigurationTests.cs#L43](tests/Incursa.Platform.Tests/Modularity/RazorPagesConfigurationTests.cs#L43)
+- **Incursa.Platform.Tests:Incursa.Platform.Tests.Modularity.RequiredServiceValidationTests.Discovery_service_resolve_engine_throws_when_factory_returns_null**
   - Summary: When an engine descriptor factory returns null, then ResolveEngine throws and identifies the module/engine key.
   - Intent: Guard against null engine factories during discovery resolution.
   - Tags: (none)
-  - Source: [tests/Bravellian.Platform.Tests/Modularity/RequiredServiceValidationTests.cs#L145](tests/Bravellian.Platform.Tests/Modularity/RequiredServiceValidationTests.cs#L145)
-- **Bravellian.Platform.Tests:Bravellian.Platform.Tests.Modularity.RequiredServiceValidationTests.Ui_adapter_executes_when_required_services_are_satisfied**
+  - Source: [tests/Incursa.Platform.Tests/Modularity/RequiredServiceValidationTests.cs#L145](tests/Incursa.Platform.Tests/Modularity/RequiredServiceValidationTests.cs#L145)
+- **Incursa.Platform.Tests:Incursa.Platform.Tests.Modularity.RequiredServiceValidationTests.Ui_adapter_executes_when_required_services_are_satisfied**
   - Summary: When required services are satisfied, then ExecuteAsync returns the engine result.
   - Intent: Confirm successful execution when required services are available.
   - Tags: (none)
-  - Source: [tests/Bravellian.Platform.Tests/Modularity/RequiredServiceValidationTests.cs#L111](tests/Bravellian.Platform.Tests/Modularity/RequiredServiceValidationTests.cs#L111)
-- **Bravellian.Platform.Tests:Bravellian.Platform.Tests.Modularity.RequiredServiceValidationTests.Ui_adapter_requires_required_service_validator_when_engine_declares_required_services**
+  - Source: [tests/Incursa.Platform.Tests/Modularity/RequiredServiceValidationTests.cs#L111](tests/Incursa.Platform.Tests/Modularity/RequiredServiceValidationTests.cs#L111)
+- **Incursa.Platform.Tests:Incursa.Platform.Tests.Modularity.RequiredServiceValidationTests.Ui_adapter_requires_required_service_validator_when_engine_declares_required_services**
   - Summary: When a UI engine declares required services and no validator is registered, then ExecuteAsync fails and mentions IRequiredServiceValidator.
   - Intent: Ensure required service validation is enforced when engines declare dependencies.
   - Tags: (none)
-  - Source: [tests/Bravellian.Platform.Tests/Modularity/RequiredServiceValidationTests.cs#L41](tests/Bravellian.Platform.Tests/Modularity/RequiredServiceValidationTests.cs#L41)
-- **Bravellian.Platform.Tests:Bravellian.Platform.Tests.Modularity.RequiredServiceValidationTests.Ui_adapter_throws_when_required_services_are_missing**
+  - Source: [tests/Incursa.Platform.Tests/Modularity/RequiredServiceValidationTests.cs#L41](tests/Incursa.Platform.Tests/Modularity/RequiredServiceValidationTests.cs#L41)
+- **Incursa.Platform.Tests:Incursa.Platform.Tests.Modularity.RequiredServiceValidationTests.Ui_adapter_throws_when_required_services_are_missing**
   - Summary: When required services are missing, then ExecuteAsync throws with missing service details.
   - Intent: Validate that required service checks surface missing dependencies in the error message.
   - Tags: (none)
-  - Source: [tests/Bravellian.Platform.Tests/Modularity/RequiredServiceValidationTests.cs#L75](tests/Bravellian.Platform.Tests/Modularity/RequiredServiceValidationTests.cs#L75)
+  - Source: [tests/Incursa.Platform.Tests/Modularity/RequiredServiceValidationTests.cs#L75](tests/Incursa.Platform.Tests/Modularity/RequiredServiceValidationTests.cs#L75)

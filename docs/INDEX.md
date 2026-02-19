@@ -1,6 +1,6 @@
-# Bravellian Platform Documentation Index
+# Incursa Platform Documentation Index
 
-Welcome to the comprehensive documentation for the Bravellian Platform. This guide will help you understand and effectively use all platform components.
+Welcome to the comprehensive documentation for the Incursa Platform. This guide will help you understand and effectively use all platform components.
 
 ## 🚀 Getting Started
 
@@ -84,7 +84,7 @@ Welcome to the comprehensive documentation for the Bravellian Platform. This gui
 
 Throughout this documentation:
 - **Code examples** are tested against the latest codebase
-- **Namespaces** use `Bravellian.Platform`
+- **Namespaces** use `Incursa.Platform`
 - **Configuration** examples use C# and appsettings.json
 - **Database** examples use SQL Server syntax
 

@@ -1,10 +1,10 @@
-# Bravellian Platform
+# Incursa Platform
 
 .NET 10 platform for SQL-backed distributed work-queue primitives (outbox, inbox, schedulers, fanout, leases) with claim-ack-abandon semantics and database-authoritative timing.
 
 ## What you get
 
-Bravellian Platform provides durable background processing and coordination primitives that are safe to use in multi-node services:
+Incursa Platform provides durable background processing and coordination primitives that are safe to use in multi-node services:
 
 - Outbox and inbox for reliable publishing and idempotent consumption.
 - One-time and recurring scheduling with database-authoritative timing.
@@ -16,9 +16,9 @@ Bravellian Platform provides durable background processing and coordination prim
 
 Choose a storage provider (or use InMemory for tests/dev):
 
-- `Bravellian.Platform.SqlServer`
-- `Bravellian.Platform.Postgres`
-- `Bravellian.Platform.InMemory`
+- `Incursa.Platform.SqlServer`
+- `Incursa.Platform.Postgres`
+- `Incursa.Platform.InMemory`
 
 Providers can auto-deploy schema (recommended for local/dev) or you can run scripts manually.
 
@@ -27,8 +27,8 @@ Providers can auto-deploy schema (recommended for local/dev) or you can run scri
 Install:
 
 ```bash
-dotnet add package Bravellian.Platform
-dotnet add package Bravellian.Platform.SqlServer
+dotnet add package Incursa.Platform
+dotnet add package Incursa.Platform.SqlServer
 ```
 
 Register the full platform stack:
@@ -61,27 +61,27 @@ builder.Services.AddSqlPlatformMultiDatabaseWithDiscovery(enableSchemaDeployment
 
 Core and providers:
 
-- `Bravellian.Platform` (core abstractions and orchestration)
-- `Bravellian.Platform.SqlServer`, `Bravellian.Platform.Postgres` (storage providers)
-- `Bravellian.Platform.InMemory` (test/dev provider)
+- `Incursa.Platform` (core abstractions and orchestration)
+- `Incursa.Platform.SqlServer`, `Incursa.Platform.Postgres` (storage providers)
+- `Incursa.Platform.InMemory` (test/dev provider)
 
 Platform capabilities:
 
-- `Bravellian.Platform.Audit` (immutable audit timeline)
-- `Bravellian.Platform.Operations` (long-running operations tracking)
-- `Bravellian.Platform.Observability` (shared conventions and emitters)
-- `Bravellian.Platform.Idempotency` (TryBegin/Complete/Fail guard)
-- `Bravellian.Platform.ExactlyOnce` (best-effort exactly-once workflow)
-- `Bravellian.Platform.Email` + `Bravellian.Platform.Email.Postmark` + `Bravellian.Platform.Email.AspNetCore`
-- `Bravellian.Platform.Webhooks` + `Bravellian.Platform.Webhooks.AspNetCore`
-- `Bravellian.Platform.Modularity` + `Bravellian.Platform.Modularity.AspNetCore` + `Bravellian.Platform.Modularity.Razor`
-- `Bravellian.Platform.Metrics.AspNetCore`, `Bravellian.Platform.Metrics.HttpServer`
-- `Bravellian.Platform.Correlation`
-- `Bravellian.Platform.HealthProbe`
+- `Incursa.Platform.Audit` (immutable audit timeline)
+- `Incursa.Platform.Operations` (long-running operations tracking)
+- `Incursa.Platform.Observability` (shared conventions and emitters)
+- `Incursa.Platform.Idempotency` (TryBegin/Complete/Fail guard)
+- `Incursa.Platform.ExactlyOnce` (best-effort exactly-once workflow)
+- `Incursa.Platform.Email` + `Incursa.Platform.Email.Postmark` + `Incursa.Platform.Email.AspNetCore`
+- `Incursa.Platform.Webhooks` + `Incursa.Platform.Webhooks.AspNetCore`
+- `Incursa.Platform.Modularity` + `Incursa.Platform.Modularity.AspNetCore` + `Incursa.Platform.Modularity.Razor`
+- `Incursa.Platform.Metrics.AspNetCore`, `Incursa.Platform.Metrics.HttpServer`
+- `Incursa.Platform.Correlation`
+- `Incursa.Platform.HealthProbe`
 
 ## Database schema
 
-SQL Server artifacts live in `src/Bravellian.Platform.SqlServer/Database/`. Use provider options to auto-deploy, or run scripts manually in controlled environments.
+SQL Server artifacts live in `src/Incursa.Platform.SqlServer/Database/`. Use provider options to auto-deploy, or run scripts manually in controlled environments.
 
 ## Documentation
 
@@ -93,13 +93,13 @@ Start here:
 - `docs/observability/README.md`
 - `docs/testing/README.md`
 
-Package-specific READMEs live under `src/Bravellian.Platform.*`.
+Package-specific READMEs live under `src/Incursa.Platform.*`.
 
 ## Tests and smoke app
 
-- Tests live in `tests/Bravellian.Platform.Tests/` and related projects.
-- `tests/Bravellian.Platform.SmokeWeb/` is a minimal ASP.NET Core UI for exercising outbox/inbox/scheduler/fanout/leases.
-- `tests/Bravellian.Platform.Smoke.AppHost/` is an Aspire app host that can spin up SQL Server and Postgres containers.
+- Tests live in `tests/Incursa.Platform.Tests/` and related projects.
+- `tests/Incursa.Platform.SmokeWeb/` is a minimal ASP.NET Core UI for exercising outbox/inbox/scheduler/fanout/leases.
+- `tests/Incursa.Platform.Smoke.AppHost/` is an Aspire app host that can spin up SQL Server and Postgres containers.
 
 ## Contributing
 

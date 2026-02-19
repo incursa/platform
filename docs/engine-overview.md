@@ -18,8 +18,8 @@ Modules implement `IModuleDefinition` and register themselves with `ModuleRegist
 
 Adapters remain optional: they map transport concerns to engines while keeping the engines themselves unaware of ASP.NET, MVC, or Razor. Reference integrations include:
 - `UiEngineAdapter` → executes an `IUiEngine` and surfaces `UiAdapterResponse` with typed navigation tokens.
-- `Bravellian.Platform.Webhooks` → provider-agnostic ingestion + processing pipeline for webhook engines.
-- `Bravellian.Platform.Modularity.AspNetCore` → adds `MapUiEngineEndpoints` and `MapWebhookEngineEndpoints` for minimal API wiring based on manifest schemas (`Inputs`/`Outputs` and `WebhookMetadata`), forwarding webhook requests into the pipeline.
+- `Incursa.Platform.Webhooks` → provider-agnostic ingestion + processing pipeline for webhook engines.
+- `Incursa.Platform.Modularity.AspNetCore` → adds `MapUiEngineEndpoints` and `MapWebhookEngineEndpoints` for minimal API wiring based on manifest schemas (`Inputs`/`Outputs` and `WebhookMetadata`), forwarding webhook requests into the pipeline.
 
 ## Versioning and isolation
 

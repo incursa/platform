@@ -1,8 +1,8 @@
-# Getting Started with Bravellian Platform
+# Getting Started with Incursa Platform
 
-Bravellian Platform is a .NET 10 library that provides SQL-backed work-queue primitives (outbox, inbox, scheduler, fanout, leases) with claim-ack-abandon semantics and database-authoritative timing.
+Incursa Platform is a .NET 10 library that provides SQL-backed work-queue primitives (outbox, inbox, scheduler, fanout, leases) with claim-ack-abandon semantics and database-authoritative timing.
 
-## What is Bravellian Platform?
+## What is Incursa Platform?
 
 Use the platform when you need durable background processing, safe retries, and coordination across multiple service instances:
 
@@ -23,16 +23,16 @@ Use the platform when you need durable background processing, safe retries, and 
 Add the core package and a provider:
 
 ```bash
-dotnet add package Bravellian.Platform
-dotnet add package Bravellian.Platform.SqlServer
+dotnet add package Incursa.Platform
+dotnet add package Incursa.Platform.SqlServer
 # or
-# dotnet add package Bravellian.Platform.Postgres
+# dotnet add package Incursa.Platform.Postgres
 ```
 
 ## Quick start: SQL Server
 
 ```csharp
-using Bravellian.Platform;
+using Incursa.Platform;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,7 +50,7 @@ var app = builder.Build();
 ## Quick start: Postgres
 
 ```csharp
-using Bravellian.Platform;
+using Incursa.Platform;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -124,7 +124,7 @@ public class WebhookController : ControllerBase
 
 Provider options can auto-deploy schema, or you can run scripts manually in controlled environments.
 
-SQL Server scripts live under `src/Bravellian.Platform.SqlServer/Database/`.
+SQL Server scripts live under `src/Incursa.Platform.SqlServer/Database/`.
 
 ## Documentation index
 
@@ -136,8 +136,8 @@ SQL Server scripts live under `src/Bravellian.Platform.SqlServer/Database/`.
 
 ## Example applications
 
-- `tests/Bravellian.Platform.SmokeWeb/` is a minimal ASP.NET Core UI for exercising outbox, inbox, scheduler, fanout, and leases.
-- `tests/Bravellian.Platform.Smoke.AppHost/` is an Aspire app host that can spin up SQL Server and Postgres containers.
+- `tests/Incursa.Platform.SmokeWeb/` is a minimal ASP.NET Core UI for exercising outbox, inbox, scheduler, fanout, and leases.
+- `tests/Incursa.Platform.Smoke.AppHost/` is an Aspire app host that can spin up SQL Server and Postgres containers.
 
 ## Getting help
 

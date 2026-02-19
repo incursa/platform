@@ -4,7 +4,7 @@ I’ll treat this as an **Explanation** page and draft a single, self‑containe
 
 # Understanding fanout and the outbox
 
-This page explains what “fanout” means in the Bravellian Platform–based architecture, how it is built on top of the outbox pattern, and how the multi‑outbox and outbox router pieces fit into the picture.
+This page explains what “fanout” means in the Incursa Platform–based architecture, how it is built on top of the outbox pattern, and how the multi‑outbox and outbox router pieces fit into the picture.
 
 The goal is to give you a mental model you can use when designing or reading code that uses fanout.
 

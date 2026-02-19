@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`Bravellian.Platform.Correlation` supplies consistent correlation identifiers across UI actions, inbox/outbox processing, webhooks, email, and operations. It helps link distributed work into a single logical trace without prescribing storage or transport.
+`Incursa.Platform.Correlation` supplies consistent correlation identifiers across UI actions, inbox/outbox processing, webhooks, email, and operations. It helps link distributed work into a single logical trace without prescribing storage or transport.
 
 ## Concepts
 
@@ -122,4 +122,4 @@ public sealed class EmailController
 
 ## Observability glue
 
-`Bravellian.Platform.Observability` uses correlation to tie together audit events, operations, and outbox processing.
+`Incursa.Platform.Observability` uses correlation to tie together audit events, operations, and outbox processing.

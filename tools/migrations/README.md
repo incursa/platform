@@ -1,6 +1,6 @@
-# Bravellian Platform Schema Migrations CLI
+# Incursa Platform Schema Migrations CLI
 
-Run the latest Bravellian Platform schema migrations against SQL Server or Postgres.
+Run the latest Incursa Platform schema migrations against SQL Server or Postgres.
 
 ## Usage
 
@@ -16,6 +16,6 @@ Optional flags:
 ## Examples
 
 ```
-bravellian-schema -p sqlserver -c "Server=.;Database=Bravellian;Trusted_Connection=True;" -s infra
+bravellian-schema -p sqlserver -c "Server=.;Database=Incursa;Trusted_Connection=True;" -s infra
 bravellian-schema -p postgres -c "Host=localhost;Database=bravellian;Username=postgres;Password=postgres" --include-control-plane
 ```

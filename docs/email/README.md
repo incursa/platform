@@ -1,6 +1,6 @@
 # Email Outbox
 
-Bravellian.Platform.Email provides a provider-agnostic outbox core for reliable email delivery.
+Incursa.Platform.Email provides a provider-agnostic outbox core for reliable email delivery.
 It focuses on idempotent enqueueing, explicit dispatching, and provider adapters (like Postmark).
 
 ## Architecture
@@ -12,7 +12,7 @@ The system separates enqueue from processing for reliability and control:
   - `IEmailDeliverySink.RecordQueuedAsync` is called for observability.
 - **Processing**: a worker calls `EmailOutboxProcessor.ProcessOnceAsync` (or the hosted service loop).
   - `IOutboxStore` claims due messages, `IOutboundEmailSender` sends them, and `IEmailDeliverySink` records attempts and final state.
-  - `IIdempotencyStore` (from `Bravellian.Platform.Idempotency`) enforces message-key dedupe across workers.
+  - `IIdempotencyStore` (from `Incursa.Platform.Idempotency`) enforces message-key dedupe across workers.
   - `IEmailSendPolicy` can throttle, delay, or reject sends before the provider call.
 
 ## Quick Start
@@ -21,8 +21,8 @@ The system separates enqueue from processing for reliability and control:
 services.AddSqlOutbox("Server=.;Database=app;Trusted_Connection=True;");
 services.AddSqlIdempotency("Server=.;Database=app;Trusted_Connection=True;");
 // For Postgres use AddPostgresOutbox/AddPostgresIdempotency instead.
-services.AddBravellianEmailCore();
-services.AddBravellianEmailProcessingHostedService();
+services.AddIncursaEmailCore();
+services.AddIncursaEmailProcessingHostedService();
 
 var outbox = serviceProvider.GetRequiredService<IEmailOutbox>();
 
@@ -75,7 +75,7 @@ If a duplicate key is detected, the message is suppressed and recorded as `Suppr
 Example (custom backoff):
 
 ```csharp
-services.AddBravellianEmailCore(
+services.AddIncursaEmailCore(
     configureProcessorOptions: options =>
     {
         options.MaxAttempts = 5;
@@ -114,14 +114,14 @@ Policy outcomes:
 
 ## Provider Adapters
 
-### Core responsibilities (Bravellian.Platform.Email)
+### Core responsibilities (Incursa.Platform.Email)
 
 - Provider-agnostic message model and validation (`OutboundEmailMessage`, `EmailMessageValidator`).
 - Outbox enqueue and processing (`IEmailOutbox`, `EmailOutboxProcessor`).
-- Idempotency and delivery tracking interfaces (`IIdempotencyStore`, `IEmailDeliverySink`), with idempotency supplied by `Bravellian.Platform.Idempotency`.
+- Idempotency and delivery tracking interfaces (`IIdempotencyStore`, `IEmailDeliverySink`), with idempotency supplied by `Incursa.Platform.Idempotency`.
 - Throttling policy (`IEmailSendPolicy`).
 
-### Postmark adapter responsibilities (Bravellian.Platform.Email.Postmark)
+### Postmark adapter responsibilities (Incursa.Platform.Email.Postmark)
 
 - Translate `OutboundEmailMessage` into Postmark payloads.
 - Inject provider headers/metadata (including `MessageKey`).
@@ -135,7 +135,7 @@ Use `IPostmarkEmailValidator` to validate against Postmark size limits and attac
 embedding provider rules in your application code.
 
 ```csharp
-services.AddBravellianEmailPostmark();
+services.AddIncursaEmailPostmark();
 
 var validator = serviceProvider.GetRequiredService<IPostmarkEmailValidator>();
 var result = validator.Validate(message);
@@ -168,10 +168,10 @@ services.AddSingleton<IWebhookProvider>(sp =>
         }));
 ```
 
-Use the Bravellian webhooks infrastructure to ingest and process events:
+Use the Incursa webhooks infrastructure to ingest and process events:
 
 ```csharp
-services.AddBravellianWebhooks();
+services.AddIncursaWebhooks();
 
 app.MapPost("/webhooks/{provider}", (HttpContext ctx, IWebhookIngestor ingestor) =>
     WebhookEndpoint.HandleAsync(ctx, ingestor));
@@ -187,7 +187,7 @@ If the probe confirms delivery, the message is finalized without retrying; if no
 
 ## ASP.NET Core Helpers
 
-- `Bravellian.Platform.Email.AspNetCore` supplies DI helpers for registering the outbox components.
+- `Incursa.Platform.Email.AspNetCore` supplies DI helpers for registering the outbox components.
 - Hosting layers should wire up `IOutbox`/`IOutboxStore`, `IOutboundEmailSender`, and `IIdempotencyStore` (for SQL Server, register `AddSqlIdempotency`).
 
 Enqueue usage:
@@ -220,14 +220,14 @@ public sealed class WelcomeEmails
 Wiring + running processor:
 
 ```csharp
-services.AddBravellianEmailCore();
-services.AddBravellianEmailPostmark(options =>
+services.AddIncursaEmailCore();
+services.AddIncursaEmailPostmark(options =>
 {
     options.ServerToken = "postmark-token";
     options.MessageStream = "transactional";
 });
 
-services.AddBravellianEmailProcessingHostedService(options =>
+services.AddIncursaEmailProcessingHostedService(options =>
 {
     options.PollInterval = TimeSpan.FromSeconds(5);
 });
@@ -238,7 +238,7 @@ services.AddBravellianEmailProcessingHostedService(options =>
 To remove old idempotency records, register the cleanup hosted service:
 
 ```csharp
-services.AddBravellianEmailIdempotencyCleanupHostedService(options =>
+services.AddIncursaEmailIdempotencyCleanupHostedService(options =>
 {
     options.RetentionPeriod = TimeSpan.FromDays(7);
     options.CleanupInterval = TimeSpan.FromHours(1);
@@ -247,7 +247,7 @@ services.AddBravellianEmailIdempotencyCleanupHostedService(options =>
 
 ## Observability integration
 
-Use `Bravellian.Platform.Observability` conventions to tie email sends and webhooks into audit + operations.
+Use `Incursa.Platform.Observability` conventions to tie email sends and webhooks into audit + operations.
 
 - Audit events emitted by the email subsystem include:
   - `PlatformEventNames.EmailQueued`

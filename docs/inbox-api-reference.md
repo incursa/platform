@@ -1,6 +1,6 @@
 # Inbox API Reference
 
-Complete API reference for the Inbox pattern implementation in Bravellian Platform.
+Complete API reference for the Inbox pattern implementation in Incursa Platform.
 
 ## IInbox Interface
 
@@ -9,7 +9,7 @@ The primary interface for tracking and managing processed messages to ensure ide
 ### Namespace
 
 ```csharp
-using Bravellian.Platform;
+using Incursa.Platform;
 ```
 
 ### Methods

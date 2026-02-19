@@ -1,7 +1,7 @@
 # Observability Guide
 
 This guide describes when to use audit events, operation tracking, and platform observability conventions,
-and how to apply them in apps that consume Bravellian.Platform.
+and how to apply them in apps that consume Incursa.Platform.
 
 ## Goals
 
@@ -11,17 +11,17 @@ and how to apply them in apps that consume Bravellian.Platform.
 
 ## Which primitive to use
 
-- **Audit events** (`Bravellian.Platform.Audit`)
+- **Audit events** (`Incursa.Platform.Audit`)
   - Use for immutable, human-readable timeline entries.
   - Best for compliance, user-facing history, and support investigations.
   - Event names should be lowercase and dot-separated (for example, `invoice.created`).
 
-- **Operations** (`Bravellian.Platform.Operations`)
+- **Operations** (`Incursa.Platform.Operations`)
   - Use for long-running or multi-step work that needs progress and status.
   - Best for jobs, batch work, and webhook processing runs.
   - Operation names should be stable and dot-separated (for example, `Webhook.Process`).
 
-- **Observability conventions** (`Bravellian.Platform.Observability`)
+- **Observability conventions** (`Incursa.Platform.Observability`)
   - Use to keep names and tags consistent across subsystems.
   - Prefer `PlatformEventNames` and `PlatformTagKeys` for standard signals.
 
@@ -65,7 +65,7 @@ These are recommended but not required:
 
 ## Analyzer support
 
-The observability analyzer package (`Bravellian.Platform.Observability.Analyzers`) ships with
+The observability analyzer package (`Incursa.Platform.Observability.Analyzers`) ships with
 conventions such as:
 
 - `OBS001`: Audit event names should be lowercase and dot-separated.

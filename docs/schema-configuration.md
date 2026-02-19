@@ -1,6 +1,6 @@
 # Schema Configuration Guide
 
-This guide explains how to configure and use custom database schemas with the Bravellian Platform.
+This guide explains how to configure and use custom database schemas with the Incursa Platform.
 
 ## Overview
 
@@ -130,7 +130,7 @@ await DatabaseSchemaManager.EnsureSchedulerSchemaAsync(
 
 ## Schema Drift & Upgrade Guidance
 
-The repository tracks a lightweight manifest of the expected schema hashes for the core modules (outbox, inbox, scheduler, fanout) in `src/Bravellian.Platform.SqlServer/Database/schema-versions.json`. When schema-defining code changes, regenerate and review this manifest to ensure upgrades are intentional:
+The repository tracks a lightweight manifest of the expected schema hashes for the core modules (outbox, inbox, scheduler, fanout) in `src/Incursa.Platform.SqlServer/Database/schema-versions.json`. When schema-defining code changes, regenerate and review this manifest to ensure upgrades are intentional:
 
 1. Refresh the manifest and show the diff:
    ```bash
@@ -142,7 +142,7 @@ The repository tracks a lightweight manifest of the expected schema hashes for t
 
 Tip: You can also regenerate the manifest in isolation with:
 ```bash
-UPDATE_SCHEMA_SNAPSHOT=1 dotnet test tests/Bravellian.Platform.Tests/Bravellian.Platform.Tests.csproj --filter SchemaVersions_MatchSnapshot
+UPDATE_SCHEMA_SNAPSHOT=1 dotnet test tests/Incursa.Platform.Tests/Incursa.Platform.Tests.csproj --filter SchemaVersions_MatchSnapshot
 ```
 
 
@@ -383,4 +383,4 @@ public class CustomSchemaTests : SqlServerTestBase
 
 - [Main README](../README.md) - Platform overview and quick start
 - [Work Queue Pattern Documentation](work-queue-pattern.md) - Details on work queue implementation
-- [Integration Tests](../tests/Bravellian.Platform.Tests/CustomSchemaIntegrationTests.cs) - Example tests with custom schemas
+- [Integration Tests](../tests/Incursa.Platform.Tests/CustomSchemaIntegrationTests.cs) - Example tests with custom schemas

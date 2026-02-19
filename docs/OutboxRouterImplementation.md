@@ -10,44 +10,44 @@ Implemented `IOutboxRouter` interface and supporting infrastructure to enable ro
 
 ### New Interfaces and Classes
 
-1. **IOutboxRouter** (`src/Bravellian.Platform/Outbox/IOutboxRouter.cs`)
+1. **IOutboxRouter** (`src/Incursa.Platform/Outbox/IOutboxRouter.cs`)
    - Provides `GetOutbox(string key)` and `GetOutbox(Guid key)` methods
    - Routes write operations to the correct outbox database
 
-2. **OutboxRouter** (`src/Bravellian.Platform/Outbox/OutboxRouter.cs`)
+2. **OutboxRouter** (`src/Incursa.Platform/Outbox/OutboxRouter.cs`)
    - Default implementation of IOutboxRouter
    - Delegates to IOutboxStoreProvider for actual outbox lookup
    - Simple, lightweight implementation
 
 ### Enhanced Existing Interfaces
 
-3. **IOutboxStoreProvider** (`src/Bravellian.Platform/Outbox/IOutboxStoreProvider.cs`)
+3. **IOutboxStoreProvider** (`src/Incursa.Platform/Outbox/IOutboxStoreProvider.cs`)
    - Added `GetStoreByKey(string key)` - returns IOutboxStore by key
    - Added `GetOutboxByKey(string key)` - returns IOutbox by key
 
-4. **ConfiguredOutboxStoreProvider** (`src/Bravellian.Platform/Outbox/ConfiguredOutboxStoreProvider.cs`)
+4. **ConfiguredOutboxStoreProvider** (`src/Incursa.Platform/Outbox/ConfiguredOutboxStoreProvider.cs`)
    - Updated to create and cache IOutbox instances alongside IOutboxStore instances
    - Implements new interface methods
 
-5. **DynamicOutboxStoreProvider** (`src/Bravellian.Platform/Outbox/DynamicOutboxStoreProvider.cs`)
+5. **DynamicOutboxStoreProvider** (`src/Incursa.Platform/Outbox/DynamicOutboxStoreProvider.cs`)
    - Updated to create and cache IOutbox instances alongside IOutboxStore instances
    - Implements new interface methods
    - Outbox instances are updated when database configuration changes
 
-6. **Service Registration** (`src/Bravellian.Platform/Scheduler/SchedulerServiceCollectionExtensions.cs`)
+6. **Service Registration** (`src/Incursa.Platform/Scheduler/SchedulerServiceCollectionExtensions.cs`)
    - Updated `AddMultiSqlOutbox` methods to register IOutboxRouter
    - Updated `AddDynamicMultiSqlOutbox` to register IOutboxRouter
 
 ### Tests
 
-7. **OutboxRouterTests** (`tests/Bravellian.Platform.Tests/OutboxRouterTests.cs`)
+7. **OutboxRouterTests** (`tests/Incursa.Platform.Tests/OutboxRouterTests.cs`)
    - 9 comprehensive unit tests covering:
      - String and GUID key routing
      - Error handling (null, empty, non-existent keys)
      - Dynamic provider integration
      - Instance caching
 
-8. **OutboxRouterIntegrationTests** (`tests/Bravellian.Platform.Tests/OutboxRouterIntegrationTests.cs`)
+8. **OutboxRouterIntegrationTests** (`tests/Incursa.Platform.Tests/OutboxRouterIntegrationTests.cs`)
    - 3 integration tests demonstrating:
      - Multi-tenant scenarios
      - Dynamic discovery scenarios

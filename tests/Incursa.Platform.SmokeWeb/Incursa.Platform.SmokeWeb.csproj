@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Incursa.Platform.SmokeWeb</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Incursa.Platform\Incursa.Platform.csproj" />
+    <ProjectReference Include="..\..\src\Incursa.Platform.SqlServer\Incursa.Platform.SqlServer.csproj" />
+    <ProjectReference Include="..\..\src\Incursa.Platform.Postgres\Incursa.Platform.Postgres.csproj" />
+    <ProjectReference Include="..\..\src\Incursa.Platform.InMemory\Incursa.Platform.InMemory.csproj" />
+    <ProjectReference Include="..\Incursa.Platform.Smoke.ServiceDefaults\Incursa.Platform.Smoke.ServiceDefaults.csproj" />
+  </ItemGroup>
+</Project>

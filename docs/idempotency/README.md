@@ -1,6 +1,6 @@
 # Idempotency
 
-Bravellian.Platform.Idempotency is a provider-agnostic abstraction for tracking idempotency keys across retries and worker restarts.
+Incursa.Platform.Idempotency is a provider-agnostic abstraction for tracking idempotency keys across retries and worker restarts.
 
 ## When to use it
 

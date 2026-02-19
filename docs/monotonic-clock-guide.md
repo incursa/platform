@@ -48,7 +48,7 @@ while (!deadline.Expired(_clock))
 The `IMonotonicClock` is automatically registered when you add platform services:
 
 ```csharp
-using Bravellian.Platform;
+using Incursa.Platform;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -106,4 +106,4 @@ See [SPEC_UPDATE_SUMMARY.md](SPEC_UPDATE_SUMMARY.md) for complete details.
 
 **File Count**: 5 specification-related files  
 **Total Size**: ~74 KB  
-**Maintained By**: Bravellian Platform Team
+**Maintained By**: Incursa Platform Team

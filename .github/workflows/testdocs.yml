@@ -34,7 +34,7 @@ jobs:
 
       - name: Build TestDocs CLI
         shell: pwsh
-        run: dotnet build ./tools/testdocs/TestDocs.sln -c Release
+        run: dotnet build ./tools/testdocs/TestDocs.slnx -c Release
 
       - name: Generate test docs
         shell: pwsh

@@ -1,0 +1,89 @@
+# Incursa.Platform.HealthProbe
+
+Total tests: 17
+
+- **Incursa.Platform.HealthProbe.Tests:Incursa.Platform.HealthProbe.Tests.HealthProbeCommandLineTests.ParseDefaultsToConfiguredEndpoint**
+  - Summary: Given only the base command, then parsing leaves EndpointName null and JsonOutput false.
+  - Intent: Describe default parsing with no endpoint or flags.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs#L33](tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs#L33)
+- **Incursa.Platform.HealthProbe.Tests:Incursa.Platform.HealthProbe.Tests.HealthProbeCommandLineTests.ParseThrowsForUnknownFlag**
+  - Summary: When an unknown flag is provided, then parsing throws a HealthProbeArgumentException.
+  - Intent: Describe parsing failure for unsupported command line options.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs#L96](tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs#L96)
+- **Incursa.Platform.HealthProbe.Tests:Incursa.Platform.HealthProbe.Tests.HealthProbeCommandLineTests.ParseUsesExplicitEndpointName**
+  - Summary: Given an explicit endpoint argument, then parsing uses it as EndpointName.
+  - Intent: Describe parsing of a positional endpoint argument.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs#L46](tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs#L46)
+- **Incursa.Platform.HealthProbe.Tests:Incursa.Platform.HealthProbe.Tests.HealthProbeCommandLineTests.ParseUsesOverrides**
+  - Summary: When override flags are provided, then parsing populates each override option.
+  - Intent: Describe parsing of URL, timeout, header, API key, TLS, and JSON flags.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs#L58](tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs#L58)
+- **Incursa.Platform.HealthProbe.Tests:Incursa.Platform.HealthProbe.Tests.HealthProbeCommandLineTests.TryRunReturnsInvalidWhenUrlMissing**
+  - Summary: Given no URL override, then running the health check returns InvalidArguments.
+  - Intent: Describe validation when required URL input is missing.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs#L77](tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs#L77)
+- **Incursa.Platform.HealthProbe.Tests:Incursa.Platform.HealthProbe.Tests.HealthProbeUrlResolverTests.ResolveAppendsLivePathWhenBaseHasNoPath**
+  - Summary: When resolving the live endpoint against a base URL with no path, then /live is appended.
+  - Intent: Describe URL resolution for an explicit endpoint name.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.HealthProbe.Tests/HealthProbeUrlResolverTests.cs#L33](tests/Incursa.Platform.HealthProbe.Tests/HealthProbeUrlResolverTests.cs#L33)
+- **Incursa.Platform.HealthProbe.Tests:Incursa.Platform.HealthProbe.Tests.HealthProbeUrlResolverTests.ResolveAppendsReadyPathWhenBaseHasNoPath**
+  - Summary: Given a base URL with no path and a default ready endpoint, then resolution appends /ready.
+  - Intent: Describe URL resolution for the default endpoint.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.HealthProbe.Tests/HealthProbeUrlResolverTests.cs#L13](tests/Incursa.Platform.HealthProbe.Tests/HealthProbeUrlResolverTests.cs#L13)
+- **Incursa.Platform.HealthProbe.Tests:Incursa.Platform.HealthProbe.Tests.HealthProbeUrlResolverTests.ResolveNormalizesPathWhenReadyPathIsRelative**
+  - Summary: When the endpoint path is relative, then resolution combines it with the base URL.
+  - Intent: Describe resolution behavior for relative endpoint paths.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.HealthProbe.Tests/HealthProbeUrlResolverTests.cs#L69](tests/Incursa.Platform.HealthProbe.Tests/HealthProbeUrlResolverTests.cs#L69)
+- **Incursa.Platform.HealthProbe.Tests:Incursa.Platform.HealthProbe.Tests.HealthProbeUrlResolverTests.ResolveUsesExplicitPathWhenProvided**
+  - Summary: Given an endpoint mapped to an absolute URL, then resolution uses that URL.
+  - Intent: Describe resolution behavior for absolute endpoint URLs.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.HealthProbe.Tests/HealthProbeUrlResolverTests.cs#L51](tests/Incursa.Platform.HealthProbe.Tests/HealthProbeUrlResolverTests.cs#L51)
+- **Incursa.Platform.HealthProbe.Tests:Incursa.Platform.HealthProbe.Tests.HealthProbeUrlResolverTests.ResolveUsesOverrideUrlWhenProvided**
+  - Summary: When an override URL is provided, then resolution returns the override and preserves the endpoint name.
+  - Intent: Describe precedence of override URLs.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.HealthProbe.Tests/HealthProbeUrlResolverTests.cs#L88](tests/Incursa.Platform.HealthProbe.Tests/HealthProbeUrlResolverTests.cs#L88)
+- **Incursa.Platform.HealthProbe.Tests:Incursa.Platform.HealthProbe.Tests.HttpHealthProbeRunnerTests.RunAsyncAddsApiKeyHeaderWhenConfigured**
+  - Summary: When API key settings are configured, then the probe request includes the API key header.
+  - Intent: Describe how API key options affect probe request headers.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs#L151](tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs#L151)
+- **Incursa.Platform.HealthProbe.Tests:Incursa.Platform.HealthProbe.Tests.HttpHealthProbeRunnerTests.RunAsyncDoesNotTreatNonSuccessStatusAsHealthyEvenWhenJsonIsHealthy**
+  - Summary: When the HTTP status is non-success, then the result is unhealthy even if JSON says Healthy.
+  - Intent: Describe precedence of HTTP status over JSON health status.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs#L101](tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs#L101)
+- **Incursa.Platform.HealthProbe.Tests:Incursa.Platform.HealthProbe.Tests.HttpHealthProbeRunnerTests.RunAsyncReturnsExceptionExitCodeOnTimeout**
+  - Summary: When the probe times out, then the result uses the exception exit code.
+  - Intent: Describe timeout handling for HTTP probes.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs#L125](tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs#L125)
+- **Incursa.Platform.HealthProbe.Tests:Incursa.Platform.HealthProbe.Tests.HttpHealthProbeRunnerTests.RunAsyncReturnsHealthyForSuccessStatus**
+  - Summary: When the probe handler returns 200 OK, then the result is healthy.
+  - Intent: Describe how a success HTTP status maps to a healthy probe result.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs#L17](tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs#L17)
+- **Incursa.Platform.HealthProbe.Tests:Incursa.Platform.HealthProbe.Tests.HttpHealthProbeRunnerTests.RunAsyncReturnsHealthyWhenJsonStatusIsHealthy**
+  - Summary: When a 200 OK response body reports Healthy, then the result is healthy.
+  - Intent: Describe how a JSON health status maps to the probe outcome.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs#L77](tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs#L77)
+- **Incursa.Platform.HealthProbe.Tests:Incursa.Platform.HealthProbe.Tests.HttpHealthProbeRunnerTests.RunAsyncReturnsUnhealthyForFailureStatus**
+  - Summary: When the probe handler returns a failure status, then the result is unhealthy.
+  - Intent: Describe how non-success HTTP status maps to an unhealthy probe result.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs#L35](tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs#L35)
+- **Incursa.Platform.HealthProbe.Tests:Incursa.Platform.HealthProbe.Tests.HttpHealthProbeRunnerTests.RunAsyncReturnsUnhealthyWhenJsonStatusIsUnhealthy**
+  - Summary: When a 200 OK response body reports Unhealthy, then the result is unhealthy.
+  - Intent: Describe how a JSON health status maps to the probe outcome.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs#L53](tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs#L53)

@@ -1,0 +1,50 @@
+// Copyright (c) Incursa
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+namespace Incursa.Platform.Email.Tests;
+
+public sealed class EmailMessageValidatorTests
+{
+    /// <summary>When validate Returns Success For Valid Message, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for validate Returns Success For Valid Message.</intent>
+    /// <scenario>Given validate Returns Success For Valid Message.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
+    [Fact]
+    public void Validate_ReturnsSuccessForValidMessage()
+    {
+        var message = EmailFixtures.CreateMessage();
+        var validator = new EmailMessageValidator();
+
+        var result = validator.Validate(message);
+
+        result.Succeeded.ShouldBeTrue();
+        result.Errors.ShouldBeEmpty();
+    }
+
+    /// <summary>When validate Returns Errors For Missing Body, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for validate Returns Errors For Missing Body.</intent>
+    /// <scenario>Given validate Returns Errors For Missing Body.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
+    [Fact]
+    public void Validate_ReturnsErrorsForMissingBody()
+    {
+        var message = EmailFixtures.CreateMessage(textBody: null, htmlBody: null);
+        var validator = new EmailMessageValidator();
+
+        var result = validator.Validate(message);
+
+        result.Succeeded.ShouldBeFalse();
+        result.Errors.ShouldContain("Either TextBody or HtmlBody must be provided.");
+    }
+}

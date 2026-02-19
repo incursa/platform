@@ -45,7 +45,7 @@ Example (with optional tags):
 /// <tags>security; regression</tags>
 /// <category>Auth.SignIn</category>
 /// <origin kind="bug" id="SEC-194" date="2025-09-03">Disabled users could sign in.</origin>
-/// <testid>Bravellian.Platform.Tests.Auth.SignInTests.Disabled_user_denied</testid>
+/// <testid>Incursa.Platform.Tests.Auth.SignInTests.Disabled_user_denied</testid>
 ```
 
 ## Formatting rules
@@ -56,7 +56,7 @@ Example (with optional tags):
 - Omit optional tags rather than guessing.
 
 ## Analyzer guidance
-If you use `Bravellian.TestDocs.Analyzers`, it will warn when required tags are missing (`TD001`) or still contain placeholders/empty values (`TD002`). The default template uses `TODO` placeholders that must be replaced.
+If you use `Incursa.TestDocs.Analyzers`, it will warn when required tags are missing (`TD001`) or still contain placeholders/empty values (`TD002`). The default template uses `TODO` placeholders that must be replaced.
 
 ## Deterministic identifiers
 If `<testid>` is omitted, the generator uses:

@@ -35,7 +35,7 @@ VALUES
 ### 2. Discovery Implementation
 
 ```csharp
-using Bravellian.Platform;
+using Incursa.Platform;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -107,7 +107,7 @@ public class GlobalDatabaseOutboxDiscovery : IOutboxDatabaseDiscovery
 ### 3. Registration in Startup
 
 ```csharp
-using Bravellian.Platform;
+using Incursa.Platform;
 using Microsoft.Extensions.DependencyInjection;
 
 public class Startup
@@ -139,8 +139,8 @@ public class Startup
   },
   "Logging": {
     "LogLevel": {
-      "Bravellian.Platform.DynamicOutboxStoreProvider": "Information",
-      "Bravellian.Platform.MultiOutboxDispatcher": "Information"
+      "Incursa.Platform.DynamicOutboxStoreProvider": "Information",
+      "Incursa.Platform.MultiOutboxDispatcher": "Information"
     }
   }
 }

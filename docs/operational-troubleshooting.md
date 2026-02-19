@@ -1,6 +1,6 @@
 # Operational Troubleshooting Guide
 
-This guide summarizes hands-on procedures for diagnosing and unblocking common operational issues in Bravellian Platform deployments. SQL snippets assume SQL Server and the default schemas/table names; adjust `schemaName`/`tableName` as needed for your environment.
+This guide summarizes hands-on procedures for diagnosing and unblocking common operational issues in Incursa Platform deployments. SQL snippets assume SQL Server and the default schemas/table names; adjust `schemaName`/`tableName` as needed for your environment.
 
 ## Stuck Locked Rows
 
@@ -113,7 +113,7 @@ For a full manifest comparison, run the repository helper locally:
 ```bash
 ./scripts/schema-diff.sh
 ```
-This regenerates the schema hashes and shows differences from `src/Bravellian.Platform.SqlServer/Database/schema-versions.json`.
+This regenerates the schema hashes and shows differences from `src/Incursa.Platform.SqlServer/Database/schema-versions.json`.
 
 ### Recover
 

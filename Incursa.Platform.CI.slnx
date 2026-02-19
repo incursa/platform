@@ -1,0 +1,49 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/src/">
+    <Project Path="src/Incursa.Platform.Modularity/Incursa.Platform.Modularity.csproj" />
+    <Project Path="src/Incursa.Platform.Modularity.AspNetCore/Incursa.Platform.Modularity.AspNetCore.csproj" />
+    <Project Path="src/Incursa.Platform.Modularity.Razor/Incursa.Platform.Modularity.Razor.csproj" />
+    <Project Path="src/Incursa.Platform.Postgres/Incursa.Platform.Postgres.csproj" />
+    <Project Path="src/Incursa.Platform.SqlServer/Incursa.Platform.SqlServer.csproj" />
+    <Project Path="src/Incursa.Platform.InMemory/Incursa.Platform.InMemory.csproj" />
+    <Project Path="src/Incursa.Platform.HealthProbe/Incursa.Platform.HealthProbe.csproj" />
+    <Project Path="src/Incursa.Platform.Email/Incursa.Platform.Email.csproj" />
+    <Project Path="src/Incursa.Platform.Email.Postmark/Incursa.Platform.Email.Postmark.csproj" />
+    <Project Path="src/Incursa.Platform.Email.AspNetCore/Incursa.Platform.Email.AspNetCore.csproj" />
+    <Project Path="src/Incursa.Platform.Webhooks/Incursa.Platform.Webhooks.csproj" />
+    <Project Path="src/Incursa.Platform.Webhooks.AspNetCore/Incursa.Platform.Webhooks.AspNetCore.csproj" />
+    <Project Path="src/Incursa.Platform.Operations/Incursa.Platform.Operations.csproj" />
+    <Project Path="src/Incursa.Platform.Audit/Incursa.Platform.Audit.csproj" />
+    <Project Path="src/Incursa.Platform.Correlation/Incursa.Platform.Correlation.csproj" />
+    <Project Path="src/Incursa.Platform.Idempotency/Incursa.Platform.Idempotency.csproj" />
+    <Project Path="src/Incursa.Platform.ExactlyOnce/Incursa.Platform.ExactlyOnce.csproj" />
+    <Project Path="src/Incursa.Platform.Observability/Incursa.Platform.Observability.csproj" />
+    <Project Path="src/Incursa.Platform.Metrics.AspNetCore/Incursa.Platform.Metrics.AspNetCore.csproj" />
+    <Project Path="src/Incursa.Platform.Metrics.HttpServer/Incursa.Platform.Metrics.HttpServer.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/observability/src/Incursa.Platform.Observability.Analyzers/Incursa.Platform.Observability.Analyzers.csproj" />
+  </Folder>
+  <Project Path="src/Incursa.Platform/Incursa.Platform.csproj" />
+  <Project Path="tests/Incursa.Platform.TestUtilities/Incursa.Platform.TestUtilities.csproj" />
+  <Project Path="tests/Incursa.Platform.Tests/Incursa.Platform.Tests.csproj" />
+  <Project Path="tests/Incursa.Platform.SqlServer.Tests/Incursa.Platform.SqlServer.Tests.csproj" />
+  <Project Path="tests/Incursa.Platform.InMemory.Tests/Incursa.Platform.InMemory.Tests.csproj" />
+  <Project Path="tests/Incursa.Platform.HealthProbe.Tests/Incursa.Platform.HealthProbe.Tests.csproj" />
+  <Project Path="tests/Incursa.Platform.Postgres.Tests/Incursa.Platform.Postgres.Tests.csproj" />
+  <Project Path="tests/Incursa.Platform.Email.Tests/Incursa.Platform.Email.Tests.csproj" />
+  <Project Path="tests/Incursa.Platform.Email.Postmark.Tests/Incursa.Platform.Email.Postmark.Tests.csproj" />
+  <Project Path="tests/Incursa.Platform.Webhooks.Tests/Incursa.Platform.Webhooks.Tests.csproj" />
+  <Project Path="tests/Incursa.Platform.Webhooks.AspNetCore.Tests/Incursa.Platform.Webhooks.AspNetCore.Tests.csproj" />
+  <Project Path="tests/Incursa.Platform.Operations.Tests/Incursa.Platform.Operations.Tests.csproj" />
+  <Project Path="tests/Incursa.Platform.Audit.Tests/Incursa.Platform.Audit.Tests.csproj" />
+  <Project Path="tests/Incursa.Platform.Correlation.Tests/Incursa.Platform.Correlation.Tests.csproj" />
+  <Project Path="tests/Incursa.Platform.Observability.Tests/Incursa.Platform.Observability.Tests.csproj" />
+  <Project Path="tests/Incursa.Platform.SmokeWeb/Incursa.Platform.SmokeWeb.csproj" />
+  <Project Path="tests/Incursa.Platform.Smoke.AppHost/Incursa.Platform.Smoke.AppHost.csproj" />
+</Solution>

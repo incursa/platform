@@ -44,7 +44,7 @@ var strategy = new DrainFirstOutboxSelectionStrategy();
 When you have a known set of databases at startup:
 
 ```csharp
-using Bravellian.Platform;
+using Incursa.Platform;
 using Microsoft.Extensions.DependencyInjection;
 
 // Define your outbox databases

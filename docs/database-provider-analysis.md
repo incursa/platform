@@ -3,11 +3,11 @@
 Last updated: 2025-02-14
 
 ## Goal
-Split the platform into a provider-agnostic core (`Bravellian.Platform`) plus a SQL Server provider package (proposed: `Bravellian.Platform.SqlServer`). This isolates SQL Server-only types, stored procedures, and SQL-specific DI wiring so future providers (e.g., Postgres) can be added without entangling the core.
+Split the platform into a provider-agnostic core (`Incursa.Platform`) plus a SQL Server provider package (proposed: `Incursa.Platform.SqlServer`). This isolates SQL Server-only types, stored procedures, and SQL-specific DI wiring so future providers (e.g., Postgres) can be added without entangling the core.
 
 ## Current SQL Server Surface Area (high-level)
 - SqlClient usage across outbox/inbox/scheduler/fanout/leases/semaphores/metrics.
-- Schema deployment and stored procedure generation in `DatabaseSchemaManager` and SQL scripts in `src/Bravellian.Platform.SqlServer/Database/*.sql`.
+- Schema deployment and stored procedure generation in `DatabaseSchemaManager` and SQL scripts in `src/Incursa.Platform.SqlServer/Database/*.sql`.
 - DI entrypoints register SQL Server implementations directly (e.g., `AddSqlOutbox`, `AddPlatformMultiDatabaseWithList`).
 - Platform lifecycle validation uses `SqlConnection`.
 - Dapper type handlers are registered from core, but only used by SQL Server implementations.
@@ -22,7 +22,7 @@ These are SQL Server-only constructs that should live in the SQL Server provider
 - Columnstore index usage for metrics.
 
 ## Proposed Project Split
-### Core (`Bravellian.Platform`)
+### Core (`Incursa.Platform`)
 Keep provider-agnostic abstractions and orchestration:
 - Interfaces: `IOutbox`, `IOutboxStore`, `IInbox`, `IScheduler*`, `IFanout*`, `ISystemLease`.
 - Routing/selection: `*Router`, `*SelectionStrategy`, round-robin strategies.
@@ -31,7 +31,7 @@ Keep provider-agnostic abstractions and orchestration:
 - `IDatabaseSchemaCompletion` + `DatabaseSchemaCompletion` (provider-agnostic coordination).
 - Provider-agnostic DI helpers (e.g., `AddTimeAbstractions`, handler registration).
 
-### SQL Server Provider (`Bravellian.Platform.SqlServer`)
+### SQL Server Provider (`Incursa.Platform.SqlServer`)
 Move SQL Server-specific code and API surface here:
 - All `Sql*` implementations and options/validators.
 - Schema deployment (`DatabaseSchemaManager`, `DatabaseSchemaBackgroundService`) and SQL artifacts.
@@ -50,14 +50,14 @@ When provider split is stable, evaluate Postgres implementation details:
 
 ## Open Questions / Follow-ups
 - Should `PlatformServiceCollectionExtensions` (AddPlatform* helpers) stay in core or move to the SQL Server provider?
-- Should SQL artifacts in `src/Bravellian.Platform.SqlServer/Database` move under the SQL Server provider package?
+- Should SQL artifacts in `src/Incursa.Platform.SqlServer/Database` move under the SQL Server provider package?
 - Do we want core to expose any provider-agnostic schema deployment interface?
 
 ## DBUp Migration Analysis (schema management in-library)
 ### Current state (baseline)
 - Schema deployment is done via `DatabaseSchemaManager` and ad-hoc SQL execution with batch splitting.
-- Schema integrity is checked in tests via `schema-versions.json` snapshot hashes (see `tests/Bravellian.Platform.Tests/SchemaVersionSnapshot.cs`).
-- SQL artifacts live under `src/Bravellian.Platform.SqlServer/Database/*.sql` and are executed in order in tests.
+- Schema integrity is checked in tests via `schema-versions.json` snapshot hashes (see `tests/Incursa.Platform.Tests/SchemaVersionSnapshot.cs`).
+- SQL artifacts live under `src/Incursa.Platform.SqlServer/Database/*.sql` and are executed in order in tests.
 
 ### DBUp feasibility
 - DBUp supports SQL Server and Postgres via provider packages (`DbUp.SqlServer`, `DbUp.Postgresql`).
@@ -68,8 +68,8 @@ When provider split is stable, evaluate Postgres implementation details:
 ### What changes are required
 - Replace `DatabaseSchemaManager` with DBUp-based migration runner per provider.
 - Move SQL artifacts into provider-specific migration folders:
-  - `src/Bravellian.Platform.SqlServer/Migrations/*.sql`
-  - `src/Bravellian.Platform.Postgres/Migrations/*.sql` (future)
+  - `src/Incursa.Platform.SqlServer/Migrations/*.sql`
+  - `src/Incursa.Platform.Postgres/Migrations/*.sql` (future)
 - Add script naming conventions for ordering (e.g., `001_Initial.sql`, `002_Add_Column.sql`).
 - Use provider-specific script batches (SQL Server uses `GO`; Postgres does not).
 - Update schema deployment flow (currently `DatabaseSchemaBackgroundService`) to run DBUp per database discovered.

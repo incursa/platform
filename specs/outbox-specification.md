@@ -7,7 +7,7 @@
 | **Component** | Outbox |
 | **Version** | 1.0 |
 | **Status** | Active |
-| **Owner** | Bravellian Platform Team |
+| **Owner** | Incursa Platform Team |
 | **Last Updated** | 2025-12-07 |
 
 ## 2. Purpose and Scope

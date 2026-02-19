@@ -1,6 +1,6 @@
 # Outbox API Reference
 
-Complete API reference for the Outbox pattern implementation in Bravellian Platform.
+Complete API reference for the Outbox pattern implementation in Incursa Platform.
 
 ## IOutbox Interface
 
@@ -9,7 +9,7 @@ The primary interface for enqueueing and managing outbox messages.
 ### Namespace
 
 ```csharp
-using Bravellian.Platform;
+using Incursa.Platform;
 ```
 
 ### Methods

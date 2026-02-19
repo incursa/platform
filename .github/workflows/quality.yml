@@ -31,16 +31,16 @@ jobs:
           global-json-file: global.json
 
       - name: Restore
-        run: dotnet restore Bravellian.Platform.CI.slnx
+        run: dotnet restore Incursa.Platform.CI.slnx
 
       - name: Verify formatting and analyzers
-        run: dotnet format --verify-no-changes Bravellian.Platform.CI.slnx
+        run: dotnet format --verify-no-changes Incursa.Platform.CI.slnx
 
       - name: Build (deterministic)
-        run: dotnet build Bravellian.Platform.CI.slnx --no-restore --configuration Release -warnaserror -p:ContinuousIntegrationBuild=true
+        run: dotnet build Incursa.Platform.CI.slnx --no-restore --configuration Release -warnaserror -p:ContinuousIntegrationBuild=true
 
       - name: Test (exclude integration)
-        run: dotnet test Bravellian.Platform.CI.slnx --no-build --configuration Release --filter "Category!=Integration&RequiresDocker!=true"
+        run: dotnet test Incursa.Platform.CI.slnx --no-build --configuration Release --filter "Category!=Integration&RequiresDocker!=true"
 
       - name: Pack (repro 1)
         shell: bash
@@ -49,7 +49,7 @@ jobs:
           rm -rf artifacts/repro1 artifacts/repro2
           mkdir -p artifacts/repro1 artifacts/repro2
 
-          dotnet pack ./Bravellian.Platform.CI.slnx \
+          dotnet pack ./Incursa.Platform.CI.slnx \
             -c Release \
             -p:ContinuousIntegrationBuild=true \
             -p:Deterministic=true \
@@ -62,7 +62,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          dotnet pack ./Bravellian.Platform.CI.slnx \
+          dotnet pack ./Incursa.Platform.CI.slnx \
             -c Release \
             -p:ContinuousIntegrationBuild=true \
             -p:Deterministic=true \

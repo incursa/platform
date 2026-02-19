@@ -5,7 +5,7 @@ These snippets show minimal, runnable configurations for fanout. They include de
 ## Single-tenant fanout
 
 ```csharp
-using Bravellian.Platform;
+using Incursa.Platform;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -80,7 +80,7 @@ public sealed class ReportSliceHandler : IOutboxHandler
 ## Multi-tenant fanout across two databases
 
 ```csharp
-using Bravellian.Platform;
+using Incursa.Platform;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 

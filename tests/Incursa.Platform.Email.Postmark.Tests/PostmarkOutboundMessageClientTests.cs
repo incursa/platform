@@ -1,0 +1,123 @@
+// Copyright (c) Incursa
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System.Net;
+using System.Text;
+using Incursa.Platform.Email.Postmark;
+
+namespace Incursa.Platform.Email.Postmark.Tests;
+
+public sealed class PostmarkOutboundMessageClientTests
+{
+    /// <summary>When get Outbound Message Details Async Returns Not Found On404, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for get Outbound Message Details Async Returns Not Found On404.</intent>
+    /// <scenario>Given get Outbound Message Details Async Returns Not Found On404.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
+    [Fact]
+    public async Task GetOutboundMessageDetailsAsync_ReturnsNotFoundOn404()
+    {
+        using var handler = new CapturingHandler(HttpStatusCode.NotFound, string.Empty);
+        using var httpClient = new HttpClient(handler)
+        {
+            BaseAddress = new Uri("https://api.postmarkapp.com/")
+        };
+        var client = new PostmarkOutboundMessageClient(httpClient, new PostmarkOptions { ServerToken = "server-token" });
+
+        var result = await client.GetOutboundMessageDetailsAsync("missing", CancellationToken.None);
+
+        result.Status.ShouldBe(PostmarkQueryStatus.NotFound);
+    }
+
+    /// <summary>When search Outbound By Metadata Async Returns Not Found When Empty, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for search Outbound By Metadata Async Returns Not Found When Empty.</intent>
+    /// <scenario>Given search Outbound By Metadata Async Returns Not Found When Empty.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
+    [Fact]
+    public async Task SearchOutboundByMetadataAsync_ReturnsNotFoundWhenEmpty()
+    {
+        var payload = "{\"TotalCount\":0,\"Messages\":[]}";
+        using var handler = new CapturingHandler(HttpStatusCode.OK, payload);
+        using var httpClient = new HttpClient(handler)
+        {
+            BaseAddress = new Uri("https://api.postmarkapp.com/")
+        };
+        var client = new PostmarkOutboundMessageClient(httpClient, new PostmarkOptions { ServerToken = "server-token" });
+
+        var result = await client.SearchOutboundByMetadataAsync("MessageKey", "value", CancellationToken.None);
+
+        result.Status.ShouldBe(PostmarkQueryStatus.NotFound);
+    }
+
+    /// <summary>When search Outbound By Metadata Async Returns Found When Message Exists, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for search Outbound By Metadata Async Returns Found When Message Exists.</intent>
+    /// <scenario>Given search Outbound By Metadata Async Returns Found When Message Exists.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
+    [Fact]
+    public async Task SearchOutboundByMetadataAsync_ReturnsFoundWhenMessageExists()
+    {
+        var payload = "{\"TotalCount\":1,\"Messages\":[{\"MessageID\":\"abc\",\"Status\":\"Sent\"}]}";
+        using var handler = new CapturingHandler(HttpStatusCode.OK, payload);
+        using var httpClient = new HttpClient(handler)
+        {
+            BaseAddress = new Uri("https://api.postmarkapp.com/")
+        };
+        var client = new PostmarkOutboundMessageClient(httpClient, new PostmarkOptions { ServerToken = "server-token" });
+
+        var result = await client.SearchOutboundByMetadataAsync("MessageKey", "value", CancellationToken.None);
+
+        result.Status.ShouldBe(PostmarkQueryStatus.Found);
+        result.Response!.Messages!.Count.ShouldBe(1);
+        result.Response.Messages[0].MessageId.ShouldBe("abc");
+    }
+
+    /// <summary>When search Outbound By Metadata Async Returns Error On Failure, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for search Outbound By Metadata Async Returns Error On Failure.</intent>
+    /// <scenario>Given search Outbound By Metadata Async Returns Error On Failure.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
+    [Fact]
+    public async Task SearchOutboundByMetadataAsync_ReturnsErrorOnFailure()
+    {
+        using var handler = new CapturingHandler(HttpStatusCode.InternalServerError, "{\"Message\":\"boom\"}");
+        using var httpClient = new HttpClient(handler)
+        {
+            BaseAddress = new Uri("https://api.postmarkapp.com/")
+        };
+        var client = new PostmarkOutboundMessageClient(httpClient, new PostmarkOptions { ServerToken = "server-token" });
+
+        var result = await client.SearchOutboundByMetadataAsync("MessageKey", "value", CancellationToken.None);
+
+        result.Status.ShouldBe(PostmarkQueryStatus.Error);
+    }
+
+    private sealed class CapturingHandler : HttpMessageHandler
+    {
+        private readonly HttpStatusCode statusCode;
+        private readonly string responseBody;
+
+        public CapturingHandler(HttpStatusCode statusCode, string responseBody)
+        {
+            this.statusCode = statusCode;
+            this.responseBody = responseBody;
+        }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            var response = new HttpResponseMessage(statusCode)
+            {
+                Content = new StringContent(responseBody, Encoding.UTF8, "application/json")
+            };
+            return Task.FromResult(response);
+        }
+    }
+}

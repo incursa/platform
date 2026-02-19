@@ -1,0 +1,271 @@
+// Copyright (c) Incursa
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+using Incursa.Platform.Tests.TestUtilities;
+using Dapper;
+using Microsoft.Data.SqlClient;
+
+namespace Incursa.Platform.Tests;
+
+[Collection(SqlServerCollection.Name)]
+[Trait("Category", "Integration")]
+[Trait("RequiresDocker", "true")]
+public class OutboxCleanupTests : SqlServerTestBase
+{
+    private readonly SqlOutboxOptions defaultOptions = new() { ConnectionString = string.Empty, SchemaName = "infra", TableName = "Outbox" };
+
+    public OutboxCleanupTests(ITestOutputHelper testOutputHelper, SqlServerCollectionFixture fixture)
+        : base(testOutputHelper, fixture)
+    {
+    }
+
+    public override async ValueTask InitializeAsync()
+    {
+        await base.InitializeAsync().ConfigureAwait(false);
+        defaultOptions.ConnectionString = ConnectionString;
+    }
+
+    /// <summary>When cleanup runs with a retention window, then only processed outbox rows older than the window are deleted.</summary>
+    /// <intent>Verify the outbox cleanup procedure removes stale processed rows.</intent>
+    /// <scenario>Given old processed, recent processed, and unprocessed outbox rows before cleanup.</scenario>
+    /// <behavior>Then only the old processed message is deleted and other rows remain.</behavior>
+    [Fact]
+    public async Task Cleanup_DeletesOldProcessedMessages()
+    {
+        // Arrange - Add old processed messages and recent processed messages
+        await using var connection = new SqlConnection(ConnectionString);
+        await connection.OpenAsync(TestContext.Current.CancellationToken);
+
+        var oldMessageId = Guid.NewGuid();
+        var recentMessageId = Guid.NewGuid();
+        var unprocessedMessageId = Guid.NewGuid();
+
+        // Insert old processed message (10 days ago)
+        await connection.ExecuteAsync(
+            $@"
+            INSERT INTO [{defaultOptions.SchemaName}].[{defaultOptions.TableName}] 
+            (Id, Topic, Payload, IsProcessed, ProcessedAt, CreatedAt)
+            VALUES (@Id, @Topic, @Payload, 1, @ProcessedAt, @CreatedAt)",
+            new
+            {
+                Id = oldMessageId,
+                Topic = "Test.Topic",
+                Payload = "old message",
+                ProcessedAt = DateTimeOffset.UtcNow.AddDays(-10),
+                CreatedAt = DateTimeOffset.UtcNow.AddDays(-11),
+            });
+
+        // Insert recent processed message (1 day ago)
+        await connection.ExecuteAsync(
+            $@"
+            INSERT INTO [{defaultOptions.SchemaName}].[{defaultOptions.TableName}] 
+            (Id, Topic, Payload, IsProcessed, ProcessedAt, CreatedAt)
+            VALUES (@Id, @Topic, @Payload, 1, @ProcessedAt, @CreatedAt)",
+            new
+            {
+                Id = recentMessageId,
+                Topic = "Test.Topic",
+                Payload = "recent message",
+                ProcessedAt = DateTimeOffset.UtcNow.AddDays(-1),
+                CreatedAt = DateTimeOffset.UtcNow.AddDays(-2),
+            });
+
+        // Insert unprocessed message
+        await connection.ExecuteAsync(
+            $@"
+            INSERT INTO [{defaultOptions.SchemaName}].[{defaultOptions.TableName}] 
+            (Id, Topic, Payload, IsProcessed, CreatedAt)
+            VALUES (@Id, @Topic, @Payload, 0, @CreatedAt)",
+            new
+            {
+                Id = unprocessedMessageId,
+                Topic = "Test.Topic",
+                Payload = "unprocessed message",
+                CreatedAt = DateTimeOffset.UtcNow.AddDays(-15),
+            });
+
+        // Act - Run cleanup with 7 day retention
+        var retentionSeconds = (int)TimeSpan.FromDays(7).TotalSeconds;
+        var deletedCount = await connection.ExecuteScalarAsync<int>(
+            $"EXEC [{defaultOptions.SchemaName}].[{defaultOptions.TableName}_Cleanup] @RetentionSeconds",
+            new { RetentionSeconds = retentionSeconds });
+
+        // Assert - Only old processed message should be deleted
+        deletedCount.ShouldBe(1);
+
+        var remainingMessages = await connection.QueryAsync<dynamic>(
+            $"SELECT Id FROM [{defaultOptions.SchemaName}].[{defaultOptions.TableName}]");
+        var remainingIds = remainingMessages.Select(m => (Guid)m.Id).ToList();
+
+        remainingIds.ShouldNotContain(oldMessageId);
+        remainingIds.ShouldContain(recentMessageId);
+        remainingIds.ShouldContain(unprocessedMessageId);
+    }
+
+    /// <summary>When cleanup runs and no processed rows are older than retention, then nothing is deleted.</summary>
+    /// <intent>Ensure cleanup is a no-op when no rows qualify for deletion.</intent>
+    /// <scenario>Given only a recent processed outbox row before cleanup.</scenario>
+    /// <behavior>Then the cleanup procedure deletes zero rows and the message remains.</behavior>
+    [Fact]
+    public async Task Cleanup_WithNoOldMessages_DeletesNothing()
+    {
+        // Arrange - Add only recent processed messages
+        await using var connection = new SqlConnection(ConnectionString);
+        await connection.OpenAsync(TestContext.Current.CancellationToken);
+
+        var recentMessageId = Guid.NewGuid();
+
+        await connection.ExecuteAsync(
+            $@"
+            INSERT INTO [{defaultOptions.SchemaName}].[{defaultOptions.TableName}] 
+            (Id, Topic, Payload, IsProcessed, ProcessedAt, CreatedAt)
+            VALUES (@Id, @Topic, @Payload, 1, @ProcessedAt, @CreatedAt)",
+            new
+            {
+                Id = recentMessageId,
+                Topic = "Test.Topic",
+                Payload = "recent message",
+                ProcessedAt = DateTimeOffset.UtcNow.AddHours(-1),
+                CreatedAt = DateTimeOffset.UtcNow.AddHours(-2),
+            });
+
+        // Act - Run cleanup with 7 day retention
+        var retentionSeconds = (int)TimeSpan.FromDays(7).TotalSeconds;
+        var deletedCount = await connection.ExecuteScalarAsync<int>(
+            $"EXEC [{defaultOptions.SchemaName}].[{defaultOptions.TableName}_Cleanup] @RetentionSeconds",
+            new { RetentionSeconds = retentionSeconds });
+
+        // Assert
+        deletedCount.ShouldBe(0);
+
+        var remainingMessages = await connection.QueryAsync<dynamic>(
+            $"SELECT Id FROM [{defaultOptions.SchemaName}].[{defaultOptions.TableName}]");
+        remainingMessages.Count().ShouldBe(1);
+    }
+
+    /// <summary>When cleanup runs with a 10-day retention period, then only rows older than 10 days are deleted.</summary>
+    /// <intent>Confirm retention period filtering for outbox cleanup.</intent>
+    /// <scenario>Given processed outbox rows at 30, 15, 7, 3, and 1 days old.</scenario>
+    /// <behavior>Then only the 30- and 15-day rows are deleted and newer rows remain.</behavior>
+    [Fact]
+    public async Task Cleanup_RespectsRetentionPeriod()
+    {
+        // Arrange - Add messages at various ages
+        await using var connection = new SqlConnection(ConnectionString);
+        await connection.OpenAsync(TestContext.Current.CancellationToken);
+
+        var messages = new[]
+        {
+            (Id: Guid.NewGuid(), DaysAgo: 30),
+            (Id: Guid.NewGuid(), DaysAgo: 15),
+            (Id: Guid.NewGuid(), DaysAgo: 7),
+            (Id: Guid.NewGuid(), DaysAgo: 3),
+            (Id: Guid.NewGuid(), DaysAgo: 1),
+        };
+
+        foreach (var (id, daysAgo) in messages)
+        {
+            await connection.ExecuteAsync(
+                $@"
+                INSERT INTO [{defaultOptions.SchemaName}].[{defaultOptions.TableName}] 
+                (Id, Topic, Payload, IsProcessed, ProcessedAt, CreatedAt)
+                VALUES (@Id, @Topic, @Payload, 1, @ProcessedAt, @CreatedAt)",
+                new
+                {
+                    Id = id,
+                    Topic = "Test.Topic",
+                    Payload = $"message {daysAgo} days old",
+                    ProcessedAt = DateTimeOffset.UtcNow.AddDays(-daysAgo),
+                    CreatedAt = DateTimeOffset.UtcNow.AddDays(-daysAgo - 1),
+                });
+        }
+
+        // Act - Run cleanup with 10 day retention
+        var retentionSeconds = (int)TimeSpan.FromDays(10).TotalSeconds;
+        var deletedCount = await connection.ExecuteScalarAsync<int>(
+            $"EXEC [{defaultOptions.SchemaName}].[{defaultOptions.TableName}_Cleanup] @RetentionSeconds",
+            new { RetentionSeconds = retentionSeconds });
+
+        // Assert - Should delete 30 and 15 day old messages
+        deletedCount.ShouldBe(2);
+
+        var remainingMessages = await connection.QueryAsync<dynamic>(
+            $"SELECT Id FROM [{defaultOptions.SchemaName}].[{defaultOptions.TableName}]");
+        var remainingIds = remainingMessages.Select(m => (Guid)m.Id).ToList();
+
+        remainingIds.Count.ShouldBe(3);
+        remainingIds.ShouldNotContain(messages[0].Id); // 30 days
+        remainingIds.ShouldNotContain(messages[1].Id); // 15 days
+        remainingIds.ShouldContain(messages[2].Id);    // 7 days
+        remainingIds.ShouldContain(messages[3].Id);    // 3 days
+        remainingIds.ShouldContain(messages[4].Id);    // 1 day
+    }
+
+    /// <summary>When the cleanup stored procedure is missing, then the cleanup service runs without crashing.</summary>
+    /// <intent>Ensure the outbox cleanup service tolerates missing schema deployment.</intent>
+    /// <scenario>Given the cleanup procedure dropped and a short cleanup interval.</scenario>
+    /// <behavior>Then StartAsync completes without throwing and the procedure remains missing.</behavior>
+    [Fact]
+    public async Task CleanupService_GracefullyHandles_MissingStoredProcedure()
+    {
+        // Arrange - Create a database without the stored procedure
+        await using var connection = new SqlConnection(ConnectionString);
+        await connection.OpenAsync(TestContext.Current.CancellationToken);
+
+        // Drop the stored procedure if it exists to simulate a database without schema deployment
+        await connection.ExecuteAsync($"DROP PROCEDURE IF EXISTS [{defaultOptions.SchemaName}].[{defaultOptions.TableName}_Cleanup]");
+
+        var mono = new MonotonicClock();
+        var logger = new TestLogger<OutboxCleanupService>(TestOutputHelper);
+
+        // Use very short intervals for testing
+        var options = new SqlOutboxOptions
+        {
+            ConnectionString = defaultOptions.ConnectionString,
+            SchemaName = defaultOptions.SchemaName,
+            TableName = defaultOptions.TableName,
+            RetentionPeriod = TimeSpan.FromDays(7),
+            CleanupInterval = TimeSpan.FromMilliseconds(100) // Very short interval for testing
+        };
+
+        var service = new OutboxCleanupService(
+            Microsoft.Extensions.Options.Options.Create(options),
+            mono,
+            logger);
+
+        // Act - Start the service and let it run a few cleanup cycles
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
+        var startTask = service.StartAsync(cts.Token);
+
+        // Wait for at least one cleanup attempt
+        await Task.Delay(TimeSpan.FromMilliseconds(500), cts.Token);
+
+        // Stop the service
+        await service.StopAsync(CancellationToken.None);
+
+        // Assert - Service should have completed without throwing
+        // The ExecuteAsync task should complete successfully (not throw)
+        await startTask;
+
+        // Verify the stored procedure is still missing (we didn't recreate it)
+        var procExists = await connection.ExecuteScalarAsync<int>(
+            $@"SELECT COUNT(*) FROM sys.procedures 
+               WHERE schema_id = SCHEMA_ID(@SchemaName) 
+               AND name = @ProcName",
+            new { SchemaName = defaultOptions.SchemaName, ProcName = $"{defaultOptions.TableName}_Cleanup" });
+        procExists.ShouldBe(0);
+    }
+}
+

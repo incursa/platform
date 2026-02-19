@@ -17,7 +17,7 @@ The observability package provides:
 ### Basic Registration
 
 ```csharp
-using Bravellian.Platform.Observability;
+using Incursa.Platform.Observability;
 
 // Register observability services
 services.AddPlatformObservability();
@@ -85,7 +85,7 @@ app.MapHealthChecks("/health", new HealthCheckOptions
 
 ## Metrics
 
-The following metrics are available via the `Bravellian.Platform` meter:
+The following metrics are available via the `Incursa.Platform` meter:
 
 ### Watchdog & Heartbeat
 - `bravellian.platform.watchdog.heartbeat_total` (counter) - Total heartbeats emitted
@@ -120,7 +120,7 @@ builder.Services
     .AddOpenTelemetry()
     .WithMetrics(metrics =>
     {
-        metrics.AddMeter("Bravellian.Platform");
+        metrics.AddMeter("Incursa.Platform");
         // Add other meters as needed
         metrics.AddPrometheusExporter(); // or OTLP, etc.
     });
@@ -143,7 +143,7 @@ builder.Logging.AddOpenTelemetry(logging =>
 
 builder.Services.AddOpenTelemetry().WithTracing(tracing =>
 {
-    tracing.AddSource("Bravellian.Platform");
+    tracing.AddSource("Incursa.Platform");
     tracing.AddAspNetCoreInstrumentation();
     tracing.AddOtlpExporter();
 });
@@ -269,7 +269,7 @@ builder.Services
     .AddOpenTelemetry()
     .WithMetrics(metrics =>
     {
-        metrics.AddMeter("Bravellian.Platform");
+        metrics.AddMeter("Incursa.Platform");
         metrics.AddPrometheusExporter();
     });
 
@@ -319,7 +319,7 @@ services.AddSingleton<ISchedulerState, YourSchedulerState>();
 
 Verify the meter is added to your metrics configuration:
 ```csharp
-metrics.AddMeter("Bravellian.Platform");
+metrics.AddMeter("Incursa.Platform");
 ```
 
 ### Health Check Always Unhealthy
@@ -341,7 +341,7 @@ The platform includes an in-app metrics exporter that stores metrics data in SQL
 
 ### Architecture
 
-- **Per-Instance Export**: Each process instance runs its own exporter that subscribes to `Bravellian.Platform` meters via `MeterListener`
+- **Per-Instance Export**: Each process instance runs its own exporter that subscribes to `Incursa.Platform` meters via `MeterListener`
 - **Minute Granularity**: Metrics are aggregated into 1-minute buckets and written to application databases
 - **Hourly Rollups**: Data is also aggregated hourly and written to a central database for cross-database analysis
 - **Additive Upserts**: Multiple instances can safely write to the same buckets concurrently using additive SQL operations
@@ -382,7 +382,7 @@ services.AddMetricsExporterHealthCheck();
 
 ### Stored Metrics
 
-The exporter captures all metrics from the `Bravellian.Platform` meter, including:
+The exporter captures all metrics from the `Incursa.Platform` meter, including:
 
 - Watchdog heartbeats and alerts
 - Scheduler job execution and delays

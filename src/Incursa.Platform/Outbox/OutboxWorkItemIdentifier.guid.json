@@ -1,0 +1,4 @@
+{
+  "name": "OutboxWorkItemIdentifier",
+  "namespace": "Incursa.Platform.Outbox"
+}

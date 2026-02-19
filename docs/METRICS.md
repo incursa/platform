@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Bravellian Platform provides a reusable metrics substrate that enables applications to emit and persist metrics at both the platform and application levels. Metrics are stored per-tenant with minute-level granularity and optionally aggregated centrally at hourly intervals for cross-tenant analysis.
+The Incursa Platform provides a reusable metrics substrate that enables applications to emit and persist metrics at both the platform and application levels. Metrics are stored per-tenant with minute-level granularity and optionally aggregated centrally at hourly intervals for cross-tenant analysis.
 
 ## Features
 
@@ -21,7 +21,7 @@ The Bravellian Platform provides a reusable metrics substrate that enables appli
 ### 1. Add Metrics to Your Application
 
 ```csharp
-using Bravellian.Platform.Metrics;
+using Incursa.Platform.Metrics;
 
 // In your Startup.cs or Program.cs
 builder.Services.AddMetricsExporter(options =>
@@ -49,13 +49,13 @@ These packages complement the database-backed exporter and use the same `Meter` 
 **ASP.NET Core**
 
 ```csharp
-using Bravellian.Platform.Metrics.AspNetCore;
+using Incursa.Platform.Metrics.AspNetCore;
 
 builder.Services.AddPlatformMetrics(options =>
 {
     options.EnablePrometheusExporter = true;
     options.PrometheusEndpointPath = "/metrics";
-    options.Meter.MeterName = "Bravellian.Platform.MyApp";
+    options.Meter.MeterName = "Incursa.Platform.MyApp";
 });
 
 app.MapPlatformMetricsEndpoint();
@@ -64,13 +64,13 @@ app.MapPlatformMetricsEndpoint();
 **Self-hosted HTTP listener**
 
 ```csharp
-using Bravellian.Platform.Metrics.HttpServer;
+using Incursa.Platform.Metrics.HttpServer;
 
 using var server = new PlatformMetricsHttpServer(new PlatformMetricsHttpServerOptions
 {
     Meter = new PlatformMeterOptions
     {
-        MeterName = "Bravellian.Platform.MyApp"
+        MeterName = "Incursa.Platform.MyApp"
     },
     UriPrefixes = ["http://localhost:9464/"],
     ScrapeEndpointPath = "/metrics"
@@ -107,7 +107,7 @@ using System.Diagnostics.Metrics;
 
 public class OrderService
 {
-    private static readonly Meter _meter = new("Bravellian.Platform.MyApp");
+    private static readonly Meter _meter = new("Incursa.Platform.MyApp");
     private static readonly Counter<long> _ordersCreated = 
         _meter.CreateCounter<long>("app.orders.created.count");
     private static readonly Histogram<double> _processingTime = 
@@ -389,7 +389,7 @@ Each instance has a unique `InstanceId` allowing you to query per-instance metri
 2. Verify database schema is deployed
 3. Check exporter health status
 4. Review application logs for errors
-5. Verify meter name starts with "Bravellian.Platform"
+5. Verify meter name starts with "Incursa.Platform"
 
 ### High Database Growth
 
@@ -590,7 +590,7 @@ using System.Diagnostics.Metrics;
 public class OrderService
 {
     // Create a meter for your application
-    private static readonly Meter _meter = new("Bravellian.Platform.OrderService");
+    private static readonly Meter _meter = new("Incursa.Platform.OrderService");
     
     // Define instruments for your metrics
     private static readonly Counter<long> _ordersCreated = 
@@ -657,7 +657,7 @@ public class OrderService
 // Middleware/MetricsMiddleware.cs
 public class MetricsMiddleware
 {
-    private static readonly Meter _meter = new("Bravellian.Platform.WebApp");
+    private static readonly Meter _meter = new("Incursa.Platform.WebApp");
     private static readonly Counter<long> _httpRequests = 
         _meter.CreateCounter<long>("app.http.requests.count");
     private static readonly Histogram<double> _httpDuration = 
@@ -769,4 +769,4 @@ See the [examples directory](../examples/metrics/) for complete working examples
 
 ## License
 
-Copyright (c) Bravellian. Licensed under the Apache License 2.0.
+Copyright (c) Incursa. Licensed under the Apache License 2.0.

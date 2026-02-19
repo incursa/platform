@@ -1,4 +1,4 @@
-# Time Abstractions in Bravellian Platform
+# Time Abstractions in Incursa Platform
 
 This document explains the time abstraction system introduced to standardize time usage across the platform and improve testability.
 

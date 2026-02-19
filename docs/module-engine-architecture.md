@@ -67,7 +67,7 @@ Typical use: API or MVC controllers create the adapter once (DI singleton) and i
 
 ### Webhook pipeline integration
 
-Module webhook engines are exposed through `Bravellian.Platform.Webhooks`:
+Module webhook engines are exposed through `Incursa.Platform.Webhooks`:
 
 - Uses provider + event type from `ModuleEngineWebhookMetadata` to route requests and validate `RequiredServices` combined from manifest-level and event-level declarations.
 - Validates signatures using `IModuleWebhookSignatureValidator` when `ModuleEngineSecurity` specifies an algorithm (legacy `IWebhookSignatureValidator` is supported as a fallback).
@@ -81,18 +81,18 @@ Typical use: HTTP endpoints forward inbound requests into the webhook pipeline (
 
 - Register modules in DI with `AddModuleServices`, then add `UiEngineAdapter` as a singleton.
 - Create endpoint handlers (e.g., minimal APIs or controllers) that accept module/engine identifiers and command DTOs, delegate to the adapter, and translate navigation tokens to routes/pages.
-- Optionally use `Bravellian.Platform.Modularity.AspNetCore` and `MapUiEngineEndpoints` to wire a generic endpoint that deserializes inputs based on manifest schemas.
+- Optionally use `Incursa.Platform.Modularity.AspNetCore` and `MapUiEngineEndpoints` to wire a generic endpoint that deserializes inputs based on manifest schemas.
 - Optionally expose manifest metadata (capabilities, navigation hints) to client apps to build menus or deep links dynamically.
 
 ### Razor Pages adapter
 
-- Add `Bravellian.Platform.Modularity.Razor` and implement `IRazorModule` for modules that ship Razor Pages.
+- Add `Incursa.Platform.Modularity.Razor` and implement `IRazorModule` for modules that ship Razor Pages.
 - Call `services.AddRazorPages().ConfigureRazorModulePages()` to register Razor conventions and application parts.
 
 ### Webhook intake surface
 
-- Register the pipeline with `AddBravellianWebhooks()` and wire modular engines using `AddModuleWebhookProviders()`.
-- Use `MapWebhookEngineEndpoints` from `Bravellian.Platform.Modularity.AspNetCore` (or `WebhookEndpoint.HandleAsync`) to ingest raw requests and return fast acknowledgements.
+- Register the pipeline with `AddIncursaWebhooks()` and wire modular engines using `AddModuleWebhookProviders()`.
+- Use `MapWebhookEngineEndpoints` from `Incursa.Platform.Modularity.AspNetCore` (or `WebhookEndpoint.HandleAsync`) to ingest raw requests and return fast acknowledgements.
 - The pipeline stores raw bodies, authenticates, classifies, and processes webhook engines asynchronously.
 
 ### Mixed module deployments

@@ -1,7 +1,7 @@
 // Observability Setup Example
 // This file shows how to configure platform observability with alerts and monitoring
 
-using Bravellian.Platform.Observability;
+using Incursa.Platform.Observability;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Metrics;
@@ -13,8 +13,8 @@ builder.Services
     .AddOpenTelemetry()
     .WithMetrics(metrics =>
     {
-        // Add the Bravellian.Platform meter
-        metrics.AddMeter("Bravellian.Platform");
+        // Add the Incursa.Platform meter
+        metrics.AddMeter("Incursa.Platform");
         
         // Add runtime instrumentation (optional)
         metrics.AddRuntimeInstrumentation();

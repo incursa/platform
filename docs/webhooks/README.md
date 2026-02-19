@@ -1,6 +1,6 @@
 # Webhooks
 
-Bravellian.Platform.Webhooks is a provider-agnostic webhook ingestion stack. The core library focuses on verification, classification, and delivery so providers can share one consistent pipeline. The ASP.NET Core package adds endpoint helpers and DI wiring without coupling the core to ASP.NET.
+Incursa.Platform.Webhooks is a provider-agnostic webhook ingestion stack. The core library focuses on verification, classification, and delivery so providers can share one consistent pipeline. The ASP.NET Core package adds endpoint helpers and DI wiring without coupling the core to ASP.NET.
 
 ## Core concepts
 - Fast-ack: return a 2xx response as quickly as possible to avoid provider retries and timeouts.
@@ -59,10 +59,10 @@ Bravellian.Platform.Webhooks is a provider-agnostic webhook ingestion stack. The
 ## Observability
 - Use `WebhookTelemetryEvents` for consistent event names across logs and metrics.
 - Configure callbacks in `WebhookOptions` to emit telemetry without coupling core logic to a logging framework.
-- The ASP.NET Core integration wires default logging via `ILogger` when you call `AddBravellianWebhooks`.
+- The ASP.NET Core integration wires default logging via `ILogger` when you call `AddIncursaWebhooks`.
 
 ```csharp
-builder.Services.AddBravellianWebhooks(options =>
+builder.Services.AddIncursaWebhooks(options =>
 {
     options.OnIngested = (result, envelope) =>
     {
@@ -145,7 +145,7 @@ public sealed class InvoicePaidHandler : IWebhookHandler
 ### 2) Provider registration (example)
 ```csharp
 builder.Services.AddSingleton<IWebhookProvider, AcmeWebhookProvider>();
-builder.Services.AddBravellianWebhooks();
+builder.Services.AddIncursaWebhooks();
 ```
 
 ### 3) ASP.NET Core minimal API mapping
@@ -167,7 +167,7 @@ builder.Services.Configure<WebhookProcessingOptions>(options =>
     options.MaxAttempts = 5;
 });
 
-builder.Services.AddBravellianWebhooks()
+builder.Services.AddIncursaWebhooks()
     .AddWebhookProcessingHostedService();
 ```
 

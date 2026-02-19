@@ -7,7 +7,7 @@
 | **Component** | Join Coordination |
 | **Version** | 1.0 |
 | **Status** | Active |
-| **Owner** | Bravellian Platform Team |
+| **Owner** | Incursa Platform Team |
 | **Last Updated** | 2025-12-07 |
 | **Dependencies** | Outbox Component (v1.0) |
 

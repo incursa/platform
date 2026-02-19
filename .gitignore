@@ -418,9 +418,9 @@ FodyWeavers.xsd
 *.msp
 .bak
 
-# Bravellian code generator output
+# Incursa code generator output
 **/Generated/__codegen.marker
 
 # SQL Server Database project - generated files from manual test
-src/Bravellian.Platform.Database/*.dacpac
-src/Bravellian.Platform.Database/DeployedSchema.sql
+src/Incursa.Platform.Database/*.dacpac
+src/Incursa.Platform.Database/DeployedSchema.sql

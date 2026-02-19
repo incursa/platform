@@ -27,7 +27,7 @@ dotnet run --project tools/testdocs/src/TestDocs.Cli -- generate
 ## Dotnet tool usage
 
 ```powershell
-dotnet tool install --global Bravellian.TestDocs.Cli
+dotnet tool install --global Incursa.TestDocs.Cli
 bravellian-testdocs generate
 ```
 
@@ -41,14 +41,14 @@ Options:
 ## Packing for NuGet
 
 ```powershell
-dotnet pack ./tools/testdocs/TestDocs.sln -c Release -o ./nupkgs
+dotnet pack ./tools/testdocs/TestDocs.slnx -c Release -o ./nupkgs
 ```
 
 ## Adding metadata to tests
 Follow the schema in `docs/testing/test-doc-schema.md`. Required tags are `summary`, `intent`, `scenario`, and `behavior`.
 
 ## Analyzer package
-The analyzer package (`Bravellian.TestDocs.Analyzers`) emits warnings for:
+The analyzer package (`Incursa.TestDocs.Analyzers`) emits warnings for:
 - `TD001`: Missing required XML doc tags.
 - `TD002`: Placeholder or empty values in required tags.
 

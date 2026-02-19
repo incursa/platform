@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <!-- Keep global Using directives -->
-  <ItemGroup Condition="'$(MSBuildProjectExtension)' != '.dcproj' AND '$(MSBuildProjectExtension)' != '.sqlproj' AND $(MSBuildProjectName.StartsWith('Bravellian.Generators')) == false AND $(MSBuildProjectName.StartsWith('Bravellian.Database')) == false">
+  <ItemGroup Condition="'$(MSBuildProjectExtension)' != '.dcproj' AND '$(MSBuildProjectExtension)' != '.sqlproj' AND $(MSBuildProjectName.StartsWith('Incursa.Generators')) == false AND $(MSBuildProjectName.StartsWith('Incursa.Database')) == false">
     <Using Include="System" />
     <Using Include="System.Collections.Generic" />
     <Using Include="System.Diagnostics" />
@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <!-- Keep core project references and build tooling -->
-  <ItemGroup Condition="'$(MSBuildProjectExtension)' != '.dcproj' AND '$(MSBuildProjectExtension)' != '.sqlproj' AND $(MSBuildProjectName.StartsWith('Bravellian.Database')) == false">
+  <ItemGroup Condition="'$(MSBuildProjectExtension)' != '.dcproj' AND '$(MSBuildProjectExtension)' != '.sqlproj' AND $(MSBuildProjectName.StartsWith('Incursa.Database')) == false">
     <RuntimeHostConfigurationOption Include="System.Runtime.Loader.UseRidGraph" Value="true" />
 
     <!-- Keep InternalsVisibleTo -->
@@ -64,8 +64,8 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(MSBuildProjectExtension)' == '.csproj' AND '$(MSBuildProjectName)' != 'Bravellian.Platform.Observability.Analyzers'">
-    <ProjectReference Include="$(MSBuildThisFileDirectory)tools/observability/src/Bravellian.Platform.Observability.Analyzers/Bravellian.Platform.Observability.Analyzers.csproj"
+  <ItemGroup Condition="'$(MSBuildProjectExtension)' == '.csproj' AND '$(MSBuildProjectName)' != 'Incursa.Platform.Observability.Analyzers'">
+    <ProjectReference Include="$(MSBuildThisFileDirectory)tools/observability/src/Incursa.Platform.Observability.Analyzers/Incursa.Platform.Observability.Analyzers.csproj"
                       OutputItemType="Analyzer"
                       ReferenceOutputAssembly="false" />
   </ItemGroup>

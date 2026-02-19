@@ -1,6 +1,6 @@
 # Outbox Join / Fan-In Support
 
-This document describes the join/fan-in functionality added to the Bravellian Platform outbox framework.
+This document describes the join/fan-in functionality added to the Incursa Platform outbox framework.
 
 ## Overview
 

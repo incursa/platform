@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`Bravellian.Platform.Audit` provides provider-agnostic primitives for an immutable, human-readable audit timeline. Events are append-only and queryable by anchors so UIs and operators can reconstruct what happened without relying on provider-specific schemas.
+`Incursa.Platform.Audit` provides provider-agnostic primitives for an immutable, human-readable audit timeline. Events are append-only and queryable by anchors so UIs and operators can reconstruct what happened without relying on provider-specific schemas.
 
 ## Concepts
 
@@ -110,4 +110,4 @@ var events = await reader.QueryAsync(query, cancellationToken);
 
 ## Observability glue
 
-Use `Bravellian.Platform.Observability` to emit standardized audit events for inbox/outbox, webhooks, and email sends.
+Use `Incursa.Platform.Observability` to emit standardized audit events for inbox/outbox, webhooks, and email sends.

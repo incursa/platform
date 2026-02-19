@@ -6,13 +6,13 @@ This guide shows how to wire engine-first modules into a host, expose UI and web
 
 ```bash
 # Core engine-first module runtime
-dotnet add package Bravellian.Platform.Modularity
+dotnet add package Incursa.Platform.Modularity
 
 # Optional: minimal API endpoint helpers
-dotnet add package Bravellian.Platform.Modularity.AspNetCore
+dotnet add package Incursa.Platform.Modularity.AspNetCore
 
 # Optional: Razor Pages adapter
-dotnet add package Bravellian.Platform.Modularity.Razor
+dotnet add package Incursa.Platform.Modularity.Razor
 ```
 
 ## 1) Define a module and its engines
@@ -95,7 +95,7 @@ ModuleRegistry.RegisterModule<OcrModule>();
 builder.Services.AddModuleServices(builder.Configuration);
 
 builder.Services.AddSingleton<UiEngineAdapter>();
-builder.Services.AddBravellianWebhooks();
+builder.Services.AddIncursaWebhooks();
 builder.Services.AddModuleWebhookProviders(options =>
 {
     // All authenticators must succeed when provided.
@@ -114,7 +114,7 @@ builder.Services.AddSingleton<IModuleWebhookSignatureValidator, MySignatureValid
 
 ## 3) Expose endpoints (optional)
 
-If you want endpoint helpers, use `Bravellian.Platform.Modularity.AspNetCore`.
+If you want endpoint helpers, use `Incursa.Platform.Modularity.AspNetCore`.
 
 ```csharp
 app.MapUiEngineEndpoints();

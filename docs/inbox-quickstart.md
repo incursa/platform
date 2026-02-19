@@ -17,10 +17,10 @@ This guarantees idempotent message processing even with duplicate deliveries.
 
 ## Installation
 
-Add the Bravellian Platform package:
+Add the Incursa Platform package:
 
 ```bash
-dotnet add package Bravellian.Platform
+dotnet add package Incursa.Platform
 ```
 
 ## Basic Setup
@@ -28,7 +28,7 @@ dotnet add package Bravellian.Platform
 ### Step 1: Configure Services
 
 ```csharp
-using Bravellian.Platform;
+using Incursa.Platform;
 
 var builder = WebApplication.CreateBuilder(args);
 
