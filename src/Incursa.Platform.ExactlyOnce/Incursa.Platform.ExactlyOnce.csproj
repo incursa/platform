@@ -10,7 +10,7 @@
     <Version>1.0.0</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
-    <Description>Exactly-once execution workflow with idempotency coordination.</Description>
+    <Description>Exactly-once orchestration primitives built on idempotency and verification hooks.</Description>
     <PackageProjectUrl>https://github.com/incursa/platform</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/incursa/platform</RepositoryUrl>

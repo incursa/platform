@@ -11,7 +11,7 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>incursa-schema</ToolCommandName>
     <PackageType>DotnetTool</PackageType>
-    <Description>CLI for applying Incursa Platform schema migrations to SQL Server or Postgres.</Description>
+    <Description>CLI and dotnet tool for applying Incursa Platform SQL Server and Postgres schema migrations.</Description>
     <Authors>Incursa</Authors>
     <Company>Incursa</Company>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>

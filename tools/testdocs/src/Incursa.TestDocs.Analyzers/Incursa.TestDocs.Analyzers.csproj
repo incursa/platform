@@ -8,10 +8,11 @@
     <AssemblyName>Incursa.TestDocs.Analyzers</AssemblyName>
     <IsPackable>true</IsPackable>
     <PackageId>Incursa.TestDocs.Analyzers</PackageId>
-    <Description>Analyzers for test documentation XML metadata.</Description>
+    <Description>Roslyn analyzers for required XML documentation metadata on test methods.</Description>
     <Authors>Incursa</Authors>
     <Company>Incursa</Company>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageIcon>nuget_logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>analyzers;testdocs;documentation;mstest;xunit;nunit</PackageTags>
     <RepositoryType>git</RepositoryType>
@@ -28,6 +29,7 @@
 
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\..\..\assets\nuget_logo.png" Pack="true" PackagePath="\" />
     <AdditionalFiles Include="AnalyzerReleases.Shipped.md" />
     <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
   </ItemGroup>

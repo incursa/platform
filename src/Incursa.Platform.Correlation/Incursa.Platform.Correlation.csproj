@@ -10,7 +10,7 @@
     <Version>1.0.0</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
-    <Description>Correlation primitives for consistent IDs across platform components.</Description>
+    <Description>Correlation context primitives for consistent request and operation identifiers.</Description>
     <PackageProjectUrl>https://github.com/incursa/platform</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/incursa/platform</RepositoryUrl>

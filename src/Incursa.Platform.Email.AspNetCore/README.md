@@ -1,11 +1,24 @@
 # Incursa.Platform.Email.AspNetCore
 
-ASP.NET Core helpers for Incursa.Platform.Email outbox integrations.
+`Incursa.Platform.Email.AspNetCore` provides ASP.NET Core DI and hosted-service integration for `Incursa.Platform.Email`.
 
-## Registrations
+## Install
 
-- `AddIncursaEmailCore` registers the core outbox and processor components.
-- `AddIncursaEmailPostmark` registers the Postmark sender adapter.
-- `AddIncursaEmailProcessingHostedService` runs the processor on an interval.
+```bash
+dotnet add package Incursa.Platform.Email.AspNetCore
+```
 
-See `/docs/email/README.md` for architecture and quick start examples.
+## What You Get
+
+- Service registration extensions for email core and provider adapters
+- Hosted processing loop for outbox dispatch
+- Cleanup and processing option models for production tuning
+
+## Typical Use
+
+Use this package in ASP.NET Core hosts to wire email outbox processing into your application lifecycle.
+
+## Documentation
+
+- https://github.com/incursa/platform/blob/main/docs/email/README.md
+- https://github.com/incursa/platform/blob/main/docs/INDEX.md

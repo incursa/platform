@@ -12,7 +12,7 @@
     <Version>1.0.0</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
-    <Description>Core platform abstractions and orchestration.</Description>
+    <Description>Core abstractions and orchestration primitives for durable background processing in Incursa Platform.</Description>
     <PackageProjectUrl>https://github.com/incursa/platform</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/incursa/platform</RepositoryUrl>

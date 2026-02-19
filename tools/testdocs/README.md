@@ -1,55 +1,41 @@
-# TestDocs CLI
+# Incursa TestDocs
 
-This tool extracts XML doc metadata from MSTest, xUnit, and NUnit methods and generates test documentation under `docs/testing/generated/`.
+`Incursa.TestDocs.Cli` and `Incursa.TestDocs.Analyzers` help teams generate and enforce structured XML documentation for tests.
 
-## Requirements
-- .NET SDK pinned in `global.json`
-- PowerShell 7+ (for scripts)
+## Packages
 
-## Run locally
+- `Incursa.TestDocs.Cli`: CLI / dotnet tool that generates documentation artifacts from test XML docs.
+- `Incursa.TestDocs.Analyzers`: Roslyn analyzer package that validates required XML metadata.
 
-```powershell
-pwsh ./tools/testdocs/scripts/Invoke-TestDocs.ps1
-```
+## Install
 
-Strict mode and compliance threshold:
-
-```powershell
-pwsh ./tools/testdocs/scripts/Invoke-TestDocs.ps1 -Strict -MinCompliance 0.9
-```
-
-## CLI usage
-
-```powershell
-dotnet run --project tools/testdocs/src/TestDocs.Cli -- generate
-```
-
-## Dotnet tool usage
-
-```powershell
+```bash
 dotnet tool install --global Incursa.TestDocs.Cli
-incursa-testdocs generate
+dotnet add package Incursa.TestDocs.Analyzers
 ```
 
-Options:
-- `--repoRoot <path>`
-- `--outDir <path>`
+## CLI Usage
+
+```bash
+incursa-testdocs generate --repoRoot . --outDir docs/testing/generated
+```
+
+Common options:
 - `--strict`
 - `--minCompliance <0-1>`
 - `--format markdown|json|both`
 
-## Packing for NuGet
+## Analyzer Rules
+
+- `TD001`: Missing required XML doc tags.
+- `TD002`: Placeholder or empty required tag values.
+
+## Build and Pack
 
 ```powershell
 dotnet pack ./tools/testdocs/TestDocs.slnx -c Release -o ./nupkgs
 ```
 
-## Adding metadata to tests
-Follow the schema in `docs/testing/test-doc-schema.md`. Required tags are `summary`, `intent`, `scenario`, and `behavior`.
+## Reference
 
-## Analyzer package
-The analyzer package (`Incursa.TestDocs.Analyzers`) emits warnings for:
-- `TD001`: Missing required XML doc tags.
-- `TD002`: Placeholder or empty values in required tags.
-
-The default code fix inserts a template with `TODO` placeholders. Replace them with real content to avoid `TD002` warnings.
+- https://github.com/incursa/platform/blob/main/docs/testing/test-doc-schema.md

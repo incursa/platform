@@ -11,10 +11,11 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>incursa-testdocs</ToolCommandName>
     <PackageType>DotnetTool</PackageType>
-    <Description>Generate test documentation from XML docs for MSTest, xUnit, and NUnit.</Description>
+    <Description>CLI and dotnet tool for generating structured test documentation from XML docs.</Description>
     <Authors>Incursa</Authors>
     <Company>Incursa</Company>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageIcon>nuget_logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>testdocs;documentation;mstest;xunit;nunit</PackageTags>
     <RepositoryType>git</RepositoryType>
@@ -27,6 +28,7 @@
 
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\..\..\assets\nuget_logo.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>

@@ -10,7 +10,7 @@
     <Version>1.0.0</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
-    <Description>Healthcheck CLI probe for generic hosts and ASP.NET Core apps.</Description>
+    <Description>Health probe CLI for validating host and endpoint readiness in deployments.</Description>
     <PackageProjectUrl>https://github.com/incursa/platform</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/incursa/platform</RepositoryUrl>

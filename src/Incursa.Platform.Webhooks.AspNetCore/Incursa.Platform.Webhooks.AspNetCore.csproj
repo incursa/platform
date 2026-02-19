@@ -9,7 +9,7 @@
     <Version>1.0.0</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
-    <Description>ASP.NET Core endpoint helpers for webhook ingestion.</Description>
+    <Description>ASP.NET Core endpoint and hosted processing integration for Incursa Platform Webhooks.</Description>
     <PackageProjectUrl>https://github.com/incursa/platform</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/incursa/platform</RepositoryUrl>
