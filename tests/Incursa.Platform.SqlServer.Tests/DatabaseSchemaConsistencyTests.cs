@@ -384,6 +384,29 @@ public class DatabaseSchemaConsistencyTests : SqlServerTestBase
         typeExists.ShouldBeGreaterThan(0, "Work queue type infra.GuidIdList should exist");
     }
 
+    /// <summary>When schema deployment is executed repeatedly, then execution remains idempotent.</summary>
+    /// <intent>Verify repeated schema deployment calls do not fail and preserve expected artifacts.</intent>
+    /// <scenario>Given repeated EnsureOutboxSchemaAsync and EnsureWorkQueueSchemaAsync calls on the same database.</scenario>
+    /// <behavior>Then required outbox table and work-queue procedure still exist after re-execution.</behavior>
+    [Fact]
+    public async Task SchemaDeployment_RepeatedExecution_IsIdempotent()
+    {
+        await DatabaseSchemaManager.EnsureOutboxSchemaAsync(ConnectionString);
+        await DatabaseSchemaManager.EnsureWorkQueueSchemaAsync(ConnectionString);
+        await DatabaseSchemaManager.EnsureOutboxSchemaAsync(ConnectionString);
+        await DatabaseSchemaManager.EnsureWorkQueueSchemaAsync(ConnectionString);
+
+        await using var connection = new SqlConnection(ConnectionString);
+        await connection.OpenAsync(TestContext.Current.CancellationToken);
+
+        var outboxExists = await TableExistsAsync(connection, "infra", "Outbox");
+        outboxExists.ShouldBeTrue("Outbox table should exist after repeated schema deployment.");
+
+        var claimProcExists = await connection.QuerySingleAsync<int>(
+            "SELECT COUNT(*) FROM sys.objects WHERE object_id = OBJECT_ID('infra.Outbox_Claim') AND type IN ('P', 'PC')");
+        claimProcExists.ShouldBeGreaterThan(0, "Outbox_Claim procedure should exist after repeated schema deployment.");
+    }
+
     /// <summary>When work-queue procedures are inspected, then they use SYSUTCDATETIME for timing.</summary>
     /// <intent>Ensure stored procedures rely on database-authoritative time.</intent>
     /// <scenario>Given the Outbox and Inbox work-queue procedures deployed in infra.</scenario>
@@ -493,4 +516,3 @@ public class DatabaseSchemaConsistencyTests : SqlServerTestBase
         return count > 0;
     }
 }
-

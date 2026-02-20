@@ -357,6 +357,28 @@ public class DatabaseSchemaConsistencyTests : PostgresTestBase
         columns.ShouldContainKey("OwnerToken", "OwnerToken column should exist after work queue migration");
     }
 
+    /// <summary>When schema deployment is executed repeatedly, then execution remains idempotent.</summary>
+    /// <intent>Verify repeated schema deployment calls do not fail and preserve expected artifacts.</intent>
+    /// <scenario>Given repeated EnsureOutboxSchemaAsync and EnsureWorkQueueSchemaAsync calls on the same database.</scenario>
+    /// <behavior>Required outbox table and work-queue index still exist after re-execution.</behavior>
+    [Fact]
+    public async Task SchemaDeployment_RepeatedExecution_IsIdempotent()
+    {
+        await DatabaseSchemaManager.EnsureOutboxSchemaAsync(ConnectionString);
+        await DatabaseSchemaManager.EnsureWorkQueueSchemaAsync(ConnectionString);
+        await DatabaseSchemaManager.EnsureOutboxSchemaAsync(ConnectionString);
+        await DatabaseSchemaManager.EnsureWorkQueueSchemaAsync(ConnectionString);
+
+        await using var connection = new NpgsqlConnection(ConnectionString);
+        await connection.OpenAsync(TestContext.Current.CancellationToken);
+
+        var outboxExists = await TableExistsAsync(connection, "infra", "Outbox");
+        outboxExists.ShouldBeTrue("Outbox table should exist after repeated schema deployment.");
+
+        var workQueueIndexExists = await IndexExistsAsync(connection, "infra", "Outbox", "IX_Outbox_WorkQueue");
+        workQueueIndexExists.ShouldBeTrue("IX_Outbox_WorkQueue should exist after repeated schema deployment.");
+    }
+
     private static async Task<bool> TableExistsAsync(NpgsqlConnection connection, string schemaName, string tableName)
     {
         const string sql = """
@@ -402,4 +424,3 @@ public class DatabaseSchemaConsistencyTests : PostgresTestBase
         return count > 0;
     }
 }
-

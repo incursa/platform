@@ -126,7 +126,18 @@ internal sealed class PostgresSchedulerStore : ISchedulerStore
     public async Task<DateTimeOffset?> GetNextEventTimeAsync(CancellationToken cancellationToken = default)
     {
         using var connection = new NpgsqlConnection(connectionString);
-        return await connection.ExecuteScalarAsync<DateTimeOffset?>(getNextEventTimeSql).ConfigureAwait(false);
+        var next = await connection.ExecuteScalarAsync<object?>(getNextEventTimeSql).ConfigureAwait(false);
+        if (next is null or DBNull)
+        {
+            return null;
+        }
+
+        return next switch
+        {
+            DateTimeOffset value => value,
+            DateTime value => new DateTimeOffset(DateTime.SpecifyKind(value, DateTimeKind.Utc)),
+            _ => throw new InvalidCastException($"Unsupported next-event value type '{next.GetType().FullName}'."),
+        };
     }
 
     public async Task<int> CreateJobRunsFromDueJobsAsync(ISystemLease lease, CancellationToken cancellationToken = default)

@@ -32,12 +32,16 @@ jobs:
       - name: Build (warn as error)
         run: dotnet build Incursa.Platform.CI.slnx --no-restore --configuration Release -warnaserror -p:ContinuousIntegrationBuild=true
 
+      - name: Validate provider traceability
+        shell: pwsh
+        run: pwsh -File scripts/quality/validate-provider-traceability.ps1
+
       - name: Run fast tests
         run: dotnet test Incursa.Platform.CI.slnx --no-build --configuration Release --filter "Category!=Integration&RequiresDocker!=true"
 
       - name: Coverage gate (provider unit tests)
         shell: pwsh
-        run: pwsh -File scripts/quality/run-provider-coverage.ps1 -LineThreshold 30
+        run: pwsh -File scripts/quality/run-provider-coverage.ps1 -Targets InMemory -LineThreshold 50 -BranchThreshold 35
 
       - name: Upload quality artifacts
         uses: actions/upload-artifact@v4
@@ -45,5 +49,6 @@ jobs:
         with:
           name: provider-fast-quality-artifacts
           path: |
+            artifacts/codex/provider-traceability-summary.md
             artifacts/codex/provider-coverage-summary.md
             artifacts/codex/coverage/

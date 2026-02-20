@@ -83,7 +83,8 @@ public sealed class SqlServerCollectionFixture : IAsyncLifetime
     public async Task<string> CreateTestDatabaseAsync(string name)
     {
         EnsureAvailable();
-        for (var attempt = 0; attempt < 2; attempt++)
+        var didRecover = false;
+        while (true)
         {
             try
             {
@@ -112,17 +113,21 @@ public sealed class SqlServerCollectionFixture : IAsyncLifetime
                     }
                 }
             }
-            catch (SqlException ex) when (IsRecoverableSqlServerFailure(ex) && attempt == 0)
+            catch (SqlException ex) when (IsRecoverableSqlServerFailure(ex) && !didRecover)
             {
+                didRecover = true;
                 await EnsureContainerReadyAsync(forceRecreate: true, TestContext.Current.CancellationToken).ConfigureAwait(false);
             }
-            catch (InvalidOperationException ex) when (IsRecoverableOperationFailure(ex) && attempt == 0)
+            catch (InvalidOperationException ex) when (IsRecoverableOperationFailure(ex) && !didRecover)
             {
+                didRecover = true;
                 await EnsureContainerReadyAsync(forceRecreate: true, TestContext.Current.CancellationToken).ConfigureAwait(false);
+            }
+            catch
+            {
+                throw;
             }
         }
-
-        throw new InvalidOperationException("Failed to create a test database after SQL Server recovery.");
     }
 
     internal void EnsureAvailable()

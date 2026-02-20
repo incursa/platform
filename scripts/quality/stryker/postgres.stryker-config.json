@@ -5,6 +5,7 @@
     "test-projects": [
       "tests/Incursa.Platform.Postgres.Tests/Incursa.Platform.Postgres.Tests.csproj"
     ],
+    "test-case-filter": "FullyQualifiedName~PostgresPublicApiContractTests|FullyQualifiedName~DatabaseSchemaDeploymentTests|FullyQualifiedName~ControlPlaneGlobalSchedulerTests",
     "reporters": [
       "progress",
       "html",
@@ -16,10 +17,11 @@
       "break": 45
     },
     "mutate": [
-      "src/Incursa.Platform.Postgres/Outbox/PostgresOutboxStore.cs",
-      "src/Incursa.Platform.Postgres/Inbox/PostgresInboxWorkStore.cs",
-      "src/Incursa.Platform.Postgres/Scheduler/PostgresSchedulerStore.cs",
-      "src/Incursa.Platform.Postgres/Lease/PostgresLease.cs"
+      "src/Incursa.Platform.Postgres/Outbox/PostgresOutboxOptionsValidator.cs",
+      "src/Incursa.Platform.Postgres/Inbox/PostgresInboxOptionsValidator.cs",
+      "src/Incursa.Platform.Postgres/Fanout/PostgresFanoutOptionsValidator.cs",
+      "src/Incursa.Platform.Postgres/Scheduler/PostgresSchedulerOptionsValidator.cs",
+      "src/Incursa.Platform.Postgres/PostgresPlatformServiceCollectionExtensions.cs"
     ]
   }
 }

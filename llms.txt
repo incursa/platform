@@ -57,17 +57,20 @@ Provider-specific primitive specs and traceability live under `specs/providers/`
 
 ## Testing
 
-Tests use xUnit v3, Shouldly, and NSubstitute. Integration tests rely on Docker SQL Server via Testcontainers.
+Tests use xUnit v3, Shouldly, and NSubstitute. Integration tests rely on Docker SQL Server and Postgres via Testcontainers.
 Shared primitive conformance harnesses are in `tests/Incursa.Platform.TestUtilities/`.
 SQL Server scheduler/lease conformance entry suites:
 - `tests/Incursa.Platform.SqlServer.Tests/SqlSchedulerBehaviorTests.cs`
 - `tests/Incursa.Platform.SqlServer.Tests/SqlSystemLeaseBehaviorTests.cs`
+Postgres scheduler/lease conformance entry suites:
+- `tests/Incursa.Platform.Postgres.Tests/PostgresSchedulerBehaviorTests.cs`
+- `tests/Incursa.Platform.Postgres.Tests/PostgresSystemLeaseBehaviorTests.cs`
 Provider quality automation and baselines:
 - Fast quality lane: `.github/workflows/provider-fast-quality.yml`
 - Docker-backed integration lane: `.github/workflows/provider-integration.yml`
 - Scoped mutation lane: `.github/workflows/provider-mutation.yml`
 - Docker image pre-pull script: `scripts/testing/prepull-test-images.ps1`
-- Coverage/mutation scripts: `scripts/quality/`
+- Coverage/mutation/traceability scripts: `scripts/quality/`
 - Baseline report: `docs/quality/provider-quality-baseline.md`
 - In-memory portability checklist: `docs/quality/inmemory-portability-checklist.md`
 

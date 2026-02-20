@@ -19,7 +19,7 @@ public sealed class SmokeTestRunner
     private readonly IDatabaseSchemaCompletion? schemaCompletion;
     private readonly TimeProvider timeProvider;
     private readonly SmokeOptions options;
-    private readonly SemaphoreSlim runLock = new(1, 1);
+    private readonly Lock runGate = new();
 
     public SmokeTestRunner(
         SmokeTestState state,
@@ -45,24 +45,20 @@ public sealed class SmokeTestRunner
         this.schemaCompletion = schemaCompletion;
     }
 
-    public async Task<SmokeRun> StartAsync(CancellationToken cancellationToken)
+    public Task<SmokeRun> StartAsync(CancellationToken cancellationToken)
     {
-        await runLock.WaitAsync(cancellationToken).ConfigureAwait(false);
-        try
+        cancellationToken.ThrowIfCancellationRequested();
+        lock (runGate)
         {
             var existingRun = state.CurrentRun;
             if (existingRun is { IsCompleted: false })
             {
-                return existingRun;
+                return Task.FromResult(existingRun);
             }
 
             var run = state.StartRun(runtimeInfo.Provider, timeProvider.GetUtcNow());
             _ = Task.Run(() => RunAsync(run), CancellationToken.None);
-            return run;
-        }
-        finally
-        {
-            runLock.Release();
+            return Task.FromResult(run);
         }
     }
 

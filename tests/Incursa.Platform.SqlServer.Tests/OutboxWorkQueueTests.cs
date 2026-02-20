@@ -26,6 +26,18 @@ namespace Incursa.Platform.Tests;
 [Trait("RequiresDocker", "true")]
 public class OutboxWorkQueueTests : SqlServerTestBase
 {
+    private sealed class DeterministicSequence(uint seed)
+    {
+        private uint state = seed;
+
+        public int NextInt(int minInclusive, int maxExclusive)
+        {
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(minInclusive, maxExclusive);
+            state = (state * 1664525U) + 1013904223U;
+            return minInclusive + (int)(state % (uint)(maxExclusive - minInclusive));
+        }
+    }
+
     private SqlOutboxService? outboxService;
 
     public OutboxWorkQueueTests(ITestOutputHelper testOutputHelper, SqlServerCollectionFixture fixture)
@@ -215,6 +227,74 @@ public class OutboxWorkQueueTests : SqlServerTestBase
         await VerifyOutboxStatusAsync(claimedIds, 1); // Status = InProgress
     }
 
+    /// <summary>When ClaimAsync receives a non-positive batch size, then it throws ArgumentOutOfRangeException.</summary>
+    /// <intent>Enforce API guard behavior for invalid outbox claim batch sizes.</intent>
+    /// <scenario>Given ready work items and ClaimAsync called with batchSize = 0.</scenario>
+    /// <behavior>Then ClaimAsync throws ArgumentOutOfRangeException.</behavior>
+    [Fact]
+    public async Task OutboxClaim_WithNonPositiveBatchSize_ThrowsArgumentOutOfRangeException()
+    {
+        await CreateTestOutboxItemsAsync(1);
+        var ownerToken = OwnerToken.GenerateNew();
+
+        await Should.ThrowAsync<ArgumentOutOfRangeException>(async () =>
+            await outboxService!.ClaimAsync(ownerToken, leaseSeconds: 30, batchSize: 0, TestContext.Current.CancellationToken));
+    }
+
+    /// <summary>When deterministic randomized outbox operations run, then terminal items are never reclaimed.</summary>
+    /// <intent>Use fixed-seed fuzzing to verify claim/ack/abandon/fail invariants under varied operation sequences.</intent>
+    /// <scenario>Given 40 ready items and 40 deterministic random operation steps.</scenario>
+    /// <behavior>Then completed/failed terminal items are never returned by subsequent claims.</behavior>
+    [Fact]
+    public async Task OutboxWorkQueue_FuzzDeterministic_TerminalItemsAreNeverReclaimed()
+    {
+        var seeded = new DeterministicSequence(1337U);
+        var ownerToken = OwnerToken.GenerateNew();
+        var terminal = new HashSet<OutboxWorkItemIdentifier>();
+
+        await CreateTestOutboxItemsAsync(40);
+
+        for (var step = 0; step < 40; step++)
+        {
+            var batchSize = seeded.NextInt(1, 6);
+            var claimed = await outboxService!.ClaimAsync(ownerToken, leaseSeconds: 30, batchSize, TestContext.Current.CancellationToken);
+            if (claimed.Count == 0)
+            {
+                break;
+            }
+
+            var operation = seeded.NextInt(0, 3);
+            switch (operation)
+            {
+                case 0:
+                    await outboxService.AckAsync(ownerToken, claimed, TestContext.Current.CancellationToken);
+                    terminal.UnionWith(claimed);
+                    break;
+                case 1:
+                    await outboxService.AbandonAsync(ownerToken, claimed, TestContext.Current.CancellationToken);
+                    break;
+                default:
+                    await outboxService.FailAsync(ownerToken, claimed, TestContext.Current.CancellationToken);
+                    terminal.UnionWith(claimed);
+                    break;
+            }
+        }
+
+        for (var scan = 0; scan < 10; scan++)
+        {
+            var scanOwner = OwnerToken.GenerateNew();
+            var claimed = await outboxService!.ClaimAsync(scanOwner, leaseSeconds: 30, batchSize: 25, TestContext.Current.CancellationToken);
+            claimed.Intersect(terminal).ShouldBeEmpty();
+
+            if (claimed.Count == 0)
+            {
+                break;
+            }
+
+            await outboxService.AckAsync(scanOwner, claimed, TestContext.Current.CancellationToken);
+        }
+    }
+
     private async Task<List<OutboxWorkItemIdentifier>> CreateTestOutboxItemsAsync(int count)
     {
         var ids = new List<OutboxWorkItemIdentifier>();
@@ -272,4 +352,3 @@ public class OutboxWorkQueueTests : SqlServerTestBase
         }
     }
 }
-

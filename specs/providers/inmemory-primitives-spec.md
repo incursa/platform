@@ -21,6 +21,16 @@ All requirements use stable scenario IDs (`PRIM-INMEMORY-*`) and are traceable t
 - `PRIM-INMEMORY-GEN-002`: The provider is intended for local development and test execution, not production distributed coordination.
 - `PRIM-INMEMORY-GEN-003`: Primitive APIs preserve owner-token safety rules for claim/ack/abandon/fail operations.
 
+## Public API Requirements
+- `PRIM-INMEMORY-API-001`: `AddInMemoryPlatformMultiDatabaseWithList` rejects null database lists with `ArgumentNullException`.
+- `PRIM-INMEMORY-API-002`: `AddInMemoryPlatformMultiDatabaseWithList` rejects empty database lists with `ArgumentException`.
+- `PRIM-INMEMORY-API-003`: `AddInMemoryPlatformMultiDatabaseWithList` registers core primitive services (`IOutbox`, `IInbox`, `ISchedulerClient`, `ISystemLeaseFactory`).
+- `PRIM-INMEMORY-API-004`: `AddFanoutTopic` rejects missing/whitespace `FanoutTopic`.
+- `PRIM-INMEMORY-API-005`: public in-memory options expose stable documented defaults (`RetentionPeriod`, cleanup defaults, lease defaults, scheduler-worker default).
+
+## Fuzz Invariants
+- `PRIM-INMEMORY-FUZZ-001`: deterministic randomized outbox claim/dispatch/reschedule/fail sequences preserve terminal-state safety (failed/dispatched items are never reclaimed).
+
 ## Outbox Requirements
 - `PRIM-INMEMORY-OUTBOX-001`: `ClaimDueAsync` with no data returns an empty list.
 - `PRIM-INMEMORY-OUTBOX-002`: due messages are claimable and returned with topic/payload.

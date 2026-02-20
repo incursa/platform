@@ -52,3 +52,11 @@ All scenarios are testable and traceable using `PRIM-SQLSERVER-*` identifiers.
 - `PRIM-SQLSERVER-SCHEMA-001`: schema deployment is idempotent for repeated execution.
 - `PRIM-SQLSERVER-SCHEMA-002`: custom schema names place artifacts in configured schema.
 - `PRIM-SQLSERVER-SCHEMA-003`: required tables/indexes/procedures exist after deployment.
+
+## Public API Requirements
+- `PRIM-SQLSERVER-API-001`: `AddSqlPlatform` registers core platform services (`IOutbox`, `IInbox`, audit, operations, metrics, discovery).
+- `PRIM-SQLSERVER-API-002`: list-based multi-database registration rejects duplicate/invalid registration state and validates discovery contract setup.
+- `PRIM-SQLSERVER-API-003`: options validation enforces required SQL option contracts (connection strings, cleanup interval bounds, schema requirements).
+
+## Fuzz Invariants
+- `PRIM-SQLSERVER-FUZZ-001`: deterministic randomized outbox claim/ack/abandon/fail sequences preserve terminal-state safety (failed/acknowledged items are never reclaimed).

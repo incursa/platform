@@ -40,3 +40,11 @@ jobs:
 
       - name: Postgres integration tests
         run: dotnet test tests/Incursa.Platform.Postgres.Tests/Incursa.Platform.Postgres.Tests.csproj --configuration Release --filter "Category=Integration&RequiresDocker=true"
+
+      - name: Coverage gate (SQL Server integration)
+        shell: pwsh
+        run: pwsh -File scripts/quality/run-provider-coverage.ps1 -Targets SqlServer -LineThreshold 35 -BranchThreshold 20
+
+      - name: Coverage gate (Postgres integration)
+        shell: pwsh
+        run: pwsh -File scripts/quality/run-provider-coverage.ps1 -Targets Postgres -LineThreshold 35 -BranchThreshold 20

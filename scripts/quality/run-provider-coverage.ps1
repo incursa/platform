@@ -1,5 +1,7 @@
 param(
-    [int]$LineThreshold = 30
+    [int]$LineThreshold = 30,
+    [int]$BranchThreshold = 0,
+    [string[]]$Targets = @("InMemory")
 )
 
 Set-StrictMode -Version Latest
@@ -15,17 +17,17 @@ $coverageRoot = Join-Path $repoRoot "artifacts\codex\coverage"
 $summaryPath = Join-Path $repoRoot "artifacts\codex\provider-coverage-summary.md"
 New-Item -Path $coverageRoot -ItemType Directory -Force | Out-Null
 
-$targets = @(
+$configuredTargets = @(
     @{
         Name = "SqlServer";
         Project = "tests/Incursa.Platform.SqlServer.Tests/Incursa.Platform.SqlServer.Tests.csproj";
-        Filter = 'Category=Unit';
+        Filter = 'Category=Integration&RequiresDocker=true';
         Include = "[Incursa.Platform.SqlServer]*";
     },
     @{
         Name = "Postgres";
         Project = "tests/Incursa.Platform.Postgres.Tests/Incursa.Platform.Postgres.Tests.csproj";
-        Filter = 'Category=Unit';
+        Filter = 'Category=Integration&RequiresDocker=true';
         Include = "[Incursa.Platform.Postgres]*";
     },
     @{
@@ -35,6 +37,17 @@ $targets = @(
         Include = "[Incursa.Platform.InMemory]*";
     }
 )
+
+$selectedTargets = @()
+foreach ($targetName in $Targets) {
+    $matched = $configuredTargets | Where-Object { $_.Name -eq $targetName } | Select-Object -First 1
+    if ($null -eq $matched) {
+        Write-Error "Unknown coverage target '$targetName'. Valid targets: SqlServer, Postgres, InMemory."
+        exit 1
+    }
+
+    $selectedTargets += $matched
+}
 
 $summary = New-Object System.Collections.Generic.List[string]
 $summary.Add("# Provider Coverage Summary")
@@ -46,7 +59,12 @@ $failures = 0
 $threshold = "$LineThreshold"
 $thresholdType = "line"
 
-foreach ($target in $targets) {
+if ($BranchThreshold -gt 0) {
+    $threshold = "$LineThreshold,$BranchThreshold"
+    $thresholdType = "line,branch"
+}
+
+foreach ($target in $selectedTargets) {
     $name = $target.Name
     $project = $target.Project
     $filter = $target.Filter
@@ -83,9 +101,7 @@ foreach ($target in $targets) {
         }
 
         if ($noMatchingTests) {
-            Write-Warning "No matching tests found for $name. Skipping coverage gate."
-            $summary.Add("| $name | $filter | Skipped (no matching tests) |")
-            continue
+            throw "No matching tests found for $name coverage filter '$filter'."
         }
 
         $coverageFiles = Get-ChildItem -Path $coverageRoot -Filter "$name*.cobertura.xml" -ErrorAction SilentlyContinue
@@ -93,7 +109,11 @@ foreach ($target in $targets) {
             throw "Coverage output file was not generated for ${name} under $coverageRoot"
         }
 
-        $summary.Add("| $name | $filter | Passed (line >= $LineThreshold) |")
+        if ($BranchThreshold -gt 0) {
+            $summary.Add("| $name | $filter | Passed (line >= $LineThreshold, branch >= $BranchThreshold) |")
+        } else {
+            $summary.Add("| $name | $filter | Passed (line >= $LineThreshold) |")
+        }
     } catch {
         $failures++
         $summary.Add("| $name | $filter | Failed coverage gate |")

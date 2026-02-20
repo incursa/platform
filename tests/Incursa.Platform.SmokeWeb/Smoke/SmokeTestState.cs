@@ -39,11 +39,14 @@ public sealed class SmokeTestState
         }
     }
 
-    public string? GetActiveRunId()
+    public string? ActiveRunId
     {
-        lock (gate)
+        get
         {
-            return currentRun?.RunId;
+            lock (gate)
+            {
+                return currentRun?.RunId;
+            }
         }
     }
 
@@ -65,6 +68,8 @@ public sealed class SmokeTestState
 
     public void MarkRunCompleted(SmokeRun run, DateTimeOffset completedAtUtc)
     {
+        ArgumentNullException.ThrowIfNull(run);
+
         lock (gate)
         {
             if (!ReferenceEquals(currentRun, run))
@@ -79,6 +84,8 @@ public sealed class SmokeTestState
 
     public void MarkStepRunning(SmokeRun run, string stepName, DateTimeOffset startedAtUtc)
     {
+        ArgumentNullException.ThrowIfNull(run);
+
         lock (gate)
         {
             if (!run.Steps.TryGetValue(stepName, out var step))
@@ -92,6 +99,8 @@ public sealed class SmokeTestState
 
     public void MarkStepSucceeded(SmokeRun run, string stepName, DateTimeOffset completedAtUtc, string? message)
     {
+        ArgumentNullException.ThrowIfNull(run);
+
         lock (gate)
         {
             if (!run.Steps.TryGetValue(stepName, out var step))
@@ -105,6 +114,8 @@ public sealed class SmokeTestState
 
     public void MarkStepFailed(SmokeRun run, string stepName, DateTimeOffset completedAtUtc, string? message)
     {
+        ArgumentNullException.ThrowIfNull(run);
+
         lock (gate)
         {
             if (!run.Steps.TryGetValue(stepName, out var step))

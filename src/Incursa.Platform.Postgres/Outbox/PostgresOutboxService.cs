@@ -159,6 +159,8 @@ internal sealed class PostgresOutboxService : IOutbox
         int batchSize,
         CancellationToken cancellationToken)
     {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(batchSize);
+
         using var activity = SchedulerMetrics.StartActivity("outbox.claim");
         var stopwatch = Stopwatch.StartNew();
 

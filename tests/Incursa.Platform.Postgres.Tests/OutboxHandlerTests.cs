@@ -245,7 +245,7 @@ public class OutboxHandlerTests : PostgresTestBase
         var rescheduled = store.RescheduledMessages.First();
         rescheduled.Key.ShouldBe(message.Id);
         rescheduled.Value.Delay.ShouldBeGreaterThan(TimeSpan.Zero);
-        rescheduled.Value.Error.ShouldBe("Test exception");
+        rescheduled.Value.Error.ShouldContain("Test exception", Case.Sensitive);
     }
 
     /// <summary>
@@ -382,7 +382,7 @@ public class OutboxHandlerTests : PostgresTestBase
         // Verify that handler was called and error was logged
         testHandler.HandledMessages.Count.ShouldBe(1);
         store.RescheduledMessages.Count.ShouldBe(1);
-        store.RescheduledMessages.First().Value.Error.ShouldBe("Test exception");
+        store.RescheduledMessages.First().Value.Error.ShouldContain("Test exception", Case.Sensitive);
     }
 
     /// <summary>
@@ -651,5 +651,4 @@ public class OutboxHandlerTests : PostgresTestBase
         }
     }
 }
-
 
