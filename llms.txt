@@ -54,6 +54,9 @@ Provider-specific primitive specs and traceability live under `specs/providers/`
 - `postgres-primitives-spec.md`
 - `inmemory-primitives-spec.md`
 - `provider-conformance-matrix.md`
+Cross-library interface quality specs and traceability live under `specs/libraries/`:
+- `library-interface-quality-spec.md`
+- `library-conformance-matrix.md`
 
 ## Testing
 
@@ -69,9 +72,11 @@ Provider quality automation and baselines:
 - Fast quality lane: `.github/workflows/provider-fast-quality.yml`
 - Docker-backed integration lane: `.github/workflows/provider-integration.yml`
 - Scoped mutation lane: `.github/workflows/provider-mutation.yml`
+- Cross-library fast lane: `.github/workflows/library-fast-quality.yml`
 - Docker image pre-pull script: `scripts/testing/prepull-test-images.ps1`
 - Coverage/mutation/traceability scripts: `scripts/quality/`
 - Baseline report: `docs/quality/provider-quality-baseline.md`
+- Cross-library baseline report: `docs/quality/library-hardening-baseline.md`
 - In-memory portability checklist: `docs/quality/inmemory-portability-checklist.md`
 
 ## Smoke Web App

@@ -32,7 +32,7 @@ Status values:
 | PRIM-SQLSERVER-API-001 | SqlServer | PublicApi | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlPlatformRegistrationTests.cs` |
 | PRIM-SQLSERVER-API-002 | SqlServer | PublicApi | Covered | `tests/Incursa.Platform.SqlServer.Tests/PlatformRegistrationTests.cs` |
 | PRIM-SQLSERVER-API-003 | SqlServer | PublicApi | Covered | `tests/Incursa.Platform.SqlServer.Tests/OptionsValidationTests.cs` |
-| PRIM-SQLSERVER-FUZZ-001 | SqlServer | Fuzz | Covered | `tests/Incursa.Platform.SqlServer.Tests/OutboxWorkQueueTests.cs` |
+| PRIM-SQLSERVER-FUZZ-001 | SqlServer | Fuzz | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlServerOutboxFuzzTests.cs` |
 | PRIM-SQLSERVER-SCHED-001 | SqlServer | Scheduler | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSchedulerBehaviorTests.cs` |
 | PRIM-SQLSERVER-SCHED-003 | SqlServer | Scheduler | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSchedulerBehaviorTests.cs` |
 | PRIM-SQLSERVER-SCHED-004 | SqlServer | Scheduler | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSchedulerBehaviorTests.cs` |
@@ -88,7 +88,7 @@ Status values:
 | PRIM-POSTGRES-API-001 | Postgres | PublicApi | Covered | `tests/Incursa.Platform.Postgres.Tests/PostgresPublicApiContractTests.cs` |
 | PRIM-POSTGRES-API-002 | Postgres | PublicApi | Covered | `tests/Incursa.Platform.Postgres.Tests/PostgresPublicApiContractTests.cs` |
 | PRIM-POSTGRES-API-003 | Postgres | PublicApi | Covered | `tests/Incursa.Platform.Postgres.Tests/PostgresPublicApiContractTests.cs` |
-| PRIM-POSTGRES-FUZZ-001 | Postgres | Fuzz | Covered | `tests/Incursa.Platform.Postgres.Tests/OutboxWorkQueueTests.cs` |
+| PRIM-POSTGRES-FUZZ-001 | Postgres | Fuzz | Covered | `tests/Incursa.Platform.Postgres.Tests/PostgresOutboxFuzzTests.cs` |
 | PRIM-INMEMORY-GEN-001 | InMemory | General | Covered | `tests/Incursa.Platform.InMemory.Tests/InMemoryGeneralCharacteristicsTests.cs` |
 | PRIM-INMEMORY-GEN-002 | InMemory | General | Covered | `tests/Incursa.Platform.InMemory.Tests/InMemoryGeneralCharacteristicsTests.cs` |
 | PRIM-INMEMORY-GEN-003 | InMemory | General | Covered | `tests/Incursa.Platform.InMemory.Tests/InMemoryOutboxStoreBehaviorTests.cs`, `tests/Incursa.Platform.InMemory.Tests/InMemoryInboxWorkStoreBehaviorTests.cs` |
