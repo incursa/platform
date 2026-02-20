@@ -14,8 +14,8 @@
 
 
 using System.Collections.Concurrent;
-using Incursa.Platform.Tests.TestUtilities;
 using Dapper;
+using Incursa.Platform.Tests.TestUtilities;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

@@ -1,159 +1,48 @@
-###############################################################################
-# Set default behavior to automatically normalize line endings.
-###############################################################################
-* text=auto
-
-###############################################################################
-# Set default behavior for command prompt diff.
-#
-# This is need for earlier builds of msysgit that does not have it on by
-# default for csharp files.
-# Note: This is only used by command line
-###############################################################################
-#*.cs     diff=csharp
-
-###############################################################################
-# Set the merge driver for project and solution files
-#
-# Merging from the command prompt will add diff markers to the files if there
-# are conflicts (Merging from VS is not affected by the settings below, in VS
-# the diff markers are never inserted). Diff markers may cause the following
-# file extensions to fail to load in VS. An alternative would be to treat
-# these files as binary and thus will always conflict and require user
-# intervention with every merge. To do so, just uncomment the entries below
-###############################################################################
-#*.sln       merge=binary
-#*.csproj    merge=binary
-#*.vbproj    merge=binary
-#*.vcxproj   merge=binary
-#*.vcproj    merge=binary
-#*.dbproj    merge=binary
-#*.fsproj    merge=binary
-#*.lsproj    merge=binary
-#*.wixproj   merge=binary
-#*.modelproj merge=binary
-#*.sqlproj   merge=binary
-#*.wwaproj   merge=binary
-
-###############################################################################
-# behavior for image files
-#
-# image files are treated as binary by default.
-###############################################################################
-#*.jpg   binary
-#*.png   binary
-#*.gif   binary
-
-###############################################################################
-# diff behavior for common document formats
-#
-# Convert binary document formats to text before diffing them. This feature
-# is only available from the command line. Turn it on by uncommenting the
-# entries below.
-###############################################################################
-#*.doc   diff=astextplain
-#*.DOC   diff=astextplain
-#*.docx  diff=astextplain
-#*.DOCX  diff=astextplain
-#*.dot   diff=astextplain
-#*.DOT   diff=astextplain
-#*.pdf   diff=astextplain
-#*.PDF   diff=astextplain
-#*.rtf   diff=astextplain
-#*.RTF   diff=astextplain
-
-
-src/db/entrypoint.sh eol=lf
-.githooks/pre-commit eol=lf
-
-##### Default behavior
-# Normalize text and store as LF
+# Default: normalize text and keep LF
 * text=auto eol=lf
 
+# Windows command scripts
+*.cmd text eol=crlf
+*.bat text eol=crlf
 
-##### MUST be binary (never normalize)
-# Fonts
-*.ttf   binary
-*.otf   binary
-*.woff  binary
-*.woff2 binary
-*.eot   binary
+# Solution and project text files
+*.sln text eol=lf
+*.slnx text eol=lf
+*.csproj text eol=lf
+*.props text eol=lf
+*.targets text eol=lf
+*.editorconfig text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.razor text eol=lf
+*.cshtml text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.sql text eol=lf
+*.ps1 text eol=lf
+*.sh text eol=lf
 
-# Icons / images
-*.ico   binary
-*.png   binary
-*.jpg   binary
-*.jpeg  binary
-*.gif   binary
-*.webp  binary
-*.svg   text eol=lf
-# SVG is text; keep as LF
-
-# Documents / office files
-*.docx  binary
-*.xlsx  binary
-*.pptx  binary
-*.pdf   binary
-
-# Archives
-*.zip   binary
-*.7z    binary
-*.rar   binary
-*.gz    binary
-*.tar   binary
-
-# Binaries / native libs
-*.dll   binary
-*.exe   binary
-*.so    binary
-*.dylib binary
-*.a     binary
-*.lib   binary
-*.pdb   binary
-*.bin   binary
-*.dat   binary
-
-# Certificates/keys often should be treated as binary to avoid accidental munging
-*.pfx   binary
-*.p12   binary
-*.cer   binary
-
-
-##### Text files (force LF)
-# C# / .NET / web
-*.cs       text eol=lf
-*.csproj   text eol=lf
-*.props    text eol=lf
-*.targets  text eol=lf
-*.sln      text eol=crlf
-# optional; remove if you want LF everywhere
-*.razor    text eol=lf
-*.cshtml   text eol=lf
-*.js       text eol=lf
-*.ts       text eol=lf
-*.css      text eol=lf
-*.html     text eol=lf
-*.json     text eol=lf
-*.yml      text eol=lf
-*.yaml     text eol=lf
-*.md       text eol=lf
-*.txt      text eol=lf
-*.env      text eol=lf
-
-# Templates
-*.hbs      text eol=lf
-# Handlebars is text, LF is fine
-*.handlebars text eol=lf
-
-# SQL scripts
-*.sql      text eol=lf
-# SQL is text, LF is fine
-
-# Shell scripts (important to be LF)
-*.sh       text eol=lf
-
-# Windows scripts that typically want CRLF
-*.bat      text eol=crlf
-*.cmd      text eol=crlf
-*.ps1      text eol=lf
-# PS is fine with LF; set crlf if your team prefers
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.7z binary
+*.tar binary
+*.gz binary
+*.dll binary
+*.exe binary
+*.pdb binary
+*.snk binary
+*.pfx binary
+*.cer binary
+*.nupkg binary
+*.snupkg binary

@@ -45,7 +45,7 @@ internal sealed class SqlOutboxStoreBehaviorHarness : SqlServerTestBase, IOutbox
 
     public override async ValueTask InitializeAsync()
     {
-        await base.InitializeAsync();
+        await base.InitializeAsync().ConfigureAwait(false);
 
         timeProvider = new FakeTimeProvider();
         options.ConnectionString = ConnectionString;
@@ -56,8 +56,11 @@ internal sealed class SqlOutboxStoreBehaviorHarness : SqlServerTestBase, IOutbox
 
     public async Task ResetAsync()
     {
-        await using var connection = new SqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken);
+        var connection = new SqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken);
         await connection.ExecuteAsync($"DELETE FROM [{options.SchemaName}].[{options.TableName}]");
+        }
     }
 }

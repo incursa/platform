@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Incursa.Platform.Outbox;
 using Dapper;
+using Incursa.Platform.Outbox;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Npgsql;
@@ -200,15 +200,17 @@ public class OutboxWorkQueueTests : PostgresTestBase
         var ownerToken = OwnerToken.GenerateNew();
 
         await Should.ThrowAsync<ArgumentOutOfRangeException>(async () =>
-            await outboxService!.ClaimAsync(ownerToken, leaseSeconds: 30, batchSize: 0, TestContext.Current.CancellationToken));
+            await outboxService!.ClaimAsync(ownerToken, leaseSeconds: 30, batchSize: 0, TestContext.Current.CancellationToken).ConfigureAwait(false));
     }
 
     private async Task<List<OutboxWorkItemIdentifier>> CreateTestOutboxItemsAsync(int count)
     {
         var ids = new List<OutboxWorkItemIdentifier>();
 
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
         for (int i = 0; i < count; i++)
         {
@@ -224,12 +226,15 @@ public class OutboxWorkQueueTests : PostgresTestBase
         }
 
         return ids;
+        }
     }
 
     private async Task VerifyOutboxStatusAsync(IEnumerable<OutboxWorkItemIdentifier> ids, byte expectedStatus)
     {
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
         foreach (var id in ids)
         {
@@ -237,18 +242,22 @@ public class OutboxWorkQueueTests : PostgresTestBase
                 $"SELECT \"Status\" FROM {qualifiedTableName} WHERE \"Id\" = @Id", new { Id = id }).ConfigureAwait(false);
             ((byte)status).ShouldBe(expectedStatus);
         }
+        }
     }
 
     private async Task VerifyOutboxProcessedAsync(IEnumerable<OutboxWorkItemIdentifier> ids, bool expectedProcessed)
     {
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
         foreach (var id in ids)
         {
             var isProcessed = await connection.ExecuteScalarAsync<bool>(
                 $"SELECT \"IsProcessed\" FROM {qualifiedTableName} WHERE \"Id\" = @Id", new { Id = id }).ConfigureAwait(false);
             isProcessed.ShouldBe(expectedProcessed);
+        }
         }
     }
 }

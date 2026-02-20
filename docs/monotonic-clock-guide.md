@@ -80,7 +80,7 @@ public class ApiClient
     }
 
     public async Task<ApiResponse> CallWithTimeoutAsync(
-        string url, 
+        string url,
         TimeSpan timeout)
     {
         // Create a deadline 30 seconds from now
@@ -93,14 +93,14 @@ public class ApiClient
                 // Try the API call
                 var response = await _httpClient.GetAsync(url);
                 response.EnsureSuccessStatusCode();
-                
+
                 return await response.Content.ReadFromJsonAsync<ApiResponse>();
             }
             catch (HttpRequestException ex) when (!deadline.Expired(_clock))
             {
                 // Transient error - retry if we have time
                 _logger.LogWarning(ex, "API call failed, retrying...");
-                
+
                 // Brief delay before retry
                 await Task.Delay(TimeSpan.FromSeconds(1));
             }
@@ -129,10 +129,10 @@ public class PerformanceMonitor
         try
         {
             await operation();
-            
+
             // Calculate elapsed time
             var elapsedSeconds = _clock.Seconds - startTime;
-            
+
             return new OperationMetrics
             {
                 Success = true,
@@ -142,7 +142,7 @@ public class PerformanceMonitor
         catch (Exception ex)
         {
             var elapsedSeconds = _clock.Seconds - startTime;
-            
+
             return new OperationMetrics
             {
                 Success = false,
@@ -188,12 +188,12 @@ public class RateLimiter
             // Calculate how long to wait
             var oldestRequest = _requestTimes.Peek();
             var waitSeconds = oldestRequest + 1.0 - now;
-            
+
             if (waitSeconds > 0)
             {
                 await Task.Delay(TimeSpan.FromSeconds(waitSeconds));
             }
-            
+
             return false; // Caller should retry
         }
 
@@ -241,9 +241,9 @@ public class AutoRenewingLease : IAsyncDisposable
 
         // Start background renewal
         _renewalTask = RenewalLoopAsync(
-            leaseName, 
-            leaseDuration, 
-            renewalInterval, 
+            leaseName,
+            leaseDuration,
+            renewalInterval,
             nextRenewal);
 
         return this;
@@ -290,7 +290,7 @@ public class AutoRenewingLease : IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         _cts.Cancel();
-        
+
         if (_renewalTask != null)
         {
             try
@@ -333,14 +333,14 @@ public class ResilientOperation
             catch (TransientException ex) when (attempt < maxAttempts - 1)
             {
                 attempt++;
-                
+
                 // Calculate exponential backoff with jitter
                 var exponentialDelay = TimeSpan.FromSeconds(
                     Math.Pow(2, attempt) * baseDelay.TotalSeconds);
-                
+
                 var jitter = TimeSpan.FromMilliseconds(
                     Random.Shared.Next(0, 1000));
-                
+
                 var totalDelay = exponentialDelay + jitter;
 
                 _logger.LogWarning(ex,
@@ -349,7 +349,7 @@ public class ResilientOperation
 
                 // Use monotonic time for delay measurement
                 var deadline = MonoDeadline.In(_clock, totalDelay);
-                
+
                 while (!deadline.Expired(_clock))
                 {
                     await Task.Delay(100);
@@ -370,7 +370,7 @@ public class CircuitBreaker
     private readonly IMonotonicClock _clock;
     private readonly int _failureThreshold;
     private readonly TimeSpan _resetTimeout;
-    
+
     private int _consecutiveFailures;
     private double _openedAt;
     private CircuitState _state = CircuitState.Closed;
@@ -406,7 +406,7 @@ public class CircuitBreaker
         try
         {
             var result = await operation();
-            
+
             // Success - close circuit if it was half-open
             if (_state == CircuitState.HalfOpen)
             {
@@ -414,13 +414,13 @@ public class CircuitBreaker
                 _consecutiveFailures = 0;
                 _logger.LogInformation("Circuit breaker closed after successful operation");
             }
-            
+
             return result;
         }
         catch (Exception)
         {
             _consecutiveFailures++;
-            
+
             if (_consecutiveFailures >= _failureThreshold)
             {
                 _state = CircuitState.Open;
@@ -429,7 +429,7 @@ public class CircuitBreaker
                     "Circuit breaker opened after {Failures} consecutive failures",
                     _consecutiveFailures);
             }
-            
+
             throw;
         }
     }
@@ -625,7 +625,7 @@ internal sealed class MonotonicClock : IMonotonicClock
     private static readonly double TicksToSeconds = 1.0 / Stopwatch.Frequency;
 
     public long Ticks => Stopwatch.GetTimestamp();
-    
+
     public double Seconds => Ticks * TicksToSeconds;
 }
 ```
@@ -665,7 +665,7 @@ var checkInterval = MonoDeadline.In(_clock, TimeSpan.FromSeconds(1));
 for (int i = 0; i < 1000000; i++)
 {
     ProcessItem(i);
-    
+
     if (checkInterval.Expired(_clock))
     {
         // Check for cancellation, log progress, etc.
@@ -678,17 +678,17 @@ for (int i = 0; i < 1000000; i++)
 
 Use `IMonotonicClock` for:
 
-✅ **Timeouts and deadlines** - Reliable timeout checking  
-✅ **Performance measurement** - Accurate duration tracking  
-✅ **Rate limiting** - Stable time windows  
-✅ **Lease renewals** - Periodic background tasks  
-✅ **Retry delays** - Exponential backoff timing  
+✅ **Timeouts and deadlines** - Reliable timeout checking
+✅ **Performance measurement** - Accurate duration tracking
+✅ **Rate limiting** - Stable time windows
+✅ **Lease renewals** - Periodic background tasks
+✅ **Retry delays** - Exponential backoff timing
 
 Avoid it for:
 
-❌ **Timestamps** - Use `TimeProvider.GetUtcNow()`  
-❌ **Scheduling** - Use `TimeProvider` for wall clock times  
-❌ **Business logic** - Use `TimeProvider` for actual dates  
+❌ **Timestamps** - Use `TimeProvider.GetUtcNow()`
+❌ **Scheduling** - Use `TimeProvider` for wall clock times
+❌ **Business logic** - Use `TimeProvider` for actual dates
 
 The combination of `TimeProvider` (for what time it is) and `IMonotonicClock` (for how much time has passed) provides a complete, testable time abstraction for building reliable distributed systems.
 

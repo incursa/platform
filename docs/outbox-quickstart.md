@@ -93,20 +93,20 @@ public class OrderService
     }
 
     private async Task<Guid> SaveOrderToDatabase(
-        CreateOrderRequest request, 
+        CreateOrderRequest request,
         IDbTransaction transaction)
     {
         var orderId = Guid.NewGuid();
-        
+
         var command = _connection.CreateCommand();
         command.Transaction = transaction;
         command.CommandText = @"
             INSERT INTO Orders (Id, CustomerId, Amount, Status, CreatedAt)
             VALUES (@Id, @CustomerId, @Amount, 'Pending', @CreatedAt)";
-        
+
         // Add parameters...
         await command.ExecuteNonQueryAsync();
-        
+
         return orderId;
     }
 }
@@ -121,7 +121,7 @@ public class OrderCreatedHandler : IOutboxHandler
     private readonly ILogger<OrderCreatedHandler> _logger;
 
     public OrderCreatedHandler(
-        IMessageBroker messageBroker, 
+        IMessageBroker messageBroker,
         ILogger<OrderCreatedHandler> logger)
     {
         _messageBroker = messageBroker;
@@ -132,7 +132,7 @@ public class OrderCreatedHandler : IOutboxHandler
     public string Topic => "order.created";
 
     public async Task HandleAsync(
-        OutboxMessage message, 
+        OutboxMessage message,
         CancellationToken cancellationToken)
     {
         // Deserialize the event
@@ -146,7 +146,7 @@ public class OrderCreatedHandler : IOutboxHandler
             cancellationToken: cancellationToken);
 
         _logger.LogInformation(
-            "Published order.created event for order {OrderId}", 
+            "Published order.created event for order {OrderId}",
             orderEvent.OrderId);
     }
 }
@@ -233,17 +233,17 @@ CREATE TABLE infra.Outbox (
     Topic NVARCHAR(255) NOT NULL,
     Payload NVARCHAR(MAX) NOT NULL,
     CreatedAt DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-    
+
     -- Work queue columns
     Status TINYINT NOT NULL DEFAULT(0),        -- 0=Ready, 1=InProgress, 2=Done, 3=Failed
     LockedUntil DATETIME2(3) NULL,
     OwnerToken UNIQUEIDENTIFIER NULL,
-    
+
     -- Error handling
     RetryCount INT NOT NULL DEFAULT 0,
     LastError NVARCHAR(MAX) NULL,
     NextAttemptAt DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-    
+
     -- Tracking
     MessageId UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
     CorrelationId NVARCHAR(255) NULL,
@@ -259,11 +259,11 @@ builder.Services.AddSqlOutbox(new SqlOutboxOptions
 {
     // Required: Database connection
     ConnectionString = "Server=localhost;Database=MyApp;...",
-    
+
     // Optional: Schema and table names (defaults to "infra" and "Outbox")
     SchemaName = "infra",
     TableName = "Outbox",
-    
+
     // Optional: Automatically create database objects (default: false)
     EnableSchemaDeployment = true
 });
@@ -312,13 +312,13 @@ public async Task CreateOrder_EnqueuesOutboxMessage()
 public class Order
 {
     private readonly List<IDomainEvent> _events = new();
-    
+
     public void Complete()
     {
         Status = OrderStatus.Completed;
         _events.Add(new OrderCompletedEvent(Id, CompletedAt));
     }
-    
+
     public IReadOnlyList<IDomainEvent> GetUncommittedEvents() => _events;
 }
 
@@ -327,7 +327,7 @@ public async Task SaveAsync(Order order, IDbTransaction transaction)
 {
     // Save order
     await SaveOrderToDatabase(order, transaction);
-    
+
     // Enqueue domain events to outbox
     foreach (var evt in order.GetUncommittedEvents())
     {
@@ -346,11 +346,11 @@ public async Task SaveAsync(Order order, IDbTransaction transaction)
 public class OrderSagaHandler : IOutboxHandler
 {
     public string Topic => "order.created";
-    
+
     public async Task HandleAsync(OutboxMessage message, CancellationToken ct)
     {
         var order = JsonSerializer.Deserialize<OrderCreatedEvent>(message.Payload);
-        
+
         // Start saga by enqueueing next step
         await _outbox.EnqueueAsync(
             "payment.process",
@@ -370,18 +370,18 @@ public class OrderSagaHandler : IOutboxHandler
 public class WebhookHandler : IOutboxHandler
 {
     private readonly HttpClient _httpClient;
-    
+
     public string Topic => "webhook.notify";
-    
+
     public async Task HandleAsync(OutboxMessage message, CancellationToken ct)
     {
         var webhook = JsonSerializer.Deserialize<WebhookEvent>(message.Payload);
-        
+
         var response = await _httpClient.PostAsync(
             webhook.Url,
             new StringContent(webhook.Payload, Encoding.UTF8, "application/json"),
             ct);
-        
+
         response.EnsureSuccessStatusCode();
     }
 }
@@ -427,11 +427,11 @@ GRANT EXECUTE ON infra.Outbox_Abandon TO [AppUser];
 
 The Outbox pattern provides:
 
-✅ **Atomic operations** - Messages and data change together  
-✅ **Reliable delivery** - Messages will eventually be processed  
-✅ **Automatic retry** - Failed messages retry with backoff  
-✅ **At-least-once** - Messages may be delivered more than once  
-✅ **Horizontal scaling** - Multiple workers can process in parallel  
+✅ **Atomic operations** - Messages and data change together
+✅ **Reliable delivery** - Messages will eventually be processed
+✅ **Automatic retry** - Failed messages retry with backoff
+✅ **At-least-once** - Messages may be delivered more than once
+✅ **Horizontal scaling** - Multiple workers can process in parallel
 
 For at-most-once processing on the receiving side, combine with the [Inbox pattern](inbox-quickstart.md).
 

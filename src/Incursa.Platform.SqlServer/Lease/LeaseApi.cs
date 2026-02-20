@@ -13,8 +13,8 @@
 // limitations under the License.
 
 
-using System.Diagnostics.CodeAnalysis;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Data.SqlClient;
 
 namespace Incursa.Platform;

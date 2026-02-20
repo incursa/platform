@@ -37,7 +37,7 @@ public class OrderService
             CreatedAt = this.timeProvider.GetUtcNow(), // Wall clock timestamp
             Status = OrderStatus.Pending
         };
-        
+
         // ... save to database
         return order;
     }
@@ -68,7 +68,7 @@ public class ApiClient
     public async Task<T> CallWithTimeoutAsync<T>(Func<Task<T>> operation, TimeSpan timeout)
     {
         var deadline = MonoDeadline.In(this.clock, timeout);
-        
+
         while (!deadline.Expired(this.clock))
         {
             try
@@ -80,11 +80,11 @@ public class ApiClient
                 // Check if we still have time to retry
                 if (deadline.Expired(this.clock))
                     throw new TimeoutException();
-                    
+
                 await Task.Delay(100); // Brief delay before retry
             }
         }
-        
+
         throw new TimeoutException();
     }
 }
@@ -110,10 +110,10 @@ public async Task OrderService_SetsCorrectCreationTime()
     // Arrange
     var fakeTime = new FakeTimeProvider(DateTimeOffset.Parse("2024-01-01T10:00:00Z"));
     var service = new OrderService(fakeTime);
-    
+
     // Act
     var order = await service.CreateOrderAsync(new CreateOrderRequest());
-    
+
     // Assert
     order.CreatedAt.ShouldBe(DateTimeOffset.Parse("2024-01-01T10:00:00Z"));
 }
@@ -129,13 +129,13 @@ public async Task ApiClient_RespectsTimeout()
     var fakeClock = new FakeMonotonicClock();
     var client = new ApiClient(fakeClock);
     var neverCompletes = () => Task.Delay(Timeout.Infinite);
-    
+
     // Act & Assert
     var task = client.CallWithTimeoutAsync(neverCompletes, TimeSpan.FromSeconds(5));
-    
+
     // Simulate 6 seconds passing
     fakeClock.Advance(TimeSpan.FromSeconds(6));
-    
+
     await Should.ThrowAsync<TimeoutException>(() => task);
 }
 ```

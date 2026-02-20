@@ -313,7 +313,7 @@ public class PostgresLeaseRunnerTests : PostgresTestBase
 
         var renewTimerCallback = typeof(PostgresLeaseRunner)
             .GetMethod("RenewTimerCallback", BindingFlags.NonPublic | BindingFlags.Instance);
-        
+
         if (renewTimerCallback == null)
         {
             throw new InvalidOperationException("PostgresLeaseRunner.RenewTimerCallback method not found. The internal implementation may have changed.");

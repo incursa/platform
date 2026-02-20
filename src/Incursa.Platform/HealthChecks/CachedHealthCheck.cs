@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Threading;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Incursa.Platform.HealthChecks;
 

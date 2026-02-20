@@ -14,10 +14,10 @@
 
 
 using System.Collections.Concurrent;
-using Npgsql;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 
 #pragma warning disable CA1822, CA2100
 namespace Incursa.Platform.Tests;
@@ -381,8 +381,10 @@ public class MultiDatabaseControlPlaneIntegrationTests
     private async Task<int> GetIsProcessedCountAsync(PlatformDatabase database)
     {
         var outboxTable = PostgresSqlHelper.Qualify(database.SchemaName, "Outbox");
-        await using var connection = new NpgsqlConnection(database.ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new NpgsqlConnection(database.ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
         await using var command = connection.CreateCommand();
         command.CommandText = $"""
@@ -391,6 +393,7 @@ SELECT COUNT(*) FROM {outboxTable} WHERE "IsProcessed" = TRUE
 
         var result = await command.ExecuteScalarAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
         return Convert.ToInt32(result, System.Globalization.CultureInfo.InvariantCulture);
+        }
     }
 
     private async Task WaitForDispatchAsync(

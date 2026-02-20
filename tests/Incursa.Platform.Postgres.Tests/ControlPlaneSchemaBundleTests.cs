@@ -83,13 +83,16 @@ public sealed class ControlPlaneSchemaBundleTests
 
     private static async Task<bool> TableExistsAsync(string connectionString, string schemaName, string tableName)
     {
-        await using var connection = new NpgsqlConnection(connectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new NpgsqlConnection(connectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
         await using var command = connection.CreateCommand();
         command.CommandText = "SELECT to_regclass(@fullName) IS NOT NULL";
         command.Parameters.AddWithValue("fullName", $"\"{schemaName}\".\"{tableName}\"");
         var result = await command.ExecuteScalarAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
         return result is bool exists && exists;
+        }
     }
 }

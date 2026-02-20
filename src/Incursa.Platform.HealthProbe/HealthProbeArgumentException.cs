@@ -34,10 +34,10 @@ public sealed class HealthProbeArgumentException : Exception
     {
     }
 
-    #pragma warning disable SYSLIB0051
+#pragma warning disable SYSLIB0051
     private HealthProbeArgumentException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }
-    #pragma warning restore SYSLIB0051
+#pragma warning restore SYSLIB0051
 }

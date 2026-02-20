@@ -122,7 +122,7 @@ Task EnqueueAsync(
 
 - **`topic`** (required, non-null): The message topic used for routing to handlers.
   - **Type**: `string`
-  - **Constraints**: 
+  - **Constraints**:
     - MUST NOT be null or empty string
     - MUST NOT exceed 255 characters
     - Case-sensitive (e.g., "Order.Created" ≠ "order.created")
@@ -722,22 +722,22 @@ CREATE TABLE [infra].[Outbox] (
     Topic NVARCHAR(255) NOT NULL,
     Payload NVARCHAR(MAX) NOT NULL,
     CreatedAt DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-    
+
     -- Work queue state
     Status TINYINT NOT NULL DEFAULT(0),        -- 0=Ready, 1=InProgress, 2=Done, 3=Failed
     LockedUntil DATETIME2(3) NULL,
     OwnerToken UNIQUEIDENTIFIER NULL,
-    
+
     -- Processing metadata
     IsProcessed BIT NOT NULL DEFAULT 0,
     ProcessedAt DATETIMEOFFSET NULL,
     ProcessedBy NVARCHAR(100) NULL,
-    
+
     -- Retry logic
     RetryCount INT NOT NULL DEFAULT 0,
     LastError NVARCHAR(MAX) NULL,
     NextAttemptAt DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-    
+
     -- Message tracking
     MessageId UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
     CorrelationId NVARCHAR(255) NULL,
@@ -767,18 +767,18 @@ public class EmailOutboxHandler : IOutboxHandler
     public async Task HandleAsync(OutboxMessage message, CancellationToken cancellationToken)
     {
         var emailData = JsonSerializer.Deserialize<EmailData>(message.Payload);
-        
+
         // Idempotency check (recommended)
         if (await _emailService.HasBeenSentAsync(message.MessageId))
         {
             _logger.LogInformation("Email {MessageId} already sent, skipping", message.MessageId);
             return;
         }
-        
+
         _logger.LogInformation("Sending email to {Recipient}", emailData.To);
-        
+
         await _emailService.SendAsync(emailData, cancellationToken);
-        
+
         // Record that we sent it (for idempotency)
         await _emailService.RecordSentAsync(message.MessageId, cancellationToken);
     }
@@ -793,10 +793,10 @@ public void ConfigureServices(IServiceCollection services)
 {
     // Register dynamic discovery
     services.AddSingleton<IOutboxDatabaseDiscovery, TenantDatabaseDiscovery>();
-    
+
     // Register multi-outbox with round-robin strategy
     services.AddDynamicMultiSqlOutbox(refreshInterval: TimeSpan.FromMinutes(5));
-    
+
     // Register handlers
     services.AddOutboxHandler<OrderCreatedHandler>();
 }
@@ -805,17 +805,17 @@ public void ConfigureServices(IServiceCollection services)
 public class OrderService
 {
     private readonly IOutboxRouter _outboxRouter;
-    
+
     public OrderService(IOutboxRouter outboxRouter)
     {
         _outboxRouter = outboxRouter;
     }
-    
+
     public async Task CreateOrderAsync(string tenantId, Order order)
     {
         // Get the outbox for this specific tenant
         var outbox = _outboxRouter.GetOutbox(tenantId);
-        
+
         // Enqueue message to the tenant's database
         await outbox.EnqueueAsync(
             topic: "order.created",

@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Dapper;
 using Incursa.Platform.Correlation;
 using Incursa.Platform.Email;
-using Dapper;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Time.Testing;
@@ -163,8 +163,10 @@ public sealed class PostgresEmailDeliverySinkTests : PostgresTestBase
 
     private async Task<EmailDeliveryRow> GetByMessageKeyAsync(string messageKey)
     {
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken);
         return await connection.QuerySingleAsync<EmailDeliveryRow>(
             $"""
             SELECT *
@@ -172,12 +174,15 @@ public sealed class PostgresEmailDeliverySinkTests : PostgresTestBase
             WHERE "MessageKey" = @MessageKey
             """,
             new { MessageKey = messageKey });
+        }
     }
 
     private async Task<EmailDeliveryRow> GetByAttemptNumberAsync(int attemptNumber)
     {
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken);
         return await connection.QuerySingleAsync<EmailDeliveryRow>(
             $"""
             SELECT *
@@ -185,12 +190,15 @@ public sealed class PostgresEmailDeliverySinkTests : PostgresTestBase
             WHERE "AttemptNumber" = @AttemptNumber
             """,
             new { AttemptNumber = attemptNumber });
+        }
     }
 
     private async Task<EmailDeliveryRow> GetByProviderEventIdAsync(string providerEventId)
     {
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken);
         return await connection.QuerySingleAsync<EmailDeliveryRow>(
             $"""
             SELECT *
@@ -198,6 +206,7 @@ public sealed class PostgresEmailDeliverySinkTests : PostgresTestBase
             WHERE "ProviderEventId" = @ProviderEventId
             """,
             new { ProviderEventId = providerEventId });
+        }
     }
 
     private static OutboundEmailMessage CreateMessage(string messageKey)

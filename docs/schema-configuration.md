@@ -152,24 +152,24 @@ UPDATE_SCHEMA_SNAPSHOT=1 dotnet test tests/Incursa.Platform.Tests/Incursa.Platfo
 
 ```csharp
 // Separate schemas for different concerns
-services.AddSqlScheduler(new SqlSchedulerOptions 
-{ 
-    SchemaName = "scheduler" 
+services.AddSqlScheduler(new SqlSchedulerOptions
+{
+    SchemaName = "scheduler"
 });
 
-services.AddSqlOutbox(new SqlOutboxOptions 
-{ 
-    SchemaName = "messaging" 
+services.AddSqlOutbox(new SqlOutboxOptions
+{
+    SchemaName = "messaging"
 });
 
-services.AddSqlInbox(new SqlInboxOptions 
-{ 
-    SchemaName = "messaging" 
+services.AddSqlInbox(new SqlInboxOptions
+{
+    SchemaName = "messaging"
 });
 
-services.AddSystemLeases(new SystemLeaseOptions 
-{ 
-    SchemaName = "locks" 
+services.AddSystemLeases(new SystemLeaseOptions
+{
+    SchemaName = "locks"
 });
 ```
 
@@ -195,17 +195,17 @@ Use schemas to isolate tenant data:
 
 ```csharp
 // Configuration for Tenant A
-services.AddSqlScheduler(new SqlSchedulerOptions 
-{ 
+services.AddSqlScheduler(new SqlSchedulerOptions
+{
     ConnectionString = tenantAConnectionString,
-    SchemaName = "tenant_a" 
+    SchemaName = "tenant_a"
 });
 
 // Configuration for Tenant B
-services.AddSqlScheduler(new SqlSchedulerOptions 
-{ 
+services.AddSqlScheduler(new SqlSchedulerOptions
+{
     ConnectionString = tenantBConnectionString,
-    SchemaName = "tenant_b" 
+    SchemaName = "tenant_b"
 });
 ```
 
@@ -214,9 +214,9 @@ services.AddSqlScheduler(new SqlSchedulerOptions
 ```csharp
 var schemaPrefix = builder.Environment.IsDevelopment() ? "dev" : "prod";
 
-services.AddSqlScheduler(new SqlSchedulerOptions 
-{ 
-    SchemaName = $"{schemaPrefix}_scheduler" 
+services.AddSqlScheduler(new SqlSchedulerOptions
+{
+    SchemaName = $"{schemaPrefix}_scheduler"
 });
 ```
 
@@ -363,7 +363,7 @@ public class CustomSchemaTests : SqlServerTestBase
             EnableSchemaDeployment = true,
             EnableBackgroundWorkers = false
         });
-        
+
         var provider = services.BuildServiceProvider();
         var scheduler = provider.GetRequiredService<ISchedulerClient>();
 

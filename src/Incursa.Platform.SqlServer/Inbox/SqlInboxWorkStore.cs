@@ -237,7 +237,7 @@ internal class SqlInboxWorkStore : IInboxWorkStore
                 {
                     logger.LogWarning("Time provider returned non-UTC timestamp {Timestamp}; abandon times will be normalized to UTC.", now);
                 }
-                
+
                 var dueTime = now.Add(delay.Value);
                 command.Parameters.AddWithValue("@DueTimeUtc", dueTime.UtcDateTime);
             }

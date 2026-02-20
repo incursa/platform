@@ -15,8 +15,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using Incursa.Platform.Outbox;
 using Dapper;
+using Incursa.Platform.Outbox;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Npgsql;

@@ -1,5 +1,5 @@
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -34,13 +34,13 @@ public static class ServiceCollectionExtensions
         }
 
         services.AddHttpClient(HealthProbeDefaults.HttpClientName);
-        #pragma warning disable MA0039 // Healthcheck CLI optionally allows insecure TLS for local diagnostics.
+#pragma warning disable MA0039 // Healthcheck CLI optionally allows insecure TLS for local diagnostics.
         services.AddHttpClient(HealthProbeDefaults.HttpClientInsecureName)
             .ConfigurePrimaryHttpMessageHandler(static () => new HttpClientHandler
             {
                 ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator,
             });
-        #pragma warning restore MA0039
+#pragma warning restore MA0039
 
         services.AddTransient<IHealthProbeRunner>(static serviceProvider =>
         {

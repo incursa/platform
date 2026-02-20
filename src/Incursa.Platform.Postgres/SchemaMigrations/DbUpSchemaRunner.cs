@@ -17,8 +17,8 @@ using System.Globalization;
 using DbUp;
 using DbUp.Engine;
 using DbUp.Engine.Output;
-using Npgsql;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 
 namespace Incursa.Platform;
 

@@ -237,7 +237,7 @@ public abstract class SchedulerBehaviorTestsBase : IAsyncLifetime
         var lease = await harness.LeaseFactory.AcquireAsync(
             resourceName,
             TimeSpan.FromSeconds(30),
-            cancellationToken: CancellationToken.None);
+            cancellationToken: CancellationToken.None).ConfigureAwait(false);
 
         lease.ShouldNotBeNull();
         return lease;

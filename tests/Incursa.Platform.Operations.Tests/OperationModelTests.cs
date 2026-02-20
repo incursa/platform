@@ -115,7 +115,7 @@ public sealed class OperationModelTests
         {
             await OperationScope.RunAsync(tracker,
                 "Runner",
-                _ => throw new InvalidOperationException("fail"), cancellationToken: Xunit.TestContext.Current.CancellationToken);
+                _ => throw new InvalidOperationException("fail"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(false);
         });
 
         var snapshot = await tracker.GetSnapshotAsync(tracker.LastStartedId, CancellationToken.None);

@@ -14,9 +14,9 @@
 
 
 using Dapper;
-using Npgsql;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Npgsql;
 
 namespace Incursa.Platform.Metrics;
 /// <summary>

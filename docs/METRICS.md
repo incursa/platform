@@ -108,21 +108,21 @@ using System.Diagnostics.Metrics;
 public class OrderService
 {
     private static readonly Meter _meter = new("Incursa.Platform.MyApp");
-    private static readonly Counter<long> _ordersCreated = 
+    private static readonly Counter<long> _ordersCreated =
         _meter.CreateCounter<long>("app.orders.created.count");
-    private static readonly Histogram<double> _processingTime = 
+    private static readonly Histogram<double> _processingTime =
         _meter.CreateHistogram<double>("app.order.processing_time.ms");
 
     public async Task CreateOrderAsync(Order order)
     {
         var sw = Stopwatch.StartNew();
-        
+
         // ... create order logic ...
-        
-        _ordersCreated.Add(1, 
+
+        _ordersCreated.Add(1,
             new KeyValuePair<string, object?>("source", order.Source),
             new KeyValuePair<string, object?>("region", order.Region));
-            
+
         _processingTime.Record(sw.Elapsed.TotalMilliseconds,
             new KeyValuePair<string, object?>("order_type", order.Type));
     }
@@ -314,7 +314,7 @@ _counter.Add(1, new KeyValuePair<string, object?>("status", "completed"));
 
 ```sql
 -- Get minute-level metrics for the last hour
-SELECT 
+SELECT
     md.Name,
     ms.Service,
     ms.InstanceId,
@@ -338,7 +338,7 @@ ORDER BY mp.BucketStartUtc DESC;
 
 ```sql
 -- Get hourly aggregates across all tenants
-SELECT 
+SELECT
     md.Name,
     ms.DatabaseId,
     ms.Service,
@@ -544,14 +544,14 @@ public static class ApplicationMetrics
             MetricAggregationKind.Counter,
             "Number of orders created",
             new[] { "order_type", "payment_method", "region" }),
-            
+
         new MetricRegistration(
             "app.orders.processing_time.ms",
             MetricUnit.Milliseconds,
             MetricAggregationKind.Histogram,
             "Order processing duration",
             new[] { "order_type" }),
-            
+
         // Add more metrics...
     };
 }
@@ -591,57 +591,57 @@ public class OrderService
 {
     // Create a meter for your application
     private static readonly Meter _meter = new("Incursa.Platform.OrderService");
-    
+
     // Define instruments for your metrics
-    private static readonly Counter<long> _ordersCreated = 
+    private static readonly Counter<long> _ordersCreated =
         _meter.CreateCounter<long>("app.orders.created.count");
-    
-    private static readonly Histogram<double> _orderProcessingTime = 
+
+    private static readonly Histogram<double> _orderProcessingTime =
         _meter.CreateHistogram<double>("app.orders.processing_time.ms");
-    
+
     private readonly ILogger<OrderService> _logger;
-    
+
     public OrderService(ILogger<OrderService> logger)
     {
         _logger = logger;
     }
-    
+
     public async Task<Order> CreateOrderAsync(CreateOrderRequest request)
     {
         var sw = Stopwatch.StartNew();
-        
+
         try
         {
             // Your order creation logic
             var order = await ProcessOrderAsync(request);
-            
+
             // Record successful order creation
             _ordersCreated.Add(1,
                 new KeyValuePair<string, object?>("order_type", order.Type),
                 new KeyValuePair<string, object?>("payment_method", order.PaymentMethod),
                 new KeyValuePair<string, object?>("region", order.Region));
-            
+
             // Record processing time
             _orderProcessingTime.Record(sw.Elapsed.TotalMilliseconds,
                 new KeyValuePair<string, object?>("order_type", order.Type));
-            
+
             return order;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to create order");
-            
+
             // Still record the attempt (with appropriate tags)
             _ordersCreated.Add(1,
                 new KeyValuePair<string, object?>("order_type", request.Type),
                 new KeyValuePair<string, object?>("payment_method", request.PaymentMethod),
                 new KeyValuePair<string, object?>("region", request.Region),
                 new KeyValuePair<string, object?>("result", "error"));
-            
+
             throw;
         }
     }
-    
+
     private async Task<Order> ProcessOrderAsync(CreateOrderRequest request)
     {
         // Implementation...
@@ -658,24 +658,24 @@ public class OrderService
 public class MetricsMiddleware
 {
     private static readonly Meter _meter = new("Incursa.Platform.WebApp");
-    private static readonly Counter<long> _httpRequests = 
+    private static readonly Counter<long> _httpRequests =
         _meter.CreateCounter<long>("app.http.requests.count");
-    private static readonly Histogram<double> _httpDuration = 
+    private static readonly Histogram<double> _httpDuration =
         _meter.CreateHistogram<double>("app.http.request_duration.ms");
-    
+
     private readonly RequestDelegate _next;
-    
+
     public MetricsMiddleware(RequestDelegate next)
     {
         _next = next;
     }
-    
+
     public async Task InvokeAsync(HttpContext context)
     {
         var sw = Stopwatch.StartNew();
         var endpoint = context.Request.Path.Value ?? "/";
         var method = context.Request.Method;
-        
+
         try
         {
             await _next(context);
@@ -683,12 +683,12 @@ public class MetricsMiddleware
         finally
         {
             var statusCode = context.Response.StatusCode.ToString();
-            
+
             _httpRequests.Add(1,
                 new KeyValuePair<string, object?>("endpoint", endpoint),
                 new KeyValuePair<string, object?>("method", method),
                 new KeyValuePair<string, object?>("status_code", statusCode));
-            
+
             _httpDuration.Record(sw.Elapsed.TotalMilliseconds,
                 new KeyValuePair<string, object?>("endpoint", endpoint),
                 new KeyValuePair<string, object?>("method", method));
@@ -733,14 +733,14 @@ registrar.RegisterRange(new[]
         MetricAggregationKind.Counter,
         "Orders successfully created",
         new[] { "product_category", "payment_method" }),
-        
+
     new MetricRegistration(
         "app.orders.failed.count",
         MetricUnit.Count,
         MetricAggregationKind.Counter,
         "Order creation failures",
         new[] { "failure_reason" }),
-        
+
     new MetricRegistration(
         "app.inventory.check_duration.ms",
         MetricUnit.Milliseconds,

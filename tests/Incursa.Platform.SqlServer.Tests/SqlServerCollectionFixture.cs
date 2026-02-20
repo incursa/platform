@@ -246,17 +246,22 @@ public sealed class SqlServerCollectionFixture : IAsyncLifetime
         {
             try
             {
-                await using var connection = new SqlConnection(connectionString);
-                await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+                var connection = new SqlConnection(connectionString);
+                await using (connection.ConfigureAwait(false))
+                {
+                    await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
-                await using var command = new SqlCommand(
+                var command = new SqlCommand(
                     "SELECT state_desc FROM sys.databases WHERE name = 'tempdb'",
                     connection);
-
-                var state = (string?)await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+                await using (command.ConfigureAwait(false))
+                {
+                    var state = (string?)await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
                 if (string.Equals(state, "ONLINE", StringComparison.OrdinalIgnoreCase))
                 {
                     return;
+                }
+                }
                 }
             }
             catch (SqlException)

@@ -26,7 +26,7 @@ CREATE TABLE Customers (
 
 -- Example data
 INSERT INTO Customers (CustomerId, CustomerName, ConnectionString, IsActive)
-VALUES 
+VALUES
     ('customer-001', 'Acme Corp', 'Server=localhost;Database=AcmeCorpDB;...', 1),
     ('customer-002', 'Globex Inc', 'Server=localhost;Database=GlobexDB;...', 1),
     ('customer-003', 'Initech', 'Server=localhost;Database=InitechDB;...', 1);
@@ -49,7 +49,7 @@ public class GlobalDatabaseOutboxDiscovery : IOutboxDatabaseDiscovery
         IConfiguration configuration,
         ILogger<GlobalDatabaseOutboxDiscovery> logger)
     {
-        this.globalConnectionString = configuration.GetConnectionString("GlobalDatabase") 
+        this.globalConnectionString = configuration.GetConnectionString("GlobalDatabase")
             ?? throw new InvalidOperationException("GlobalDatabase connection string not found");
         this.logger = logger;
     }
@@ -65,8 +65,8 @@ public class GlobalDatabaseOutboxDiscovery : IOutboxDatabaseDiscovery
             await connection.OpenAsync(cancellationToken);
 
             var customers = await connection.QueryAsync<CustomerRecord>(
-                @"SELECT CustomerId, CustomerName, ConnectionString 
-                  FROM Customers 
+                @"SELECT CustomerId, CustomerName, ConnectionString
+                  FROM Customers
                   WHERE IsActive = 1",
                 cancellationToken);
 
@@ -89,7 +89,7 @@ public class GlobalDatabaseOutboxDiscovery : IOutboxDatabaseDiscovery
             this.logger.LogError(
                 ex,
                 "Error discovering customer databases from global database");
-            
+
             // Return empty list on error to prevent disrupting existing processing
             return Enumerable.Empty<OutboxDatabaseConfig>();
         }
@@ -184,8 +184,8 @@ Within 5 minutes (the refresh interval), the system will:
 When you deactivate a customer:
 
 ```sql
-UPDATE Customers 
-SET IsActive = 0 
+UPDATE Customers
+SET IsActive = 0
 WHERE CustomerId = 'customer-002';
 ```
 

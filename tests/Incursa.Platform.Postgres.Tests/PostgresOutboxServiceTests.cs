@@ -13,8 +13,8 @@
 // limitations under the License.
 
 using System.Data;
-using Dapper;
 using System.Globalization;
+using Dapper;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Npgsql;

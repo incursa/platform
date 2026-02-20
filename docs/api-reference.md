@@ -3396,8 +3396,3 @@ Service registration extensions for webhook ingestion and processing.
 
 Members:
 - `public static IServiceCollection AddIncursaWebhooks( this IServiceCollection services, Action<WebhookOptions>? configureOptions = null)` — Registers Incursa webhook services.
-
-
-
-
-

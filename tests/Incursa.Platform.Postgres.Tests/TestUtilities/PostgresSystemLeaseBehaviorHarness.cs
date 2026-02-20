@@ -49,8 +49,11 @@ internal sealed class PostgresSystemLeaseBehaviorHarness : PostgresTestBase, ISy
 
     public async Task ResetAsync()
     {
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
         await connection.ExecuteAsync("""DELETE FROM "infra"."DistributedLock";""").ConfigureAwait(false);
+        }
     }
 }

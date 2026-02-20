@@ -131,10 +131,10 @@ public sealed class WebhookEndpointTests
         var app = builder.Build();
         app.MapPost("/webhooks/{provider}", async (HttpContext context, string provider, IWebhookIngestor ingest, CancellationToken ct) =>
         {
-            return await WebhookEndpoint.HandleAsync(context, provider, ingest, ct);
+            return await WebhookEndpoint.HandleAsync(context, provider, ingest, ct).ConfigureAwait(false);
         });
 
-        await app.StartAsync(Xunit.TestContext.Current.CancellationToken);
+        await app.StartAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
         return app;
     }
 

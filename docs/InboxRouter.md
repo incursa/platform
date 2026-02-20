@@ -21,12 +21,12 @@ services.AddSqlInbox(new SqlInboxOptions
 public class MyService
 {
     private readonly IInbox inbox;
-    
+
     public MyService(IInbox inbox)
     {
         this.inbox = inbox;
     }
-    
+
     public async Task ProcessOrderAsync(Order order)
     {
         await inbox.EnqueueAsync("order.process", "external-api", order.Id, JsonSerializer.Serialize(order));
@@ -60,17 +60,17 @@ services.AddMultiSqlInbox(tenantDatabases);
 public class MyMultiTenantService
 {
     private readonly IInboxRouter inboxRouter;
-    
+
     public MyMultiTenantService(IInboxRouter inboxRouter)
     {
         this.inboxRouter = inboxRouter;
     }
-    
+
     public async Task ProcessOrderAsync(string tenantId, Order order)
     {
         // Get the inbox for this specific tenant
         var inbox = inboxRouter.GetInbox(tenantId);
-        
+
         // Enqueue message to the tenant's database
         await inbox.EnqueueAsync("order.process", "external-api", order.Id, JsonSerializer.Serialize(order));
     }
@@ -85,17 +85,17 @@ For applications where tenant databases are discovered at runtime:
 public class MyTenantDatabaseDiscovery : IInboxDatabaseDiscovery
 {
     private readonly IConfiguration configuration;
-    
+
     public MyTenantDatabaseDiscovery(IConfiguration configuration)
     {
         this.configuration = configuration;
     }
-    
+
     public async Task<IEnumerable<InboxDatabaseConfig>> DiscoverDatabasesAsync(CancellationToken cancellationToken)
     {
         // Query your tenant registry/database to get current tenants
         var tenants = await GetActiveTenantsAsync();
-        
+
         return tenants.Select(t => new InboxDatabaseConfig
         {
             Identifier = t.TenantId,
@@ -114,12 +114,12 @@ services.AddDynamicMultiSqlInbox();
 public class MyService
 {
     private readonly IInboxRouter inboxRouter;
-    
+
     public MyService(IInboxRouter inboxRouter)
     {
         this.inboxRouter = inboxRouter;
     }
-    
+
     public async Task ProcessOrderAsync(string tenantId, Order order)
     {
         var inbox = inboxRouter.GetInbox(tenantId);

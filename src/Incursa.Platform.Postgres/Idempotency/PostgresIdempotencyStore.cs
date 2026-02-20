@@ -14,8 +14,8 @@
 
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
-using Incursa.Platform.Idempotency;
 using Dapper;
+using Incursa.Platform.Idempotency;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Npgsql;

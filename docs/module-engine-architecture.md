@@ -122,4 +122,3 @@ Typical use: HTTP endpoints forward inbound requests into the webhook pipeline (
 2. Register module types with `ModuleRegistry.RegisterModule<T>()` so initialization loads configuration, registers engines, and wires health checks.
 3. Choose adapter surfaces (UI, webhook, or both), register them with DI, and map HTTP routes or background triggers to adapter calls.
 4. Validate required services and security settings during startup, optionally exposing manifest metadata to operators or client applications for discovery and governance.
-

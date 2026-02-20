@@ -14,12 +14,12 @@
 
 
 using System.Collections.Concurrent;
-using Incursa.Platform.Tests.TestUtilities;
 using Dapper;
-using Npgsql;
+using Incursa.Platform.Tests.TestUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Time.Testing;
+using Npgsql;
 
 namespace Incursa.Platform.Tests;
 

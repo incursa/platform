@@ -14,12 +14,12 @@
 
 using System.Reflection;
 using System.Text.Json;
-using Shouldly;
 using Incursa.Platform;
 using Incursa.Platform.Email;
 using Incursa.Platform.Email.Postmark;
 using Incursa.Platform.Observability;
 using Incursa.Platform.Webhooks;
+using Shouldly;
 
 namespace Incursa.Platform.Email.Postmark.Tests;
 

@@ -288,7 +288,7 @@ public sealed class WebhookProcessorTests
     private sealed class FakeInboxWorkStore : IInboxWorkStore
     {
         private readonly TimeProvider timeProvider;
-    private int messageSequence;
+        private int messageSequence;
         private readonly Dictionary<string, StoredMessage> messages = new(StringComparer.Ordinal);
         private readonly Dictionary<string, WorkState> states = new(StringComparer.Ordinal);
 

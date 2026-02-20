@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Dapper;
 using Incursa.Platform.Operations;
 using Incursa.Platform.Tests.TestUtilities;
-using Dapper;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Time.Testing;
 using Npgsql;

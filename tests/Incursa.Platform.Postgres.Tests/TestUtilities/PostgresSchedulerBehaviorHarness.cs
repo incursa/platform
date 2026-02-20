@@ -70,8 +70,10 @@ internal sealed class PostgresSchedulerBehaviorHarness : PostgresTestBase, ISche
 
     public async Task ResetAsync()
     {
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
         const string sql = """
             DELETE FROM "infra"."JobRuns";
@@ -87,5 +89,6 @@ internal sealed class PostgresSchedulerBehaviorHarness : PostgresTestBase, ISche
             """;
 
         await connection.ExecuteAsync(sql).ConfigureAwait(false);
+        }
     }
 }

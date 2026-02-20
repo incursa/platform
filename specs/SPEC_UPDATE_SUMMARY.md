@@ -1,7 +1,7 @@
 # Outbox Specification Update Summary
 
-**Date**: 2025-12-07  
-**Files Modified**: 
+**Date**: 2025-12-07
+**Files Modified**:
 - `specs/outbox-specification.md`
 - `specs/prompt-extract-join-spec.md` (new)
 - `specs/prompt-normalize-parameters.md` (new)

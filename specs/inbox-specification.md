@@ -893,47 +893,47 @@ CREATE TABLE [infra].[Inbox] (
     -- Natural key for deduplication
     Source NVARCHAR(255) NOT NULL,
     MessageId NVARCHAR(255) NOT NULL,
-    
+
     -- Message content and routing
     Topic NVARCHAR(255) NOT NULL,
     Payload NVARCHAR(MAX) NOT NULL,
     Hash VARBINARY(MAX) NULL,
-    
+
     -- Tracking timestamps
     FirstSeenUtc DATETIME2(3) NOT NULL DEFAULT SYSUTCDATETIME(),
     LastSeenUtc DATETIME2(3) NOT NULL DEFAULT SYSUTCDATETIME(),
-    
+
     -- Work queue state
     Status VARCHAR(20) NOT NULL DEFAULT 'Seen',  -- Seen, Processing, Done, Dead
     LockedUntil DATETIME2(3) NULL,
     OwnerToken UNIQUEIDENTIFIER NULL,
-    
+
     -- Retry logic
     Attempt INT NOT NULL DEFAULT 0,
     LastError NVARCHAR(MAX) NULL,
     NextAttemptAt DATETIME2(3) NOT NULL DEFAULT SYSUTCDATETIME(),
-    
+
     -- Scheduling
     DueTimeUtc DATETIME2(3) NULL,
-    
+
     -- Primary key
     CONSTRAINT PK_Inbox PRIMARY KEY (Source, MessageId)
 );
 
 -- Index for work queue claims
-CREATE INDEX IX_Inbox_WorkQueue 
-    ON [infra].[Inbox](Status, NextAttemptAt, DueTimeUtc) 
+CREATE INDEX IX_Inbox_WorkQueue
+    ON [infra].[Inbox](Status, NextAttemptAt, DueTimeUtc)
     INCLUDE(Source, MessageId, OwnerToken, LockedUntil)
     WHERE Status = 'Processing';
 
 -- Index for due time queries
-CREATE INDEX IX_Inbox_DueTime 
-    ON [infra].[Inbox](DueTimeUtc) 
+CREATE INDEX IX_Inbox_DueTime
+    ON [infra].[Inbox](DueTimeUtc)
     WHERE DueTimeUtc IS NOT NULL AND Status = 'Processing';
 
 -- Index for cleanup operations
-CREATE INDEX IX_Inbox_Cleanup 
-    ON [infra].[Inbox](Status, LastSeenUtc) 
+CREATE INDEX IX_Inbox_Cleanup
+    ON [infra].[Inbox](Status, LastSeenUtc)
     WHERE Status = 'Done';
 ```
 
@@ -946,7 +946,7 @@ public class PaymentReceivedHandler : IInboxHandler
     private readonly ILogger<PaymentReceivedHandler> _logger;
 
     public PaymentReceivedHandler(
-        IPaymentService paymentService, 
+        IPaymentService paymentService,
         ILogger<PaymentReceivedHandler> logger)
     {
         _paymentService = paymentService;
@@ -958,16 +958,16 @@ public class PaymentReceivedHandler : IInboxHandler
     public async Task HandleAsync(InboxMessage message, CancellationToken cancellationToken)
     {
         var paymentData = JsonSerializer.Deserialize<PaymentData>(message.Payload);
-        
+
         _logger.LogInformation(
             "Processing payment {PaymentId} from {Source}, attempt {Attempt}",
-            message.MessageId, 
-            message.Source, 
+            message.MessageId,
+            message.Source,
             message.Attempt);
-        
+
         // Handler should be idempotent - the message may be retried
         await _paymentService.ProcessPaymentAsync(
-            paymentData, 
+            paymentData,
             message.MessageId,  // Use message ID for idempotency
             cancellationToken);
     }
@@ -987,7 +987,7 @@ public class StripeWebhookController : ControllerBase
     private readonly IConfiguration _configuration;
 
     public StripeWebhookController(
-        IInbox inbox, 
+        IInbox inbox,
         ILogger<StripeWebhookController> logger,
         IConfiguration configuration)
     {
@@ -1000,7 +1000,7 @@ public class StripeWebhookController : ControllerBase
     public async Task<IActionResult> HandleWebhook()
     {
         var json = await new StreamReader(Request.Body).ReadToEndAsync();
-        
+
         // IMPORTANT: Verify webhook signature before processing
         var signature = Request.Headers["Stripe-Signature"].FirstOrDefault();
         if (string.IsNullOrEmpty(signature))
@@ -1008,34 +1008,34 @@ public class StripeWebhookController : ControllerBase
             _logger.LogWarning("Webhook received without Stripe-Signature header");
             return Unauthorized("Missing signature");
         }
-        
+
         var webhookSecret = _configuration["Stripe:WebhookSecret"];
         if (!VerifyStripeSignature(json, signature, webhookSecret))
         {
             _logger.LogWarning("Webhook signature verification failed");
             return Unauthorized("Invalid signature");
         }
-        
+
         var stripeEvent = JsonSerializer.Deserialize<StripeEvent>(json);
-        
+
         // Calculate content hash for deduplication
         var hash = SHA256.HashData(Encoding.UTF8.GetBytes(json));
-        
+
         // Check if we've already processed this webhook
         var alreadyProcessed = await _inbox.AlreadyProcessedAsync(
             messageId: stripeEvent.Id,
             source: "StripeWebhook",
             hash: hash,
             cancellationToken: HttpContext.RequestAborted);
-        
+
         if (alreadyProcessed)
         {
             _logger.LogInformation(
-                "Webhook {EventId} already processed, returning 200", 
+                "Webhook {EventId} already processed, returning 200",
                 stripeEvent.Id);
             return Ok();
         }
-        
+
         // Enqueue for async processing
         await _inbox.EnqueueAsync(
             topic: $"stripe.{stripeEvent.Type}",
@@ -1045,14 +1045,14 @@ public class StripeWebhookController : ControllerBase
             hash: hash,
             dueTimeUtc: null,
             cancellationToken: HttpContext.RequestAborted);
-        
+
         _logger.LogInformation(
-            "Webhook {EventId} enqueued for processing", 
+            "Webhook {EventId} enqueued for processing",
             stripeEvent.Id);
-        
+
         return Ok();
     }
-    
+
     private bool VerifyStripeSignature(string payload, string signature, string secret)
     {
         // Stripe signature format: t=timestamp,v1=signature
@@ -1060,10 +1060,10 @@ public class StripeWebhookController : ControllerBase
         var parts = signature.Split(',');
         var timestamp = parts.FirstOrDefault(p => p.StartsWith("t="))?.Substring(2);
         var sig = parts.FirstOrDefault(p => p.StartsWith("v1="))?.Substring(3);
-        
+
         if (string.IsNullOrEmpty(timestamp) || string.IsNullOrEmpty(sig))
             return false;
-        
+
         // Verify timestamp is recent (within 5 minutes) to prevent replay attacks
         if (long.TryParse(timestamp, out var ts))
         {
@@ -1074,13 +1074,13 @@ public class StripeWebhookController : ControllerBase
                 return false;
             }
         }
-        
+
         // Compute expected signature: HMAC-SHA256 of "timestamp.payload" with secret
         var signedPayload = $"{timestamp}.{payload}";
         using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secret));
         var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(signedPayload));
         var expectedSig = Convert.ToHexString(hash).ToLowerInvariant();
-        
+
         return sig == expectedSig;
     }
 }
@@ -1094,10 +1094,10 @@ public void ConfigureServices(IServiceCollection services)
 {
     // Register dynamic discovery
     services.AddSingleton<IInboxDatabaseDiscovery, TenantDatabaseDiscovery>();
-    
+
     // Register multi-inbox with round-robin strategy
     services.AddDynamicMultiSqlInbox(refreshInterval: TimeSpan.FromMinutes(5));
-    
+
     // Register handlers
     services.AddInboxHandler<PaymentReceivedHandler>();
     services.AddInboxHandler<OrderCreatedHandler>();
@@ -1107,27 +1107,27 @@ public void ConfigureServices(IServiceCollection services)
 public class WebhookService
 {
     private readonly IInboxRouter _inboxRouter;
-    
+
     public WebhookService(IInboxRouter inboxRouter)
     {
         _inboxRouter = inboxRouter;
     }
-    
+
     public async Task ProcessWebhookAsync(
-        string tenantId, 
-        string eventId, 
-        string eventType, 
+        string tenantId,
+        string eventId,
+        string eventType,
         string payload)
     {
         // Get the inbox for this specific tenant
         var inbox = _inboxRouter.GetInbox(tenantId);
-        
+
         // Check for duplicates
         var alreadyProcessed = await inbox.AlreadyProcessedAsync(
             messageId: eventId,
             source: "ExternalWebhook",
             cancellationToken: CancellationToken.None);
-        
+
         if (!alreadyProcessed)
         {
             // Enqueue message to the tenant's database

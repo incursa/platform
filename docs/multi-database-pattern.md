@@ -90,7 +90,7 @@ public sealed class Multi{Primitive}Dispatcher
     private readonly I{Primitive}StoreProvider storeProvider;
     private readonly I{Primitive}SelectionStrategy selectionStrategy;
     private readonly ILogger<Multi{Primitive}Dispatcher> logger;
-    
+
     private I{Primitive}Store? lastProcessedStore;
     private int lastProcessedCount;
 
@@ -107,7 +107,7 @@ public sealed class Multi{Primitive}Dispatcher
     public async Task<int> RunOnceAsync(int batchSize, CancellationToken cancellationToken)
     {
         var stores = this.storeProvider.GetAllStores();
-        
+
         if (stores.Count == 0)
         {
             return 0;
@@ -125,12 +125,12 @@ public sealed class Multi{Primitive}Dispatcher
         }
 
         var storeIdentifier = this.storeProvider.GetStoreIdentifier(selectedStore);
-        
+
         // Process items from the selected store
         var processedCount = await this.ProcessFromStoreAsync(
-            selectedStore, 
-            storeIdentifier, 
-            batchSize, 
+            selectedStore,
+            storeIdentifier,
+            batchSize,
             cancellationToken);
 
         // Track for next iteration
@@ -179,9 +179,9 @@ public sealed class Multi{Primitive}PollingService : BackgroundService
             try
             {
                 var processedCount = await this.dispatcher.RunOnceAsync(
-                    this.batchSize, 
+                    this.batchSize,
                     stoppingToken);
-                    
+
                 if (processedCount > 0)
                 {
                     this.logger.LogDebug(
@@ -335,7 +335,7 @@ public interface IInboxSelectionStrategy
         IReadOnlyList<IInboxWorkStore> stores,
         IInboxWorkStore? lastProcessedStore,
         int lastProcessedCount);
-    
+
     void Reset();
 }
 
@@ -423,7 +423,7 @@ public class MultiDatabaseLeaseAcquisition
                 var lease = await factory.AcquireLeaseAsync(
                     leaseName,
                     cancellationToken);
-                    
+
                 if (lease != null)
                 {
                     return lease;

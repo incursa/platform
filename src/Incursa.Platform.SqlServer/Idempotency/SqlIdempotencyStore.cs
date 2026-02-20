@@ -15,8 +15,8 @@
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using Incursa.Platform.Idempotency;
 using Dapper;
+using Incursa.Platform.Idempotency;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

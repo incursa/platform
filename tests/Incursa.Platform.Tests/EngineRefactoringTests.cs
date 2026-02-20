@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Text;
 using Incursa.Platform.Modularity;
 using Incursa.Platform.Webhooks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text;
 using Xunit;
 
 #pragma warning disable CA1861
@@ -177,7 +177,7 @@ public sealed class EngineRefactoringTests
         var adapter = new UiEngineAdapter(provider.GetRequiredService<ModuleEngineDiscoveryService>(), provider);
 
         await Assert.ThrowsAsync<ArgumentException>(async () =>
-            await adapter.ExecuteAsync<LoginCommand, LoginViewModel>("fake-module", "ui.login", new LoginCommand(string.Empty, "pass"), CancellationToken.None));
+            await adapter.ExecuteAsync<LoginCommand, LoginViewModel>("fake-module", "ui.login", new LoginCommand(string.Empty, "pass"), CancellationToken.None).ConfigureAwait(false));
     }
 
     /// <summary>
@@ -199,7 +199,7 @@ public sealed class EngineRefactoringTests
         var adapter = new UiEngineAdapter(provider.GetRequiredService<ModuleEngineDiscoveryService>(), provider);
 
         var ex = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-            await adapter.ExecuteAsync<LoginCommand, LoginViewModel>("fake-module", "ui.missing", new LoginCommand("admin", "pass"), CancellationToken.None));
+            await adapter.ExecuteAsync<LoginCommand, LoginViewModel>("fake-module", "ui.missing", new LoginCommand("admin", "pass"), CancellationToken.None).ConfigureAwait(false));
 
         Assert.Contains("No UI engine registered", ex.ToString(), StringComparison.Ordinal);
     }
@@ -223,7 +223,7 @@ public sealed class EngineRefactoringTests
         var adapter = new UiEngineAdapter(provider.GetRequiredService<ModuleEngineDiscoveryService>(), provider);
 
         var ex = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-            await adapter.ExecuteAsync<LoginCommand, LoginViewModel>("fake-module", "webhook.postmark", new LoginCommand("admin", "pass"), CancellationToken.None));
+            await adapter.ExecuteAsync<LoginCommand, LoginViewModel>("fake-module", "webhook.postmark", new LoginCommand("admin", "pass"), CancellationToken.None).ConfigureAwait(false));
 
         Assert.Contains("does not implement the expected UI contract", ex.ToString(), StringComparison.Ordinal);
     }

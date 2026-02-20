@@ -394,8 +394,10 @@ public class DatabaseSchemaConsistencyTests : PostgresTestBase
 
     private async Task<Dictionary<string, string>> GetTableColumnsAsync(string schemaName, string tableName)
     {
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
         const string sql = """
             SELECT column_name, data_type
@@ -407,6 +409,7 @@ public class DatabaseSchemaConsistencyTests : PostgresTestBase
             sql, new { SchemaName = schemaName, TableName = tableName }).ConfigureAwait(false);
 
         return columns.ToDictionary(c => c.ColumnName, c => c.DataType, StringComparer.Ordinal);
+        }
     }
 
     private static async Task<bool> IndexExistsAsync(NpgsqlConnection connection, string schemaName, string tableName, string indexName)

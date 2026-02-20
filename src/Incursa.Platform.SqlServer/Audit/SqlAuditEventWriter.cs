@@ -13,9 +13,9 @@
 // limitations under the License.
 
 using System.Text.Json;
+using Dapper;
 using Incursa.Platform.Audit;
 using Incursa.Platform.Correlation;
-using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

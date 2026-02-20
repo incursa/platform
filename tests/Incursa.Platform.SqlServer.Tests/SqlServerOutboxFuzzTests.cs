@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Incursa.Platform.Outbox;
 using Dapper;
+using Incursa.Platform.Outbox;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -46,8 +46,8 @@ public sealed class SqlServerOutboxFuzzTests : SqlServerTestBase
 
     public override async ValueTask InitializeAsync()
     {
-        await base.InitializeAsync();
-        await DatabaseSchemaManager.EnsureWorkQueueSchemaAsync(ConnectionString);
+        await base.InitializeAsync().ConfigureAwait(false);
+        await DatabaseSchemaManager.EnsureWorkQueueSchemaAsync(ConnectionString).ConfigureAwait(false);
 
         var options = Options.Create(new SqlOutboxOptions
         {
@@ -152,7 +152,7 @@ public sealed class SqlServerOutboxFuzzTests : SqlServerTestBase
         switch (operation)
         {
             case 0:
-                await outboxService!.AckAsync(owner, claimed, TestContext.Current.CancellationToken);
+                await outboxService!.AckAsync(owner, claimed, TestContext.Current.CancellationToken).ConfigureAwait(false);
                 terminal.UnionWith(claimed);
                 break;
             case 1:
@@ -170,7 +170,7 @@ public sealed class SqlServerOutboxFuzzTests : SqlServerTestBase
         for (var scan = 0; scan < 10; scan++)
         {
             var scanOwner = OwnerToken.GenerateNew();
-            var claimed = await outboxService!.ClaimAsync(scanOwner, leaseSeconds: 30, batchSize: 25, TestContext.Current.CancellationToken);
+            var claimed = await outboxService!.ClaimAsync(scanOwner, leaseSeconds: 30, batchSize: 25, TestContext.Current.CancellationToken).ConfigureAwait(false);
             claimed.Intersect(terminal).ShouldBeEmpty();
 
             if (claimed.Count == 0)
@@ -178,16 +178,16 @@ public sealed class SqlServerOutboxFuzzTests : SqlServerTestBase
                 break;
             }
 
-            await outboxService.AckAsync(scanOwner, claimed, TestContext.Current.CancellationToken);
+            await outboxService.AckAsync(scanOwner, claimed, TestContext.Current.CancellationToken).ConfigureAwait(false);
         }
     }
 
     private async Task CreateTestOutboxItemsAsync(int count)
     {
         var connection = new SqlConnection(ConnectionString);
-        await using (connection)
+        await using (connection.ConfigureAwait(false))
         {
-            await connection.OpenAsync(TestContext.Current.CancellationToken);
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
             for (var i = 0; i < count; i++)
             {
@@ -200,7 +200,7 @@ public sealed class SqlServerOutboxFuzzTests : SqlServerTestBase
                         Id = OutboxWorkItemIdentifier.GenerateNew(),
                         Topic = "fuzz",
                         Payload = $"payload{i}",
-                    });
+                    }).ConfigureAwait(false);
             }
         }
     }

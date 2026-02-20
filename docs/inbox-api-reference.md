@@ -79,10 +79,10 @@ Task MarkProcessedAsync(
 try
 {
     await _inbox.MarkProcessingAsync(messageId);
-    
+
     // Process message
     await _handler.ProcessAsync(message);
-    
+
     // Mark as successfully processed
     await _inbox.MarkProcessedAsync(messageId);
 }
@@ -163,14 +163,14 @@ catch (Exception ex)
 {
     // Check if we've exceeded retry limit
     var attempts = await GetAttemptCountAsync(messageId);
-    
+
     if (attempts >= MaxRetries)
     {
-        _logger.LogError(ex, "Message {MessageId} failed {Attempts} times, marking as dead", 
+        _logger.LogError(ex, "Message {MessageId} failed {Attempts} times, marking as dead",
             messageId, attempts);
         await _inbox.MarkDeadAsync(messageId);
     }
-    
+
     throw;
 }
 ```
@@ -208,14 +208,14 @@ Task EnqueueAsync(
 public async Task<IActionResult> PaymentWebhook([FromBody] PaymentEvent evt)
 {
     var hash = ComputeHash(evt);
-    
+
     await _inbox.EnqueueAsync(
         topic: "payment.received",
         source: "StripeWebhook",
         messageId: evt.Id,
         payload: JsonSerializer.Serialize(evt),
         hash: hash);
-    
+
     return Ok();
 }
 
@@ -268,7 +268,7 @@ string Topic { get; }
 public class PaymentReceivedHandler : IInboxHandler
 {
     public string Topic => "payment.received";
-    
+
     // ...
 }
 ```
@@ -298,12 +298,12 @@ public async Task HandleAsync(
     CancellationToken cancellationToken)
 {
     var payment = JsonSerializer.Deserialize<PaymentEvent>(message.Payload);
-    
+
     await _paymentService.RecordPaymentAsync(
         payment.OrderId,
         payment.Amount,
         cancellationToken);
-    
+
     _logger.LogInformation(
         "Processed payment {PaymentId} for order {OrderId}",
         payment.PaymentId,
@@ -341,11 +341,11 @@ IInbox GetInbox(string key)
 public async Task HandleWebhookAsync(string tenantId, WebhookEvent evt)
 {
     var inbox = _inboxRouter.GetInbox(tenantId);
-    
+
     var alreadyProcessed = await inbox.AlreadyProcessedAsync(
         evt.Id,
         "Webhook");
-    
+
     if (!alreadyProcessed)
     {
         await ProcessEventAsync(evt);
@@ -539,7 +539,7 @@ USING (VALUES (@MessageId, @Source, @Hash, @Now)) AS source(MessageId, Source, H
 ON target.MessageId = source.MessageId
 
 WHEN MATCHED THEN
-    UPDATE SET 
+    UPDATE SET
         LastSeenUtc = source.LastSeenUtc,
         Attempts = Attempts + 1
 
@@ -571,7 +571,7 @@ public static class InboxHashHelper
     {
         return SHA256.HashData(Encoding.UTF8.GetBytes(content));
     }
-    
+
     public static byte[] ComputeHash(object obj)
     {
         var json = JsonSerializer.Serialize(obj);
@@ -663,11 +663,11 @@ public async Task HandleMessageAsync(Message message)
     var alreadyProcessed = await _inbox.AlreadyProcessedAsync(
         message.MessageId,
         "Queue");
-    
+
     if (alreadyProcessed) return;
-    
+
     await _inbox.MarkProcessingAsync(message.MessageId);
-    
+
     try
     {
         await ProcessAsync(message);
@@ -676,7 +676,7 @@ public async Task HandleMessageAsync(Message message)
     catch (Exception ex)
     {
         var attempts = await GetAttemptsAsync(message.MessageId);
-        
+
         if (attempts >= 5)
         {
             // Too many failures - mark as dead
@@ -711,19 +711,19 @@ public class InboxCleanupService : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         using var timer = new PeriodicTimer(TimeSpan.FromHours(6));
-        
+
         while (await timer.WaitForNextTickAsync(stoppingToken))
         {
             // Delete processed messages older than 30 days
             await using var connection = new SqlConnection(_connectionString);
             await connection.OpenAsync(stoppingToken);
-            
+
             var command = new SqlCommand(@"
-                DELETE FROM infra.Inbox 
-                WHERE Status = 'Done' 
+                DELETE FROM infra.Inbox
+                WHERE Status = 'Done'
                   AND ProcessedUtc < DATEADD(day, -30, GETUTCDATE())",
                 connection);
-            
+
             var deleted = await command.ExecuteNonQueryAsync(stoppingToken);
             _logger.LogInformation("Cleaned up {Count} old inbox messages", deleted);
         }
@@ -743,21 +743,21 @@ public async Task ProcessMessageAsync(
     CancellationToken cancellationToken)
 {
     var hash = SHA256.HashData(message.Body);
-    
+
     var alreadyProcessed = await _inbox.AlreadyProcessedAsync(
         message.MessageId,
         "ServiceBus",
         hash,
         cancellationToken);
-    
+
     if (alreadyProcessed)
     {
         await message.CompleteAsync(cancellationToken);
         return;
     }
-    
+
     await _inbox.MarkProcessingAsync(message.MessageId, cancellationToken);
-    
+
     try
     {
         await _handler.HandleAsync(message.Body.ToString(), cancellationToken);
@@ -804,17 +804,17 @@ public class RabbitMQConsumer : BackgroundService
     {
         var messageId = ea.BasicProperties.MessageId;
         var body = Encoding.UTF8.GetString(ea.Body.ToArray());
-        
+
         var alreadyProcessed = await _inbox.AlreadyProcessedAsync(messageId, "RabbitMQ");
-        
+
         if (alreadyProcessed)
         {
             _channel.BasicAck(ea.DeliveryTag, false);
             return;
         }
-        
+
         await _inbox.MarkProcessingAsync(messageId);
-        
+
         try
         {
             await _handler.HandleAsync(body, CancellationToken.None);

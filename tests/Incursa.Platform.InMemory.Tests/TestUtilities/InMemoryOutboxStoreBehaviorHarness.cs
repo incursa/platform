@@ -54,7 +54,7 @@ internal sealed class InMemoryOutboxStoreBehaviorHarness : IOutboxStoreBehaviorH
         outbox = provider.GetRequiredService<IOutbox>();
 
         var storeProvider = provider.GetRequiredService<IOutboxStoreProvider>();
-        var stores = await storeProvider.GetAllStoresAsync();
+        var stores = await storeProvider.GetAllStoresAsync().ConfigureAwait(false);
         store = stores.Single();
     }
 }

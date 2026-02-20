@@ -13,8 +13,8 @@
 // limitations under the License.
 
 
-using Incursa.Platform.Tests.TestUtilities;
 using Dapper;
+using Incursa.Platform.Tests.TestUtilities;
 using Microsoft.Extensions.Options;
 
 namespace Incursa.Platform.Tests;
@@ -180,8 +180,10 @@ public class InboxIntegrationTests : PostgresTestBase
 
     private async Task VerifyMessageState(string messageId, string expectedStatus, bool processedUtc)
     {
-        await using var connection = new Npgsql.NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new Npgsql.NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
         var result = await connection.QuerySingleAsync<(string Status, DateTime? ProcessedUtc)>(
             $"SELECT \"Status\", \"ProcessedUtc\" FROM {qualifiedInboxTableName} WHERE \"MessageId\" = @MessageId",
@@ -196,6 +198,7 @@ public class InboxIntegrationTests : PostgresTestBase
         else
         {
             Assert.Null(result.ProcessedUtc);
+        }
         }
     }
 }

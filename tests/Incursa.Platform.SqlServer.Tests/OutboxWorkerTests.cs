@@ -13,9 +13,9 @@
 // limitations under the License.
 
 
+using Dapper;
 using Incursa.Platform.Outbox;
 using Incursa.Platform.Tests.TestUtilities;
-using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -407,10 +407,13 @@ public class OutboxWorkerTests : SqlServerTestBase
 
     private async Task VerifyOwnerTokenAsync(OutboxWorkItemIdentifier id, Guid expectedOwner)
     {
-        await using var connection = new SqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new SqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
         var ownerToken = await connection.ExecuteScalarAsync<Guid?>("SELECT OwnerToken FROM infra.Outbox WHERE Id = @Id", new { Id = id.Value }).ConfigureAwait(false);
         ownerToken.ShouldBe(expectedOwner);
+        }
     }
 
     private class TestOutboxWorker : BackgroundService

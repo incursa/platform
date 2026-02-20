@@ -59,7 +59,7 @@ public sealed class StartupLatchLiveHealthEndpointTests
             Predicate = check => check.Tags.Contains("live", StringComparer.Ordinal),
         });
 
-        await app.StartAsync(TestContext.Current.CancellationToken);
+        await app.StartAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
         return app;
     }
 }

@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Incursa.Platform.Outbox;
 using Dapper;
+using Incursa.Platform.Outbox;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Npgsql;
@@ -64,8 +64,10 @@ public class OutboxJoinTests : PostgresTestBase
 
     private async Task<OutboxMessageIdentifier> CreateOutboxMessageAsync()
     {
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(CancellationToken.None).ConfigureAwait(false);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(CancellationToken.None).ConfigureAwait(false);
 
         var id = Guid.NewGuid();
         await connection.ExecuteAsync(
@@ -76,6 +78,7 @@ public class OutboxJoinTests : PostgresTestBase
             new { Id = id, Topic = "test.topic", Payload = "{}", MessageId = Guid.NewGuid() }).ConfigureAwait(false);
 
         return OutboxMessageIdentifier.From(id);
+        }
     }
 
     /// <summary>When CreateJoinAsync is called with valid parameters, then a pending join is created.</summary>

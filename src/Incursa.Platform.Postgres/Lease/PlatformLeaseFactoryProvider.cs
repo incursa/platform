@@ -15,8 +15,8 @@
 
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
-using Npgsql;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 
 namespace Incursa.Platform;
 /// <summary>

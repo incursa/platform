@@ -14,11 +14,11 @@
 
 using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
-using Incursa.Platform.Outbox;
 using Dapper;
-using Npgsql;
+using Incursa.Platform.Outbox;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using Npgsql;
 using Shouldly;
 
 namespace Incursa.Platform.Tests;
@@ -247,30 +247,39 @@ public class FanoutCoordinatorIntegrationTests : PostgresTestBase
     private async Task<int> CountOutboxMessagesAsync()
     {
         var outboxTable = PostgresSqlHelper.Qualify("infra", "Outbox");
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
         return await connection.ExecuteScalarAsync<int>(
             new CommandDefinition($"SELECT COUNT(*) FROM {outboxTable}", cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(false);
+        }
     }
 
     private async Task<IReadOnlyList<string>> GetOutboxPayloadsAsync()
     {
         var outboxTable = PostgresSqlHelper.Qualify("infra", "Outbox");
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
         var payloads = await connection.QueryAsync<string>(
             new CommandDefinition($"SELECT \"Payload\" FROM {outboxTable} ORDER BY \"CreatedAt\"", cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(false);
         return payloads.ToList();
+        }
     }
 
     private async Task<IReadOnlyList<(Guid Id, string CorrelationId)>> GetOutboxMessagesAsync()
     {
         var outboxTable = PostgresSqlHelper.Qualify("infra", "Outbox");
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
         var messages = await connection.QueryAsync<(Guid Id, string CorrelationId)>(
             new CommandDefinition($"SELECT \"Id\", \"CorrelationId\" FROM {outboxTable} ORDER BY \"CreatedAt\"", cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(false);
         return messages.ToList();
+        }
     }
 
     private sealed class StaticPlanner : IFanoutPlanner

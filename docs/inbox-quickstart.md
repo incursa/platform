@@ -74,7 +74,7 @@ public class OrderEventConsumer
         if (alreadyProcessed)
         {
             _logger.LogInformation(
-                "Message {MessageId} already processed, skipping", 
+                "Message {MessageId} already processed, skipping",
                 message.MessageId);
             return;
         }
@@ -91,13 +91,13 @@ public class OrderEventConsumer
             await _inbox.MarkProcessedAsync(message.MessageId);
 
             _logger.LogInformation(
-                "Successfully processed message {MessageId}", 
+                "Successfully processed message {MessageId}",
                 message.MessageId);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, 
-                "Failed to process message {MessageId}", 
+            _logger.LogError(ex,
+                "Failed to process message {MessageId}",
                 message.MessageId);
 
             // Optional: Mark as dead after repeated failures
@@ -259,7 +259,7 @@ public class RabbitMQConsumer : BackgroundService
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to process message");
-                
+
                 // Reject and requeue (or not, depending on error)
                 _channel.BasicNack(ea.DeliveryTag, false, requeue: false);
             }
@@ -291,7 +291,7 @@ public class ResilientMessageHandler
         // Check if already processed
         var alreadyProcessed = await _inbox.AlreadyProcessedAsync(
             message.Id, message.Source);
-            
+
         if (alreadyProcessed)
         {
             return;
@@ -305,10 +305,10 @@ public class ResilientMessageHandler
             try
             {
                 await _inbox.MarkProcessingAsync(message.Id);
-                
+
                 // Your processing logic here
                 await _processor.ProcessAsync(message);
-                
+
                 await _inbox.MarkProcessedAsync(message.Id);
                 return; // Success!
             }
@@ -317,7 +317,7 @@ public class ResilientMessageHandler
                 // Transient error - retry after delay
                 lastException = ex;
                 attempts++;
-                
+
                 if (attempts < _maxRetries)
                 {
                     var delay = TimeSpan.FromSeconds(Math.Pow(2, attempts));
@@ -332,7 +332,7 @@ public class ResilientMessageHandler
                 throw;
             }
         }
-        
+
         // Max retries exceeded
         await _inbox.MarkDeadAsync(message.Id);
         throw new MaxRetriesExceededException(
@@ -437,7 +437,7 @@ USING (VALUES (@MessageId, @Source, @Hash, @Now)) AS source
 ON target.MessageId = source.MessageId
 
 WHEN MATCHED THEN
-    UPDATE SET 
+    UPDATE SET
         LastSeenUtc = source.LastSeenUtc,
         Attempts = Attempts + 1
 
@@ -460,11 +460,11 @@ builder.Services.AddSqlInbox(new SqlInboxOptions
 {
     // Required: Database connection
     ConnectionString = "Server=localhost;Database=MyApp;...",
-    
+
     // Optional: Schema and table names (defaults to "infra" and "Inbox")
     SchemaName = "infra",
     TableName = "Inbox",
-    
+
     // Optional: Automatically create database objects (default: false)
     EnableSchemaDeployment = true
 });
@@ -482,7 +482,7 @@ public class InboxMaintenanceService : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         using var timer = new PeriodicTimer(TimeSpan.FromHours(6));
-        
+
         while (await timer.WaitForNextTickAsync(stoppingToken))
         {
             try
@@ -491,10 +491,10 @@ public class InboxMaintenanceService : BackgroundService
                 var connectionString = scope.ServiceProvider
                     .GetRequiredService<IOptions<SqlInboxOptions>>()
                     .Value.ConnectionString;
-                
+
                 // Clean up old processed messages (older than 30 days)
                 await CleanupOldMessagesAsync(connectionString, TimeSpan.FromDays(30));
-                
+
                 // Alert on stuck processing messages
                 await AlertOnStuckMessagesAsync(connectionString, TimeSpan.FromHours(1));
             }
@@ -506,21 +506,21 @@ public class InboxMaintenanceService : BackgroundService
     }
 
     private async Task CleanupOldMessagesAsync(
-        string connectionString, 
+        string connectionString,
         TimeSpan retentionPeriod)
     {
         using var connection = new SqlConnection(connectionString);
         await connection.OpenAsync();
 
         var command = new SqlCommand(@"
-            DELETE FROM infra.Inbox 
-            WHERE Status = 'Done' 
+            DELETE FROM infra.Inbox
+            WHERE Status = 'Done'
               AND ProcessedUtc < @CutoffDate",
             connection);
-        
-        command.Parameters.AddWithValue("@CutoffDate", 
+
+        command.Parameters.AddWithValue("@CutoffDate",
             DateTime.UtcNow.Subtract(retentionPeriod));
-        
+
         var deleted = await command.ExecuteNonQueryAsync();
         _logger.LogInformation("Cleaned up {Count} old inbox messages", deleted);
     }
@@ -538,9 +538,9 @@ public async Task HandleMessage_SkipsWhenAlreadyProcessed()
     // Arrange
     var mockInbox = new Mock<IInbox>();
     mockInbox.Setup(x => x.AlreadyProcessedAsync(
-        It.IsAny<string>(), 
-        It.IsAny<string>(), 
-        It.IsAny<byte[]?>(), 
+        It.IsAny<string>(),
+        It.IsAny<string>(),
+        It.IsAny<byte[]?>(),
         It.IsAny<CancellationToken>()))
         .ReturnsAsync(true);
 
@@ -557,7 +557,7 @@ public async Task HandleMessage_SkipsWhenAlreadyProcessed()
 
     // Assert
     mockInbox.Verify(x => x.MarkProcessingAsync(
-        It.IsAny<string>(), 
+        It.IsAny<string>(),
         It.IsAny<CancellationToken>()), Times.Never);
 }
 ```
@@ -583,20 +583,20 @@ public class EventStoreConsumer
     {
         // Use event ID and version as message ID
         var messageId = $"{evt.StreamId}-{evt.Version}";
-        
+
         var alreadyProcessed = await _inbox.AlreadyProcessedAsync(
             messageId, "EventStore");
-            
+
         if (alreadyProcessed)
         {
             return;
         }
 
         await _inbox.MarkProcessingAsync(messageId);
-        
+
         // Project event into read model
         await ProjectEventAsync(evt);
-        
+
         await _inbox.MarkProcessedAsync(messageId);
     }
 }
@@ -617,7 +617,7 @@ public class WebhookController : ControllerBase
         // Use Stripe's event ID
         var alreadyProcessed = await _inbox.AlreadyProcessedAsync(
             evt.Id, "Stripe");
-            
+
         if (alreadyProcessed)
         {
             return Ok(); // Idempotent response
@@ -666,11 +666,11 @@ WHERE Status = 'Processing'
 
 The Inbox pattern provides:
 
-✅ **At-most-once processing** - Messages processed exactly once  
-✅ **Duplicate detection** - Same message ID is skipped  
-✅ **Content verification** - Optional hash prevents corruption  
-✅ **Poison message handling** - Track and isolate problem messages  
-✅ **Concurrent safety** - SQL MERGE ensures atomicity  
+✅ **At-most-once processing** - Messages processed exactly once
+✅ **Duplicate detection** - Same message ID is skipped
+✅ **Content verification** - Optional hash prevents corruption
+✅ **Poison message handling** - Track and isolate problem messages
+✅ **Concurrent safety** - SQL MERGE ensures atomicity
 
 Combined with the [Outbox pattern](outbox-quickstart.md), you get end-to-end exactly-once semantics across distributed systems.
 

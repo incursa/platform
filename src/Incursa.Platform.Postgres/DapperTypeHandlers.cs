@@ -15,10 +15,10 @@
 #pragma warning disable MA0048 // File name must match type name - intentionally grouping all type handlers
 
 using System.Data;
+using Dapper;
 using Incursa.Platform.Inbox;
 using Incursa.Platform.Metrics;
 using Incursa.Platform.Outbox;
-using Dapper;
 
 namespace Incursa.Platform;
 

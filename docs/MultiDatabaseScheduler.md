@@ -61,25 +61,25 @@ services.AddSystemLeases(new SystemLeaseOptions
 public class MySchedulerDatabaseDiscovery : ISchedulerDatabaseDiscovery
 {
     private readonly string registryConnectionString;
-    
+
     public MySchedulerDatabaseDiscovery(string registryConnectionString)
     {
         this.registryConnectionString = registryConnectionString;
     }
-    
+
     public async Task<IEnumerable<SchedulerDatabaseConfig>> DiscoverDatabasesAsync(
         CancellationToken cancellationToken = default)
     {
         // Query your registry database to get the list of active customer databases
         // This is called periodically to detect changes
         var databases = new List<SchedulerDatabaseConfig>();
-        
+
         using var connection = new SqlConnection(this.registryConnectionString);
         await connection.OpenAsync(cancellationToken);
-        
+
         var customers = await connection.QueryAsync<(string Id, string ConnectionString)>(
             "SELECT CustomerId, ConnectionString FROM ActiveCustomers");
-            
+
         foreach (var customer in customers)
         {
             databases.Add(new SchedulerDatabaseConfig
@@ -89,7 +89,7 @@ public class MySchedulerDatabaseDiscovery : ISchedulerDatabaseDiscovery
                 SchemaName = "infra",
             });
         }
-        
+
         return databases;
     }
 }
@@ -117,24 +117,24 @@ When working with multiple databases, use the router to direct scheduler operati
 public class MyController : Controller
 {
     private readonly ISchedulerRouter schedulerRouter;
-    
+
     public MyController(ISchedulerRouter schedulerRouter)
     {
         this.schedulerRouter = schedulerRouter;
     }
-    
+
     public async Task<IActionResult> ScheduleJob(string customerId)
     {
         // Get the scheduler client for this customer
         var schedulerClient = this.schedulerRouter.GetSchedulerClient(customerId);
-        
+
         // Schedule a job in the customer's database
         await schedulerClient.CreateOrUpdateJobAsync(
             jobName: "daily-report",
             topic: "generate-daily-report",
             cronSchedule: "0 0 * * *", // Daily at midnight
             payload: JsonSerializer.Serialize(new { CustomerId = customerId }));
-            
+
         return Ok();
     }
 }

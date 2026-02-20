@@ -21,12 +21,12 @@ services.AddSqlOutbox(new SqlOutboxOptions
 public class MyService
 {
     private readonly IOutbox outbox;
-    
+
     public MyService(IOutbox outbox)
     {
         this.outbox = outbox;
     }
-    
+
     public async Task CreateOrderAsync(Order order)
     {
         await outbox.EnqueueAsync("order.created", JsonSerializer.Serialize(order), order.Id);
@@ -60,17 +60,17 @@ services.AddMultiSqlOutbox(tenantDatabases);
 public class MyMultiTenantService
 {
     private readonly IOutboxRouter outboxRouter;
-    
+
     public MyMultiTenantService(IOutboxRouter outboxRouter)
     {
         this.outboxRouter = outboxRouter;
     }
-    
+
     public async Task CreateOrderAsync(string tenantId, Order order)
     {
         // Get the outbox for this specific tenant
         var outbox = outboxRouter.GetOutbox(tenantId);
-        
+
         // Enqueue message to the tenant's database
         await outbox.EnqueueAsync("order.created", JsonSerializer.Serialize(order), order.Id);
     }
@@ -85,17 +85,17 @@ For applications where tenant databases are discovered at runtime:
 public class MyTenantDatabaseDiscovery : IOutboxDatabaseDiscovery
 {
     private readonly IConfiguration configuration;
-    
+
     public MyTenantDatabaseDiscovery(IConfiguration configuration)
     {
         this.configuration = configuration;
     }
-    
+
     public async Task<IEnumerable<OutboxDatabaseConfig>> DiscoverDatabasesAsync(CancellationToken cancellationToken)
     {
         // Query your tenant registry/database to get current tenants
         var tenants = await GetActiveTenantsAsync();
-        
+
         return tenants.Select(t => new OutboxDatabaseConfig
         {
             Identifier = t.TenantId,
@@ -114,12 +114,12 @@ services.AddDynamicMultiSqlOutbox();
 public class MyService
 {
     private readonly IOutboxRouter outboxRouter;
-    
+
     public MyService(IOutboxRouter outboxRouter)
     {
         this.outboxRouter = outboxRouter;
     }
-    
+
     public async Task CreateOrderAsync(string tenantId, Order order)
     {
         var outbox = outboxRouter.GetOutbox(tenantId);

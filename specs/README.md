@@ -4,11 +4,11 @@ This directory contains the Outbox Component specification and related documenta
 
 ## Main Specification
 
-**[outbox-specification.md](outbox-specification.md)**  
+**[outbox-specification.md](outbox-specification.md)**
 The complete functional specification for the Outbox component. This is the authoritative source for Outbox behavior, API surface, and requirements.
 
-**Last Updated**: 2025-12-07  
-**Version**: 1.0  
+**Last Updated**: 2025-12-07
+**Version**: 1.0
 **Status**: Active - Join-agnostic, with comprehensive parameter semantics
 
 ### Key Characteristics:
@@ -30,14 +30,14 @@ These specs define provider-specific low-level primitive behavior and are intend
 
 ### Change Summary
 
-**[SPEC_UPDATE_SUMMARY.md](SPEC_UPDATE_SUMMARY.md)**  
+**[SPEC_UPDATE_SUMMARY.md](SPEC_UPDATE_SUMMARY.md)**
 Comprehensive summary of changes made to separate join concerns and normalize parameter semantics.
 
 **Purpose**: Quick reference for understanding what changed and why.
 
 ### Future Join Specification
 
-**[join-coordination-specification.md](join-coordination-specification.md)**  
+**[join-coordination-specification.md](join-coordination-specification.md)**
 Outline and content for the separate Join Coordination Component specification.
 
 **Purpose**: Ready-to-use template for creating the independent Join spec with all content extracted from Outbox.
@@ -56,7 +56,7 @@ These prompts can be used to validate changes or apply similar updates to other 
 
 ### Extract Join Specification
 
-**[prompt-extract-join-spec.md](prompt-extract-join-spec.md)**  
+**[prompt-extract-join-spec.md](prompt-extract-join-spec.md)**
 Complete instructions for extracting join/fan-in coordination from the Outbox spec and creating a separate Join Coordination specification.
 
 **Use cases**:
@@ -66,7 +66,7 @@ Complete instructions for extracting join/fan-in coordination from the Outbox sp
 
 ### Normalize Parameter Semantics
 
-**[prompt-normalize-parameters.md](prompt-normalize-parameters.md)**  
+**[prompt-normalize-parameters.md](prompt-normalize-parameters.md)**
 Complete instructions for normalizing method signatures and adding comprehensive parameter documentation to any specification.
 
 **Use cases**:
@@ -105,14 +105,14 @@ Complete instructions for normalizing method signatures and adding comprehensive
 4. Defined canonical method signatures with implementation notes for overloads
 5. Updated all examples to match canonical signatures
 
-**Requirements Added**: OBX-127, OBX-128, OBX-129, OBX-130  
-**Requirements Removed**: OBX-033, OBX-034, OBX-046, OBX-047, OBX-080 through OBX-096 (moved to Join spec)  
+**Requirements Added**: OBX-127, OBX-128, OBX-129, OBX-130
+**Requirements Removed**: OBX-033, OBX-034, OBX-046, OBX-047, OBX-080 through OBX-096 (moved to Join spec)
 **Sections Removed**: §4.5 Join/Fan-In Concepts, §6.11 Join/Fan-In Coordination, Appendix D Join Example
 
 See [SPEC_UPDATE_SUMMARY.md](SPEC_UPDATE_SUMMARY.md) for complete details.
 
 ---
 
-**File Count**: 5 specification-related files  
-**Total Size**: ~74 KB  
+**File Count**: 5 specification-related files
+**Total Size**: ~74 KB
 **Maintained By**: Incursa Platform Team

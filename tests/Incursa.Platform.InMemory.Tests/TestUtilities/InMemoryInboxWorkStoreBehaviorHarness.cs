@@ -55,7 +55,7 @@ internal sealed class InMemoryInboxWorkStoreBehaviorHarness : IInboxWorkStoreBeh
         inbox = provider.GetRequiredService<IInbox>();
 
         var storeProvider = provider.GetRequiredService<IInboxWorkStoreProvider>();
-        var stores = await storeProvider.GetAllStoresAsync();
+        var stores = await storeProvider.GetAllStoresAsync().ConfigureAwait(false);
         store = stores.Single();
     }
 }

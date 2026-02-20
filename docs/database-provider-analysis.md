@@ -100,4 +100,3 @@ When provider split is stable, evaluate Postgres implementation details:
 
 ### Recommendation note
 Given the platform’s concurrency primitives and heavy reliance on DB-specific behavior, a SQL-first migration approach (DBUp) is the least disruptive and most faithful. FluentMigrator or EF Core would still require raw SQL for the critical behaviors, which negates much of their advantage. DBUp also keeps the migration logic owned by the library without introducing an external toolchain.
-

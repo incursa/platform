@@ -54,7 +54,7 @@ public sealed class RequiredServiceValidationTests
                 "required-service-module",
                 "ui.required",
                 new DummyCommand(),
-                CancellationToken.None));
+                CancellationToken.None).ConfigureAwait(false));
 
         ex.ToString().ShouldContain(nameof(IRequiredServiceValidator));
     }
@@ -89,7 +89,7 @@ public sealed class RequiredServiceValidationTests
                 "required-service-module",
                 "ui.required",
                 new DummyCommand(),
-                CancellationToken.None));
+                CancellationToken.None).ConfigureAwait(false));
 
         ex.ToString().ShouldContain("missing required services");
         ex.ToString().ShouldContain("cache");

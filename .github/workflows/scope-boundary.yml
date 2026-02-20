@@ -1,0 +1,16 @@
+name: scope-boundary
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate-platform-scope:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate platform scope boundary
+        shell: pwsh
+        run: ./scripts/quality/validate-platform-scope.ps1

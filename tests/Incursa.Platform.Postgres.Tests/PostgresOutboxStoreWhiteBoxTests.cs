@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Incursa.Platform.Outbox;
 using Dapper;
+using Incursa.Platform.Outbox;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Time.Testing;
@@ -135,8 +135,10 @@ public sealed class PostgresOutboxStoreWhiteBoxTests : PostgresTestBase
     private async Task<Guid> InsertMessageAsync()
     {
         var messageId = Guid.NewGuid();
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken);
 
         await connection.ExecuteAsync(
             $"""
@@ -155,5 +157,6 @@ public sealed class PostgresOutboxStoreWhiteBoxTests : PostgresTestBase
             });
 
         return messageId;
+        }
     }
 }

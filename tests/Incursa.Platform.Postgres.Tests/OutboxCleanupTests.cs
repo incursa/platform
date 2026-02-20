@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Dapper;
 using Incursa.Platform.Outbox;
 using Incursa.Platform.Tests.TestUtilities;
-using Dapper;
 using Microsoft.Extensions.Options;
 using Npgsql;
 
@@ -279,12 +279,15 @@ public class OutboxCleanupTests : PostgresTestBase
             SELECT COUNT(*) FROM deleted;
             """;
 
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken);
 
         return await connection.ExecuteScalarAsync<int>(
             sql,
             new { RetentionSeconds = (int)retentionPeriod.TotalSeconds });
+        }
     }
 }
 

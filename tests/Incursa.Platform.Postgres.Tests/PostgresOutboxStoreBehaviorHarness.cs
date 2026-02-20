@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Incursa.Platform.Tests.TestUtilities;
 using Dapper;
+using Incursa.Platform.Tests.TestUtilities;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Time.Testing;
@@ -46,7 +46,7 @@ internal sealed class PostgresOutboxStoreBehaviorHarness : PostgresTestBase, IOu
 
     public override async ValueTask InitializeAsync()
     {
-        await base.InitializeAsync();
+        await base.InitializeAsync().ConfigureAwait(false);
 
         timeProvider = new FakeTimeProvider();
         options.ConnectionString = ConnectionString;
@@ -57,9 +57,12 @@ internal sealed class PostgresOutboxStoreBehaviorHarness : PostgresTestBase, IOu
 
     public async Task ResetAsync()
     {
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken);
         var tableName = PostgresSqlHelper.Qualify(options.SchemaName, options.TableName);
         await connection.ExecuteAsync($"DELETE FROM {tableName}");
+        }
     }
 }

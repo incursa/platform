@@ -300,4 +300,3 @@ await platformEventEmitter.EmitAuditEventAsync(
 - Use `MessageKey` in logs and persistence as the primary key.
 - If the provider returns an id, record it in `IEmailDeliverySink` for lookup.
 - Ensure Postmark metadata includes `MessageKey` to correlate webhook events.
-

@@ -14,8 +14,8 @@
 
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Incursa.Platform.Email;
 using Dapper;
+using Incursa.Platform.Email;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Npgsql;

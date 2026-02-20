@@ -68,16 +68,16 @@ Simply implement your handler as normal:
 public class ExtractCustomersHandler : IOutboxHandler
 {
     public string Topic => "extract.customers";
-    
+
     public async Task HandleAsync(OutboxMessage message, CancellationToken cancellationToken)
     {
         // Do the work
         await ExtractCustomersAsync(cancellationToken);
-        
+
         // That's it! When this completes successfully, the outbox framework
         // will automatically report join completion for any joins this message
         // is part of.
-        
+
         // If an exception is thrown and the handler continues to fail until the
         // message is permanently failed, the framework will automatically report
         // join failure. Note that temporary failures (which trigger retries) do
@@ -193,7 +193,7 @@ CREATE TABLE [infra].[OutboxJoinMember] (
     OutboxMessageId UNIQUEIDENTIFIER NOT NULL,
     CreatedUtc DATETIME2(3) NOT NULL DEFAULT SYSUTCDATETIME(),
     CONSTRAINT PK_OutboxJoinMember PRIMARY KEY (JoinId, OutboxMessageId),
-    CONSTRAINT FK_OutboxJoinMember_Join FOREIGN KEY (JoinId) 
+    CONSTRAINT FK_OutboxJoinMember_Join FOREIGN KEY (JoinId)
         REFERENCES [infra].[OutboxJoin](JoinId) ON DELETE CASCADE
 );
 ```
@@ -264,11 +264,11 @@ The handlers for `extract.*` topics can now be implemented without any join-spec
 public class ExtractCustomersHandler : IOutboxHandler
 {
     public string Topic => "extract.customers";
-    
+
     public async Task HandleAsync(OutboxMessage message, CancellationToken cancellationToken)
     {
         var payload = JsonSerializer.Deserialize<ExtractPayload>(message.Payload);
-        
+
         // Just do the work - join completion is automatic!
         await ExtractCustomersAsync(payload.CustomerId, cancellationToken);
     }

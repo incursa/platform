@@ -72,10 +72,10 @@ if (runner != null)
         {
             // Check if lease is still valid
             runner.ThrowIfLost(); // Throws LostLeaseException if lost
-            
+
             // Do some work
             await ProcessItem();
-            
+
             // Manual renewal if needed
             var renewed = await runner.TryRenewNowAsync();
             if (!renewed)
@@ -105,9 +105,9 @@ var leaseApi = new LeaseApi(connectionString, "infra");
 var result = await leaseApi.AcquireAsync("my-lease", "owner-1", 300); // 5 minutes
 if (result.Acquired)
 {
-    logger.LogInformation("Acquired lease until {Expiry} (server time: {ServerTime})", 
+    logger.LogInformation("Acquired lease until {Expiry} (server time: {ServerTime})",
         result.LeaseUntilUtc, result.ServerUtcNow);
-    
+
     // Renew lease
     var renewResult = await leaseApi.RenewAsync("my-lease", "owner-1", 300);
     if (renewResult.Renewed)
@@ -122,7 +122,7 @@ if (result.Acquired)
 ### Lease Duration Guidelines
 
 - **Short-lived processes** (< 1 minute): 30-60 seconds
-- **Medium processes** (1-10 minutes): 2-5 minutes  
+- **Medium processes** (1-10 minutes): 2-5 minutes
 - **Long-running processes** (> 10 minutes): 5-15 minutes
 
 ### Renewal Percentage
@@ -152,7 +152,7 @@ try
         logger.LogInformation("Could not acquire lease, another process is running");
         return;
     }
-    
+
     // Use runner.CancellationToken for cooperative cancellation
     await DoWork(runner.CancellationToken);
 }

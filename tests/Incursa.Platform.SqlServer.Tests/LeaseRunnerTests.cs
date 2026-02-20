@@ -369,7 +369,7 @@ public class LeaseRunnerTests : SqlServerTestBase
 
         var renewTimerCallback = typeof(LeaseRunner)
             .GetMethod("RenewTimerCallback", BindingFlags.NonPublic | BindingFlags.Instance);
-        
+
         if (renewTimerCallback == null)
         {
             throw new InvalidOperationException("LeaseRunner.RenewTimerCallback method not found. The internal implementation may have changed.");

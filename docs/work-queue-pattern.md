@@ -65,7 +65,7 @@ The work queue pattern adds these columns to existing tables:
 ```sql
 -- Added to infra.Outbox, infra.Timers, infra.JobRuns
 Status TINYINT NOT NULL DEFAULT(0)           -- 0=Ready, 1=InProgress, 2=Done, 3=Failed
-LockedUntil DATETIME2(3) NULL                -- UTC lease expiration time  
+LockedUntil DATETIME2(3) NULL                -- UTC lease expiration time
 OwnerToken UNIQUEIDENTIFIER NULL             -- Process ownership identifier
 ```
 
@@ -81,7 +81,7 @@ CREATE INDEX IX_JobRuns_WorkQueue ON infra.JobRuns(StatusCode, ScheduledTime) IN
 **Per-table procedures are generated following this pattern:**
 
 - `{Table}_Claim` - Atomically claims ready items with lease
-- `{Table}_Ack` - Marks items as successfully completed  
+- `{Table}_Ack` - Marks items as successfully completed
 - `{Table}_Abandon` - Returns items to ready state for retry
 - `{Table}_Fail` - Marks items as failed
 - `{Table}_ReapExpired` - Recovers expired leases
@@ -89,7 +89,7 @@ CREATE INDEX IX_JobRuns_WorkQueue ON infra.JobRuns(StatusCode, ScheduledTime) IN
 **Example for Outbox:**
 ```sql
 infra.Outbox_Claim
-infra.Outbox_Ack  
+infra.Outbox_Ack
 infra.Outbox_Abandon
 infra.Outbox_Fail
 infra.Outbox_ReapExpired
@@ -168,7 +168,7 @@ public class TimerWorker : BackgroundService
 
             // Process timers...
             var processedIds = await ProcessTimersAsync(claimedIds, stoppingToken);
-            
+
             // Acknowledge completed timers
             await scheduler.AckTimersAsync(ownerToken, processedIds, stoppingToken);
         }
@@ -183,7 +183,7 @@ public class TimerWorker : BackgroundService
 - Work queue operations are naturally part of the domain interface
 - One obvious way to process each type of work item
 
-### 2. **Domain-Specific Behavior** 
+### 2. **Domain-Specific Behavior**
 - Timers are claimed only when `DueTime <= now()`
 - Job runs are claimed only when `ScheduledTime <= now()`
 - Outbox items are claimed immediately when ready

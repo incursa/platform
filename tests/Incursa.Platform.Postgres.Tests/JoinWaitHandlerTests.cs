@@ -13,8 +13,8 @@
 // limitations under the License.
 
 using System.Text.Json;
-using Incursa.Platform.Outbox;
 using Dapper;
+using Incursa.Platform.Outbox;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Npgsql;
@@ -68,8 +68,10 @@ public class JoinWaitHandlerTests : PostgresTestBase
 
     private async Task<OutboxMessageIdentifier> CreateOutboxMessageAsync()
     {
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(CancellationToken.None).ConfigureAwait(false);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(CancellationToken.None).ConfigureAwait(false);
 
         var id = Guid.NewGuid();
         await connection.ExecuteAsync(
@@ -77,6 +79,7 @@ public class JoinWaitHandlerTests : PostgresTestBase
             new { Id = id, Topic = "test.topic", Payload = "{}", MessageId = Guid.NewGuid() }).ConfigureAwait(false);
 
         return OutboxMessageIdentifier.From(id);
+        }
     }
 
     /// <summary>When the join has incomplete steps, then the handler throws JoinNotReadyException.</summary>

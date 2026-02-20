@@ -49,8 +49,11 @@ internal sealed class SqlSystemLeaseBehaviorHarness : SqlServerTestBase, ISystem
 
     public async Task ResetAsync()
     {
-        await using var connection = new SqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken);
+        var connection = new SqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken);
         await connection.ExecuteAsync("DELETE FROM [infra].[DistributedLock]").ConfigureAwait(false);
+        }
     }
 }

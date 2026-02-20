@@ -14,9 +14,9 @@
 
 using System.Text;
 using System.Text.Json;
+using Dapper;
 using Incursa.Platform.Audit;
 using Incursa.Platform.Correlation;
-using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -121,43 +121,43 @@ public sealed class SqlAuditEventReader : IAuditEventReader
         {
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
-        IReadOnlyList<AuditEventRow> events;
-        try
-        {
-            events = (await connection.QueryAsync<AuditEventRow>(sql.ToString(), parameters).ConfigureAwait(false)).ToList();
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Failed to query audit events.");
-            throw;
-        }
+            IReadOnlyList<AuditEventRow> events;
+            try
+            {
+                events = (await connection.QueryAsync<AuditEventRow>(sql.ToString(), parameters).ConfigureAwait(false)).ToList();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed to query audit events.");
+                throw;
+            }
 
-        if (events.Count == 0)
-        {
-            SqlAuditMetrics.RecordRead(0);
-            return Array.Empty<AuditEvent>();
-        }
+            if (events.Count == 0)
+            {
+                SqlAuditMetrics.RecordRead(0);
+                return Array.Empty<AuditEvent>();
+            }
 
-        var eventIds = events.Select(evt => evt.AuditEventId).ToArray();
-        var anchorsSql = $"""
+            var eventIds = events.Select(evt => evt.AuditEventId).ToArray();
+            var anchorsSql = $"""
             SELECT AuditEventId, AnchorType, AnchorId, Role
             FROM [{options.SchemaName}].[{options.AuditAnchorsTable}]
             WHERE AuditEventId IN @AuditEventIds
             """;
 
-        var anchors = await connection.QueryAsync<AuditAnchorRow>(anchorsSql, new { AuditEventIds = eventIds })
-            .ConfigureAwait(false);
+            var anchors = await connection.QueryAsync<AuditAnchorRow>(anchorsSql, new { AuditEventIds = eventIds })
+                .ConfigureAwait(false);
 
-        var anchorLookup = anchors
-            .GroupBy(anchor => anchor.AuditEventId, StringComparer.Ordinal)
-            .ToDictionary(
-                group => group.Key,
-                group => (IReadOnlyList<EventAnchor>)group.Select(item => new EventAnchor(item.AnchorType, item.AnchorId, item.Role)).ToList(),
-                StringComparer.Ordinal);
+            var anchorLookup = anchors
+                .GroupBy(anchor => anchor.AuditEventId, StringComparer.Ordinal)
+                .ToDictionary(
+                    group => group.Key,
+                    group => (IReadOnlyList<EventAnchor>)group.Select(item => new EventAnchor(item.AnchorType, item.AnchorId, item.Role)).ToList(),
+                    StringComparer.Ordinal);
 
-        var mapped = events.Select(evt => MapAuditEvent(evt, anchorLookup)).ToList();
-        SqlAuditMetrics.RecordRead(mapped.Count);
-        return mapped;
+            var mapped = events.Select(evt => MapAuditEvent(evt, anchorLookup)).ToList();
+            SqlAuditMetrics.RecordRead(mapped.Count);
+            return mapped;
         }
     }
 

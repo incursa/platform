@@ -267,7 +267,7 @@ public class EmailOutboxHandler : IOutboxHandler
     public async Task HandleAsync(OutboxMessage message, CancellationToken cancellationToken)
     {
         var emailData = JsonSerializer.Deserialize<EmailData>(message.Payload);
-        
+
         this.logger.LogInformation(
             "Sending email to {Recipient} for message {MessageId}",
             emailData.To,

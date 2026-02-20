@@ -37,13 +37,13 @@ services.AddPlatformObservability(options =>
         ScanPeriod = TimeSpan.FromSeconds(15),
         HeartbeatPeriod = TimeSpan.FromSeconds(30),
         HeartbeatTimeout = TimeSpan.FromSeconds(90),
-        
+
         // Thresholds for alert detection
         JobOverdueThreshold = TimeSpan.FromSeconds(30),
         InboxStuckThreshold = TimeSpan.FromMinutes(5),
         OutboxStuckThreshold = TimeSpan.FromMinutes(5),
         ProcessorIdleThreshold = TimeSpan.FromMinutes(1),
-        
+
         // Alert cooldown per key
         AlertCooldown = TimeSpan.FromMinutes(2),
     };
@@ -442,7 +442,7 @@ Query metrics directly from SQL:
 
 ```sql
 -- Get outbox published count for the last hour
-SELECT 
+SELECT
     SUM(m.ValueSum) as TotalPublished
 FROM infra.MetricSeries s
 JOIN infra.MetricPointMinute m ON s.SeriesId = m.SeriesId
@@ -451,7 +451,7 @@ WHERE d.Name = 'bravellian.platform.outbox.enqueued_total'
   AND m.BucketStartUtc >= DATEADD(HOUR, -1, GETUTCDATE());
 
 -- Get P95 latency across all instances
-SELECT 
+SELECT
     MAX(m.P95) as MaxP95Latency
 FROM infra.MetricSeries s
 JOIN infra.MetricPointMinute m ON s.SeriesId = m.SeriesId

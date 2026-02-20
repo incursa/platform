@@ -13,9 +13,9 @@
 // limitations under the License.
 
 
-using Incursa.Platform.SqlServer;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
+using Incursa.Platform.SqlServer;
 using Microsoft.Data.SqlClient;
 
 namespace Incursa.Platform.Tests;

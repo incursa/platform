@@ -13,8 +13,8 @@
 // limitations under the License.
 
 
-using Incursa.Platform.Outbox;
 using Dapper;
+using Incursa.Platform.Outbox;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -226,7 +226,7 @@ public class OutboxWorkQueueTests : SqlServerTestBase
         var ownerToken = OwnerToken.GenerateNew();
 
         await Should.ThrowAsync<ArgumentOutOfRangeException>(async () =>
-            await outboxService!.ClaimAsync(ownerToken, leaseSeconds: 30, batchSize: 0, TestContext.Current.CancellationToken));
+            await outboxService!.ClaimAsync(ownerToken, leaseSeconds: 30, batchSize: 0, TestContext.Current.CancellationToken).ConfigureAwait(false));
     }
 
     private async Task<List<OutboxWorkItemIdentifier>> CreateTestOutboxItemsAsync(int count)

@@ -13,8 +13,8 @@
 // limitations under the License.
 
 using System.Text.Json;
-using Incursa.Platform.Audit;
 using Dapper;
+using Incursa.Platform.Audit;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Npgsql;

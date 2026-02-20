@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Dapper;
 using Incursa.Platform.Email;
 using Incursa.Platform.Tests.TestUtilities;
-using Dapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Time.Testing;
-using Microsoft.Data.SqlClient;
 
 namespace Incursa.Platform.Tests;
 

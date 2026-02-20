@@ -59,7 +59,7 @@ internal sealed class InMemorySchedulerBehaviorHarness : ISchedulerBehaviorHarne
         leaseFactory = provider.GetRequiredService<ISystemLeaseFactory>();
 
         var storeProvider = provider.GetRequiredService<ISchedulerStoreProvider>();
-        var stores = await storeProvider.GetAllStoresAsync();
+        var stores = await storeProvider.GetAllStoresAsync().ConfigureAwait(false);
         schedulerStore = stores.Single();
     }
 }

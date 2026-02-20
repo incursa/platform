@@ -14,10 +14,10 @@
 
 
 using Dapper;
-using Npgsql;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Npgsql;
 
 namespace Incursa.Platform;
 /// <summary>

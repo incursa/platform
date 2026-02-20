@@ -96,12 +96,15 @@ public sealed class SqlAuditAdapterTests : SqlServerTestBase
 
     private async Task ApplyScriptsAsync(IEnumerable<string> scripts)
     {
-        await using var connection = new SqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new SqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
         foreach (var script in scripts)
         {
             await ExecuteSqlScriptAsync(connection, script).ConfigureAwait(false);
+        }
         }
     }
 
@@ -119,8 +122,11 @@ public sealed class SqlAuditAdapterTests : SqlServerTestBase
                 continue;
             }
 
-            await using var command = new SqlCommand(trimmed, connection);
-            await command.ExecuteNonQueryAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+            var command = new SqlCommand(trimmed, connection);
+            await using (command.ConfigureAwait(false))
+            {
+                await command.ExecuteNonQueryAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+            }
         }
     }
 }

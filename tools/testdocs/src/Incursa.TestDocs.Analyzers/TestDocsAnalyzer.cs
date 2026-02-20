@@ -1,9 +1,9 @@
 using System.Collections.Immutable;
+using System.Xml.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using System.Xml.Linq;
 
 namespace Incursa.TestDocs.Analyzers;
 

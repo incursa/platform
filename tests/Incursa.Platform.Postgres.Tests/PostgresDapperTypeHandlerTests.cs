@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Dapper;
 using Incursa.Platform.Inbox;
 using Incursa.Platform.Metrics;
 using Incursa.Platform.Outbox;
-using Dapper;
 using Npgsql;
 
 namespace Incursa.Platform.Tests;
@@ -33,8 +33,10 @@ public sealed class PostgresDapperTypeHandlerTests : PostgresTestBase
 
     private async Task CreateTestTableAsync()
     {
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
         await connection.ExecuteAsync(@"
             DROP TABLE IF EXISTS ""TestTable"";
@@ -51,6 +53,7 @@ public sealed class PostgresDapperTypeHandlerTests : PostgresTestBase
                 ""NullableOwnerTokenColumn"" uuid NULL
             );
         ", commandTimeout: 30).ConfigureAwait(false);
+        }
     }
 
     /// <summary>When a row is inserted with an OwnerToken, then Dapper returns the same token.</summary>

@@ -14,9 +14,9 @@
 
 using System.Data;
 using System.Text.Json;
+using Dapper;
 using Incursa.Platform.Correlation;
 using Incursa.Platform.Operations;
-using Dapper;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Npgsql;

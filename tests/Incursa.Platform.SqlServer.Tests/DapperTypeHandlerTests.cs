@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Dapper;
 using Incursa.Platform.Inbox;
 using Incursa.Platform.Metrics;
 using Incursa.Platform.Outbox;
-using Dapper;
 using Microsoft.Data.SqlClient;
 
 namespace Incursa.Platform.Tests;

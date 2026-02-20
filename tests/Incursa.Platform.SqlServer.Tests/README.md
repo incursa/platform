@@ -13,7 +13,7 @@ Tests are categorized using xUnit traits:
 - **Integration Tests**: Tests requiring external dependencies (databases, Docker containers)
   - Trait: `[Trait("Category", "Integration")]`
   - Trait: `[Trait("RequiresDocker", "true")]`
-  
+
 - **Unit Tests**: Fast, isolated tests with no external dependencies
   - Trait: `[Trait("Category", "Unit")]`
 
@@ -35,7 +35,7 @@ public class MyDatabaseTests : SqlServerTestBase
         : base(output, fixture)
     {
     }
-    
+
     // Your tests...
 }
 ```

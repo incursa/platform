@@ -13,9 +13,9 @@
 // limitations under the License.
 
 
-using Npgsql;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 
 namespace Incursa.Platform;
 /// <summary>

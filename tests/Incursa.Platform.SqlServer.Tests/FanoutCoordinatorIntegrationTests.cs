@@ -14,8 +14,8 @@
 
 using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
-using Incursa.Platform.Outbox;
 using Dapper;
+using Incursa.Platform.Outbox;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;

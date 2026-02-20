@@ -1,0 +1,18 @@
+{
+  "approvedProviderAdapters": [
+    "Postmark"
+  ],
+  "disallowedProviderCandidates": [
+    "WorkOS",
+    "Cloudflare",
+    "ElectronicNotary",
+    "Twilio",
+    "SendGrid",
+    "Stripe",
+    "Auth0",
+    "Okta"
+  ],
+  "scanRoots": [
+    "src"
+  ]
+}

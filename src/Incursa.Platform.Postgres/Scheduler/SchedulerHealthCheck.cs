@@ -13,9 +13,9 @@
 // limitations under the License.
 
 using Dapper;
-using Npgsql;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
+using Npgsql;
 
 namespace Incursa.Platform;
 

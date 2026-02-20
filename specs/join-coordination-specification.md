@@ -400,7 +400,7 @@ This section uses RFC 2119 language (MUST, SHOULD, MAY). Requirement IDs use the
   - `(JoinId, OutboxMessageId) = (joinId, outboxMessageId)`
   - `Status = Pending` (0)
   - `CreatedUtc = current UTC time`
-  
+
   if no such row already exists.
 
 - **JOIN-011**: `AttachMessageToJoinAsync` MUST be idempotent. Calling it multiple times with the same `(joinId, outboxMessageId)` MUST NOT create duplicate rows or increment any join counters.
@@ -634,7 +634,7 @@ The Join component should support the following configuration options:
 - Are these manual methods required for any planned workflows, or can they be marked as advanced/diagnostic only?
 - Should the default guidance explicitly discourage manual calls unless Outbox integration is unavailable?
 
-**Recommendation for v1.0**: 
+**Recommendation for v1.0**:
 - Document that automatic reporting is the default and preferred mechanism
 - Mark manual methods as "advanced" or "for edge cases only"
 - Provide clear guidance that handlers should NOT call manual reporting methods
@@ -705,12 +705,12 @@ await outbox.EnqueueJoinWaitAsync(
 public class ExtractCustomersHandler : IOutboxHandler
 {
     public string Topic => "extract.customers";
-    
+
     public async Task HandleAsync(OutboxMessage message, CancellationToken cancellationToken)
     {
         // Just do the work - join completion is automatic!
         await ExtractCustomersAsync(cancellationToken);
-        
+
         // No need to call ReportStepCompletedAsync - the Outbox ack automatically updates join counters
     }
 }
@@ -718,7 +718,7 @@ public class ExtractCustomersHandler : IOutboxHandler
 public class ExtractOrdersHandler : IOutboxHandler
 {
     public string Topic => "extract.orders";
-    
+
     public async Task HandleAsync(OutboxMessage message, CancellationToken cancellationToken)
     {
         await ExtractOrdersAsync(cancellationToken);
@@ -729,7 +729,7 @@ public class ExtractOrdersHandler : IOutboxHandler
 public class ExtractProductsHandler : IOutboxHandler
 {
     public string Topic => "extract.products";
-    
+
     public async Task HandleAsync(OutboxMessage message, CancellationToken cancellationToken)
     {
         await ExtractProductsAsync(cancellationToken);
@@ -741,7 +741,7 @@ public class ExtractProductsHandler : IOutboxHandler
 public class TransformHandler : IOutboxHandler
 {
     public string Topic => "etl.transform";
-    
+
     public async Task HandleAsync(OutboxMessage message, CancellationToken cancellationToken)
     {
         var request = JsonSerializer.Deserialize<TransformRequest>(message.Payload);
@@ -787,14 +787,14 @@ await outbox.EnqueueJoinWaitAsync(
 public class ReportAssembler : IOutboxHandler
 {
     public string Topic => "report.assemble";
-    
+
     public async Task HandleAsync(OutboxMessage message, CancellationToken cancellationToken)
     {
         var request = JsonSerializer.Deserialize<AssembleRequest>(message.Payload);
-        
+
         // Query which sections actually succeeded
         var availableSections = await GetCompletedSectionsAsync(request.ReportId, cancellationToken);
-        
+
         // Assemble report with available sections, marking missing ones
         await AssembleReportAsync(request.ReportId, availableSections, cancellationToken);
     }
@@ -834,24 +834,24 @@ await outbox.EnqueueJoinWaitAsync(
 public class StartValidationHandler : IOutboxHandler
 {
     public string Topic => "workflow.start-validation";
-    
+
     public async Task HandleAsync(OutboxMessage message, CancellationToken cancellationToken)
     {
         var request = JsonSerializer.Deserialize<StartValidationRequest>(message.Payload);
-        
+
         // Stage 2: Create validation join
         var validationJoinId = await outbox.StartJoinAsync(
             groupingKey: request.WorkflowId,
             expectedSteps: 2,
             metadata: """{"stage": "validation"}""",
             cancellationToken);
-        
+
         var val1Msg = await outbox.EnqueueAsync("validate.schema", /*...*/, cancellationToken);
         await outbox.AttachMessageToJoinAsync(validationJoinId, val1Msg, cancellationToken);
-        
+
         var val2Msg = await outbox.EnqueueAsync("validate.business-rules", /*...*/, cancellationToken);
         await outbox.AttachMessageToJoinAsync(validationJoinId, val2Msg, cancellationToken);
-        
+
         // When validation completes, publish the data
         await outbox.EnqueueJoinWaitAsync(
             joinId: validationJoinId,

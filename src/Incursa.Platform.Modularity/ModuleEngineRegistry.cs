@@ -22,7 +22,7 @@ namespace Incursa.Platform.Modularity;
 internal static class ModuleEngineRegistry
 {
     private static readonly ConcurrentDictionary<string, List<IModuleEngineDescriptor>> Engines = new(StringComparer.OrdinalIgnoreCase);
-    
+
     // Single lock protects registry operations without disposal requirements.
     private static readonly Lock RegistryLock = new();
     private static IModuleEngineDescriptor[]? CachedSnapshot;

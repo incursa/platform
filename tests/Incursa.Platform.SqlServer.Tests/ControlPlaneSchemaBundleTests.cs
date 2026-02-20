@@ -68,8 +68,10 @@ public sealed class ControlPlaneSchemaBundleTests
 
     private static async Task<bool> TableExistsAsync(string connectionString, string schemaName, string tableName)
     {
-        await using var connection = new SqlConnection(connectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new SqlConnection(connectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
         using var command = connection.CreateCommand();
         command.CommandText = """
@@ -78,5 +80,6 @@ public sealed class ControlPlaneSchemaBundleTests
         command.Parameters.AddWithValue("@FullName", $"[{schemaName}].[{tableName}]");
         var result = await command.ExecuteScalarAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
         return Convert.ToInt32(result, System.Globalization.CultureInfo.InvariantCulture) == 1;
+        }
     }
 }

@@ -89,14 +89,17 @@ public sealed class GlobalControlPlaneRoutingTests
 
     private static async Task<int> CountOutboxAsync(string connectionString, string schemaName, string topic)
     {
-        await using var connection = new NpgsqlConnection(connectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new NpgsqlConnection(connectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
         await using var command = connection.CreateCommand();
         command.CommandText = $"SELECT COUNT(*) FROM \"{schemaName}\".\"Outbox\" WHERE \"Topic\" = @topic";
         command.Parameters.AddWithValue("topic", topic);
         var result = await command.ExecuteScalarAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
         return Convert.ToInt32(result, System.Globalization.CultureInfo.InvariantCulture);
+        }
     }
 }
 #pragma warning restore CA2100

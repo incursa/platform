@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Dapper;
 using Incursa.Platform;
 using Incursa.Platform.Outbox;
 using Incursa.Platform.Tests.TestUtilities;
-using Dapper;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -295,8 +295,10 @@ public class OutboxWorkerTests : PostgresTestBase
     {
         var ids = new List<OutboxWorkItemIdentifier>();
 
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
         for (int i = 0; i < count; i++)
         {
@@ -313,12 +315,15 @@ public class OutboxWorkerTests : PostgresTestBase
         }
 
         return ids;
+        }
     }
 
     private async Task VerifyOutboxStatusAsync(IEnumerable<OutboxWorkItemIdentifier> ids, byte expectedStatus)
     {
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
         foreach (var id in ids)
         {
@@ -332,12 +337,15 @@ public class OutboxWorkerTests : PostgresTestBase
 
             ((byte)status).ShouldBe(expectedStatus);
         }
+        }
     }
 
     private async Task VerifyOwnerTokenAsync(OutboxWorkItemIdentifier id, Guid expectedOwner)
     {
-        await using var connection = new NpgsqlConnection(ConnectionString);
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+        var connection = new NpgsqlConnection(ConnectionString);
+        await using (connection.ConfigureAwait(false))
+        {
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
         var ownerToken = await connection.ExecuteScalarAsync<Guid?>(
             $"""
             SELECT "OwnerToken"
@@ -346,6 +354,7 @@ public class OutboxWorkerTests : PostgresTestBase
             """,
             new { Id = id.Value }).ConfigureAwait(false);
         ownerToken.ShouldBe(expectedOwner);
+        }
     }
 
     private class TestOutboxWorker : BackgroundService

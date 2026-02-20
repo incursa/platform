@@ -87,3 +87,9 @@ Provider quality automation and baselines:
 
 Advanced patterns: multi-database routing, fanout/join coordination, and internal work-queue mechanics.
 CLI tools: `tools/migrations` ships `bravellian-schema` for applying SQL Server/Postgres schema migrations from the command line.
+
+## Repository Scope Governance
+
+Scope boundary policy lives at `docs/quality/repo-scope-boundary.md`.
+Automated guardrail runs via `scripts/quality/validate-platform-scope.ps1` using rules in `scripts/quality/platform-scope.rules.json`.
+CI enforcement workflow: `.github/workflows/scope-boundary.yml`.

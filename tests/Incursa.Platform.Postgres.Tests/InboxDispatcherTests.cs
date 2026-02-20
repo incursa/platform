@@ -13,8 +13,8 @@
 // limitations under the License.
 
 
-using Incursa.Platform.Tests.TestUtilities;
 using Dapper;
+using Incursa.Platform.Tests.TestUtilities;
 using Microsoft.Extensions.Options;
 using Shouldly;
 

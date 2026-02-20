@@ -70,14 +70,14 @@ try
 {
     // Business logic
     await SaveOrderAsync(order, transaction);
-    
+
     // Enqueue in same transaction
     await _outbox.EnqueueAsync(
         "order.created",
         JsonSerializer.Serialize(order),
         transaction,
         order.Id.ToString());
-    
+
     await transaction.CommitAsync();
 }
 catch
@@ -278,7 +278,7 @@ string Topic { get; }
 public class OrderCreatedHandler : IOutboxHandler
 {
     public string Topic => "order.created";
-    
+
     // ...
 }
 ```
@@ -308,12 +308,12 @@ public async Task HandleAsync(
     CancellationToken cancellationToken)
 {
     var orderEvent = JsonSerializer.Deserialize<OrderCreatedEvent>(message.Payload);
-    
+
     await _messageBroker.PublishAsync(
         "orders",
         message.Payload,
         cancellationToken);
-    
+
     _logger.LogInformation(
         "Published order {OrderId} to message broker",
         orderEvent.OrderId);
@@ -350,7 +350,7 @@ IOutbox GetOutbox(string key)
 public async Task CreateOrderAsync(string tenantId, Order order)
 {
     var outbox = _outboxRouter.GetOutbox(tenantId);
-    
+
     await outbox.EnqueueAsync(
         "order.created",
         JsonSerializer.Serialize(order),
@@ -518,28 +518,28 @@ CREATE TABLE infra.Outbox (
     Topic NVARCHAR(255) NOT NULL,
     Payload NVARCHAR(MAX) NOT NULL,
     CreatedAt DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-    
+
     -- Work queue state management
     Status TINYINT NOT NULL DEFAULT(0),           -- 0=Ready, 1=InProgress, 2=Done, 3=Failed
     LockedUntil DATETIME2(3) NULL,                -- UTC lease expiration time
     OwnerToken UNIQUEIDENTIFIER NULL,             -- Process ownership identifier
-    
+
     -- Processing metadata
     IsProcessed BIT NOT NULL DEFAULT 0,
     ProcessedAt DATETIMEOFFSET NULL,
     ProcessedBy NVARCHAR(100) NULL,
-    
+
     -- Error handling and retry
     RetryCount INT NOT NULL DEFAULT 0,
     LastError NVARCHAR(MAX) NULL,
     NextAttemptAt DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-    
+
     -- Message tracking
     MessageId UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
     CorrelationId NVARCHAR(255) NULL
 );
 
-CREATE INDEX IX_Outbox_WorkQueue ON infra.Outbox(Status, CreatedAt) 
+CREATE INDEX IX_Outbox_WorkQueue ON infra.Outbox(Status, CreatedAt)
     INCLUDE(Id, OwnerToken);
 ```
 
@@ -550,7 +550,7 @@ CREATE INDEX IX_Outbox_WorkQueue ON infra.Outbox(Status, CreatedAt)
 Claims ready messages for processing.
 
 ```sql
-EXEC infra.Outbox_Claim 
+EXEC infra.Outbox_Claim
     @OwnerToken = '...',
     @LeaseSeconds = 30,
     @BatchSize = 50
@@ -561,7 +561,7 @@ EXEC infra.Outbox_Claim
 Acknowledges successful processing.
 
 ```sql
-EXEC infra.Outbox_Ack 
+EXEC infra.Outbox_Ack
     @OwnerToken = '...',
     @Ids = @IdList  -- User-defined table type
 ```
@@ -571,7 +571,7 @@ EXEC infra.Outbox_Ack
 Returns messages to ready state.
 
 ```sql
-EXEC infra.Outbox_Abandon 
+EXEC infra.Outbox_Abandon
     @OwnerToken = '...',
     @Ids = @IdList
 ```
@@ -581,7 +581,7 @@ EXEC infra.Outbox_Abandon
 Marks messages as failed.
 
 ```sql
-EXEC infra.Outbox_Fail 
+EXEC infra.Outbox_Fail
     @OwnerToken = '...',
     @Ids = @IdList
 ```
@@ -692,7 +692,7 @@ foreach (var id in claimedIds)
 // Ack successes and abandon failures separately
 if (successIds.Any())
     await _outbox.AckAsync(ownerToken, successIds);
-    
+
 if (failedIds.Any())
     await _outbox.AbandonAsync(ownerToken, failedIds);
 ```
@@ -703,20 +703,20 @@ if (failedIds.Any())
 public class OrderCreatedHandler : IOutboxHandler
 {
     public string Topic => "order.created";
-    
+
     public async Task HandleAsync(
         OutboxMessage message,
         CancellationToken cancellationToken)
     {
         var order = JsonSerializer.Deserialize<OrderEvent>(message.Payload);
-        
+
         // ✅ GOOD: Idempotent - check if already processed
         if (await _orderRepo.ExistsAsync(order.OrderId))
         {
             _logger.LogInformation("Order {OrderId} already processed", order.OrderId);
             return;
         }
-        
+
         await _orderRepo.CreateAsync(order);
     }
 }
