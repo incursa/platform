@@ -169,7 +169,10 @@ public static class PostgresPlatformServiceCollectionExtensions
         ArgumentNullException.ThrowIfNull(services);
 
         ArgumentNullException.ThrowIfNull(options);
-        ArgumentException.ThrowIfNullOrWhiteSpace(options.ConnectionString);
+        if (string.IsNullOrWhiteSpace(options.ConnectionString))
+        {
+            throw new ArgumentException("Connection string is required.", nameof(options));
+        }
 
         services.AddPostgresPlatformMultiDatabaseWithControlPlaneAndList(
             new[]
@@ -1002,8 +1005,6 @@ public static class PostgresPlatformServiceCollectionExtensions
         return router.GetSchedulerClient(key);
     }
 }
-
-
 
 
 

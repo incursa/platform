@@ -49,10 +49,22 @@ SQL Server schema scripts live under `src/Incursa.Platform.SqlServer/Database/`.
 ## Specifications
 
 Outbox, inbox, and join coordination specifications define behavior requirements and guarantees.
+Provider-specific primitive specs and traceability live under `specs/providers/`:
+- `sqlserver-primitives-spec.md`
+- `postgres-primitives-spec.md`
+- `inmemory-primitives-spec.md`
+- `provider-conformance-matrix.md`
 
 ## Testing
 
 Tests use xUnit v3, Shouldly, and NSubstitute. Integration tests rely on Docker SQL Server via Testcontainers.
+Provider quality automation and baselines:
+- Fast quality lane: `.github/workflows/provider-fast-quality.yml`
+- Docker-backed integration lane: `.github/workflows/provider-integration.yml`
+- Scoped mutation lane: `.github/workflows/provider-mutation.yml`
+- Docker image pre-pull script: `scripts/testing/prepull-test-images.ps1`
+- Coverage/mutation scripts: `scripts/quality/`
+- Baseline report: `docs/quality/provider-quality-baseline.md`
 
 ## Smoke Web App
 

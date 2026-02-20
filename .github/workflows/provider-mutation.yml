@@ -1,0 +1,38 @@
+name: Provider Mutation (Scoped)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 5 * * 1"
+
+jobs:
+  provider-mutation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Restore
+        run: dotnet restore Incursa.Platform.CI.slnx
+
+      - name: Restore tools
+        run: dotnet tool restore
+
+      - name: Run scoped provider mutation
+        shell: pwsh
+        run: pwsh -File scripts/quality/run-provider-mutation.ps1 -FailOnThreshold
+
+      - name: Upload mutation artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: provider-mutation-artifacts
+          path: |
+            artifacts/codex/provider-mutation-summary.md
+            StrykerOutput/

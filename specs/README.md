@@ -19,6 +19,15 @@ The complete functional specification for the Outbox component. This is the auth
 
 ## Supporting Documentation
 
+### Provider Primitive Specifications
+
+These specs define provider-specific low-level primitive behavior and are intended for conformance testing and quality ratcheting.
+
+- **`providers/sqlserver-primitives-spec.md`**: SQL Server primitive contracts.
+- **`providers/postgres-primitives-spec.md`**: Postgres primitive contracts.
+- **`providers/inmemory-primitives-spec.md`**: InMemory primitive contracts.
+- **`providers/provider-conformance-matrix.md`**: Scenario-to-test traceability across providers.
+
 ### Change Summary
 
 **[SPEC_UPDATE_SUMMARY.md](SPEC_UPDATE_SUMMARY.md)**  

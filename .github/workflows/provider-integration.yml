@@ -1,0 +1,42 @@
+name: Provider Integration Lane
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5 * * *"
+  push:
+    branches:
+      - main
+      - release/**
+
+jobs:
+  provider-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    concurrency:
+      group: provider-integration-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Restore
+        run: dotnet restore Incursa.Platform.CI.slnx
+
+      - name: Restore tools
+        run: dotnet tool restore
+
+      - name: Pre-pull test images
+        shell: pwsh
+        run: pwsh -File scripts/testing/prepull-test-images.ps1
+
+      - name: SQL Server integration tests
+        run: dotnet test tests/Incursa.Platform.SqlServer.Tests/Incursa.Platform.SqlServer.Tests.csproj --configuration Release --filter "Category=Integration&RequiresDocker=true"
+
+      - name: Postgres integration tests
+        run: dotnet test tests/Incursa.Platform.Postgres.Tests/Incursa.Platform.Postgres.Tests.csproj --configuration Release --filter "Category=Integration&RequiresDocker=true"

@@ -184,7 +184,10 @@ public static class SqlPlatformServiceCollectionExtensions
         ArgumentNullException.ThrowIfNull(services);
 
         ArgumentNullException.ThrowIfNull(options);
-        ArgumentException.ThrowIfNullOrWhiteSpace(options.ConnectionString);
+        if (string.IsNullOrWhiteSpace(options.ConnectionString))
+        {
+            throw new ArgumentException("Connection string is required.", nameof(options));
+        }
 
         services.AddTimeAbstractions();
 

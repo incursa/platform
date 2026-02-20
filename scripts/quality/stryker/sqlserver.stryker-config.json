@@ -1,0 +1,25 @@
+{
+  "stryker-config": {
+    "solution": "Incursa.Platform.CI.slnx",
+    "project": "src/Incursa.Platform.SqlServer/Incursa.Platform.SqlServer.csproj",
+    "test-projects": [
+      "tests/Incursa.Platform.SqlServer.Tests/Incursa.Platform.SqlServer.Tests.csproj"
+    ],
+    "reporters": [
+      "progress",
+      "html",
+      "json"
+    ],
+    "thresholds": {
+      "high": 70,
+      "low": 45,
+      "break": 45
+    },
+    "mutate": [
+      "src/Incursa.Platform.SqlServer/Outbox/SqlOutboxStore.cs",
+      "src/Incursa.Platform.SqlServer/Inbox/SqlInboxWorkStore.cs",
+      "src/Incursa.Platform.SqlServer/Scheduler/SqlSchedulerStore.cs",
+      "src/Incursa.Platform.SqlServer/Lease/SqlLease.cs"
+    ]
+  }
+}

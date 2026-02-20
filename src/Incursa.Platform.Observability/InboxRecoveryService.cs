@@ -79,7 +79,7 @@ public sealed class InboxRecoveryService
     }
 
     private async Task<IReadOnlyList<InboxMessageSnapshot>> CaptureSnapshotsAsync(
-        IReadOnlyList<string> messageIds,
+        List<string> messageIds,
         CancellationToken cancellationToken)
     {
         var snapshots = new List<InboxMessageSnapshot>(messageIds.Count);
@@ -97,7 +97,22 @@ public sealed class InboxRecoveryService
                     message.LastError,
                     message.DueTimeUtc));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
+            {
+                logger.LogWarning(
+                    ex,
+                    "Failed to load inbox message {MessageId} for revive audit event.",
+                    messageId);
+
+                snapshots.Add(new InboxMessageSnapshot(
+                    messageId,
+                    Source: null,
+                    Topic: null,
+                    Attempt: null,
+                    LastError: null,
+                    DueTimeUtc: null));
+            }
+            catch (KeyNotFoundException ex)
             {
                 logger.LogWarning(
                     ex,
