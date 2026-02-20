@@ -31,8 +31,8 @@ Use the in-memory primitive conformance suite as the portability baseline for SQ
 - Dispose/reacquisition semantics.
 
 ## Execution Order
-1. Port shared scheduler harness coverage to `SqlServer` tests.
-2. Port shared scheduler harness coverage to `Postgres` tests.
-3. Port shared lease harness coverage to `SqlServer` tests.
-4. Port shared lease harness coverage to `Postgres` tests.
+1. Port shared scheduler harness coverage to `SqlServer` tests. Status: Completed.
+2. Port shared lease harness coverage to `SqlServer` tests. Status: Completed.
+3. Port shared scheduler harness coverage to `Postgres` tests. Status: Pending.
+4. Port shared lease harness coverage to `Postgres` tests. Status: Pending.
 5. Reconcile provider-specific differences as explicit deferred scenarios.

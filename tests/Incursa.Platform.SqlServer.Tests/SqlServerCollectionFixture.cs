@@ -27,7 +27,8 @@ namespace Incursa.Platform.Tests;
 public sealed class SqlServerCollectionFixture : IAsyncLifetime
 {
     private const string SaPassword = "Str0ng!Passw0rd!";
-    private readonly IContainer msSqlContainer;
+    private readonly SemaphoreSlim recoveryLock = new(1, 1);
+    private IContainer msSqlContainer;
     private string? connectionString;
     private int databaseCounter;
     private bool isAvailable;
@@ -35,14 +36,7 @@ public sealed class SqlServerCollectionFixture : IAsyncLifetime
     public SqlServerCollectionFixture()
     {
         isAvailable = true;
-        msSqlContainer = new ContainerBuilder("mcr.microsoft.com/mssql/server:2022-CU10-ubuntu-22.04")
-            .WithEnvironment("ACCEPT_EULA", "Y")
-            .WithEnvironment("MSSQL_SA_PASSWORD", SaPassword)
-            .WithEnvironment("MSSQL_PID", "Developer")
-            .WithPortBinding(1433, true)
-            .WithReuse(true)  // Enable container reuse to avoid rebuilding
-            .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(1433))
-            .Build();
+        msSqlContainer = BuildContainer();
     }
 
     /// <summary>
@@ -66,31 +60,19 @@ public sealed class SqlServerCollectionFixture : IAsyncLifetime
 
         try
         {
-            await msSqlContainer.StartAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+            await EnsureContainerReadyAsync(forceRecreate: false, TestContext.Current.CancellationToken).ConfigureAwait(false);
         }
         catch (NotSupportedException ex) when (ex.ToString().Contains("sqlcmd", StringComparison.OrdinalIgnoreCase))
         {
             isAvailable = false;
             return;
         }
-
-        var builder = new SqlConnectionStringBuilder
-        {
-            DataSource = $"{msSqlContainer.Hostname},{msSqlContainer.GetMappedPublicPort(1433)}",
-            UserID = "sa",
-            Password = SaPassword,
-            InitialCatalog = "master",
-            Encrypt = false,
-            TrustServerCertificate = true,
-        };
-
-        connectionString = builder.ConnectionString;
-        await WaitForServerReadyAsync(connectionString, TestContext.Current.CancellationToken).ConfigureAwait(false);
     }
 
     public async ValueTask DisposeAsync()
     {
         await msSqlContainer.DisposeAsync().ConfigureAwait(false);
+        recoveryLock.Dispose();
     }
 
     /// <summary>
@@ -101,32 +83,46 @@ public sealed class SqlServerCollectionFixture : IAsyncLifetime
     public async Task<string> CreateTestDatabaseAsync(string name)
     {
         EnsureAvailable();
-        if (connectionString == null)
+        for (var attempt = 0; attempt < 2; attempt++)
         {
-            throw new InvalidOperationException("Container has not been initialized. Ensure InitializeAsync has been called before creating databases.");
-        }
-
-        var dbNumber = Interlocked.Increment(ref databaseCounter);
-        var dbName = $"TestDb_{dbNumber}_{name}_{Guid.NewGuid():N}";
-
-        var connection = new SqlConnection(connectionString);
-        await using (connection.ConfigureAwait(false))
-        {
-            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
-            var command = new SqlCommand($"CREATE DATABASE [{dbName}]", connection);
-            await using (command.ConfigureAwait(false))
+            try
             {
-                await command.ExecuteNonQueryAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+                await EnsureContainerReadyAsync(forceRecreate: false, TestContext.Current.CancellationToken).ConfigureAwait(false);
+                var effectiveConnectionString = connectionString ?? throw new InvalidOperationException("Container has not been initialized. Ensure InitializeAsync has been called before creating databases.");
+                var dbNumber = Interlocked.Increment(ref databaseCounter);
+                var dbName = $"TestDb_{dbNumber}_{name}_{Guid.NewGuid():N}";
 
-                // Build connection string for the new database
-                var builder = new SqlConnectionStringBuilder(connectionString)
+                var connection = new SqlConnection(effectiveConnectionString);
+                await using (connection.ConfigureAwait(false))
                 {
-                    InitialCatalog = dbName
-                };
+                    await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+                    var command = new SqlCommand($"CREATE DATABASE [{dbName}]", connection);
+                    await using (command.ConfigureAwait(false))
+                    {
+                        command.CommandTimeout = 120;
+                        await command.ExecuteNonQueryAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
-                return builder.ConnectionString;
+                        // Build connection string for the new database
+                        var builder = new SqlConnectionStringBuilder(effectiveConnectionString)
+                        {
+                            InitialCatalog = dbName
+                        };
+
+                        return builder.ConnectionString;
+                    }
+                }
+            }
+            catch (SqlException ex) when (IsRecoverableSqlServerFailure(ex) && attempt == 0)
+            {
+                await EnsureContainerReadyAsync(forceRecreate: true, TestContext.Current.CancellationToken).ConfigureAwait(false);
+            }
+            catch (InvalidOperationException ex) when (IsRecoverableOperationFailure(ex) && attempt == 0)
+            {
+                await EnsureContainerReadyAsync(forceRecreate: true, TestContext.Current.CancellationToken).ConfigureAwait(false);
             }
         }
+
+        throw new InvalidOperationException("Failed to create a test database after SQL Server recovery.");
     }
 
     internal void EnsureAvailable()
@@ -164,5 +160,107 @@ public sealed class SqlServerCollectionFixture : IAsyncLifetime
 
         throw new TimeoutException("SQL Server did not become available before the timeout.");
     }
-}
 
+    private static bool IsRecoverableSqlServerFailure(SqlException ex)
+    {
+        var message = ex.ToString();
+        return message.Contains("tempdb", StringComparison.OrdinalIgnoreCase) ||
+            message.Contains("transport-level error", StringComparison.OrdinalIgnoreCase) ||
+            message.Contains("A severe error occurred on the current command", StringComparison.OrdinalIgnoreCase) ||
+            message.Contains("Execution Timeout Expired", StringComparison.OrdinalIgnoreCase) ||
+            message.Contains("wait operation timed out", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsRecoverableOperationFailure(InvalidOperationException ex)
+    {
+        return ex.ToString().Contains("The connection is broken", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private async Task EnsureContainerReadyAsync(bool forceRecreate, CancellationToken cancellationToken)
+    {
+        await recoveryLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            if (forceRecreate)
+            {
+                await RecreateContainerAsync(cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                await msSqlContainer.StartAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            connectionString = BuildMasterConnectionString();
+            await WaitForServerReadyAsync(connectionString, cancellationToken).ConfigureAwait(false);
+            await EnsureTempDbOnlineAsync(connectionString, cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            recoveryLock.Release();
+        }
+    }
+
+    private async Task RecreateContainerAsync(CancellationToken cancellationToken)
+    {
+        await msSqlContainer.DisposeAsync().ConfigureAwait(false);
+        msSqlContainer = BuildContainer();
+        await msSqlContainer.StartAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    private IContainer BuildContainer()
+    {
+        return new ContainerBuilder("mcr.microsoft.com/mssql/server:2022-CU10-ubuntu-22.04")
+            .WithEnvironment("ACCEPT_EULA", "Y")
+            .WithEnvironment("MSSQL_SA_PASSWORD", SaPassword)
+            .WithEnvironment("MSSQL_PID", "Developer")
+            .WithPortBinding(1433, true)
+            .WithReuse(false)
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(1433))
+            .Build();
+    }
+
+    private string BuildMasterConnectionString()
+    {
+        var builder = new SqlConnectionStringBuilder
+        {
+            DataSource = $"{msSqlContainer.Hostname},{msSqlContainer.GetMappedPublicPort(1433)}",
+            UserID = "sa",
+            Password = SaPassword,
+            InitialCatalog = "master",
+            Encrypt = false,
+            TrustServerCertificate = true,
+        };
+
+        return builder.ConnectionString;
+    }
+
+    private static async Task EnsureTempDbOnlineAsync(string connectionString, CancellationToken cancellationToken)
+    {
+        var timeoutAt = DateTimeOffset.UtcNow.AddSeconds(60);
+        while (DateTimeOffset.UtcNow < timeoutAt)
+        {
+            try
+            {
+                await using var connection = new SqlConnection(connectionString);
+                await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+
+                await using var command = new SqlCommand(
+                    "SELECT state_desc FROM sys.databases WHERE name = 'tempdb'",
+                    connection);
+
+                var state = (string?)await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+                if (string.Equals(state, "ONLINE", StringComparison.OrdinalIgnoreCase))
+                {
+                    return;
+                }
+            }
+            catch (SqlException)
+            {
+            }
+
+            await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken).ConfigureAwait(false);
+        }
+
+        throw new TimeoutException("SQL Server tempdb did not report ONLINE before timeout.");
+    }
+}

@@ -19,6 +19,23 @@ Status values:
 | PRIM-SQLSERVER-SCHED-002 | SqlServer | Scheduler | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSchedulerClientTests.cs` |
 | PRIM-SQLSERVER-LEASE-003 | SqlServer | Lease | Covered | `tests/Incursa.Platform.SqlServer.Tests/LeaseRunnerTests.cs` |
 | PRIM-SQLSERVER-SCHEMA-003 | SqlServer | Schema | Covered | `tests/Incursa.Platform.SqlServer.Tests/DatabaseSchemaConsistencyTests.cs` |
+| PRIM-SQLSERVER-SCHED-001 | SqlServer | Scheduler | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSchedulerBehaviorTests.cs` |
+| PRIM-SQLSERVER-SCHED-003 | SqlServer | Scheduler | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSchedulerBehaviorTests.cs` |
+| PRIM-SQLSERVER-SCHED-004 | SqlServer | Scheduler | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSchedulerBehaviorTests.cs` |
+| PRIM-SQLSERVER-SCHED-006 | SqlServer | Scheduler | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSchedulerBehaviorTests.cs` |
+| PRIM-SQLSERVER-SCHED-007 | SqlServer | Scheduler | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSchedulerBehaviorTests.cs` |
+| PRIM-SQLSERVER-SCHED-008 | SqlServer | Scheduler | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSchedulerBehaviorTests.cs` |
+| PRIM-SQLSERVER-SCHED-009 | SqlServer | Scheduler | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSchedulerBehaviorTests.cs` |
+| PRIM-SQLSERVER-SCHED-010 | SqlServer | Scheduler | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSchedulerBehaviorTests.cs` |
+| PRIM-SQLSERVER-LEASE-001 | SqlServer | Lease | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSystemLeaseBehaviorTests.cs` |
+| PRIM-SQLSERVER-LEASE-002 | SqlServer | Lease | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSystemLeaseBehaviorTests.cs` |
+| PRIM-SQLSERVER-LEASE-004 | SqlServer | Lease | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSystemLeaseBehaviorTests.cs` |
+| PRIM-SQLSERVER-LEASE-005 | SqlServer | Lease | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSystemLeaseBehaviorTests.cs` |
+| PRIM-SQLSERVER-LEASE-006 | SqlServer | Lease | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSystemLeaseBehaviorTests.cs` |
+| PRIM-SQLSERVER-LEASE-007 | SqlServer | Lease | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSystemLeaseBehaviorTests.cs` |
+| PRIM-SQLSERVER-LEASE-008 | SqlServer | Lease | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSystemLeaseBehaviorTests.cs` |
+| PRIM-SQLSERVER-LEASE-009 | SqlServer | Lease | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSystemLeaseBehaviorTests.cs` |
+| PRIM-SQLSERVER-LEASE-010 | SqlServer | Lease | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlSystemLeaseBehaviorTests.cs` |
 | PRIM-POSTGRES-OUTBOX-002 | Postgres | Outbox | Covered | `tests/Incursa.Platform.Postgres.Tests/PostgresOutboxStoreBehaviorTests.cs` |
 | PRIM-POSTGRES-INBOX-005 | Postgres | Inbox | Covered | `tests/Incursa.Platform.Postgres.Tests/PostgresInboxWorkStoreBehaviorTests.cs` |
 | PRIM-POSTGRES-SCHED-002 | Postgres | Scheduler | Covered | `tests/Incursa.Platform.Postgres.Tests/PostgresSchedulerClientTests.cs` |
@@ -67,5 +84,5 @@ Status values:
 | PRIM-INMEMORY-LEASE-010 | InMemory | Lease | Covered | `tests/Incursa.Platform.InMemory.Tests/InMemorySystemLeaseBehaviorTests.cs` |
 
 ## Next Updates
-- Port scheduler and lease harnesses to SqlServer/Postgres provider suites.
+- Port scheduler and lease harnesses to Postgres provider suite.
 - Replace temporary General scenario mapping to README with executable behavioral tests where practical.

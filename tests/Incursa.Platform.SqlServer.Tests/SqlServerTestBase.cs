@@ -40,7 +40,7 @@ public abstract class SqlServerTestBase : IAsyncLifetime
             .WithEnvironment("MSSQL_SA_PASSWORD", SaPassword)
             .WithEnvironment("MSSQL_PID", "Developer")
             .WithPortBinding(1433, true)
-            .WithReuse(true)
+            .WithReuse(false)
             .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(1433))
             .Build();
 
@@ -633,4 +633,3 @@ GO";
         throw new TimeoutException("SQL Server did not become available before the timeout.");
     }
 }
-
