@@ -38,8 +38,6 @@ Status values:
 | LIB-EMAIL-TEST-001 | Email | Behavior | Covered | `tests/Incursa.Platform.Email.Tests/Incursa.Platform.Email.Tests.csproj` |
 | LIB-EMAILASPNETCORE-API-001 | Email.AspNetCore | PublicApi | Covered | `tests/Incursa.Platform.Email.Tests/EmailAspNetCoreExtensionsTests.cs` |
 | LIB-EMAILASPNETCORE-TEST-001 | Email.AspNetCore | Behavior | Covered | `tests/Incursa.Platform.Email.Tests/Incursa.Platform.Email.Tests.csproj` |
-| LIB-EMAILPOSTMARK-API-001 | Email.Postmark | PublicApi | Covered | `tests/Incursa.Platform.Email.Postmark.Tests/PostmarkEmailSenderTests.cs` |
-| LIB-EMAILPOSTMARK-TEST-001 | Email.Postmark | Behavior | Covered | `tests/Incursa.Platform.Email.Postmark.Tests/Incursa.Platform.Email.Postmark.Tests.csproj` |
 | LIB-EXACTLYONCE-API-001 | ExactlyOnce | PublicApi | Covered | `tests/Incursa.Platform.Tests/ExactlyOnceExecutorTests.cs` |
 | LIB-EXACTLYONCE-TEST-001 | ExactlyOnce | Behavior | Covered | `tests/Incursa.Platform.Tests/ExactlyOnceHandlerTests.cs` |
 | LIB-HEALTHPROBE-API-001 | HealthProbe | PublicApi | Covered | `tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs` |

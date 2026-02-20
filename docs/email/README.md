@@ -1,7 +1,7 @@
 # Email Outbox
 
 Incursa.Platform.Email provides a provider-agnostic outbox core for reliable email delivery.
-It focuses on idempotent enqueueing, explicit dispatching, and provider adapters (like Postmark).
+It focuses on idempotent enqueueing, explicit dispatching, and provider adapter integration points.
 
 ## Architecture
 
@@ -121,66 +121,17 @@ Policy outcomes:
 - Idempotency and delivery tracking interfaces (`IIdempotencyStore`, `IEmailDeliverySink`), with idempotency supplied by `Incursa.Platform.Idempotency`.
 - Throttling policy (`IEmailSendPolicy`).
 
-### Postmark adapter responsibilities (Incursa.Platform.Email.Postmark)
-
-- Translate `OutboundEmailMessage` into Postmark payloads.
-- Inject provider headers/metadata (including `MessageKey`).
-- Classify Postmark HTTP errors into transient vs permanent results.
-- Provide webhook integration for bounce/suppression tracking.
-- Expose Postmark-specific validation and reconciliation helpers.
-
-### Postmark validation (provider-specific)
-
-Use `IPostmarkEmailValidator` to validate against Postmark size limits and attachment restrictions without
-embedding provider rules in your application code.
-
-```csharp
-services.AddIncursaEmailPostmark();
-
-var validator = serviceProvider.GetRequiredService<IPostmarkEmailValidator>();
-var result = validator.Validate(message);
-if (!result.Succeeded)
-{
-    // Present validation errors to the caller or UI.
-}
-```
-
-### App-specific responsibilities
+### Provider adapter responsibilities (integration repositories)`r`n`r`n- Translate `OutboundEmailMessage` into provider payloads.`r`n- Inject provider headers/metadata (including `MessageKey`).`r`n- Classify provider HTTP errors into transient vs permanent results.`r`n- Provide webhook integration for bounce/suppression tracking.`r`n- Expose provider-specific validation and reconciliation helpers.`r`n`r`n### App-specific responsibilities
 
 - Choose `MessageKey` and business-level dedupe rules.
 - Configure retry/backoff and throttling.
 - Implement `IEmailDeliverySink` to persist status updates.
 - Register DI and hosted processing loop.
 
-## Delivery Tracking via Postmark Webhooks
-
-- Register `PostmarkWebhookProvider` to translate Postmark webhooks into provider-neutral delivery updates.
-- Correlation is performed via `MessageKey` (sent in metadata/header) and/or provider message id.
-- Webhook types recognized by the Postmark adapter: `bounce`, `suppression`, `spam-complaint`, `subscription-change`, `inbound`.
-
-```csharp
-services.AddSingleton<IWebhookProvider>(sp =>
-    new PostmarkWebhookProvider(
-        sp.GetRequiredService<IEmailDeliverySink>(),
-        new PostmarkWebhookOptions
-        {
-            SigningSecret = "postmark-signing-secret",
-        }));
-```
-
-Use the Incursa webhooks infrastructure to ingest and process events:
-
-```csharp
-services.AddIncursaWebhooks();
-
-app.MapPost("/webhooks/{provider}", (HttpContext ctx, IWebhookIngestor ingestor) =>
-    WebhookEndpoint.HandleAsync(ctx, ingestor));
-```
-
-## Reconciliation (send exactly once)
+## Delivery Tracking via Provider Webhooks`r`n`r`n- Register the provider webhook implementation from the integration package to translate provider webhooks into delivery updates.`r`n- Correlation is performed via `MessageKey` (sent in metadata/header) and/or provider message id.`r`n`r`n## Reconciliation (send exactly once)
 
 When a send fails with an ambiguous response, the processor can probe the provider to confirm whether the
-message was actually accepted. The Postmark probe searches by `MessageKey` metadata and converts the result
+message was actually accepted. The provider probe searches by `MessageKey` metadata and converts the result
 into a confirmed delivery status. This probe is **additive** and does not replace the normal send flow.
 
 If the probe confirms delivery, the message is finalized without retrying; if not found, normal retries apply.
@@ -221,11 +172,8 @@ Wiring + running processor:
 
 ```csharp
 services.AddIncursaEmailCore();
-services.AddIncursaEmailPostmark(options =>
-{
-    options.ServerToken = "postmark-token";
-    options.MessageStream = "transactional";
-});
+// Register provider adapter options via the integration package
+// (for example, Incursa.Integrations.Postmark.AspNetCore).
 
 services.AddIncursaEmailProcessingHostedService(options =>
 {
@@ -299,4 +247,4 @@ await platformEventEmitter.EmitAuditEventAsync(
 
 - Use `MessageKey` in logs and persistence as the primary key.
 - If the provider returns an id, record it in `IEmailDeliverySink` for lookup.
-- Ensure Postmark metadata includes `MessageKey` to correlate webhook events.
+- Ensure provider metadata includes `MessageKey` to correlate webhook events.

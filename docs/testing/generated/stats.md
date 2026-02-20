@@ -38,7 +38,6 @@ Generated at (UTC): 2026-02-01T05:28:34.4934903Z
 | --- | ---: | ---: |
 | Incursa.Platform.Audit.Tests | 4 | 4 |
 | Incursa.Platform.Correlation.Tests | 8 | 8 |
-| Incursa.Platform.Email.Postmark.Tests | 18 | 18 |
 | Incursa.Platform.Email.Tests | 20 | 20 |
 | Incursa.Platform.HealthProbe.Tests | 17 | 17 |
 | Incursa.Platform.InMemory.Tests | 2 | 2 |

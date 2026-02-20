@@ -58,9 +58,6 @@ All requirements use stable scenario IDs (`LIB-*`) and are traceable via `specs/
 - `LIB-EMAILASPNETCORE-API-001`: `Incursa.Platform.Email.AspNetCore` extension behavior is specified and tested.
 - `LIB-EMAILASPNETCORE-TEST-001`: `Incursa.Platform.Email.AspNetCore` has automated tests for registration/runtime behavior.
 
-- `LIB-EMAILPOSTMARK-API-001`: `Incursa.Platform.Email.Postmark` public adapter behavior is specified and tested.
-- `LIB-EMAILPOSTMARK-TEST-001`: `Incursa.Platform.Email.Postmark` has automated unit tests for public contracts.
-
 - `LIB-EXACTLYONCE-API-001`: `Incursa.Platform.ExactlyOnce` public execution behavior is specified and tested.
 - `LIB-EXACTLYONCE-TEST-001`: `Incursa.Platform.ExactlyOnce` has automated tests for public contracts.
 

@@ -14,7 +14,6 @@
 
 using Incursa.Platform;
 using Incursa.Platform.Email;
-using Incursa.Platform.Email.Postmark;
 using Incursa.Platform.Idempotency;
 using Incursa.Platform.Observability;
 using Microsoft.Extensions.DependencyInjection;
@@ -120,42 +119,6 @@ public static class EmailServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Registers the Postmark sender adapter.
-    /// </summary>
-    /// <param name="services">Service collection.</param>
-    /// <param name="configureOptions">Optional Postmark options configuration.</param>
-    /// <returns>The service collection.</returns>
-    public static IServiceCollection AddIncursaEmailPostmark(
-        this IServiceCollection services,
-        Action<PostmarkOptions>? configureOptions = null)
-    {
-        ArgumentNullException.ThrowIfNull(services);
-
-        if (configureOptions != null)
-        {
-            services.Configure(configureOptions);
-        }
-
-        services.AddOptions<PostmarkOptions>();
-        services.AddOptions<PostmarkValidationOptions>();
-        services.AddSingleton<IPostmarkEmailValidator>(sp =>
-            new PostmarkEmailValidator(sp.GetRequiredService<IOptions<PostmarkValidationOptions>>().Value));
-        services.AddHttpClient<PostmarkOutboundMessageClient>()
-            .AddTypedClient((httpClient, sp) =>
-                new PostmarkOutboundMessageClient(httpClient, sp.GetRequiredService<IOptions<PostmarkOptions>>().Value));
-        services.AddSingleton<IOutboundEmailProbe>(sp =>
-            new PostmarkEmailProbe(sp.GetRequiredService<PostmarkOutboundMessageClient>()));
-        services.AddHttpClient<PostmarkEmailSender>()
-            .AddTypedClient((httpClient, sp) =>
-                new PostmarkEmailSender(
-                    httpClient,
-                    sp.GetRequiredService<IOptions<PostmarkOptions>>().Value,
-                    sp.GetRequiredService<IPostmarkEmailValidator>()));
-        services.AddTransient<IOutboundEmailSender>(sp => sp.GetRequiredService<PostmarkEmailSender>());
-        return services;
-    }
-
-    /// <summary>
     /// Registers a hosted service that periodically runs the email outbox processor.
     /// </summary>
     /// <param name="services">Service collection.</param>
@@ -214,4 +177,3 @@ public static class EmailServiceCollectionExtensions
         return services;
     }
 }
-

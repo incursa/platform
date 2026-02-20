@@ -23,7 +23,6 @@ Outbox, inbox, scheduler, fanout, and leases are built on a work-queue pattern: 
 - Incursa.Platform.Idempotency: At-most-once semantics for a logical key with TryBegin/Complete/Fail.
 - Incursa.Platform.ExactlyOnce: Best-effort exactly-once execution workflow with idempotency and optional verification probes.
 - Incursa.Platform.Email: Outbox-driven email delivery with idempotency, send policies, and provider adapters.
-- Incursa.Platform.Email.Postmark: Postmark outbound adapter.
 - Incursa.Platform.Email.AspNetCore: ASP.NET Core DI helpers and hosted processing loop.
 - Incursa.Platform.Webhooks: Provider-agnostic webhook ingestion; authenticate/classify/enqueue/handle with retries.
 - Incursa.Platform.Webhooks.AspNetCore: ASP.NET Core endpoints and DI wiring for webhooks.

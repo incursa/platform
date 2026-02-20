@@ -16,7 +16,7 @@ dotnet add package Incursa.Platform.Email
 
 ## Typical Use
 
-Use this package for application-level email orchestration, then pair it with a provider adapter such as `Incursa.Platform.Email.Postmark`.
+Use this package for application-level email orchestration, then pair it with a provider adapter package from an integration repository (for example `Incursa.Integrations.Postmark`).
 
 ## Documentation
 

@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Incursa.Platform.Email\Incursa.Platform.Email.csproj" />
-    <ProjectReference Include="..\Incursa.Platform.Email.Postmark\Incursa.Platform.Email.Postmark.csproj" />
     <ProjectReference Include="..\Incursa.Platform.Idempotency\Incursa.Platform.Idempotency.csproj" />
     <ProjectReference Include="..\Incursa.Platform.Observability\Incursa.Platform.Observability.csproj" />
   </ItemGroup>

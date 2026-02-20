@@ -72,7 +72,7 @@ Platform capabilities:
 - `Incursa.Platform.Observability` (shared conventions and emitters)
 - `Incursa.Platform.Idempotency` (TryBegin/Complete/Fail guard)
 - `Incursa.Platform.ExactlyOnce` (best-effort exactly-once workflow)
-- `Incursa.Platform.Email` + `Incursa.Platform.Email.Postmark` + `Incursa.Platform.Email.AspNetCore`
+- `Incursa.Platform.Email` + `Incursa.Platform.Email.AspNetCore`
 - `Incursa.Platform.Webhooks` + `Incursa.Platform.Webhooks.AspNetCore`
 - `Incursa.Platform.Modularity` + `Incursa.Platform.Modularity.AspNetCore` + `Incursa.Platform.Modularity.Razor`
 - `Incursa.Platform.Metrics.AspNetCore`, `Incursa.Platform.Metrics.HttpServer`

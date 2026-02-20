@@ -14,7 +14,6 @@ This document defines what belongs in the `platform` repository versus provider-
 - Storage providers (`SqlServer`, `Postgres`, `InMemory`) for core primitives.
 - Shared cross-cutting libraries (`Observability`, `Correlation`, `Audit`, `Operations`, `Idempotency`, `ExactlyOnce`).
 - Provider-agnostic integration frameworks such as `Email` and `Webhooks` contracts.
-- Exception: existing reference/default adapters tightly coupled to platform contracts (currently `Incursa.Platform.Email.Postmark`).
 
 ## Out Of Scope For `platform`
 
@@ -35,4 +34,4 @@ This document defines what belongs in the `platform` repository versus provider-
 - `integrations-workos`: WorkOS auth, webhook, and management integration surface.
 - `integrations-cloudflare`: Cloudflare KV/R2/custom-hostname/load-balancer integrations.
 - `integrations-electronicnotary`: electronic notary domain contracts and proof integration.
-- `integrations-postmark`: reserved for future standalone packaging; authoritative Postmark adapter remains in `platform`.
+- `integrations-postmark`: authoritative home for Postmark-specific integration packages.

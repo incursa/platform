@@ -4,8 +4,8 @@
     "defaultBranch": "main"
   },
   "summary": {
-    "total": 743,
-    "compliant": 743,
+    "total": 725,
+    "compliant": 0,
     "missingRequired": 0,
     "invalidFormat": 0
   },
@@ -22,8 +22,8 @@
     },
     {
       "category": "Incursa.Platform.Email",
-      "total": 38,
-      "compliant": 38
+      "total": 20,
+      "compliant": 20
     },
     {
       "category": "Incursa.Platform.HealthProbe",
@@ -77,11 +77,6 @@
       "project": "Incursa.Platform.Correlation.Tests",
       "total": 8,
       "compliant": 8
-    },
-    {
-      "project": "Incursa.Platform.Email.Postmark.Tests",
-      "total": 18,
-      "compliant": 18
     },
     {
       "project": "Incursa.Platform.Email.Tests",
@@ -331,294 +326,6 @@
       },
       "status": "compliant",
       "project": "Incursa.Platform.Correlation.Tests"
-    },
-    {
-      "testId": "Incursa.Platform.Email.Postmark.Tests:Incursa.Platform.Email.Postmark.Tests.PostmarkEmailSenderTests.SendAsync_ReportsPermanentFailureOnBadRequest",
-      "category": "Incursa.Platform.Email",
-      "tags": [],
-      "summary": "When send Async Reports Permanent Failure On Bad Request, then it behaves as expected.",
-      "intent": "Document expected behavior for send Async Reports Permanent Failure On Bad Request.",
-      "scenario": "Given send Async Reports Permanent Failure On Bad Request.",
-      "behavior": "Then the operation matches the expected outcome.",
-      "source": {
-        "file": "tests/Incursa.Platform.Email.Postmark.Tests/PostmarkEmailSenderTests.cs",
-        "line": 109,
-        "member": "Incursa.Platform.Email.Postmark.Tests.PostmarkEmailSenderTests.SendAsync_ReportsPermanentFailureOnBadRequest"
-      },
-      "status": "compliant",
-      "project": "Incursa.Platform.Email.Postmark.Tests"
-    },
-    {
-      "testId": "Incursa.Platform.Email.Postmark.Tests:Incursa.Platform.Email.Postmark.Tests.PostmarkEmailSenderTests.SendAsync_ReportsTransientFailureOnServerError",
-      "category": "Incursa.Platform.Email",
-      "tags": [],
-      "summary": "When send Async Reports Transient Failure On Server Error, then it behaves as expected.",
-      "intent": "Document expected behavior for send Async Reports Transient Failure On Server Error.",
-      "scenario": "Given send Async Reports Transient Failure On Server Error.",
-      "behavior": "Then the operation matches the expected outcome.",
-      "source": {
-        "file": "tests/Incursa.Platform.Email.Postmark.Tests/PostmarkEmailSenderTests.cs",
-        "line": 81,
-        "member": "Incursa.Platform.Email.Postmark.Tests.PostmarkEmailSenderTests.SendAsync_ReportsTransientFailureOnServerError"
-      },
-      "status": "compliant",
-      "project": "Incursa.Platform.Email.Postmark.Tests"
-    },
-    {
-      "testId": "Incursa.Platform.Email.Postmark.Tests:Incursa.Platform.Email.Postmark.Tests.PostmarkEmailSenderTests.SendAsync_SendsExpectedPayload",
-      "category": "Incursa.Platform.Email",
-      "tags": [],
-      "summary": "When send Async Sends Expected Payload, then it behaves as expected.",
-      "intent": "Document expected behavior for send Async Sends Expected Payload.",
-      "scenario": "Given send Async Sends Expected Payload.",
-      "behavior": "Then the operation matches the expected outcome.",
-      "source": {
-        "file": "tests/Incursa.Platform.Email.Postmark.Tests/PostmarkEmailSenderTests.cs",
-        "line": 30,
-        "member": "Incursa.Platform.Email.Postmark.Tests.PostmarkEmailSenderTests.SendAsync_SendsExpectedPayload"
-      },
-      "status": "compliant",
-      "project": "Incursa.Platform.Email.Postmark.Tests"
-    },
-    {
-      "testId": "Incursa.Platform.Email.Postmark.Tests:Incursa.Platform.Email.Postmark.Tests.PostmarkEmailValidatorTests.Validate_RejectsBodyOverLimit",
-      "category": "Incursa.Platform.Email",
-      "tags": [],
-      "summary": "When validate Rejects Body Over Limit, then it behaves as expected.",
-      "intent": "Document expected behavior for validate Rejects Body Over Limit.",
-      "scenario": "Given validate Rejects Body Over Limit.",
-      "behavior": "Then the operation matches the expected outcome.",
-      "source": {
-        "file": "tests/Incursa.Platform.Email.Postmark.Tests/PostmarkEmailValidatorTests.cs",
-        "line": 27,
-        "member": "Incursa.Platform.Email.Postmark.Tests.PostmarkEmailValidatorTests.Validate_RejectsBodyOverLimit"
-      },
-      "status": "compliant",
-      "project": "Incursa.Platform.Email.Postmark.Tests"
-    },
-    {
-      "testId": "Incursa.Platform.Email.Postmark.Tests:Incursa.Platform.Email.Postmark.Tests.PostmarkEmailValidatorTests.Validate_RejectsForbiddenExtensions",
-      "category": "Incursa.Platform.Email",
-      "tags": [],
-      "summary": "When validate Rejects Forbidden Extensions, then it behaves as expected.",
-      "intent": "Document expected behavior for validate Rejects Forbidden Extensions.",
-      "scenario": "Given validate Rejects Forbidden Extensions.",
-      "behavior": "Then the operation matches the expected outcome.",
-      "source": {
-        "file": "tests/Incursa.Platform.Email.Postmark.Tests/PostmarkEmailValidatorTests.cs",
-        "line": 47,
-        "member": "Incursa.Platform.Email.Postmark.Tests.PostmarkEmailValidatorTests.Validate_RejectsForbiddenExtensions"
-      },
-      "status": "compliant",
-      "project": "Incursa.Platform.Email.Postmark.Tests"
-    },
-    {
-      "testId": "Incursa.Platform.Email.Postmark.Tests:Incursa.Platform.Email.Postmark.Tests.PostmarkEmailValidatorTests.Validate_RejectsTotalSizeOverLimit",
-      "category": "Incursa.Platform.Email",
-      "tags": [],
-      "summary": "When validate Rejects Total Size Over Limit, then it behaves as expected.",
-      "intent": "Document expected behavior for validate Rejects Total Size Over Limit.",
-      "scenario": "Given validate Rejects Total Size Over Limit.",
-      "behavior": "Then the operation matches the expected outcome.",
-      "source": {
-        "file": "tests/Incursa.Platform.Email.Postmark.Tests/PostmarkEmailValidatorTests.cs",
-        "line": 68,
-        "member": "Incursa.Platform.Email.Postmark.Tests.PostmarkEmailValidatorTests.Validate_RejectsTotalSizeOverLimit"
-      },
-      "status": "compliant",
-      "project": "Incursa.Platform.Email.Postmark.Tests"
-    },
-    {
-      "testId": "Incursa.Platform.Email.Postmark.Tests:Incursa.Platform.Email.Postmark.Tests.PostmarkEmailValidatorTests.Validate_UsesBase64EncodedAttachmentSizeForTotal",
-      "category": "Incursa.Platform.Email",
-      "tags": [],
-      "summary": "When validate Uses Base64 Encoded Attachment Size For Total, then it behaves as expected.",
-      "intent": "Document expected behavior for validate Uses Base64 Encoded Attachment Size For Total.",
-      "scenario": "Given validate Uses Base64 Encoded Attachment Size For Total.",
-      "behavior": "Then the operation matches the expected outcome.",
-      "source": {
-        "file": "tests/Incursa.Platform.Email.Postmark.Tests/PostmarkEmailValidatorTests.cs",
-        "line": 89,
-        "member": "Incursa.Platform.Email.Postmark.Tests.PostmarkEmailValidatorTests.Validate_UsesBase64EncodedAttachmentSizeForTotal"
-      },
-      "status": "compliant",
-      "project": "Incursa.Platform.Email.Postmark.Tests"
-    },
-    {
-      "testId": "Incursa.Platform.Email.Postmark.Tests:Incursa.Platform.Email.Postmark.Tests.PostmarkOutboundMessageClientTests.GetOutboundMessageDetailsAsync_ReturnsNotFoundOn404",
-      "category": "Incursa.Platform.Email",
-      "tags": [],
-      "summary": "When get Outbound Message Details Async Returns Not Found On404, then it behaves as expected.",
-      "intent": "Document expected behavior for get Outbound Message Details Async Returns Not Found On404.",
-      "scenario": "Given get Outbound Message Details Async Returns Not Found On404.",
-      "behavior": "Then the operation matches the expected outcome.",
-      "source": {
-        "file": "tests/Incursa.Platform.Email.Postmark.Tests/PostmarkOutboundMessageClientTests.cs",
-        "line": 28,
-        "member": "Incursa.Platform.Email.Postmark.Tests.PostmarkOutboundMessageClientTests.GetOutboundMessageDetailsAsync_ReturnsNotFoundOn404"
-      },
-      "status": "compliant",
-      "project": "Incursa.Platform.Email.Postmark.Tests"
-    },
-    {
-      "testId": "Incursa.Platform.Email.Postmark.Tests:Incursa.Platform.Email.Postmark.Tests.PostmarkOutboundMessageClientTests.SearchOutboundByMetadataAsync_ReturnsErrorOnFailure",
-      "category": "Incursa.Platform.Email",
-      "tags": [],
-      "summary": "When search Outbound By Metadata Async Returns Error On Failure, then it behaves as expected.",
-      "intent": "Document expected behavior for search Outbound By Metadata Async Returns Error On Failure.",
-      "scenario": "Given search Outbound By Metadata Async Returns Error On Failure.",
-      "behavior": "Then the operation matches the expected outcome.",
-      "source": {
-        "file": "tests/Incursa.Platform.Email.Postmark.Tests/PostmarkOutboundMessageClientTests.cs",
-        "line": 89,
-        "member": "Incursa.Platform.Email.Postmark.Tests.PostmarkOutboundMessageClientTests.SearchOutboundByMetadataAsync_ReturnsErrorOnFailure"
-      },
-      "status": "compliant",
-      "project": "Incursa.Platform.Email.Postmark.Tests"
-    },
-    {
-      "testId": "Incursa.Platform.Email.Postmark.Tests:Incursa.Platform.Email.Postmark.Tests.PostmarkOutboundMessageClientTests.SearchOutboundByMetadataAsync_ReturnsFoundWhenMessageExists",
-      "category": "Incursa.Platform.Email",
-      "tags": [],
-      "summary": "When search Outbound By Metadata Async Returns Found When Message Exists, then it behaves as expected.",
-      "intent": "Document expected behavior for search Outbound By Metadata Async Returns Found When Message Exists.",
-      "scenario": "Given search Outbound By Metadata Async Returns Found When Message Exists.",
-      "behavior": "Then the operation matches the expected outcome.",
-      "source": {
-        "file": "tests/Incursa.Platform.Email.Postmark.Tests/PostmarkOutboundMessageClientTests.cs",
-        "line": 67,
-        "member": "Incursa.Platform.Email.Postmark.Tests.PostmarkOutboundMessageClientTests.SearchOutboundByMetadataAsync_ReturnsFoundWhenMessageExists"
-      },
-      "status": "compliant",
-      "project": "Incursa.Platform.Email.Postmark.Tests"
-    },
-    {
-      "testId": "Incursa.Platform.Email.Postmark.Tests:Incursa.Platform.Email.Postmark.Tests.PostmarkOutboundMessageClientTests.SearchOutboundByMetadataAsync_ReturnsNotFoundWhenEmpty",
-      "category": "Incursa.Platform.Email",
-      "tags": [],
-      "summary": "When search Outbound By Metadata Async Returns Not Found When Empty, then it behaves as expected.",
-      "intent": "Document expected behavior for search Outbound By Metadata Async Returns Not Found When Empty.",
-      "scenario": "Given search Outbound By Metadata Async Returns Not Found When Empty.",
-      "behavior": "Then the operation matches the expected outcome.",
-      "source": {
-        "file": "tests/Incursa.Platform.Email.Postmark.Tests/PostmarkOutboundMessageClientTests.cs",
-        "line": 47,
-        "member": "Incursa.Platform.Email.Postmark.Tests.PostmarkOutboundMessageClientTests.SearchOutboundByMetadataAsync_ReturnsNotFoundWhenEmpty"
-      },
-      "status": "compliant",
-      "project": "Incursa.Platform.Email.Postmark.Tests"
-    },
-    {
-      "testId": "Incursa.Platform.Email.Postmark.Tests:Incursa.Platform.Email.Postmark.Tests.PostmarkWebhookTests.WebhookIngestorStoresPostmarkBounceAsync",
-      "category": "Incursa.Platform.Email",
-      "tags": [],
-      "summary": "When webhook Ingestor Stores Postmark Bounce Async, then it behaves as expected.",
-      "intent": "Document expected behavior for webhook Ingestor Stores Postmark Bounce Async.",
-      "scenario": "Given webhook Ingestor Stores Postmark Bounce Async.",
-      "behavior": "Then the operation matches the expected outcome.",
-      "source": {
-        "file": "tests/Incursa.Platform.Email.Postmark.Tests/PostmarkWebhookTests.cs",
-        "line": 35,
-        "member": "Incursa.Platform.Email.Postmark.Tests.PostmarkWebhookTests.WebhookIngestorStoresPostmarkBounceAsync"
-      },
-      "status": "compliant",
-      "project": "Incursa.Platform.Email.Postmark.Tests"
-    },
-    {
-      "testId": "Incursa.Platform.Email.Postmark.Tests:Incursa.Platform.Email.Postmark.Tests.PostmarkWebhookTests.WebhookIngestorStoresPostmarkInboundAsync",
-      "category": "Incursa.Platform.Email",
-      "tags": [],
-      "summary": "When webhook Ingestor Stores Postmark Inbound Async, then it behaves as expected.",
-      "intent": "Document expected behavior for webhook Ingestor Stores Postmark Inbound Async.",
-      "scenario": "Given webhook Ingestor Stores Postmark Inbound Async.",
-      "behavior": "Then the operation matches the expected outcome.",
-      "source": {
-        "file": "tests/Incursa.Platform.Email.Postmark.Tests/PostmarkWebhookTests.cs",
-        "line": 110,
-        "member": "Incursa.Platform.Email.Postmark.Tests.PostmarkWebhookTests.WebhookIngestorStoresPostmarkInboundAsync"
-      },
-      "status": "compliant",
-      "project": "Incursa.Platform.Email.Postmark.Tests"
-    },
-    {
-      "testId": "Incursa.Platform.Email.Postmark.Tests:Incursa.Platform.Email.Postmark.Tests.PostmarkWebhookTests.WebhookIngestorStoresPostmarkSpamComplaintAsync",
-      "category": "Incursa.Platform.Email",
-      "tags": [],
-      "summary": "When webhook Ingestor Stores Postmark Spam Complaint Async, then it behaves as expected.",
-      "intent": "Document expected behavior for webhook Ingestor Stores Postmark Spam Complaint Async.",
-      "scenario": "Given webhook Ingestor Stores Postmark Spam Complaint Async.",
-      "behavior": "Then the operation matches the expected outcome.",
-      "source": {
-        "file": "tests/Incursa.Platform.Email.Postmark.Tests/PostmarkWebhookTests.cs",
-        "line": 60,
-        "member": "Incursa.Platform.Email.Postmark.Tests.PostmarkWebhookTests.WebhookIngestorStoresPostmarkSpamComplaintAsync"
-      },
-      "status": "compliant",
-      "project": "Incursa.Platform.Email.Postmark.Tests"
-    },
-    {
-      "testId": "Incursa.Platform.Email.Postmark.Tests:Incursa.Platform.Email.Postmark.Tests.PostmarkWebhookTests.WebhookIngestorStoresPostmarkSubscriptionChangeAsync",
-      "category": "Incursa.Platform.Email",
-      "tags": [],
-      "summary": "When webhook Ingestor Stores Postmark Subscription Change Async, then it behaves as expected.",
-      "intent": "Document expected behavior for webhook Ingestor Stores Postmark Subscription Change Async.",
-      "scenario": "Given webhook Ingestor Stores Postmark Subscription Change Async.",
-      "behavior": "Then the operation matches the expected outcome.",
-      "source": {
-        "file": "tests/Incursa.Platform.Email.Postmark.Tests/PostmarkWebhookTests.cs",
-        "line": 85,
-        "member": "Incursa.Platform.Email.Postmark.Tests.PostmarkWebhookTests.WebhookIngestorStoresPostmarkSubscriptionChangeAsync"
-      },
-      "status": "compliant",
-      "project": "Incursa.Platform.Email.Postmark.Tests"
-    },
-    {
-      "testId": "Incursa.Platform.Email.Postmark.Tests:Incursa.Platform.Email.Postmark.Tests.PostmarkWebhookTests.WebhookProcessorDispatchesBounceToSinkAsync",
-      "category": "Incursa.Platform.Email",
-      "tags": [],
-      "summary": "When webhook Processor Dispatches Bounce To Sink Async, then it behaves as expected.",
-      "intent": "Document expected behavior for webhook Processor Dispatches Bounce To Sink Async.",
-      "scenario": "Given webhook Processor Dispatches Bounce To Sink Async.",
-      "behavior": "Then the operation matches the expected outcome.",
-      "source": {
-        "file": "tests/Incursa.Platform.Email.Postmark.Tests/PostmarkWebhookTests.cs",
-        "line": 135,
-        "member": "Incursa.Platform.Email.Postmark.Tests.PostmarkWebhookTests.WebhookProcessorDispatchesBounceToSinkAsync"
-      },
-      "status": "compliant",
-      "project": "Incursa.Platform.Email.Postmark.Tests"
-    },
-    {
-      "testId": "Incursa.Platform.Email.Postmark.Tests:Incursa.Platform.Email.Postmark.Tests.PostmarkWebhookTests.WebhookProcessorDispatchesSpamComplaintAsSuppressedAsync",
-      "category": "Incursa.Platform.Email",
-      "tags": [],
-      "summary": "When webhook Processor Dispatches Spam Complaint As Suppressed Async, then it behaves as expected.",
-      "intent": "Document expected behavior for webhook Processor Dispatches Spam Complaint As Suppressed Async.",
-      "scenario": "Given webhook Processor Dispatches Spam Complaint As Suppressed Async.",
-      "behavior": "Then the operation matches the expected outcome.",
-      "source": {
-        "file": "tests/Incursa.Platform.Email.Postmark.Tests/PostmarkWebhookTests.cs",
-        "line": 214,
-        "member": "Incursa.Platform.Email.Postmark.Tests.PostmarkWebhookTests.WebhookProcessorDispatchesSpamComplaintAsSuppressedAsync"
-      },
-      "status": "compliant",
-      "project": "Incursa.Platform.Email.Postmark.Tests"
-    },
-    {
-      "testId": "Incursa.Platform.Email.Postmark.Tests:Incursa.Platform.Email.Postmark.Tests.PostmarkWebhookTests.WebhookProcessor_EmitsWebhookReceivedAuditEvent",
-      "category": "Incursa.Platform.Email",
-      "tags": [],
-      "summary": "When webhook Processor Emits Webhook Received Audit Event, then it behaves as expected.",
-      "intent": "Document expected behavior for webhook Processor Emits Webhook Received Audit Event.",
-      "scenario": "Given webhook Processor Emits Webhook Received Audit Event.",
-      "behavior": "Then the operation matches the expected outcome.",
-      "source": {
-        "file": "tests/Incursa.Platform.Email.Postmark.Tests/PostmarkWebhookTests.cs",
-        "line": 178,
-        "member": "Incursa.Platform.Email.Postmark.Tests.PostmarkWebhookTests.WebhookProcessor_EmitsWebhookReceivedAuditEvent"
-      },
-      "status": "compliant",
-      "project": "Incursa.Platform.Email.Postmark.Tests"
     },
     {
       "testId": "Incursa.Platform.Email.Tests:Incursa.Platform.Email.Tests.EmailAspNetCoreExtensionsTests.AddIncursaEmailCoreRegistersComponents",
@@ -946,7 +653,7 @@
       "tags": [],
       "summary": "Given only the base command, then parsing leaves EndpointName null and JsonOutput false.",
       "intent": "Describe default parsing with no endpoint or flags.",
-      "scenario": "Given arguments containing only \u0022healthcheck\u0022.",
+      "scenario": "Given arguments containing only \"healthcheck\".",
       "behavior": "EndpointName remains null and JsonOutput stays false.",
       "source": {
         "file": "tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs",
@@ -962,7 +669,7 @@
       "tags": [],
       "summary": "When an unknown flag is provided, then parsing throws a HealthProbeArgumentException.",
       "intent": "Describe parsing failure for unsupported command line options.",
-      "scenario": "Given arguments including an unrecognized \u0022--nope\u0022 option.",
+      "scenario": "Given arguments including an unrecognized \"--nope\" option.",
       "behavior": "Parsing throws and the message mentions an unknown option.",
       "source": {
         "file": "tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs",
@@ -978,8 +685,8 @@
       "tags": [],
       "summary": "Given an explicit endpoint argument, then parsing uses it as EndpointName.",
       "intent": "Describe parsing of a positional endpoint argument.",
-      "scenario": "Given arguments \u0022healthcheck\u0022 and \u0022deploy\u0022.",
-      "behavior": "EndpointName is \u0022deploy\u0022.",
+      "scenario": "Given arguments \"healthcheck\" and \"deploy\".",
+      "behavior": "EndpointName is \"deploy\".",
       "source": {
         "file": "tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs",
         "line": 46,
@@ -1010,7 +717,7 @@
       "tags": [],
       "summary": "Given no URL override, then running the health check returns InvalidArguments.",
       "intent": "Describe validation when required URL input is missing.",
-      "scenario": "Given a service provider and a command line containing only \u0022healthcheck\u0022.",
+      "scenario": "Given a service provider and a command line containing only \"healthcheck\".",
       "behavior": "The returned exit code is InvalidArguments.",
       "source": {
         "file": "tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs",
@@ -1091,7 +798,7 @@
       "summary": "When an override URL is provided, then resolution returns the override and preserves the endpoint name.",
       "intent": "Describe precedence of override URLs.",
       "scenario": "Given a configured endpoint and an explicit override URL.",
-      "behavior": "The resolved URL matches the override and EndpointName remains \u0022deploy\u0022.",
+      "behavior": "The resolved URL matches the override and EndpointName remains \"deploy\".",
       "source": {
         "file": "tests/Incursa.Platform.HealthProbe.Tests/HealthProbeUrlResolverTests.cs",
         "line": 88,
@@ -1122,7 +829,7 @@
       "tags": [],
       "summary": "When the HTTP status is non-success, then the result is unhealthy even if JSON says Healthy.",
       "intent": "Describe precedence of HTTP status over JSON health status.",
-      "scenario": "Given a ServiceUnavailable response whose JSON body reports \u0022Healthy\u0022.",
+      "scenario": "Given a ServiceUnavailable response whose JSON body reports \"Healthy\".",
       "behavior": "The result is unhealthy and the exit code is Unhealthy.",
       "source": {
         "file": "tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs",
@@ -1170,7 +877,7 @@
       "tags": [],
       "summary": "When a 200 OK response body reports Healthy, then the result is healthy.",
       "intent": "Describe how a JSON health status maps to the probe outcome.",
-      "scenario": "Given a stubbed 200 OK response with JSON status \u0022Healthy\u0022.",
+      "scenario": "Given a stubbed 200 OK response with JSON status \"Healthy\".",
       "behavior": "The result is healthy and the exit code is Healthy.",
       "source": {
         "file": "tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs",
@@ -1202,7 +909,7 @@
       "tags": [],
       "summary": "When a 200 OK response body reports Unhealthy, then the result is unhealthy.",
       "intent": "Describe how a JSON health status maps to the probe outcome.",
-      "scenario": "Given a stubbed 200 OK response with JSON status \u0022Unhealthy\u0022.",
+      "scenario": "Given a stubbed 200 OK response with JSON status \"Unhealthy\".",
       "behavior": "The result is unhealthy and the exit code is Unhealthy.",
       "source": {
         "file": "tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs",
@@ -1442,7 +1149,7 @@
       "tags": [],
       "summary": "When the distributed lock schema is ensured with a custom schema, then the table is created there.",
       "intent": "Verify distributed lock deployment honors the configured schema name.",
-      "scenario": "Given EnsureDistributedLockSchemaAsync is called with the \u0022platform\u0022 schema and table name \u0022DistributedLock\u0022.",
+      "scenario": "Given EnsureDistributedLockSchemaAsync is called with the \"platform\" schema and table name \"DistributedLock\".",
       "behavior": "The DistributedLock table is present in the custom schema.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/CustomSchemaIntegrationTests.cs",
@@ -1458,7 +1165,7 @@
       "tags": [],
       "summary": "When the fanout schema is ensured with a custom schema, then policy and cursor tables are created there.",
       "intent": "Verify fanout deployment honors the configured schema name.",
-      "scenario": "Given EnsureFanoutSchemaAsync is called with the \u0022platform\u0022 schema and custom table names.",
+      "scenario": "Given EnsureFanoutSchemaAsync is called with the \"platform\" schema and custom table names.",
       "behavior": "FanoutPolicy and FanoutCursor tables are present in the custom schema.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/CustomSchemaIntegrationTests.cs",
@@ -1474,7 +1181,7 @@
       "tags": [],
       "summary": "When the inbox schema is ensured with a custom schema, then the Inbox table is created there.",
       "intent": "Verify inbox deployment honors the configured schema name.",
-      "scenario": "Given EnsureInboxSchemaAsync is called with the \u0022platform\u0022 schema and table name \u0022Inbox\u0022.",
+      "scenario": "Given EnsureInboxSchemaAsync is called with the \"platform\" schema and table name \"Inbox\".",
       "behavior": "The Inbox table is present in the custom schema.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/CustomSchemaIntegrationTests.cs",
@@ -1490,7 +1197,7 @@
       "tags": [],
       "summary": "When the inbox work-queue schema is ensured with a custom schema, then inbox objects are created there.",
       "intent": "Verify inbox work-queue deployment honors the configured schema name.",
-      "scenario": "Given EnsureInboxSchemaAsync and EnsureInboxWorkQueueSchemaAsync are called with the \u0022platform\u0022 schema.",
+      "scenario": "Given EnsureInboxSchemaAsync and EnsureInboxWorkQueueSchemaAsync are called with the \"platform\" schema.",
       "behavior": "The Inbox table is present in the custom schema.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/CustomSchemaIntegrationTests.cs",
@@ -1506,7 +1213,7 @@
       "tags": [],
       "summary": "When the lease schema is ensured with a custom schema, then the lease table is created there.",
       "intent": "Verify lease deployment honors the configured schema name.",
-      "scenario": "Given EnsureLeaseSchemaAsync is called with the \u0022platform\u0022 schema and table name \u0022Lease\u0022.",
+      "scenario": "Given EnsureLeaseSchemaAsync is called with the \"platform\" schema and table name \"Lease\".",
       "behavior": "The Lease table is present in the custom schema.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/CustomSchemaIntegrationTests.cs",
@@ -1522,7 +1229,7 @@
       "tags": [],
       "summary": "When the outbox schema is ensured with a custom schema, then outbox tables are created there.",
       "intent": "Verify outbox deployment honors the configured schema name.",
-      "scenario": "Given EnsureOutboxSchemaAsync is called with the \u0022platform\u0022 schema and table name \u0022Outbox\u0022.",
+      "scenario": "Given EnsureOutboxSchemaAsync is called with the \"platform\" schema and table name \"Outbox\".",
       "behavior": "The Outbox and OutboxState tables are present in the custom schema.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/CustomSchemaIntegrationTests.cs",
@@ -1538,7 +1245,7 @@
       "tags": [],
       "summary": "When the scheduler schema is ensured with a custom schema, then scheduler tables are created there.",
       "intent": "Verify scheduler deployment honors the configured schema name.",
-      "scenario": "Given EnsureSchedulerSchemaAsync is called with the \u0022platform\u0022 schema and custom table names.",
+      "scenario": "Given EnsureSchedulerSchemaAsync is called with the \"platform\" schema and custom table names.",
       "behavior": "Jobs, Timers, JobRuns, and SchedulerState tables are present in the custom schema.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/CustomSchemaIntegrationTests.cs",
@@ -1554,7 +1261,7 @@
       "tags": [],
       "summary": "When the work-queue schema is ensured with a custom schema, then work-queue objects use that schema.",
       "intent": "Verify work-queue deployment honors the configured schema name.",
-      "scenario": "Given EnsureOutboxSchemaAsync and EnsureWorkQueueSchemaAsync are called with the \u0022platform\u0022 schema.",
+      "scenario": "Given EnsureOutboxSchemaAsync and EnsureWorkQueueSchemaAsync are called with the \"platform\" schema.",
       "behavior": "The Outbox table is present in the custom schema.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/CustomSchemaIntegrationTests.cs",
@@ -2226,7 +1933,7 @@
       "tags": [],
       "summary": "When requesting a missing message id, then GetAsync throws InvalidOperationException.",
       "intent": "Verify missing messages raise an exception.",
-      "scenario": "Given an inbox store with no message matching \u0022non-existent\u0022.",
+      "scenario": "Given an inbox store with no message matching \"non-existent\".",
       "behavior": "An InvalidOperationException is thrown.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/InboxWorkStoreTests.cs",
@@ -2242,7 +1949,7 @@
       "tags": [],
       "summary": "Given a valid message id, then GetAsync returns the stored inbox message.",
       "intent": "Verify message retrieval by id returns stored fields.",
-      "scenario": "Given one enqueued message with id \u0022msg-1\u0022.",
+      "scenario": "Given one enqueued message with id \"msg-1\".",
       "behavior": "The returned message matches the stored fields and has Attempt 1.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/InboxWorkStoreTests.cs",
@@ -4608,10 +4315,10 @@
       "testId": "Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.ConfiguredLeaseFactoryProviderTests.ConfiguredProvider_GetFactoryIdentifier_ReturnsUnknownForInvalidFactory",
       "category": "Incursa.Platform.Tests",
       "tags": [],
-      "summary": "When a factory not created by the provider is inspected, then its identifier is reported as \u0022Unknown\u0022.",
+      "summary": "When a factory not created by the provider is inspected, then its identifier is reported as \"Unknown\".",
       "intent": "Confirm identifier lookup only recognizes provider-managed factories.",
       "scenario": "Given an external SqlLeaseFactory not created by ConfiguredLeaseFactoryProvider.",
-      "behavior": "Then GetFactoryIdentifier returns \u0022Unknown\u0022.",
+      "behavior": "Then GetFactoryIdentifier returns \"Unknown\".",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/ConfiguredLeaseFactoryProviderTests.cs",
         "line": 127,
@@ -4627,7 +4334,7 @@
       "summary": "When the obsolete discovery-based control plane overload is used, then it still wires defaults correctly.",
       "intent": "Ensure legacy discovery registration continues to configure the control plane schema.",
       "scenario": "Given AddSqlPlatformMultiDatabaseWithControlPlaneAndDiscovery called via the obsolete signature and a list-based discovery.",
-      "behavior": "Then PlatformConfiguration defaults the schema to \u0022infra\u0022.",
+      "behavior": "Then PlatformConfiguration defaults the schema to \"infra\".",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/ControlPlaneConfigurationTests.cs",
         "line": 247,
@@ -4659,7 +4366,7 @@
       "summary": "When the obsolete list-based control plane overload is used, then it still wires defaults correctly.",
       "intent": "Ensure legacy registration paths continue to configure the control plane schema.",
       "scenario": "Given AddSqlPlatformMultiDatabaseWithControlPlaneAndList called via the obsolete signature.",
-      "behavior": "Then PlatformConfiguration defaults the schema to \u0022infra\u0022.",
+      "behavior": "Then PlatformConfiguration defaults the schema to \"infra\".",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/ControlPlaneConfigurationTests.cs",
         "line": 201,
@@ -4690,7 +4397,7 @@
       "tags": [],
       "summary": "When list-based control plane registration specifies a schema name, then configuration uses it.",
       "intent": "Verify control-plane schema settings are propagated to configuration.",
-      "scenario": "Given AddSqlPlatformMultiDatabaseWithControlPlaneAndList called with control plane options specifying SchemaName = \u0022control\u0022.",
+      "scenario": "Given AddSqlPlatformMultiDatabaseWithControlPlaneAndList called with control plane options specifying SchemaName = \"control\".",
       "behavior": "Then PlatformConfiguration uses the control plane schema and connection string.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/ControlPlaneConfigurationTests.cs",
@@ -4704,10 +4411,10 @@
       "testId": "Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.ControlPlaneConfigurationTests.PlatformControlPlaneOptions_DefaultSchemaName_IsDbo",
       "category": "Incursa.Platform.Tests",
       "tags": [],
-      "summary": "When PlatformControlPlaneOptions is created without a schema name, then it defaults to \u0022infra\u0022.",
+      "summary": "When PlatformControlPlaneOptions is created without a schema name, then it defaults to \"infra\".",
       "intent": "Confirm control-plane options default schema aligns with platform conventions.",
       "scenario": "Given a PlatformControlPlaneOptions instance with only ConnectionString set.",
-      "behavior": "Then SchemaName is \u0022infra\u0022.",
+      "behavior": "Then SchemaName is \"infra\".",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/ControlPlaneConfigurationTests.cs",
         "line": 178,
@@ -5328,7 +5035,7 @@
       "testId": "Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.DynamicDiscoveryEnforcementTests.PlatformWithDiscovery_ShouldNotConfigureCustomerDatabaseOptions",
       "category": "Incursa.Platform.Tests",
       "tags": [],
-      "summary": "Verifies that when using platform registration with discovery, customer database features (Inbox, Outbox, Lease, Scheduler, Fanout) do NOT have services.Configure\u003CTOptions\u003E() called (they should use discovery instead). Global features may have Configure\u003CTOptions\u003E() called.",
+      "summary": "Verifies that when using platform registration with discovery, customer database features (Inbox, Outbox, Lease, Scheduler, Fanout) do NOT have services.Configure<TOptions>() called (they should use discovery instead). Global features may have Configure<TOptions>() called.",
       "intent": "Enforce discovery-driven configuration for tenant features while allowing global options.",
       "scenario": "Given AddSqlPlatformMultiDatabaseWithControlPlaneAndDiscovery with a discovery implementation and control plane options.",
       "behavior": "Then Outbox/Inbox/Scheduler/Fanout options remain default.",
@@ -5360,7 +5067,7 @@
       "testId": "Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.DynamicDiscoveryEnforcementTests.PlatformWithList_ShouldNotConfigureCustomerDatabaseOptions",
       "category": "Incursa.Platform.Tests",
       "tags": [],
-      "summary": "Verifies that when using platform registration with a list, customer database features do NOT have services.Configure\u003CTOptions\u003E() called.",
+      "summary": "Verifies that when using platform registration with a list, customer database features do NOT have services.Configure<TOptions>() called.",
       "intent": "Ensure list-based registration still relies on discovery providers rather than direct options.",
       "scenario": "Given AddSqlPlatformMultiDatabaseWithList with two tenant databases and schema deployment disabled.",
       "behavior": "Then Outbox/Inbox/Scheduler/Fanout options remain default.",
@@ -5651,7 +5358,7 @@
       "summary": "When a known scheduler key is requested, then GetSchedulerClientByKey returns a client instance.",
       "intent": "Verify keyed scheduler client lookup works after discovery.",
       "scenario": "Given discovery provides Customer1 and initial discovery has completed.",
-      "behavior": "Then GetSchedulerClientByKey(\u0022Customer1\u0022) returns a non-null client.",
+      "behavior": "Then GetSchedulerClientByKey(\"Customer1\") returns a non-null client.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/DynamicSchedulerStoreProviderTests.cs",
         "line": 218,
@@ -5667,7 +5374,7 @@
       "summary": "When an unknown scheduler key is requested, then GetSchedulerClientByKey returns null.",
       "intent": "Ensure missing scheduler keys are reported as null lookups.",
       "scenario": "Given discovery provides Customer1 and initial discovery has completed.",
-      "behavior": "Then GetSchedulerClientByKey(\u0022UnknownCustomer\u0022) returns null.",
+      "behavior": "Then GetSchedulerClientByKey(\"UnknownCustomer\") returns null.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/DynamicSchedulerStoreProviderTests.cs",
         "line": 262,
@@ -5810,7 +5517,7 @@
       "tags": [],
       "summary": "When a tenant key is missing, then FanoutRouter throws an InvalidOperationException containing the key.",
       "intent": "Ensure invalid fanout keys are rejected with actionable errors.",
-      "scenario": "Given a FanoutRouter configured for Tenant1 only and a lookup for \u0022NonExistentKey\u0022.",
+      "scenario": "Given a FanoutRouter configured for Tenant1 only and a lookup for \"NonExistentKey\".",
       "behavior": "Then both policy and cursor repository lookups throw and mention the missing key.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/FanoutRouterIntegrationTests.cs",
@@ -7234,7 +6941,7 @@
       "tags": [],
       "summary": "When a handler throws, then the dispatcher reschedules the message with a backoff delay.",
       "intent": "Verify failing handlers trigger reschedule with an error message.",
-      "scenario": "Given a TestHandler configured to throw and a message with RetryCount \u003E 0.",
+      "scenario": "Given a TestHandler configured to throw and a message with RetryCount > 0.",
       "behavior": "Then the store records a reschedule with a positive delay and the handler error.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/OutboxHandlerTests.cs",
@@ -7346,7 +7053,7 @@
       "tags": [],
       "summary": "When handler topics are looked up with different casing, then the resolver still matches them.",
       "intent": "Ensure topic matching is case-insensitive.",
-      "scenario": "Given a resolver with a handler for \u0022Email.Send\u0022 and lookups using different casing.",
+      "scenario": "Given a resolver with a handler for \"Email.Send\" and lookups using different casing.",
       "behavior": "Then TryGet succeeds for lower-case and upper-case topic strings.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/OutboxHandlerTests.cs",
@@ -7394,7 +7101,7 @@
       "tags": [],
       "summary": "When AddOutboxHandler is called with a handler type, then it registers a singleton IOutboxHandler.",
       "intent": "Confirm DI registration for handler types.",
-      "scenario": "Given a ServiceCollection and AddOutboxHandler\u003CTestHandler\u003E invocation.",
+      "scenario": "Given a ServiceCollection and AddOutboxHandler<TestHandler> invocation.",
       "behavior": "Then the service descriptor registers TestHandler as a singleton IOutboxHandler.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/OutboxHandlerTests.cs",
@@ -7762,7 +7469,7 @@
       "tags": [],
       "summary": "When a Guid key does not match any configured identifier, then GetOutbox throws with the key in the message.",
       "intent": "Verify Guid-based lookup reports missing identifiers clearly.",
-      "scenario": "Given a router configured for \u0022Customer1\u0022 and a different Guid key.",
+      "scenario": "Given a router configured for \"Customer1\" and a different Guid key.",
       "behavior": "Then GetOutbox(Guid) throws InvalidOperationException containing the Guid string.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/OutboxRouterTests.cs",
@@ -8307,7 +8014,7 @@
       "summary": "When list-based discovery requires databases but none are found, then StartAsync throws with a missing database message.",
       "intent": "Enforce startup database requirements for list-based discovery.",
       "scenario": "Given UsesDiscovery false, RequiresDatabaseAtStartup true, and an EmptyDatabaseDiscovery.",
-      "behavior": "Then StartAsync throws an InvalidOperationException containing \u0022At least one database is required\u0022.",
+      "behavior": "Then StartAsync throws an InvalidOperationException containing \"At least one database is required\".",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/PlatformLifecycleServiceTests.cs",
         "line": 69,
@@ -9619,7 +9326,7 @@
       "summary": "When a UI engine is not registered for the requested engine ID, then ExecuteAsync throws.",
       "intent": "Ensure missing UI engines surface a clear error.",
       "scenario": "Given a UiEngineAdapter and a request targeting an unknown UI engine ID.",
-      "behavior": "Then ExecuteAsync throws InvalidOperationException with a \u0022No UI engine registered\u0022 message.",
+      "behavior": "Then ExecuteAsync throws InvalidOperationException with a \"No UI engine registered\" message.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/EngineRefactoringTests.cs",
         "line": 196,
@@ -9987,7 +9694,7 @@
       "summary": "When IsCatchable is called with a null exception, then it throws ArgumentNullException.",
       "intent": "Guard against null exception inputs.",
       "scenario": "Given a null exception argument.",
-      "behavior": "Then an ArgumentNullException is thrown with parameter name \u0022exception\u0022.",
+      "behavior": "Then an ArgumentNullException is thrown with parameter name \"exception\".",
       "source": {
         "file": "tests/Incursa.Platform.Tests/ExceptionFilterTests.cs",
         "line": 108,
@@ -10067,7 +9774,7 @@
       "summary": "When IsCritical is called with a null exception, then it throws ArgumentNullException.",
       "intent": "Guard against null exception inputs for critical checks.",
       "scenario": "Given a null exception argument.",
-      "behavior": "Then an ArgumentNullException is thrown with parameter name \u0022exception\u0022.",
+      "behavior": "Then an ArgumentNullException is thrown with parameter name \"exception\".",
       "source": {
         "file": "tests/Incursa.Platform.Tests/ExceptionFilterTests.cs",
         "line": 203,
@@ -10211,7 +9918,7 @@
       "summary": "When IsExpected is called with a null exception, then it throws ArgumentNullException.",
       "intent": "Guard against null exception inputs for expected checks.",
       "scenario": "Given a null exception argument.",
-      "behavior": "Then an ArgumentNullException is thrown with parameter name \u0022exception\u0022.",
+      "behavior": "Then an ArgumentNullException is thrown with parameter name \"exception\".",
       "source": {
         "file": "tests/Incursa.Platform.Tests/ExceptionFilterTests.cs",
         "line": 327,
@@ -10227,7 +9934,7 @@
       "summary": "When IsExpected is called with null expected types, then it throws ArgumentNullException.",
       "intent": "Guard against null expected type arrays.",
       "scenario": "Given a non-null exception and a null expectedTypes array.",
-      "behavior": "Then an ArgumentNullException is thrown with parameter name \u0022expectedTypes\u0022.",
+      "behavior": "Then an ArgumentNullException is thrown with parameter name \"expectedTypes\".",
       "source": {
         "file": "tests/Incursa.Platform.Tests/ExceptionFilterTests.cs",
         "line": 347,
@@ -10272,10 +9979,10 @@
       "testId": "Incursa.Platform.Tests:Incursa.Platform.Tests.FanoutSystemTests.FanoutDispatcher_ShouldCreateCorrectTopicName",
       "category": "Incursa.Platform.Tests",
       "tags": [],
-      "summary": "When a fanout topic name is constructed, then it follows the \u0022fanout:{fanoutTopic}:{workKey}\u0022 convention.",
+      "summary": "When a fanout topic name is constructed, then it follows the \"fanout:{fanoutTopic}:{workKey}\" convention.",
       "intent": "Document the fanout topic naming pattern used by the dispatcher.",
-      "scenario": "Given a fanout topic of \u0022etl\u0022 and a work key of \u0022payments\u0022.",
-      "behavior": "Then the expected topic is \u0022fanout:etl:payments\u0022.",
+      "scenario": "Given a fanout topic of \"etl\" and a work key of \"payments\".",
+      "behavior": "Then the expected topic is \"fanout:etl:payments\".",
       "source": {
         "file": "tests/Incursa.Platform.Tests/FanoutSystemTests.cs",
         "line": 71,
@@ -10530,7 +10237,7 @@
       "tags": [],
       "summary": "When a registered metric allows a tag, then IsTagAllowed returns true.",
       "intent": "Confirm allowed tags are honored for registered metrics.",
-      "scenario": "Given a registered metric that includes the \u0022allowed_tag\u0022 value.",
+      "scenario": "Given a registered metric that includes the \"allowed_tag\" value.",
       "behavior": "Then IsTagAllowed returns true for that tag.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/MetricRegistrarTests.cs",
@@ -10546,7 +10253,7 @@
       "tags": [],
       "summary": "When a registered metric does not allow a tag, then IsTagAllowed returns false.",
       "intent": "Ensure disallowed tags are rejected even for registered metrics.",
-      "scenario": "Given a registered metric that only allows \u0022allowed_tag\u0022.",
+      "scenario": "Given a registered metric that only allows \"allowed_tag\".",
       "behavior": "Then IsTagAllowed returns false for a different tag value.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/MetricRegistrarTests.cs",
@@ -10562,7 +10269,7 @@
       "tags": [],
       "summary": "When a metric is not registered, then IsTagAllowed returns false for any tag.",
       "intent": "Verify tag checks fail for unknown metrics.",
-      "scenario": "Given a MetricRegistrar with no registration for \u0022unknown.metric\u0022.",
+      "scenario": "Given a MetricRegistrar with no registration for \"unknown.metric\".",
       "behavior": "Then IsTagAllowed returns false for the requested tag.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/MetricRegistrarTests.cs",
@@ -10610,7 +10317,7 @@
       "tags": [],
       "summary": "When a valid metric is registered, then it appears in the registry.",
       "intent": "Verify MetricRegistrar stores new metric registrations.",
-      "scenario": "Given a MetricRegistrar and a MetricRegistration for \u0022test.metric\u0022.",
+      "scenario": "Given a MetricRegistrar and a MetricRegistration for \"test.metric\".",
       "behavior": "Then GetAll returns a single entry that matches the registered metric.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/MetricRegistrarTests.cs",
@@ -11651,7 +11358,7 @@
       "summary": "When module services are added, then the module definition is registered in DI.",
       "intent": "Ensure module definitions are accessible through the service provider.",
       "scenario": "Given SampleModule is registered and configuration includes its required key.",
-      "behavior": "Then resolving IModuleDefinition returns a module with key \u0022sample-module\u0022.",
+      "behavior": "Then resolving IModuleDefinition returns a module with key \"sample-module\".",
       "source": {
         "file": "tests/Incursa.Platform.Tests/Modularity/ModuleSystemTests.cs",
         "line": 77,
@@ -11667,7 +11374,7 @@
       "summary": "When a module is registered with its required configuration, then its services and health checks are added to DI.",
       "intent": "Verify that module registration wires up services and health checks.",
       "scenario": "Given SampleModule is registered and configuration provides its required key.",
-      "behavior": "Then MarkerService is resolvable and the health check registration includes \u0022sample_module\u0022.",
+      "behavior": "Then MarkerService is resolvable and the health check registration includes \"sample_module\".",
       "source": {
         "file": "tests/Incursa.Platform.Tests/Modularity/ModuleSystemTests.cs",
         "line": 42,
@@ -11747,7 +11454,7 @@
       "summary": "When an engine descriptor factory returns null, then ResolveEngine throws and identifies the module/engine key.",
       "intent": "Guard against null engine factories during discovery resolution.",
       "scenario": "Given a ModuleEngineDescriptor whose factory returns null and an empty service provider.",
-      "behavior": "Then ResolveEngine throws an InvalidOperationException mentioning \u0022returned null\u0022 and the descriptor key.",
+      "behavior": "Then ResolveEngine throws an InvalidOperationException mentioning \"returned null\" and the descriptor key.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/Modularity/RequiredServiceValidationTests.cs",
         "line": 145,
@@ -11763,7 +11470,7 @@
       "summary": "When required services are satisfied, then ExecuteAsync returns the engine result.",
       "intent": "Confirm successful execution when required services are available.",
       "scenario": "Given RequiredServiceModule is registered and a TestRequiredServiceValidator lists cache and telemetry as available.",
-      "behavior": "Then the returned view model contains the expected \u0022ok\u0022 value.",
+      "behavior": "Then the returned view model contains the expected \"ok\" value.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/Modularity/RequiredServiceValidationTests.cs",
         "line": 111,
