@@ -65,6 +65,7 @@ Provider quality automation and baselines:
 - Docker image pre-pull script: `scripts/testing/prepull-test-images.ps1`
 - Coverage/mutation scripts: `scripts/quality/`
 - Baseline report: `docs/quality/provider-quality-baseline.md`
+- In-memory portability checklist: `docs/quality/inmemory-portability-checklist.md`
 
 ## Smoke Web App
 
