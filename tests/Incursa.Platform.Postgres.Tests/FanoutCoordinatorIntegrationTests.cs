@@ -251,8 +251,8 @@ public class FanoutCoordinatorIntegrationTests : PostgresTestBase
         await using (connection.ConfigureAwait(false))
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
-        return await connection.ExecuteScalarAsync<int>(
-            new CommandDefinition($"SELECT COUNT(*) FROM {outboxTable}", cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(false);
+            return await connection.ExecuteScalarAsync<int>(
+                new CommandDefinition($"SELECT COUNT(*) FROM {outboxTable}", cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(false);
         }
     }
 
@@ -263,9 +263,9 @@ public class FanoutCoordinatorIntegrationTests : PostgresTestBase
         await using (connection.ConfigureAwait(false))
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
-        var payloads = await connection.QueryAsync<string>(
-            new CommandDefinition($"SELECT \"Payload\" FROM {outboxTable} ORDER BY \"CreatedAt\"", cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(false);
-        return payloads.ToList();
+            var payloads = await connection.QueryAsync<string>(
+                new CommandDefinition($"SELECT \"Payload\" FROM {outboxTable} ORDER BY \"CreatedAt\"", cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(false);
+            return payloads.ToList();
         }
     }
 
@@ -276,9 +276,9 @@ public class FanoutCoordinatorIntegrationTests : PostgresTestBase
         await using (connection.ConfigureAwait(false))
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
-        var messages = await connection.QueryAsync<(Guid Id, string CorrelationId)>(
-            new CommandDefinition($"SELECT \"Id\", \"CorrelationId\" FROM {outboxTable} ORDER BY \"CreatedAt\"", cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(false);
-        return messages.ToList();
+            var messages = await connection.QueryAsync<(Guid Id, string CorrelationId)>(
+                new CommandDefinition($"SELECT \"Id\", \"CorrelationId\" FROM {outboxTable} ORDER BY \"CreatedAt\"", cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(false);
+            return messages.ToList();
         }
     }
 

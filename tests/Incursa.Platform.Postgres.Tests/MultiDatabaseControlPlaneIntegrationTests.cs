@@ -386,13 +386,13 @@ public class MultiDatabaseControlPlaneIntegrationTests
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
-        await using var command = connection.CreateCommand();
-        command.CommandText = $"""
+            await using var command = connection.CreateCommand();
+            command.CommandText = $"""
 SELECT COUNT(*) FROM {outboxTable} WHERE "IsProcessed" = TRUE
 """;
 
-        var result = await command.ExecuteScalarAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
-        return Convert.ToInt32(result, System.Globalization.CultureInfo.InvariantCulture);
+            var result = await command.ExecuteScalarAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+            return Convert.ToInt32(result, System.Globalization.CultureInfo.InvariantCulture);
         }
     }
 

@@ -399,16 +399,16 @@ public class DatabaseSchemaConsistencyTests : PostgresTestBase
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
-        const string sql = """
+            const string sql = """
             SELECT column_name, data_type
             FROM information_schema.columns
             WHERE table_schema = @SchemaName AND table_name = @TableName
             """;
 
-        var columns = await connection.QueryAsync<(string ColumnName, string DataType)>(
-            sql, new { SchemaName = schemaName, TableName = tableName }).ConfigureAwait(false);
+            var columns = await connection.QueryAsync<(string ColumnName, string DataType)>(
+                sql, new { SchemaName = schemaName, TableName = tableName }).ConfigureAwait(false);
 
-        return columns.ToDictionary(c => c.ColumnName, c => c.DataType, StringComparer.Ordinal);
+            return columns.ToDictionary(c => c.ColumnName, c => c.DataType, StringComparer.Ordinal);
         }
     }
 

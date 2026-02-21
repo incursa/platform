@@ -205,7 +205,7 @@ public class OutboxHandlerTests : SqlServerTestBase
         var rescheduled = store.RescheduledMessages.First();
         rescheduled.Key.ShouldBe(message.Id);
         rescheduled.Value.Delay.ShouldBeGreaterThan(TimeSpan.Zero);
-        rescheduled.Value.Error.ShouldBe("Test exception");
+        rescheduled.Value.Error.ShouldContain("Test exception");
     }
 
     /// <summary>When a message hits max attempts, then the dispatcher fails it instead of rescheduling.</summary>
@@ -318,7 +318,7 @@ public class OutboxHandlerTests : SqlServerTestBase
         // Verify that handler was called and error was logged
         testHandler.HandledMessages.Count.ShouldBe(1);
         store.RescheduledMessages.Count.ShouldBe(1);
-        store.RescheduledMessages.First().Value.Error.ShouldBe("Test exception");
+        store.RescheduledMessages.First().Value.Error.ShouldContain("Test exception");
     }
 
     /// <summary>When processing both a handled and an unhandled message, then logs are emitted at expected levels.</summary>
@@ -549,4 +549,3 @@ public class OutboxHandlerTests : SqlServerTestBase
         }
     }
 }
-

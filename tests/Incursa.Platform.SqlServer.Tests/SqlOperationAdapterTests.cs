@@ -128,10 +128,10 @@ public sealed class SqlOperationAdapterTests : SqlServerTestBase
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
-        foreach (var script in scripts)
-        {
-            await ExecuteSqlScriptAsync(connection, script).ConfigureAwait(false);
-        }
+            foreach (var script in scripts)
+            {
+                await ExecuteSqlScriptAsync(connection, script).ConfigureAwait(false);
+            }
         }
     }
 

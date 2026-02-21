@@ -38,6 +38,10 @@ public abstract class SchedulerBehaviorTestsBase : IAsyncLifetime
         GC.SuppressFinalize(this);
     }
 
+    /// <summary>When schedule Timer Async And Claim Timers Async With Due Timer Returns Claimed Id, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for schedule Timer Async And Claim Timers Async With Due Timer Returns Claimed Id.</intent>
+    /// <scenario>Given schedule Timer Async And Claim Timers Async With Due Timer Returns Claimed Id.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public async Task ScheduleTimerAsync_AndClaimTimersAsync_WithDueTimer_ReturnsClaimedId()
     {
@@ -59,6 +63,10 @@ public abstract class SchedulerBehaviorTestsBase : IAsyncLifetime
         claimed[0].ToString().ShouldBe(timerId, StringCompareShould.IgnoreCase);
     }
 
+    /// <summary>When claim Timers Async Respects Batch Size, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for claim Timers Async Respects Batch Size.</intent>
+    /// <scenario>Given claim Timers Async Respects Batch Size.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public async Task ClaimTimersAsync_RespectsBatchSize()
     {
@@ -76,6 +84,10 @@ public abstract class SchedulerBehaviorTestsBase : IAsyncLifetime
         claimed.Count.ShouldBe(1);
     }
 
+    /// <summary>When ack Timers Async With Valid Owner Makes Timer Unavailable, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for ack Timers Async With Valid Owner Makes Timer Unavailable.</intent>
+    /// <scenario>Given ack Timers Async With Valid Owner Makes Timer Unavailable.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public async Task AckTimersAsync_WithValidOwner_MakesTimerUnavailable()
     {
@@ -98,6 +110,10 @@ public abstract class SchedulerBehaviorTestsBase : IAsyncLifetime
         reClaimed.Count.ShouldBe(0);
     }
 
+    /// <summary>When abandon Timers Async With Valid Owner Returns Timer To Ready, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for abandon Timers Async With Valid Owner Returns Timer To Ready.</intent>
+    /// <scenario>Given abandon Timers Async With Valid Owner Returns Timer To Ready.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public async Task AbandonTimersAsync_WithValidOwner_ReturnsTimerToReady()
     {
@@ -120,6 +136,10 @@ public abstract class SchedulerBehaviorTestsBase : IAsyncLifetime
         reClaimed.Count.ShouldBe(1);
     }
 
+    /// <summary>When reap Expired Timers Async Returns Expired Claims To Ready, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for reap Expired Timers Async Returns Expired Claims To Ready.</intent>
+    /// <scenario>Given reap Expired Timers Async Returns Expired Claims To Ready.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public async Task ReapExpiredTimersAsync_ReturnsExpiredClaimsToReady()
     {
@@ -143,6 +163,10 @@ public abstract class SchedulerBehaviorTestsBase : IAsyncLifetime
         reClaimed.Count.ShouldBe(1);
     }
 
+    /// <summary>When trigger Job Async And Claim Job Runs Async Returns Claimed Run, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for trigger Job Async And Claim Job Runs Async Returns Claimed Run.</intent>
+    /// <scenario>Given trigger Job Async And Claim Job Runs Async Returns Claimed Run.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public async Task TriggerJobAsync_AndClaimJobRunsAsync_ReturnsClaimedRun()
     {
@@ -161,6 +185,10 @@ public abstract class SchedulerBehaviorTestsBase : IAsyncLifetime
         claimed.Count.ShouldBe(1);
     }
 
+    /// <summary>When create Or Update Job Async Existing Job Uses Updated Topic And Payload, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for create Or Update Job Async Existing Job Uses Updated Topic And Payload.</intent>
+    /// <scenario>Given create Or Update Job Async Existing Job Uses Updated Topic And Payload.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public async Task CreateOrUpdateJobAsync_ExistingJob_UsesUpdatedTopicAndPayload()
     {
@@ -179,6 +207,10 @@ public abstract class SchedulerBehaviorTestsBase : IAsyncLifetime
         runs[0].Payload.ShouldBe("payload-new");
     }
 
+    /// <summary>When delete Job Async Removes Pending Runs, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for delete Job Async Removes Pending Runs.</intent>
+    /// <scenario>Given delete Job Async Removes Pending Runs.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public async Task DeleteJobAsync_RemovesPendingRuns()
     {
@@ -194,6 +226,10 @@ public abstract class SchedulerBehaviorTestsBase : IAsyncLifetime
         runs.Count.ShouldBe(0);
     }
 
+    /// <summary>When create Job Runs From Due Jobs Async Creates Runs From Due Schedule, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for create Job Runs From Due Jobs Async Creates Runs From Due Schedule.</intent>
+    /// <scenario>Given create Job Runs From Due Jobs Async Creates Runs From Due Schedule.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public async Task CreateJobRunsFromDueJobsAsync_CreatesRunsFromDueSchedule()
     {
@@ -217,6 +253,10 @@ public abstract class SchedulerBehaviorTestsBase : IAsyncLifetime
         created.ShouldBeGreaterThan(0);
     }
 
+    /// <summary>When get Next Event Time Async With Scheduled Timer Returns Approximate Due Time, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for get Next Event Time Async With Scheduled Timer Returns Approximate Due Time.</intent>
+    /// <scenario>Given get Next Event Time Async With Scheduled Timer Returns Approximate Due Time.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public async Task GetNextEventTimeAsync_WithScheduledTimer_ReturnsApproximateDueTime()
     {

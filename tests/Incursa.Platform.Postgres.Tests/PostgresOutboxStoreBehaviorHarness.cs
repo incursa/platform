@@ -61,8 +61,8 @@ internal sealed class PostgresOutboxStoreBehaviorHarness : PostgresTestBase, IOu
         await using (connection.ConfigureAwait(false))
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken);
-        var tableName = PostgresSqlHelper.Qualify(options.SchemaName, options.TableName);
-        await connection.ExecuteAsync($"DELETE FROM {tableName}");
+            var tableName = PostgresSqlHelper.Qualify(options.SchemaName, options.TableName);
+            await connection.ExecuteAsync($"DELETE FROM {tableName}");
         }
     }
 }

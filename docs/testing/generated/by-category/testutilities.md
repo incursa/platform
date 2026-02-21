@@ -1,6 +1,6 @@
 # TestUtilities
 
-Total tests: 14
+Total tests: 33
 
 - **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.InboxWorkStoreBehaviorTestsBase.AbandonAsync_ReturnsMessageToQueue**
   - Summary: When abandon Async Returns Message To Queue, then it behaves as expected.
@@ -37,6 +37,11 @@ Total tests: 14
   - Intent: Document expected behavior for get Async Returns Stored Message.
   - Tags: (none)
   - Source: [tests/Incursa.Platform.TestUtilities/InboxWorkStoreBehaviorTestsBase.cs#L239](tests/Incursa.Platform.TestUtilities/InboxWorkStoreBehaviorTestsBase.cs#L239)
+- **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.InboxWorkStoreBehaviorTestsBase.ReviveAsync_RequeuesDeadMessage**
+  - Summary: When revive Async Requeues Dead Message, then it behaves as expected.
+  - Intent: Document expected behavior for revive Async Requeues Dead Message.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.TestUtilities/InboxWorkStoreBehaviorTestsBase.cs#L264](tests/Incursa.Platform.TestUtilities/InboxWorkStoreBehaviorTestsBase.cs#L264)
 - **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.OutboxStoreBehaviorTestsBase.ClaimDueAsync_ReturnsCorrelationIdAndDueTime**
   - Summary: When claim Due Async Returns Correlation Id And Due Time, then it behaves as expected.
   - Intent: Document expected behavior for claim Due Async Returns Correlation Id And Due Time.
@@ -72,3 +77,93 @@ Total tests: 14
   - Intent: Document expected behavior for reschedule Async Makes Message Available Again.
   - Tags: (none)
   - Source: [tests/Incursa.Platform.TestUtilities/OutboxStoreBehaviorTestsBase.cs#L142](tests/Incursa.Platform.TestUtilities/OutboxStoreBehaviorTestsBase.cs#L142)
+- **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.AbandonTimersAsync_WithValidOwner_ReturnsTimerToReady**
+  - Summary: When abandon Timers Async With Valid Owner Returns Timer To Ready, then it behaves as expected.
+  - Intent: Document expected behavior for abandon Timers Async With Valid Owner Returns Timer To Ready.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L118](tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L118)
+- **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.AckTimersAsync_WithValidOwner_MakesTimerUnavailable**
+  - Summary: When ack Timers Async With Valid Owner Makes Timer Unavailable, then it behaves as expected.
+  - Intent: Document expected behavior for ack Timers Async With Valid Owner Makes Timer Unavailable.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L92](tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L92)
+- **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.ClaimTimersAsync_RespectsBatchSize**
+  - Summary: When claim Timers Async Respects Batch Size, then it behaves as expected.
+  - Intent: Document expected behavior for claim Timers Async Respects Batch Size.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L71](tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L71)
+- **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.CreateJobRunsFromDueJobsAsync_CreatesRunsFromDueSchedule**
+  - Summary: When create Job Runs From Due Jobs Async Creates Runs From Due Schedule, then it behaves as expected.
+  - Intent: Document expected behavior for create Job Runs From Due Jobs Async Creates Runs From Due Schedule.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L234](tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L234)
+- **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.CreateOrUpdateJobAsync_ExistingJob_UsesUpdatedTopicAndPayload**
+  - Summary: When create Or Update Job Async Existing Job Uses Updated Topic And Payload, then it behaves as expected.
+  - Intent: Document expected behavior for create Or Update Job Async Existing Job Uses Updated Topic And Payload.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L193](tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L193)
+- **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.DeleteJobAsync_RemovesPendingRuns**
+  - Summary: When delete Job Async Removes Pending Runs, then it behaves as expected.
+  - Intent: Document expected behavior for delete Job Async Removes Pending Runs.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L215](tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L215)
+- **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.GetNextEventTimeAsync_WithScheduledTimer_ReturnsApproximateDueTime**
+  - Summary: When get Next Event Time Async With Scheduled Timer Returns Approximate Due Time, then it behaves as expected.
+  - Intent: Document expected behavior for get Next Event Time Async With Scheduled Timer Returns Approximate Due Time.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L261](tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L261)
+- **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.ReapExpiredTimersAsync_ReturnsExpiredClaimsToReady**
+  - Summary: When reap Expired Timers Async Returns Expired Claims To Ready, then it behaves as expected.
+  - Intent: Document expected behavior for reap Expired Timers Async Returns Expired Claims To Ready.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L144](tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L144)
+- **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.ScheduleTimerAsync_AndClaimTimersAsync_WithDueTimer_ReturnsClaimedId**
+  - Summary: When schedule Timer Async And Claim Timers Async With Due Timer Returns Claimed Id, then it behaves as expected.
+  - Intent: Document expected behavior for schedule Timer Async And Claim Timers Async With Due Timer Returns Claimed Id.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L46](tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L46)
+- **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.TriggerJobAsync_AndClaimJobRunsAsync_ReturnsClaimedRun**
+  - Summary: When trigger Job Async And Claim Job Runs Async Returns Claimed Run, then it behaves as expected.
+  - Intent: Document expected behavior for trigger Job Async And Claim Job Runs Async Returns Claimed Run.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L171](tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs#L171)
+- **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.AcquireAsync_AfterExpiry_ReturnsNewLease**
+  - Summary: When acquire Async After Expiry Returns New Lease, then it behaves as expected.
+  - Intent: Document expected behavior for acquire Async After Expiry Returns New Lease.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs#L204](tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs#L204)
+- **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.AcquireAsync_WhenOccupied_ReturnsNull**
+  - Summary: When acquire Async When Occupied Returns Null, then it behaves as expected.
+  - Intent: Document expected behavior for acquire Async When Occupied Returns Null.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs#L84](tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs#L84)
+- **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.AcquireAsync_WithCustomOwnerToken_UsesProvidedToken**
+  - Summary: When acquire Async With Custom Owner Token Uses Provided Token, then it behaves as expected.
+  - Intent: Document expected behavior for acquire Async With Custom Owner Token Uses Provided Token.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs#L64](tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs#L64)
+- **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.AcquireAsync_WithFreeResource_ReturnsLease**
+  - Summary: When acquire Async With Free Resource Returns Lease, then it behaves as expected.
+  - Intent: Document expected behavior for acquire Async With Free Resource Returns Lease.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs#L46](tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs#L46)
+- **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.DisposeAsync_ReleasesLease_ForReacquisition**
+  - Summary: When dispose Async Releases Lease For Reacquisition, then it behaves as expected.
+  - Intent: Document expected behavior for dispose Async Releases Lease For Reacquisition.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs#L179](tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs#L179)
+- **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.LeaseLoss_AfterExpiry_CancelsToken_AndThrowIfLostThrows**
+  - Summary: When lease Loss After Expiry Cancels Token And Throw If Lost Throws, then it behaves as expected.
+  - Intent: Document expected behavior for lease Loss After Expiry Cancels Token And Throw If Lost Throws.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs#L131](tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs#L131)
+- **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.TryRenewNowAsync_AfterLeaseLoss_ReturnsFalse**
+  - Summary: When try Renew Now Async After Lease Loss Returns False, then it behaves as expected.
+  - Intent: Document expected behavior for try Renew Now Async After Lease Loss Returns False.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs#L157](tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs#L157)
+- **Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.TryRenewNowAsync_WithValidLease_ReturnsTrueAndIncrementsFencingToken**
+  - Summary: When try Renew Now Async With Valid Lease Returns True And Increments Fencing Token, then it behaves as expected.
+  - Intent: Document expected behavior for try Renew Now Async With Valid Lease Returns True And Increments Fencing Token.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs#L108](tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs#L108)

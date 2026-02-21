@@ -34,6 +34,10 @@ public sealed class InMemoryOutboxFuzzTests
         }
     }
 
+    /// <summary>When outbox Store Fuzz Deterministic Terminal Items Are Never Reclaimed, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for outbox Store Fuzz Deterministic Terminal Items Are Never Reclaimed.</intent>
+    /// <scenario>Given outbox Store Fuzz Deterministic Terminal Items Are Never Reclaimed.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public async Task OutboxStore_FuzzDeterministic_TerminalItemsAreNeverReclaimed()
     {

@@ -300,21 +300,21 @@ public class OutboxWorkerTests : PostgresTestBase
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
-        for (int i = 0; i < count; i++)
-        {
-            var id = OutboxWorkItemIdentifier.GenerateNew();
-            ids.Add(id);
+            for (int i = 0; i < count; i++)
+            {
+                var id = OutboxWorkItemIdentifier.GenerateNew();
+                ids.Add(id);
 
-            await connection.ExecuteAsync(
-                $"""
+                await connection.ExecuteAsync(
+                    $"""
                 INSERT INTO {qualifiedTableName}
                 ("Id", "Topic", "Payload", "Status", "CreatedAt", "MessageId")
                 VALUES (@Id, @Topic, @Payload, @Status, CURRENT_TIMESTAMP, @MessageId)
                 """,
-                new { Id = id, Topic = "test", Payload = $"payload{i}", Status = OutboxStatus.Ready, MessageId = Guid.NewGuid() }).ConfigureAwait(false);
-        }
+                    new { Id = id, Topic = "test", Payload = $"payload{i}", Status = OutboxStatus.Ready, MessageId = Guid.NewGuid() }).ConfigureAwait(false);
+            }
 
-        return ids;
+            return ids;
         }
     }
 
@@ -325,18 +325,18 @@ public class OutboxWorkerTests : PostgresTestBase
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
-        foreach (var id in ids)
-        {
-            var status = await connection.ExecuteScalarAsync<short>(
-                $"""
+            foreach (var id in ids)
+            {
+                var status = await connection.ExecuteScalarAsync<short>(
+                    $"""
                 SELECT "Status"
                 FROM {qualifiedTableName}
                 WHERE "Id" = @Id
                 """,
-                new { Id = id.Value }).ConfigureAwait(false);
+                    new { Id = id.Value }).ConfigureAwait(false);
 
-            ((byte)status).ShouldBe(expectedStatus);
-        }
+                ((byte)status).ShouldBe(expectedStatus);
+            }
         }
     }
 
@@ -346,14 +346,14 @@ public class OutboxWorkerTests : PostgresTestBase
         await using (connection.ConfigureAwait(false))
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
-        var ownerToken = await connection.ExecuteScalarAsync<Guid?>(
-            $"""
+            var ownerToken = await connection.ExecuteScalarAsync<Guid?>(
+                $"""
             SELECT "OwnerToken"
             FROM {qualifiedTableName}
             WHERE "Id" = @Id
             """,
-            new { Id = id.Value }).ConfigureAwait(false);
-        ownerToken.ShouldBe(expectedOwner);
+                new { Id = id.Value }).ConfigureAwait(false);
+            ownerToken.ShouldBe(expectedOwner);
         }
     }
 

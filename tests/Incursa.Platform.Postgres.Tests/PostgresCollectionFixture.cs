@@ -76,17 +76,17 @@ public sealed class PostgresCollectionFixture : IAsyncLifetime
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 #pragma warning disable CA2100
-        await using var command = new NpgsqlCommand($"CREATE DATABASE \"{dbName}\"", connection);
+            await using var command = new NpgsqlCommand($"CREATE DATABASE \"{dbName}\"", connection);
 #pragma warning restore CA2100
-        await command.ExecuteNonQueryAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+            await command.ExecuteNonQueryAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
-        var dbBuilder = new NpgsqlConnectionStringBuilder(connectionString)
-        {
-            Database = dbName,
-            Pooling = false,
-        };
+            var dbBuilder = new NpgsqlConnectionStringBuilder(connectionString)
+            {
+                Database = dbName,
+                Pooling = false,
+            };
 
-        return dbBuilder.ConnectionString;
+            return dbBuilder.ConnectionString;
         }
     }
 }

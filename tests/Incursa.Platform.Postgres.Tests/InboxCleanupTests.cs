@@ -305,9 +305,9 @@ public class InboxCleanupTests : PostgresTestBase
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken);
 
-        return await connection.ExecuteScalarAsync<int>(
-            sql,
-            new { RetentionSeconds = (int)retentionPeriod.TotalSeconds });
+            return await connection.ExecuteScalarAsync<int>(
+                sql,
+                new { RetentionSeconds = (int)retentionPeriod.TotalSeconds });
         }
     }
 }

@@ -138,22 +138,22 @@ public sealed class SqlOutboxStoreWhiteBoxTests : SqlServerTestBase
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken);
 
-        await connection.ExecuteAsync(
-            $"""
+            await connection.ExecuteAsync(
+                $"""
             INSERT INTO [{options.SchemaName}].[{options.TableName}]
             (Id, Topic, Payload, Status, CreatedAt, RetryCount)
             VALUES (@Id, @Topic, @Payload, @Status, @CreatedAt, 0)
             """,
-            new
-            {
-                Id = messageId,
-                Topic = "Test.Topic",
-                Payload = "payload",
-                Status = OutboxStatus.Ready,
-                CreatedAt = DateTimeOffset.UtcNow,
-            });
+                new
+                {
+                    Id = messageId,
+                    Topic = "Test.Topic",
+                    Payload = "payload",
+                    Status = OutboxStatus.Ready,
+                    CreatedAt = DateTimeOffset.UtcNow,
+                });
 
-        return messageId;
+            return messageId;
         }
     }
 }

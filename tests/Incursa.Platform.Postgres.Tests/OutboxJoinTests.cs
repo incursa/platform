@@ -69,15 +69,15 @@ public class OutboxJoinTests : PostgresTestBase
         {
             await connection.OpenAsync(CancellationToken.None).ConfigureAwait(false);
 
-        var id = Guid.NewGuid();
-        await connection.ExecuteAsync(
-            $"""
+            var id = Guid.NewGuid();
+            await connection.ExecuteAsync(
+                $"""
             INSERT INTO {outboxTable} ("Id", "Topic", "Payload", "MessageId")
             VALUES (@Id, @Topic, @Payload, @MessageId)
             """,
-            new { Id = id, Topic = "test.topic", Payload = "{}", MessageId = Guid.NewGuid() }).ConfigureAwait(false);
+                new { Id = id, Topic = "test.topic", Payload = "{}", MessageId = Guid.NewGuid() }).ConfigureAwait(false);
 
-        return OutboxMessageIdentifier.From(id);
+            return OutboxMessageIdentifier.From(id);
         }
     }
 

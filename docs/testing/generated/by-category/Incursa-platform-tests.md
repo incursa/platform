@@ -1,17 +1,62 @@
 # Incursa.Platform.Tests
 
-Total tests: 626
+Total tests: 646
 
+- **Incursa.Platform.InMemory.Tests:Incursa.Platform.Tests.InMemoryGeneralCharacteristicsTests.LeaseCoordination_IsNotSharedAcrossIndependentProviderInstances**
+  - Summary: When independent providers acquire the same lease resource, then both acquisitions succeed.
+  - Intent: Verify the in-memory provider does not provide cross-provider distributed coordination guarantees.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.InMemory.Tests/InMemoryGeneralCharacteristicsTests.cs#L59](tests/Incursa.Platform.InMemory.Tests/InMemoryGeneralCharacteristicsTests.cs#L59)
+- **Incursa.Platform.InMemory.Tests:Incursa.Platform.Tests.InMemoryGeneralCharacteristicsTests.ProcessLocalState_IsIsolatedAcrossProviderInstances_AndNotDurable**
+  - Summary: When independent providers are used, then in-memory state stays process-local and non-durable.
+  - Intent: Verify outbox state is isolated per provider instance and does not persist across provider recreation.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.InMemory.Tests/InMemoryGeneralCharacteristicsTests.cs#L29](tests/Incursa.Platform.InMemory.Tests/InMemoryGeneralCharacteristicsTests.cs#L29)
 - **Incursa.Platform.InMemory.Tests:Incursa.Platform.Tests.InMemoryInboxTimeBehaviorTests.ClaimAsync_RespectsFakeTimeProvider**
   - Summary: When claim Async Respects Fake Time Provider, then it behaves as expected.
   - Intent: Document expected behavior for claim Async Respects Fake Time Provider.
   - Tags: (none)
   - Source: [tests/Incursa.Platform.InMemory.Tests/InMemoryInboxTimeBehaviorTests.cs#L30](tests/Incursa.Platform.InMemory.Tests/InMemoryInboxTimeBehaviorTests.cs#L30)
+- **Incursa.Platform.InMemory.Tests:Incursa.Platform.Tests.InMemoryOutboxFuzzTests.OutboxStore_FuzzDeterministic_TerminalItemsAreNeverReclaimed**
+  - Summary: When outbox Store Fuzz Deterministic Terminal Items Are Never Reclaimed, then it behaves as expected.
+  - Intent: Document expected behavior for outbox Store Fuzz Deterministic Terminal Items Are Never Reclaimed.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.InMemory.Tests/InMemoryOutboxFuzzTests.cs#L42](tests/Incursa.Platform.InMemory.Tests/InMemoryOutboxFuzzTests.cs#L42)
 - **Incursa.Platform.InMemory.Tests:Incursa.Platform.Tests.InMemoryOutboxTimeBehaviorTests.ClaimDueAsync_RespectsFakeTimeProvider**
   - Summary: When claim Due Async Respects Fake Time Provider, then it behaves as expected.
   - Intent: Document expected behavior for claim Due Async Respects Fake Time Provider.
   - Tags: (none)
   - Source: [tests/Incursa.Platform.InMemory.Tests/InMemoryOutboxTimeBehaviorTests.cs#L30](tests/Incursa.Platform.InMemory.Tests/InMemoryOutboxTimeBehaviorTests.cs#L30)
+- **Incursa.Platform.InMemory.Tests:Incursa.Platform.Tests.InMemoryPublicApiContractTests.AddFanoutTopic_WithMissingFanoutTopic_ThrowsArgumentException**
+  - Summary: When add Fanout Topic With Missing Fanout Topic Throws Argument Exception, then it behaves as expected.
+  - Intent: Document expected behavior for add Fanout Topic With Missing Fanout Topic Throws Argument Exception.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.InMemory.Tests/InMemoryPublicApiContractTests.cs#L74](tests/Incursa.Platform.InMemory.Tests/InMemoryPublicApiContractTests.cs#L74)
+- **Incursa.Platform.InMemory.Tests:Incursa.Platform.Tests.InMemoryPublicApiContractTests.AddInMemoryPlatformMultiDatabaseWithList_RegistersCorePrimitiveServices**
+  - Summary: When add In Memory Platform Multi Database With List Registers Core Primitive Services, then it behaves as expected.
+  - Intent: Document expected behavior for add In Memory Platform Multi Database With List Registers Core Primitive Services.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.InMemory.Tests/InMemoryPublicApiContractTests.cs#L54](tests/Incursa.Platform.InMemory.Tests/InMemoryPublicApiContractTests.cs#L54)
+- **Incursa.Platform.InMemory.Tests:Incursa.Platform.Tests.InMemoryPublicApiContractTests.AddInMemoryPlatformMultiDatabaseWithList_WithEmptyDatabases_ThrowsArgumentException**
+  - Summary: When add In Memory Platform Multi Database With List With Empty Databases Throws Argument Exception, then it behaves as expected.
+  - Intent: Document expected behavior for add In Memory Platform Multi Database With List With Empty Databases Throws Argument Exception.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.InMemory.Tests/InMemoryPublicApiContractTests.cs#L41](tests/Incursa.Platform.InMemory.Tests/InMemoryPublicApiContractTests.cs#L41)
+- **Incursa.Platform.InMemory.Tests:Incursa.Platform.Tests.InMemoryPublicApiContractTests.AddInMemoryPlatformMultiDatabaseWithList_WithNullDatabases_ThrowsArgumentNullException**
+  - Summary: When add In Memory Platform Multi Database With List With Null Databases Throws Argument Null Exception, then it behaves as expected.
+  - Intent: Document expected behavior for add In Memory Platform Multi Database With List With Null Databases Throws Argument Null Exception.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.InMemory.Tests/InMemoryPublicApiContractTests.cs#L28](tests/Incursa.Platform.InMemory.Tests/InMemoryPublicApiContractTests.cs#L28)
+- **Incursa.Platform.InMemory.Tests:Incursa.Platform.Tests.InMemoryPublicApiContractTests.InMemoryOptions_HaveExpectedDefaults**
+  - Summary: When in Memory Options Have Expected Defaults, then it behaves as expected.
+  - Intent: Document expected behavior for in Memory Options Have Expected Defaults.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.InMemory.Tests/InMemoryPublicApiContractTests.cs#L90](tests/Incursa.Platform.InMemory.Tests/InMemoryPublicApiContractTests.cs#L90)
+- **Incursa.Platform.Observability.Tests:Incursa.Platform.Tests.InboxRecoveryServiceTests.ReviveAsync_EmitsAuditEventWithPriorError**
+  - Summary: When revive Async Emits Audit Event, then it behaves as expected.
+  - Intent: Verify inbox revive emits audit data with the prior error.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.Observability.Tests/InboxRecoveryServiceTests.cs#L30](tests/Incursa.Platform.Observability.Tests/InboxRecoveryServiceTests.cs#L30)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.ControlPlaneSchemaBundleTests.ControlPlaneBundle_AddsControlPlaneSchema_OnTopOfTenantBundle**
   - Summary: When control Plane Bundle Adds Control Plane Schema On Top Of Tenant Bundle, then it behaves as expected.
   - Intent: Document expected behavior for control Plane Bundle Adds Control Plane Schema On Top Of Tenant Bundle.
@@ -102,6 +147,11 @@ Total tests: 626
   - Intent: Validate the Outbox table shape matches the expected schema.
   - Tags: (none)
   - Source: [tests/Incursa.Platform.Postgres.Tests/DatabaseSchemaConsistencyTests.cs#L117](tests/Incursa.Platform.Postgres.Tests/DatabaseSchemaConsistencyTests.cs#L117)
+- **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.DatabaseSchemaConsistencyTests.SchemaDeployment_RepeatedExecution_IsIdempotent**
+  - Summary: When schema deployment is executed repeatedly, then execution remains idempotent.
+  - Intent: Verify repeated schema deployment calls do not fail and preserve expected artifacts.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/DatabaseSchemaConsistencyTests.cs#L365](tests/Incursa.Platform.Postgres.Tests/DatabaseSchemaConsistencyTests.cs#L365)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.DatabaseSchemaConsistencyTests.TimersTable_HasCorrectSchema**
   - Summary: When inspecting the Timers table, then all required columns and types match.
   - Intent: Validate the Timers table shape matches the expected schema.
@@ -291,17 +341,17 @@ Total tests: 626
   - Summary: When all join steps are completed, then the join remains in a completed state.
   - Intent: Confirm the wait handler leaves a completed join unchanged.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/JoinWaitHandlerTests.cs#L123](tests/Incursa.Platform.Postgres.Tests/JoinWaitHandlerTests.cs#L123)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/JoinWaitHandlerTests.cs#L126](tests/Incursa.Platform.Postgres.Tests/JoinWaitHandlerTests.cs#L126)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.JoinWaitHandlerTests.HandleAsync_WhenAnyStepFailed_MarksJoinFailed**
   - Summary: When any join step fails and failure propagation is enabled, then the join is marked failed.
   - Intent: Validate failure propagation for join steps.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/JoinWaitHandlerTests.cs#L168](tests/Incursa.Platform.Postgres.Tests/JoinWaitHandlerTests.cs#L168)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/JoinWaitHandlerTests.cs#L171](tests/Incursa.Platform.Postgres.Tests/JoinWaitHandlerTests.cs#L171)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.JoinWaitHandlerTests.HandleAsync_WhenJoinNotReady_ThrowsJoinNotReadyException**
   - Summary: When the join has incomplete steps, then the handler throws JoinNotReadyException.
   - Intent: Validate that the wait handler blocks until the join is complete.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/JoinWaitHandlerTests.cs#L87](tests/Incursa.Platform.Postgres.Tests/JoinWaitHandlerTests.cs#L87)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/JoinWaitHandlerTests.cs#L90](tests/Incursa.Platform.Postgres.Tests/JoinWaitHandlerTests.cs#L90)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.LeaseTests.AcquireAsync_WithExpiredLease_SucceedsAndReturnsNewExpiry**
   - Summary: When a lease has expired, then a new owner can acquire it and receives a new expiry.
   - Intent: Verify acquisition succeeds after lease expiration.
@@ -496,87 +546,87 @@ Total tests: 626
   - Summary: When attaching the same message twice, then only one association exists.
   - Intent: Verify AttachMessageToJoinAsync is idempotent.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L187](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L187)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L190](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L190)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxJoinTests.AttachMessageToJoinAsync_WithValidIds_CreatesAssociation**
   - Summary: When attaching a message to a join, then the association is stored.
   - Intent: Verify join member rows are created for attached messages.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L154](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L154)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L157](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L157)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxJoinTests.CompleteJoinWorkflow_WithAllStepsCompleted_WorksCorrectly**
   - Summary: When all steps complete, then the join reports completed status and counts.
   - Intent: Verify the full join workflow records completion for every step.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L340](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L340)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L343](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L343)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxJoinTests.CompleteJoinWorkflow_WithSomeStepsFailed_WorksCorrectly**
   - Summary: When some steps fail, then the join reports failed status and counts.
   - Intent: Verify the join workflow records failures alongside completions.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L384](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L384)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L387](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L387)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxJoinTests.CreateJoinAsync_WithValidParameters_CreatesJoin**
   - Summary: When CreateJoinAsync is called with valid parameters, then a pending join is created.
   - Intent: Verify join creation populates expected metadata and counters.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L86](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L86)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L89](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L89)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxJoinTests.GetJoinAsync_WithExistingJoin_ReturnsJoin**
   - Summary: When retrieving an existing join, then GetJoinAsync returns it.
   - Intent: Verify joins can be fetched by id.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L116](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L116)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L119](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L119)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxJoinTests.GetJoinAsync_WithNonExistentJoin_ReturnsNull**
   - Summary: When retrieving a non-existent join, then GetJoinAsync returns null.
   - Intent: Verify unknown join ids are handled gracefully.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L138](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L138)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L141](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L141)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxJoinTests.GetJoinMessagesAsync_WithMultipleMessages_ReturnsAllMessageIds**
   - Summary: When a join has multiple attached messages, then GetJoinMessagesAsync returns all ids.
   - Intent: Verify join message enumeration returns every attached message.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L309](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L309)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L312](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L312)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxJoinTests.IncrementCompletedAsync_CalledTwiceForSameMessage_IsIdempotent**
   - Summary: When IncrementCompletedAsync is called twice for the same message, then counts are not duplicated.
   - Intent: Verify completion increments are idempotent per message.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L422](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L422)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L425](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L425)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxJoinTests.IncrementCompletedAsync_WhenTotalWouldExceedExpected_DoesNotOverCount**
   - Summary: When completed steps would exceed expected, then counts do not overrun expected steps.
   - Intent: Verify completion counting is capped at ExpectedSteps.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L472](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L472)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L475](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L475)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxJoinTests.IncrementCompletedAsync_WithValidMessage_IncrementsCount**
   - Summary: When incrementing completion for an attached message, then CompletedSteps increases.
   - Intent: Verify completion updates counters and timestamps.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L225](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L225)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L228](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L228)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxJoinTests.IncrementFailedAsync_CalledTwiceForSameMessage_IsIdempotent**
   - Summary: When IncrementFailedAsync is called twice for the same message, then counts are not duplicated.
   - Intent: Verify failure increments are idempotent per message.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L447](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L447)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L450](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L450)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxJoinTests.IncrementFailedAsync_WithValidMessage_IncrementsCount**
   - Summary: When incrementing failure for an attached message, then FailedSteps increases.
   - Intent: Verify failure updates counters and timestamps.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L254](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L254)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L257](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L257)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxJoinTests.OutboxAck_AutomaticallyReportsJoinCompletion**
   - Summary: When outbox messages are acked, then join completion counts are incremented.
   - Intent: Verify outbox acknowledgements report join completion automatically.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L507](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L507)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L510](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L510)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxJoinTests.OutboxAck_MultipleAcksForSameMessage_IsIdempotent**
   - Summary: When the same message is acked multiple times, then join counts are not over-incremented.
   - Intent: Verify outbox ack reporting is idempotent per message.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L578](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L578)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L581](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L581)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxJoinTests.OutboxFail_AutomaticallyReportsJoinFailure**
   - Summary: When outbox messages fail, then join failure counts are incremented.
   - Intent: Verify outbox failures report join failures automatically.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L545](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L545)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L548](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L548)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxJoinTests.UpdateStatusAsync_WithValidStatus_UpdatesJoinStatus**
   - Summary: When UpdateStatusAsync sets a status, then the join status is updated.
   - Intent: Verify status updates persist for joins.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L283](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L283)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L286](tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs#L286)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxWorkQueueTests.ConcurrentClaim_MultipleWorkers_NoOverlap**
   - Summary: When two workers claim concurrently, then claimed sets do not overlap.
   - Intent: Verify concurrent claims are exclusive per work item.
@@ -602,6 +652,11 @@ Total tests: 626
   - Intent: Verify ClaimAsync honors the requested batch size.
   - Tags: (none)
   - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxWorkQueueTests.cs#L74](tests/Incursa.Platform.Postgres.Tests/OutboxWorkQueueTests.cs#L74)
+- **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxWorkQueueTests.OutboxClaim_WithNonPositiveBatchSize_ThrowsArgumentOutOfRangeException**
+  - Summary: When ClaimAsync receives a non-positive batch size, then it throws ArgumentOutOfRangeException.
+  - Intent: Enforce API guard behavior for invalid outbox claim batch sizes.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/OutboxWorkQueueTests.cs#L197](tests/Incursa.Platform.Postgres.Tests/OutboxWorkQueueTests.cs#L197)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxWorkQueueTests.OutboxClaim_WithReadyItems_ReturnsClaimedIds**
   - Summary: When ready items are available, then ClaimAsync returns their ids.
   - Intent: Verify ready outbox work items can be claimed.
@@ -681,47 +736,47 @@ Total tests: 626
   - Summary: When all identifier columns are queried together, then each property matches its inserted value.
   - Intent: Confirm multi-column mapping across all identifier type handlers.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L318](tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L318)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L321](tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L321)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresDapperTypeHandlerTests.DatabaseIdentifier_RoundTrip_WorksCorrectly**
   - Summary: When a DatabaseIdentifier is stored, then Dapper returns the same database id.
   - Intent: Verify Dapper mapping for DatabaseIdentifier UUIDs.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L286](tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L286)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L289](tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L289)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresDapperTypeHandlerTests.InboxMessageIdentifier_RoundTrip_WorksCorrectly**
   - Summary: When an InboxMessageIdentifier is inserted, then Dapper reads the same identifier.
   - Intent: Verify Dapper mapping for InboxMessageIdentifier UUIDs.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L126](tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L126)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L129](tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L129)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresDapperTypeHandlerTests.InstanceIdentifier_RoundTrip_WorksCorrectly**
   - Summary: When an InstanceIdentifier is stored, then Dapper reads the same instance id.
   - Intent: Verify Dapper mapping for InstanceIdentifier UUIDs.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L254](tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L254)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L257](tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L257)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresDapperTypeHandlerTests.JoinIdentifier_RoundTrip_WorksCorrectly**
   - Summary: When a JoinIdentifier is stored, then Dapper returns the same join id.
   - Intent: Verify Dapper mapping for JoinIdentifier UUIDs.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L222](tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L222)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L225](tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L225)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresDapperTypeHandlerTests.NullableOwnerToken_RoundTrip_WorksCorrectly**
   - Summary: When a nullable OwnerToken is stored in a nullable column, then it is read back intact.
   - Intent: Confirm nullable OwnerToken values are materialized correctly.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L93](tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L93)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L96](tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L96)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresDapperTypeHandlerTests.OutboxMessageIdentifier_RoundTrip_WorksCorrectly**
   - Summary: When an OutboxMessageIdentifier is inserted, then Dapper returns the same identifier.
   - Intent: Verify Dapper mapping for OutboxMessageIdentifier UUIDs.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L158](tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L158)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L161](tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L161)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresDapperTypeHandlerTests.OutboxWorkItemIdentifier_RoundTrip_WorksCorrectly**
   - Summary: When an OutboxWorkItemIdentifier is stored, then Dapper reads it back unchanged.
   - Intent: Verify Dapper mapping for OutboxWorkItemIdentifier UUIDs.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L190](tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L190)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L193](tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L193)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresDapperTypeHandlerTests.OwnerToken_RoundTrip_WorksCorrectly**
   - Summary: When a row is inserted with an OwnerToken, then Dapper returns the same token.
   - Intent: Confirm the OwnerToken handler maps UUID values losslessly.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L61](tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L61)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L64](tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs#L64)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresEmailDeliverySinkTests.RecordAttempt_WritesAttemptDetails**
   - Summary: When an attempt is recorded, then attempt details are stored.
   - Intent: Capture provider attempt details.
@@ -857,6 +912,16 @@ Total tests: 626
   - Intent: Verify stalled transitions update status and completion time.
   - Tags: (none)
   - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresOperationWatcherTests.cs#L97](tests/Incursa.Platform.Postgres.Tests/PostgresOperationWatcherTests.cs#L97)
+- **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresOutboxFuzzTests.Outbox_FuzzConcurrentRounds_ClaimsStayDisjointAndTerminalItemsAreNotReclaimed**
+  - Summary: When two workers perform deterministic randomized claim rounds, then claimed sets stay disjoint and terminal items stay terminal.
+  - Intent: Exercise queue state transitions under concurrent claimers and mixed ack/abandon/fail actions.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresOutboxFuzzTests.cs#L111](tests/Incursa.Platform.Postgres.Tests/PostgresOutboxFuzzTests.cs#L111)
+- **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresOutboxFuzzTests.Outbox_FuzzDeterministic_TerminalItemsAreNeverReclaimed**
+  - Summary: When deterministic randomized outbox operations run, then terminal items are never reclaimed.
+  - Intent: Use fixed-seed fuzzing to verify claim/ack/abandon/fail invariants under varied operation sequences.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresOutboxFuzzTests.cs#L69](tests/Incursa.Platform.Postgres.Tests/PostgresOutboxFuzzTests.cs#L69)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresOutboxServiceTests.Constructor_CreatesInstance**
   - Summary: When constructed with valid options, then the service is created and implements IOutbox.
   - Intent: Verify the outbox service can be instantiated with valid options.
@@ -927,6 +992,21 @@ Total tests: 626
   - Intent: Document expected behavior for reschedule Async Increments Retry Count And Sets Error.
   - Tags: (none)
   - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresOutboxStoreWhiteBoxTests.cs#L110](tests/Incursa.Platform.Postgres.Tests/PostgresOutboxStoreWhiteBoxTests.cs#L110)
+- **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresPublicApiContractTests.AddPostgresOutbox_ThrowsForMissingConnectionString**
+  - Summary: When invalid outbox options are supplied, then options validation fails immediately.
+  - Intent: Ensure Postgres option validators enforce required contracts.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresPublicApiContractTests.cs#L64](tests/Incursa.Platform.Postgres.Tests/PostgresPublicApiContractTests.cs#L64)
+- **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresPublicApiContractTests.AddPostgresPlatformMultiDatabaseWithList_CalledTwice_ThrowsInvalidOperationException**
+  - Summary: When list-based registration is repeated, then registration guard rails reject duplicate setup.
+  - Intent: Ensure platform registration lifecycle validates duplicate/invalid registration state.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresPublicApiContractTests.cs#L44](tests/Incursa.Platform.Postgres.Tests/PostgresPublicApiContractTests.cs#L44)
+- **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresPublicApiContractTests.AddPostgresPlatform_RegistersCoreDependencies**
+  - Summary: When AddPostgresPlatform is used, then core routing dependencies are registered.
+  - Intent: Verify primary Postgres platform registration wires primitive routers/providers and platform services.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.Postgres.Tests/PostgresPublicApiContractTests.cs#L28](tests/Incursa.Platform.Postgres.Tests/PostgresPublicApiContractTests.cs#L28)
 - **Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresSchedulerClientTests.Constructor_WithValidConnectionString_CreatesInstance**
   - Summary: When constructed with valid options, then the client is created and implements ISchedulerClient.
   - Intent: Verify the scheduler client can be instantiated with valid options.
@@ -1182,6 +1262,11 @@ Total tests: 626
   - Intent: Verify production index definitions are present in tests.
   - Tags: (none)
   - Source: [tests/Incursa.Platform.SqlServer.Tests/DatabaseSchemaConsistencyTests.cs#L300](tests/Incursa.Platform.SqlServer.Tests/DatabaseSchemaConsistencyTests.cs#L300)
+- **Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.DatabaseSchemaConsistencyTests.SchemaDeployment_RepeatedExecution_IsIdempotent**
+  - Summary: When schema deployment is executed repeatedly, then execution remains idempotent.
+  - Intent: Verify repeated schema deployment calls do not fail and preserve expected artifacts.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.SqlServer.Tests/DatabaseSchemaConsistencyTests.cs#L392](tests/Incursa.Platform.SqlServer.Tests/DatabaseSchemaConsistencyTests.cs#L392)
 - **Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.DatabaseSchemaConsistencyTests.TimersTable_HasCorrectSchema**
   - Summary: When inspecting the Timers table, then required columns exist with expected data types.
   - Intent: Ensure timers schema matches production column definitions.
@@ -1196,7 +1281,7 @@ Total tests: 626
   - Summary: When work-queue procedures are inspected, then they use SYSUTCDATETIME for timing.
   - Intent: Ensure stored procedures rely on database-authoritative time.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.SqlServer.Tests/DatabaseSchemaConsistencyTests.cs#L392](tests/Incursa.Platform.SqlServer.Tests/DatabaseSchemaConsistencyTests.cs#L392)
+  - Source: [tests/Incursa.Platform.SqlServer.Tests/DatabaseSchemaConsistencyTests.cs#L415](tests/Incursa.Platform.SqlServer.Tests/DatabaseSchemaConsistencyTests.cs#L415)
 - **Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.DatabaseSchemaDeploymentTests.AddSqlOutbox_WithSchemaDeploymentDisabled_DoesNotRegisterSchemaService**
   - Summary: When AddSqlOutbox disables schema deployment, then schema completion and background services are not registered.
   - Intent: Avoid schema deployment services when deployment is disabled.
@@ -2062,6 +2147,11 @@ Total tests: 626
   - Intent: Ensure batch size is respected in outbox claims.
   - Tags: (none)
   - Source: [tests/Incursa.Platform.SqlServer.Tests/OutboxWorkQueueTests.cs#L77](tests/Incursa.Platform.SqlServer.Tests/OutboxWorkQueueTests.cs#L77)
+- **Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.OutboxWorkQueueTests.OutboxClaim_WithNonPositiveBatchSize_ThrowsArgumentOutOfRangeException**
+  - Summary: When ClaimAsync receives a non-positive batch size, then it throws ArgumentOutOfRangeException.
+  - Intent: Enforce API guard behavior for invalid outbox claim batch sizes.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.SqlServer.Tests/OutboxWorkQueueTests.cs#L223](tests/Incursa.Platform.SqlServer.Tests/OutboxWorkQueueTests.cs#L223)
 - **Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.OutboxWorkQueueTests.OutboxClaim_WithReadyItems_ReturnsClaimedIds**
   - Summary: When ready outbox items exist, then ClaimAsync returns their ids.
   - Intent: Verify work-queue claims return the ready items.
@@ -2467,6 +2557,16 @@ Total tests: 626
   - Intent: Verify the ordered SQL script set can be deployed sequentially.
   - Tags: (none)
   - Source: [tests/Incursa.Platform.SqlServer.Tests/SqlScriptDeploymentTests.cs#L37](tests/Incursa.Platform.SqlServer.Tests/SqlScriptDeploymentTests.cs#L37)
+- **Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.SqlServerOutboxFuzzTests.Outbox_FuzzConcurrentRounds_ClaimsStayDisjointAndTerminalItemsAreNotReclaimed**
+  - Summary: When two workers perform deterministic randomized claim rounds, then claimed sets stay disjoint and terminal items stay terminal.
+  - Intent: Exercise queue state transitions under concurrent claimers and mixed ack/abandon/fail actions.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.SqlServer.Tests/SqlServerOutboxFuzzTests.cs#L109](tests/Incursa.Platform.SqlServer.Tests/SqlServerOutboxFuzzTests.cs#L109)
+- **Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.SqlServerOutboxFuzzTests.Outbox_FuzzDeterministic_TerminalItemsAreNeverReclaimed**
+  - Summary: When deterministic randomized outbox operations run, then terminal items are never reclaimed.
+  - Intent: Use fixed-seed fuzzing to verify claim/ack/abandon/fail invariants under varied operation sequences.
+  - Tags: (none)
+  - Source: [tests/Incursa.Platform.SqlServer.Tests/SqlServerOutboxFuzzTests.cs#L67](tests/Incursa.Platform.SqlServer.Tests/SqlServerOutboxFuzzTests.cs#L67)
 - **Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.SystemLeaseTests.AcquireAsync_AfterLeaseReleased_CanAcquireAgain**
   - Summary: When a lease is released, then the resource can be acquired again with a higher fencing token.
   - Intent: Validate lease release frees the resource for subsequent acquisition.
@@ -2671,12 +2771,12 @@ Total tests: 626
   - Summary: When a critical exception is thrown, then the catch filter does not intercept it.
   - Intent: Ensure critical exceptions bypass catchable filters.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Tests/ExceptionFilterTests.cs#L556](tests/Incursa.Platform.Tests/ExceptionFilterTests.cs#L556)
+  - Source: [tests/Incursa.Platform.Tests/ExceptionFilterTests.cs#L557](tests/Incursa.Platform.Tests/ExceptionFilterTests.cs#L557)
 - **Incursa.Platform.Tests:Incursa.Platform.Tests.ExceptionFilterTests.IsCatchableAndExpected_RealWorldScenario_SqlExceptions**
   - Summary: When evaluating a catchable SQL-like exception versus a critical one, then only the catchable exception returns true.
   - Intent: Demonstrate real-world filtering that excludes critical exceptions.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Tests/ExceptionFilterTests.cs#L652](tests/Incursa.Platform.Tests/ExceptionFilterTests.cs#L652)
+  - Source: [tests/Incursa.Platform.Tests/ExceptionFilterTests.cs#L653](tests/Incursa.Platform.Tests/ExceptionFilterTests.cs#L653)
 - **Incursa.Platform.Tests:Incursa.Platform.Tests.ExceptionFilterTests.IsCatchableAndExpected_WithCatchableAndExpected_ReturnsTrue**
   - Summary: When an exception is both catchable and expected, then IsCatchableAndExpected returns true.
   - Intent: Validate combined catchable and expected filtering logic.
@@ -2721,7 +2821,7 @@ Total tests: 626
   - Summary: When IsCatchable is evaluated for common exception types, then it returns true.
   - Intent: Validate catchable classification for typical application exceptions.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Tests/ExceptionFilterTests.cs#L601](tests/Incursa.Platform.Tests/ExceptionFilterTests.cs#L601)
+  - Source: [tests/Incursa.Platform.Tests/ExceptionFilterTests.cs#L602](tests/Incursa.Platform.Tests/ExceptionFilterTests.cs#L602)
 - **Incursa.Platform.Tests:Incursa.Platform.Tests.ExceptionFilterTests.IsCritical_WithNullException_ThrowsArgumentNullException**
   - Summary: When IsCritical is called with a null exception, then it throws ArgumentNullException.
   - Intent: Guard against null exception inputs for critical checks.
@@ -2786,7 +2886,7 @@ Total tests: 626
   - Summary: When IsExpected is given an OperationCanceledException and matching expected type, then it returns true.
   - Intent: Confirm cancellation exceptions are matched when expected.
   - Tags: (none)
-  - Source: [tests/Incursa.Platform.Tests/ExceptionFilterTests.cs#L627](tests/Incursa.Platform.Tests/ExceptionFilterTests.cs#L627)
+  - Source: [tests/Incursa.Platform.Tests/ExceptionFilterTests.cs#L628](tests/Incursa.Platform.Tests/ExceptionFilterTests.cs#L628)
 - **Incursa.Platform.Tests:Incursa.Platform.Tests.FanoutSystemTests.FanoutDispatcher_ShouldCreateCorrectTopicName**
   - Summary: When a fanout topic name is constructed, then it follows the "fanout:{fanoutTopic}:{workKey}" convention.
   - Intent: Document the fanout topic naming pattern used by the dispatcher.

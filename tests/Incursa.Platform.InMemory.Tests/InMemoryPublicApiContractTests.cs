@@ -20,6 +20,10 @@ namespace Incursa.Platform.Tests;
 [Trait("Category", "Unit")]
 public sealed class InMemoryPublicApiContractTests
 {
+    /// <summary>When add In Memory Platform Multi Database With List With Null Databases Throws Argument Null Exception, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for add In Memory Platform Multi Database With List With Null Databases Throws Argument Null Exception.</intent>
+    /// <scenario>Given add In Memory Platform Multi Database With List With Null Databases Throws Argument Null Exception.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public void AddInMemoryPlatformMultiDatabaseWithList_WithNullDatabases_ThrowsArgumentNullException()
     {
@@ -29,6 +33,10 @@ public sealed class InMemoryPublicApiContractTests
             services.AddInMemoryPlatformMultiDatabaseWithList(null!));
     }
 
+    /// <summary>When add In Memory Platform Multi Database With List With Empty Databases Throws Argument Exception, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for add In Memory Platform Multi Database With List With Empty Databases Throws Argument Exception.</intent>
+    /// <scenario>Given add In Memory Platform Multi Database With List With Empty Databases Throws Argument Exception.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public void AddInMemoryPlatformMultiDatabaseWithList_WithEmptyDatabases_ThrowsArgumentException()
     {
@@ -38,6 +46,10 @@ public sealed class InMemoryPublicApiContractTests
             services.AddInMemoryPlatformMultiDatabaseWithList(Array.Empty<InMemoryPlatformDatabase>()));
     }
 
+    /// <summary>When add In Memory Platform Multi Database With List Registers Core Primitive Services, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for add In Memory Platform Multi Database With List Registers Core Primitive Services.</intent>
+    /// <scenario>Given add In Memory Platform Multi Database With List Registers Core Primitive Services.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public void AddInMemoryPlatformMultiDatabaseWithList_RegistersCorePrimitiveServices()
     {
@@ -54,6 +66,10 @@ public sealed class InMemoryPublicApiContractTests
         provider.GetRequiredService<ISystemLeaseFactory>().ShouldNotBeNull();
     }
 
+    /// <summary>When add Fanout Topic With Missing Fanout Topic Throws Argument Exception, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for add Fanout Topic With Missing Fanout Topic Throws Argument Exception.</intent>
+    /// <scenario>Given add Fanout Topic With Missing Fanout Topic Throws Argument Exception.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public void AddFanoutTopic_WithMissingFanoutTopic_ThrowsArgumentException()
     {
@@ -66,6 +82,10 @@ public sealed class InMemoryPublicApiContractTests
         Should.Throw<ArgumentException>(() => services.AddFanoutTopic<TestFanoutPlanner>(options));
     }
 
+    /// <summary>When in Memory Options Have Expected Defaults, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for in Memory Options Have Expected Defaults.</intent>
+    /// <scenario>Given in Memory Options Have Expected Defaults.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public void InMemoryOptions_HaveExpectedDefaults()
     {

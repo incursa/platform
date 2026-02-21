@@ -185,20 +185,20 @@ public class InboxIntegrationTests : PostgresTestBase
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
-        var result = await connection.QuerySingleAsync<(string Status, DateTime? ProcessedUtc)>(
-            $"SELECT \"Status\", \"ProcessedUtc\" FROM {qualifiedInboxTableName} WHERE \"MessageId\" = @MessageId",
-            new { MessageId = messageId }).ConfigureAwait(false);
+            var result = await connection.QuerySingleAsync<(string Status, DateTime? ProcessedUtc)>(
+                $"SELECT \"Status\", \"ProcessedUtc\" FROM {qualifiedInboxTableName} WHERE \"MessageId\" = @MessageId",
+                new { MessageId = messageId }).ConfigureAwait(false);
 
-        Assert.Equal(expectedStatus, result.Status);
+            Assert.Equal(expectedStatus, result.Status);
 
-        if (processedUtc)
-        {
-            Assert.NotNull(result.ProcessedUtc);
-        }
-        else
-        {
-            Assert.Null(result.ProcessedUtc);
-        }
+            if (processedUtc)
+            {
+                Assert.NotNull(result.ProcessedUtc);
+            }
+            else
+            {
+                Assert.Null(result.ProcessedUtc);
+            }
         }
     }
 }

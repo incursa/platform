@@ -140,23 +140,23 @@ public sealed class PostgresOutboxStoreWhiteBoxTests : PostgresTestBase
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken);
 
-        await connection.ExecuteAsync(
-            $"""
+            await connection.ExecuteAsync(
+                $"""
             INSERT INTO {qualifiedTableName}
             ("Id", "Topic", "Payload", "Status", "CreatedAt", "RetryCount", "MessageId")
             VALUES (@Id, @Topic, @Payload, @Status, @CreatedAt, 0, @MessageId)
             """,
-            new
-            {
-                Id = messageId,
-                Topic = "Test.Topic",
-                Payload = "payload",
-                Status = OutboxStatus.Ready,
-                CreatedAt = DateTimeOffset.UtcNow,
-                MessageId = Guid.NewGuid(),
-            });
+                new
+                {
+                    Id = messageId,
+                    Topic = "Test.Topic",
+                    Payload = "payload",
+                    Status = OutboxStatus.Ready,
+                    CreatedAt = DateTimeOffset.UtcNow,
+                    MessageId = Guid.NewGuid(),
+                });
 
-        return messageId;
+            return messageId;
         }
     }
 }

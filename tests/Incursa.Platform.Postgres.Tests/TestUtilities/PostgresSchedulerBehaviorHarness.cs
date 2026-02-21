@@ -75,7 +75,7 @@ internal sealed class PostgresSchedulerBehaviorHarness : PostgresTestBase, ISche
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
-        const string sql = """
+            const string sql = """
             DELETE FROM "infra"."JobRuns";
             DELETE FROM "infra"."Timers";
             DELETE FROM "infra"."Jobs";
@@ -88,7 +88,7 @@ internal sealed class PostgresSchedulerBehaviorHarness : PostgresTestBase, ISche
                 "LastRunAt" = NULL;
             """;
 
-        await connection.ExecuteAsync(sql).ConfigureAwait(false);
+            await connection.ExecuteAsync(sql).ConfigureAwait(false);
         }
     }
 }

@@ -212,20 +212,20 @@ public class OutboxWorkQueueTests : PostgresTestBase
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
-        for (int i = 0; i < count; i++)
-        {
-            var id = OutboxWorkItemIdentifier.GenerateNew();
-            ids.Add(id);
+            for (int i = 0; i < count; i++)
+            {
+                var id = OutboxWorkItemIdentifier.GenerateNew();
+                ids.Add(id);
 
-            await connection.ExecuteAsync(
-                $"""
+                await connection.ExecuteAsync(
+                    $"""
                 INSERT INTO {qualifiedTableName} ("Id", "Topic", "Payload", "Status", "CreatedAt", "MessageId")
                 VALUES (@Id, @Topic, @Payload, 0, CURRENT_TIMESTAMP, @MessageId)
                 """,
-                new { Id = id, Topic = "test", Payload = $"payload{i}", MessageId = Guid.NewGuid() }).ConfigureAwait(false);
-        }
+                    new { Id = id, Topic = "test", Payload = $"payload{i}", MessageId = Guid.NewGuid() }).ConfigureAwait(false);
+            }
 
-        return ids;
+            return ids;
         }
     }
 
@@ -236,12 +236,12 @@ public class OutboxWorkQueueTests : PostgresTestBase
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
-        foreach (var id in ids)
-        {
-            var status = await connection.ExecuteScalarAsync<short>(
-                $"SELECT \"Status\" FROM {qualifiedTableName} WHERE \"Id\" = @Id", new { Id = id }).ConfigureAwait(false);
-            ((byte)status).ShouldBe(expectedStatus);
-        }
+            foreach (var id in ids)
+            {
+                var status = await connection.ExecuteScalarAsync<short>(
+                    $"SELECT \"Status\" FROM {qualifiedTableName} WHERE \"Id\" = @Id", new { Id = id }).ConfigureAwait(false);
+                ((byte)status).ShouldBe(expectedStatus);
+            }
         }
     }
 
@@ -252,12 +252,12 @@ public class OutboxWorkQueueTests : PostgresTestBase
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
-        foreach (var id in ids)
-        {
-            var isProcessed = await connection.ExecuteScalarAsync<bool>(
-                $"SELECT \"IsProcessed\" FROM {qualifiedTableName} WHERE \"Id\" = @Id", new { Id = id }).ConfigureAwait(false);
-            isProcessed.ShouldBe(expectedProcessed);
-        }
+            foreach (var id in ids)
+            {
+                var isProcessed = await connection.ExecuteScalarAsync<bool>(
+                    $"SELECT \"IsProcessed\" FROM {qualifiedTableName} WHERE \"Id\" = @Id", new { Id = id }).ConfigureAwait(false);
+                isProcessed.ShouldBe(expectedProcessed);
+            }
         }
     }
 }

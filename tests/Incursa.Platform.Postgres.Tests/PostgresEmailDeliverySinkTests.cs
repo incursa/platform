@@ -167,13 +167,13 @@ public sealed class PostgresEmailDeliverySinkTests : PostgresTestBase
         await using (connection.ConfigureAwait(false))
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken);
-        return await connection.QuerySingleAsync<EmailDeliveryRow>(
-            $"""
+            return await connection.QuerySingleAsync<EmailDeliveryRow>(
+                $"""
             SELECT *
             FROM {qualifiedTable}
             WHERE "MessageKey" = @MessageKey
             """,
-            new { MessageKey = messageKey });
+                new { MessageKey = messageKey });
         }
     }
 
@@ -183,13 +183,13 @@ public sealed class PostgresEmailDeliverySinkTests : PostgresTestBase
         await using (connection.ConfigureAwait(false))
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken);
-        return await connection.QuerySingleAsync<EmailDeliveryRow>(
-            $"""
+            return await connection.QuerySingleAsync<EmailDeliveryRow>(
+                $"""
             SELECT *
             FROM {qualifiedTable}
             WHERE "AttemptNumber" = @AttemptNumber
             """,
-            new { AttemptNumber = attemptNumber });
+                new { AttemptNumber = attemptNumber });
         }
     }
 
@@ -199,13 +199,13 @@ public sealed class PostgresEmailDeliverySinkTests : PostgresTestBase
         await using (connection.ConfigureAwait(false))
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken);
-        return await connection.QuerySingleAsync<EmailDeliveryRow>(
-            $"""
+            return await connection.QuerySingleAsync<EmailDeliveryRow>(
+                $"""
             SELECT *
             FROM {qualifiedTable}
             WHERE "ProviderEventId" = @ProviderEventId
             """,
-            new { ProviderEventId = providerEventId });
+                new { ProviderEventId = providerEventId });
         }
     }
 

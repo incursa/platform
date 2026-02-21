@@ -191,21 +191,21 @@ public sealed class PostgresOutboxFuzzTests : PostgresTestBase
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken);
 
-        for (var i = 0; i < count; i++)
-        {
-            await connection.ExecuteAsync(
-                $"""
+            for (var i = 0; i < count; i++)
+            {
+                await connection.ExecuteAsync(
+                    $"""
                 INSERT INTO {qualifiedTableName} ("Id", "Topic", "Payload", "Status", "CreatedAt", "MessageId")
                 VALUES (@Id, @Topic, @Payload, 0, CURRENT_TIMESTAMP, @MessageId)
                 """,
-                new
-                {
-                    Id = OutboxWorkItemIdentifier.GenerateNew(),
-                    Topic = "fuzz",
-                    Payload = $"payload{i}",
-                    MessageId = Guid.NewGuid(),
-                });
-        }
+                    new
+                    {
+                        Id = OutboxWorkItemIdentifier.GenerateNew(),
+                        Topic = "fuzz",
+                        Payload = $"payload{i}",
+                        MessageId = Guid.NewGuid(),
+                    });
+            }
         }
     }
 }

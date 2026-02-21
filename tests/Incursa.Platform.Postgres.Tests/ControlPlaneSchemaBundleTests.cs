@@ -88,11 +88,11 @@ public sealed class ControlPlaneSchemaBundleTests
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
-        await using var command = connection.CreateCommand();
-        command.CommandText = "SELECT to_regclass(@fullName) IS NOT NULL";
-        command.Parameters.AddWithValue("fullName", $"\"{schemaName}\".\"{tableName}\"");
-        var result = await command.ExecuteScalarAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
-        return result is bool exists && exists;
+            await using var command = connection.CreateCommand();
+            command.CommandText = "SELECT to_regclass(@fullName) IS NOT NULL";
+            command.Parameters.AddWithValue("fullName", $"\"{schemaName}\".\"{tableName}\"");
+            var result = await command.ExecuteScalarAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+            return result is bool exists && exists;
         }
     }
 }

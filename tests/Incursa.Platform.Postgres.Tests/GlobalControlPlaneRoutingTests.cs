@@ -94,11 +94,11 @@ public sealed class GlobalControlPlaneRoutingTests
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
-        await using var command = connection.CreateCommand();
-        command.CommandText = $"SELECT COUNT(*) FROM \"{schemaName}\".\"Outbox\" WHERE \"Topic\" = @topic";
-        command.Parameters.AddWithValue("topic", topic);
-        var result = await command.ExecuteScalarAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
-        return Convert.ToInt32(result, System.Globalization.CultureInfo.InvariantCulture);
+            await using var command = connection.CreateCommand();
+            command.CommandText = $"SELECT COUNT(*) FROM \"{schemaName}\".\"Outbox\" WHERE \"Topic\" = @topic";
+            command.Parameters.AddWithValue("topic", topic);
+            var result = await command.ExecuteScalarAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+            return Convert.ToInt32(result, System.Globalization.CultureInfo.InvariantCulture);
         }
     }
 }

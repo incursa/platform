@@ -38,7 +38,7 @@ public sealed class PostgresDapperTypeHandlerTests : PostgresTestBase
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
-        await connection.ExecuteAsync(@"
+            await connection.ExecuteAsync(@"
             DROP TABLE IF EXISTS ""TestTable"";
 
             CREATE TABLE ""TestTable"" (

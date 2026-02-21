@@ -1,11 +1,11 @@
 {
-  "generatedAtUtc": "2026-02-01T05:28:34.4934903Z",
+  "generatedAtUtc": "2026-02-20T23:59:31.1619703Z",
   "repo": {
     "defaultBranch": "main"
   },
   "summary": {
-    "total": 725,
-    "compliant": 0,
+    "total": 764,
+    "compliant": 764,
     "missingRequired": 0,
     "invalidFormat": 0
   },
@@ -47,8 +47,8 @@
     },
     {
       "category": "Incursa.Platform.Tests",
-      "total": 626,
-      "compliant": 626
+      "total": 646,
+      "compliant": 646
     },
     {
       "category": "Incursa.Platform.Webhooks",
@@ -62,8 +62,8 @@
     },
     {
       "category": "TestUtilities",
-      "total": 14,
-      "compliant": 14
+      "total": 33,
+      "compliant": 33
     }
   ],
   "byTag": [],
@@ -90,13 +90,13 @@
     },
     {
       "project": "Incursa.Platform.InMemory.Tests",
-      "total": 2,
-      "compliant": 2
+      "total": 10,
+      "compliant": 10
     },
     {
       "project": "Incursa.Platform.Observability.Tests",
-      "total": 3,
-      "compliant": 3
+      "total": 4,
+      "compliant": 4
     },
     {
       "project": "Incursa.Platform.Operations.Tests",
@@ -105,18 +105,18 @@
     },
     {
       "project": "Incursa.Platform.Postgres.Tests",
-      "total": 200,
-      "compliant": 200
+      "total": 207,
+      "compliant": 207
     },
     {
       "project": "Incursa.Platform.SqlServer.Tests",
-      "total": 300,
-      "compliant": 300
+      "total": 304,
+      "compliant": 304
     },
     {
       "project": "Incursa.Platform.TestUtilities",
-      "total": 14,
-      "compliant": 14
+      "total": 33,
+      "compliant": 33
     },
     {
       "project": "Incursa.Platform.Tests",
@@ -653,7 +653,7 @@
       "tags": [],
       "summary": "Given only the base command, then parsing leaves EndpointName null and JsonOutput false.",
       "intent": "Describe default parsing with no endpoint or flags.",
-      "scenario": "Given arguments containing only \"healthcheck\".",
+      "scenario": "Given arguments containing only \u0022healthcheck\u0022.",
       "behavior": "EndpointName remains null and JsonOutput stays false.",
       "source": {
         "file": "tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs",
@@ -669,7 +669,7 @@
       "tags": [],
       "summary": "When an unknown flag is provided, then parsing throws a HealthProbeArgumentException.",
       "intent": "Describe parsing failure for unsupported command line options.",
-      "scenario": "Given arguments including an unrecognized \"--nope\" option.",
+      "scenario": "Given arguments including an unrecognized \u0022--nope\u0022 option.",
       "behavior": "Parsing throws and the message mentions an unknown option.",
       "source": {
         "file": "tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs",
@@ -685,8 +685,8 @@
       "tags": [],
       "summary": "Given an explicit endpoint argument, then parsing uses it as EndpointName.",
       "intent": "Describe parsing of a positional endpoint argument.",
-      "scenario": "Given arguments \"healthcheck\" and \"deploy\".",
-      "behavior": "EndpointName is \"deploy\".",
+      "scenario": "Given arguments \u0022healthcheck\u0022 and \u0022deploy\u0022.",
+      "behavior": "EndpointName is \u0022deploy\u0022.",
       "source": {
         "file": "tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs",
         "line": 46,
@@ -717,7 +717,7 @@
       "tags": [],
       "summary": "Given no URL override, then running the health check returns InvalidArguments.",
       "intent": "Describe validation when required URL input is missing.",
-      "scenario": "Given a service provider and a command line containing only \"healthcheck\".",
+      "scenario": "Given a service provider and a command line containing only \u0022healthcheck\u0022.",
       "behavior": "The returned exit code is InvalidArguments.",
       "source": {
         "file": "tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs",
@@ -798,7 +798,7 @@
       "summary": "When an override URL is provided, then resolution returns the override and preserves the endpoint name.",
       "intent": "Describe precedence of override URLs.",
       "scenario": "Given a configured endpoint and an explicit override URL.",
-      "behavior": "The resolved URL matches the override and EndpointName remains \"deploy\".",
+      "behavior": "The resolved URL matches the override and EndpointName remains \u0022deploy\u0022.",
       "source": {
         "file": "tests/Incursa.Platform.HealthProbe.Tests/HealthProbeUrlResolverTests.cs",
         "line": 88,
@@ -829,7 +829,7 @@
       "tags": [],
       "summary": "When the HTTP status is non-success, then the result is unhealthy even if JSON says Healthy.",
       "intent": "Describe precedence of HTTP status over JSON health status.",
-      "scenario": "Given a ServiceUnavailable response whose JSON body reports \"Healthy\".",
+      "scenario": "Given a ServiceUnavailable response whose JSON body reports \u0022Healthy\u0022.",
       "behavior": "The result is unhealthy and the exit code is Unhealthy.",
       "source": {
         "file": "tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs",
@@ -877,7 +877,7 @@
       "tags": [],
       "summary": "When a 200 OK response body reports Healthy, then the result is healthy.",
       "intent": "Describe how a JSON health status maps to the probe outcome.",
-      "scenario": "Given a stubbed 200 OK response with JSON status \"Healthy\".",
+      "scenario": "Given a stubbed 200 OK response with JSON status \u0022Healthy\u0022.",
       "behavior": "The result is healthy and the exit code is Healthy.",
       "source": {
         "file": "tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs",
@@ -909,7 +909,7 @@
       "tags": [],
       "summary": "When a 200 OK response body reports Unhealthy, then the result is unhealthy.",
       "intent": "Describe how a JSON health status maps to the probe outcome.",
-      "scenario": "Given a stubbed 200 OK response with JSON status \"Unhealthy\".",
+      "scenario": "Given a stubbed 200 OK response with JSON status \u0022Unhealthy\u0022.",
       "behavior": "The result is unhealthy and the exit code is Unhealthy.",
       "source": {
         "file": "tests/Incursa.Platform.HealthProbe.Tests/HttpHealthProbeRunnerTests.cs",
@@ -1064,6 +1064,38 @@
       "project": "Incursa.Platform.Postgres.Tests"
     },
     {
+      "testId": "Incursa.Platform.InMemory.Tests:Incursa.Platform.Tests.InMemoryGeneralCharacteristicsTests.LeaseCoordination_IsNotSharedAcrossIndependentProviderInstances",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When independent providers acquire the same lease resource, then both acquisitions succeed.",
+      "intent": "Verify the in-memory provider does not provide cross-provider distributed coordination guarantees.",
+      "scenario": "Given two separate provider instances each requesting the same lease resource name.",
+      "behavior": "Then each provider acquires its own lease for the same resource.",
+      "source": {
+        "file": "tests/Incursa.Platform.InMemory.Tests/InMemoryGeneralCharacteristicsTests.cs",
+        "line": 59,
+        "member": "Incursa.Platform.Tests.InMemoryGeneralCharacteristicsTests.LeaseCoordination_IsNotSharedAcrossIndependentProviderInstances"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.InMemory.Tests"
+    },
+    {
+      "testId": "Incursa.Platform.InMemory.Tests:Incursa.Platform.Tests.InMemoryGeneralCharacteristicsTests.ProcessLocalState_IsIsolatedAcrossProviderInstances_AndNotDurable",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When independent providers are used, then in-memory state stays process-local and non-durable.",
+      "intent": "Verify outbox state is isolated per provider instance and does not persist across provider recreation.",
+      "scenario": "Given one provider with an enqueued outbox message and separate provider instances using the same logical database name.",
+      "behavior": "Then only the original provider can claim the message, and a newly created provider has no prior state.",
+      "source": {
+        "file": "tests/Incursa.Platform.InMemory.Tests/InMemoryGeneralCharacteristicsTests.cs",
+        "line": 29,
+        "member": "Incursa.Platform.Tests.InMemoryGeneralCharacteristicsTests.ProcessLocalState_IsIsolatedAcrossProviderInstances_AndNotDurable"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.InMemory.Tests"
+    },
+    {
       "testId": "Incursa.Platform.InMemory.Tests:Incursa.Platform.Tests.InMemoryInboxTimeBehaviorTests.ClaimAsync_RespectsFakeTimeProvider",
       "category": "Incursa.Platform.Tests",
       "tags": [],
@@ -1075,6 +1107,22 @@
         "file": "tests/Incursa.Platform.InMemory.Tests/InMemoryInboxTimeBehaviorTests.cs",
         "line": 30,
         "member": "Incursa.Platform.Tests.InMemoryInboxTimeBehaviorTests.ClaimAsync_RespectsFakeTimeProvider"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.InMemory.Tests"
+    },
+    {
+      "testId": "Incursa.Platform.InMemory.Tests:Incursa.Platform.Tests.InMemoryOutboxFuzzTests.OutboxStore_FuzzDeterministic_TerminalItemsAreNeverReclaimed",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When outbox Store Fuzz Deterministic Terminal Items Are Never Reclaimed, then it behaves as expected.",
+      "intent": "Document expected behavior for outbox Store Fuzz Deterministic Terminal Items Are Never Reclaimed.",
+      "scenario": "Given outbox Store Fuzz Deterministic Terminal Items Are Never Reclaimed.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.InMemory.Tests/InMemoryOutboxFuzzTests.cs",
+        "line": 42,
+        "member": "Incursa.Platform.Tests.InMemoryOutboxFuzzTests.OutboxStore_FuzzDeterministic_TerminalItemsAreNeverReclaimed"
       },
       "status": "compliant",
       "project": "Incursa.Platform.InMemory.Tests"
@@ -1094,6 +1142,102 @@
       },
       "status": "compliant",
       "project": "Incursa.Platform.InMemory.Tests"
+    },
+    {
+      "testId": "Incursa.Platform.InMemory.Tests:Incursa.Platform.Tests.InMemoryPublicApiContractTests.AddFanoutTopic_WithMissingFanoutTopic_ThrowsArgumentException",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When add Fanout Topic With Missing Fanout Topic Throws Argument Exception, then it behaves as expected.",
+      "intent": "Document expected behavior for add Fanout Topic With Missing Fanout Topic Throws Argument Exception.",
+      "scenario": "Given add Fanout Topic With Missing Fanout Topic Throws Argument Exception.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.InMemory.Tests/InMemoryPublicApiContractTests.cs",
+        "line": 74,
+        "member": "Incursa.Platform.Tests.InMemoryPublicApiContractTests.AddFanoutTopic_WithMissingFanoutTopic_ThrowsArgumentException"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.InMemory.Tests"
+    },
+    {
+      "testId": "Incursa.Platform.InMemory.Tests:Incursa.Platform.Tests.InMemoryPublicApiContractTests.AddInMemoryPlatformMultiDatabaseWithList_RegistersCorePrimitiveServices",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When add In Memory Platform Multi Database With List Registers Core Primitive Services, then it behaves as expected.",
+      "intent": "Document expected behavior for add In Memory Platform Multi Database With List Registers Core Primitive Services.",
+      "scenario": "Given add In Memory Platform Multi Database With List Registers Core Primitive Services.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.InMemory.Tests/InMemoryPublicApiContractTests.cs",
+        "line": 54,
+        "member": "Incursa.Platform.Tests.InMemoryPublicApiContractTests.AddInMemoryPlatformMultiDatabaseWithList_RegistersCorePrimitiveServices"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.InMemory.Tests"
+    },
+    {
+      "testId": "Incursa.Platform.InMemory.Tests:Incursa.Platform.Tests.InMemoryPublicApiContractTests.AddInMemoryPlatformMultiDatabaseWithList_WithEmptyDatabases_ThrowsArgumentException",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When add In Memory Platform Multi Database With List With Empty Databases Throws Argument Exception, then it behaves as expected.",
+      "intent": "Document expected behavior for add In Memory Platform Multi Database With List With Empty Databases Throws Argument Exception.",
+      "scenario": "Given add In Memory Platform Multi Database With List With Empty Databases Throws Argument Exception.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.InMemory.Tests/InMemoryPublicApiContractTests.cs",
+        "line": 41,
+        "member": "Incursa.Platform.Tests.InMemoryPublicApiContractTests.AddInMemoryPlatformMultiDatabaseWithList_WithEmptyDatabases_ThrowsArgumentException"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.InMemory.Tests"
+    },
+    {
+      "testId": "Incursa.Platform.InMemory.Tests:Incursa.Platform.Tests.InMemoryPublicApiContractTests.AddInMemoryPlatformMultiDatabaseWithList_WithNullDatabases_ThrowsArgumentNullException",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When add In Memory Platform Multi Database With List With Null Databases Throws Argument Null Exception, then it behaves as expected.",
+      "intent": "Document expected behavior for add In Memory Platform Multi Database With List With Null Databases Throws Argument Null Exception.",
+      "scenario": "Given add In Memory Platform Multi Database With List With Null Databases Throws Argument Null Exception.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.InMemory.Tests/InMemoryPublicApiContractTests.cs",
+        "line": 28,
+        "member": "Incursa.Platform.Tests.InMemoryPublicApiContractTests.AddInMemoryPlatformMultiDatabaseWithList_WithNullDatabases_ThrowsArgumentNullException"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.InMemory.Tests"
+    },
+    {
+      "testId": "Incursa.Platform.InMemory.Tests:Incursa.Platform.Tests.InMemoryPublicApiContractTests.InMemoryOptions_HaveExpectedDefaults",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When in Memory Options Have Expected Defaults, then it behaves as expected.",
+      "intent": "Document expected behavior for in Memory Options Have Expected Defaults.",
+      "scenario": "Given in Memory Options Have Expected Defaults.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.InMemory.Tests/InMemoryPublicApiContractTests.cs",
+        "line": 90,
+        "member": "Incursa.Platform.Tests.InMemoryPublicApiContractTests.InMemoryOptions_HaveExpectedDefaults"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.InMemory.Tests"
+    },
+    {
+      "testId": "Incursa.Platform.Observability.Tests:Incursa.Platform.Tests.InboxRecoveryServiceTests.ReviveAsync_EmitsAuditEventWithPriorError",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When revive Async Emits Audit Event, then it behaves as expected.",
+      "intent": "Verify inbox revive emits audit data with the prior error.",
+      "scenario": "Given a work store returning a message with LastError.",
+      "behavior": "Then the audit event includes the previous error and revive reason.",
+      "source": {
+        "file": "tests/Incursa.Platform.Observability.Tests/InboxRecoveryServiceTests.cs",
+        "line": 30,
+        "member": "Incursa.Platform.Tests.InboxRecoveryServiceTests.ReviveAsync_EmitsAuditEventWithPriorError"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.Observability.Tests"
     },
     {
       "testId": "Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.ControlPlaneSchemaBundleTests.ControlPlaneBundle_AddsControlPlaneSchema_OnTopOfTenantBundle",
@@ -1149,7 +1293,7 @@
       "tags": [],
       "summary": "When the distributed lock schema is ensured with a custom schema, then the table is created there.",
       "intent": "Verify distributed lock deployment honors the configured schema name.",
-      "scenario": "Given EnsureDistributedLockSchemaAsync is called with the \"platform\" schema and table name \"DistributedLock\".",
+      "scenario": "Given EnsureDistributedLockSchemaAsync is called with the \u0022platform\u0022 schema and table name \u0022DistributedLock\u0022.",
       "behavior": "The DistributedLock table is present in the custom schema.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/CustomSchemaIntegrationTests.cs",
@@ -1165,7 +1309,7 @@
       "tags": [],
       "summary": "When the fanout schema is ensured with a custom schema, then policy and cursor tables are created there.",
       "intent": "Verify fanout deployment honors the configured schema name.",
-      "scenario": "Given EnsureFanoutSchemaAsync is called with the \"platform\" schema and custom table names.",
+      "scenario": "Given EnsureFanoutSchemaAsync is called with the \u0022platform\u0022 schema and custom table names.",
       "behavior": "FanoutPolicy and FanoutCursor tables are present in the custom schema.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/CustomSchemaIntegrationTests.cs",
@@ -1181,7 +1325,7 @@
       "tags": [],
       "summary": "When the inbox schema is ensured with a custom schema, then the Inbox table is created there.",
       "intent": "Verify inbox deployment honors the configured schema name.",
-      "scenario": "Given EnsureInboxSchemaAsync is called with the \"platform\" schema and table name \"Inbox\".",
+      "scenario": "Given EnsureInboxSchemaAsync is called with the \u0022platform\u0022 schema and table name \u0022Inbox\u0022.",
       "behavior": "The Inbox table is present in the custom schema.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/CustomSchemaIntegrationTests.cs",
@@ -1197,7 +1341,7 @@
       "tags": [],
       "summary": "When the inbox work-queue schema is ensured with a custom schema, then inbox objects are created there.",
       "intent": "Verify inbox work-queue deployment honors the configured schema name.",
-      "scenario": "Given EnsureInboxSchemaAsync and EnsureInboxWorkQueueSchemaAsync are called with the \"platform\" schema.",
+      "scenario": "Given EnsureInboxSchemaAsync and EnsureInboxWorkQueueSchemaAsync are called with the \u0022platform\u0022 schema.",
       "behavior": "The Inbox table is present in the custom schema.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/CustomSchemaIntegrationTests.cs",
@@ -1213,7 +1357,7 @@
       "tags": [],
       "summary": "When the lease schema is ensured with a custom schema, then the lease table is created there.",
       "intent": "Verify lease deployment honors the configured schema name.",
-      "scenario": "Given EnsureLeaseSchemaAsync is called with the \"platform\" schema and table name \"Lease\".",
+      "scenario": "Given EnsureLeaseSchemaAsync is called with the \u0022platform\u0022 schema and table name \u0022Lease\u0022.",
       "behavior": "The Lease table is present in the custom schema.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/CustomSchemaIntegrationTests.cs",
@@ -1229,7 +1373,7 @@
       "tags": [],
       "summary": "When the outbox schema is ensured with a custom schema, then outbox tables are created there.",
       "intent": "Verify outbox deployment honors the configured schema name.",
-      "scenario": "Given EnsureOutboxSchemaAsync is called with the \"platform\" schema and table name \"Outbox\".",
+      "scenario": "Given EnsureOutboxSchemaAsync is called with the \u0022platform\u0022 schema and table name \u0022Outbox\u0022.",
       "behavior": "The Outbox and OutboxState tables are present in the custom schema.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/CustomSchemaIntegrationTests.cs",
@@ -1245,7 +1389,7 @@
       "tags": [],
       "summary": "When the scheduler schema is ensured with a custom schema, then scheduler tables are created there.",
       "intent": "Verify scheduler deployment honors the configured schema name.",
-      "scenario": "Given EnsureSchedulerSchemaAsync is called with the \"platform\" schema and custom table names.",
+      "scenario": "Given EnsureSchedulerSchemaAsync is called with the \u0022platform\u0022 schema and custom table names.",
       "behavior": "Jobs, Timers, JobRuns, and SchedulerState tables are present in the custom schema.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/CustomSchemaIntegrationTests.cs",
@@ -1261,7 +1405,7 @@
       "tags": [],
       "summary": "When the work-queue schema is ensured with a custom schema, then work-queue objects use that schema.",
       "intent": "Verify work-queue deployment honors the configured schema name.",
-      "scenario": "Given EnsureOutboxSchemaAsync and EnsureWorkQueueSchemaAsync are called with the \"platform\" schema.",
+      "scenario": "Given EnsureOutboxSchemaAsync and EnsureWorkQueueSchemaAsync are called with the \u0022platform\u0022 schema.",
       "behavior": "The Outbox table is present in the custom schema.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/CustomSchemaIntegrationTests.cs",
@@ -1379,6 +1523,22 @@
         "file": "tests/Incursa.Platform.Postgres.Tests/DatabaseSchemaConsistencyTests.cs",
         "line": 117,
         "member": "Incursa.Platform.Tests.DatabaseSchemaConsistencyTests.OutboxTable_HasCorrectSchema"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.Postgres.Tests"
+    },
+    {
+      "testId": "Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.DatabaseSchemaConsistencyTests.SchemaDeployment_RepeatedExecution_IsIdempotent",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When schema deployment is executed repeatedly, then execution remains idempotent.",
+      "intent": "Verify repeated schema deployment calls do not fail and preserve expected artifacts.",
+      "scenario": "Given repeated EnsureOutboxSchemaAsync and EnsureWorkQueueSchemaAsync calls on the same database.",
+      "behavior": "Required outbox table and work-queue index still exist after re-execution.",
+      "source": {
+        "file": "tests/Incursa.Platform.Postgres.Tests/DatabaseSchemaConsistencyTests.cs",
+        "line": 365,
+        "member": "Incursa.Platform.Tests.DatabaseSchemaConsistencyTests.SchemaDeployment_RepeatedExecution_IsIdempotent"
       },
       "status": "compliant",
       "project": "Incursa.Platform.Postgres.Tests"
@@ -1933,7 +2093,7 @@
       "tags": [],
       "summary": "When requesting a missing message id, then GetAsync throws InvalidOperationException.",
       "intent": "Verify missing messages raise an exception.",
-      "scenario": "Given an inbox store with no message matching \"non-existent\".",
+      "scenario": "Given an inbox store with no message matching \u0022non-existent\u0022.",
       "behavior": "An InvalidOperationException is thrown.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/InboxWorkStoreTests.cs",
@@ -1949,7 +2109,7 @@
       "tags": [],
       "summary": "Given a valid message id, then GetAsync returns the stored inbox message.",
       "intent": "Verify message retrieval by id returns stored fields.",
-      "scenario": "Given one enqueued message with id \"msg-1\".",
+      "scenario": "Given one enqueued message with id \u0022msg-1\u0022.",
       "behavior": "The returned message matches the stored fields and has Attempt 1.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/InboxWorkStoreTests.cs",
@@ -1985,7 +2145,7 @@
       "behavior": "CompletedSteps equals ExpectedSteps after handling the wait message.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/JoinWaitHandlerTests.cs",
-        "line": 123,
+        "line": 126,
         "member": "Incursa.Platform.Tests.JoinWaitHandlerTests.HandleAsync_WhenAllStepsCompleted_MarksJoinAsCompleted"
       },
       "status": "compliant",
@@ -2001,7 +2161,7 @@
       "behavior": "The join status is updated to Failed.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/JoinWaitHandlerTests.cs",
-        "line": 168,
+        "line": 171,
         "member": "Incursa.Platform.Tests.JoinWaitHandlerTests.HandleAsync_WhenAnyStepFailed_MarksJoinFailed"
       },
       "status": "compliant",
@@ -2017,7 +2177,7 @@
       "behavior": "HandleAsync raises JoinNotReadyException.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/JoinWaitHandlerTests.cs",
-        "line": 87,
+        "line": 90,
         "member": "Incursa.Platform.Tests.JoinWaitHandlerTests.HandleAsync_WhenJoinNotReady_ThrowsJoinNotReadyException"
       },
       "status": "compliant",
@@ -2641,7 +2801,7 @@
       "behavior": "The join member table contains a single row for that pair.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs",
-        "line": 187,
+        "line": 190,
         "member": "Incursa.Platform.Tests.OutboxJoinTests.AttachMessageToJoinAsync_CalledTwice_IsIdempotent"
       },
       "status": "compliant",
@@ -2657,7 +2817,7 @@
       "behavior": "The join member table has one row for the join/message pair.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs",
-        "line": 154,
+        "line": 157,
         "member": "Incursa.Platform.Tests.OutboxJoinTests.AttachMessageToJoinAsync_WithValidIds_CreatesAssociation"
       },
       "status": "compliant",
@@ -2673,7 +2833,7 @@
       "behavior": "CompletedSteps is 3, FailedSteps is 0, and Status is Completed.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs",
-        "line": 340,
+        "line": 343,
         "member": "Incursa.Platform.Tests.OutboxJoinTests.CompleteJoinWorkflow_WithAllStepsCompleted_WorksCorrectly"
       },
       "status": "compliant",
@@ -2689,7 +2849,7 @@
       "behavior": "Status is Failed with CompletedSteps 2 and FailedSteps 1.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs",
-        "line": 384,
+        "line": 387,
         "member": "Incursa.Platform.Tests.OutboxJoinTests.CompleteJoinWorkflow_WithSomeStepsFailed_WorksCorrectly"
       },
       "status": "compliant",
@@ -2705,7 +2865,7 @@
       "behavior": "The join has a non-empty id, pending status, zero counts, and a recent CreatedUtc.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs",
-        "line": 86,
+        "line": 89,
         "member": "Incursa.Platform.Tests.OutboxJoinTests.CreateJoinAsync_WithValidParameters_CreatesJoin"
       },
       "status": "compliant",
@@ -2721,7 +2881,7 @@
       "behavior": "The retrieved join matches the created JoinId and ExpectedSteps.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs",
-        "line": 116,
+        "line": 119,
         "member": "Incursa.Platform.Tests.OutboxJoinTests.GetJoinAsync_WithExistingJoin_ReturnsJoin"
       },
       "status": "compliant",
@@ -2737,7 +2897,7 @@
       "behavior": "The retrieved join is null.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs",
-        "line": 138,
+        "line": 141,
         "member": "Incursa.Platform.Tests.OutboxJoinTests.GetJoinAsync_WithNonExistentJoin_ReturnsNull"
       },
       "status": "compliant",
@@ -2753,7 +2913,7 @@
       "behavior": "The returned list contains all three message ids.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs",
-        "line": 309,
+        "line": 312,
         "member": "Incursa.Platform.Tests.OutboxJoinTests.GetJoinMessagesAsync_WithMultipleMessages_ReturnsAllMessageIds"
       },
       "status": "compliant",
@@ -2769,7 +2929,7 @@
       "behavior": "CompletedSteps remains 1 and FailedSteps remains 0.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs",
-        "line": 422,
+        "line": 425,
         "member": "Incursa.Platform.Tests.OutboxJoinTests.IncrementCompletedAsync_CalledTwiceForSameMessage_IsIdempotent"
       },
       "status": "compliant",
@@ -2785,7 +2945,7 @@
       "behavior": "CompletedSteps remains at 2 and FailedSteps remains 0.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs",
-        "line": 472,
+        "line": 475,
         "member": "Incursa.Platform.Tests.OutboxJoinTests.IncrementCompletedAsync_WhenTotalWouldExceedExpected_DoesNotOverCount"
       },
       "status": "compliant",
@@ -2801,7 +2961,7 @@
       "behavior": "CompletedSteps is 1, FailedSteps is 0, and LastUpdatedUtc advances.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs",
-        "line": 225,
+        "line": 228,
         "member": "Incursa.Platform.Tests.OutboxJoinTests.IncrementCompletedAsync_WithValidMessage_IncrementsCount"
       },
       "status": "compliant",
@@ -2817,7 +2977,7 @@
       "behavior": "FailedSteps remains 1 and CompletedSteps remains 0.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs",
-        "line": 447,
+        "line": 450,
         "member": "Incursa.Platform.Tests.OutboxJoinTests.IncrementFailedAsync_CalledTwiceForSameMessage_IsIdempotent"
       },
       "status": "compliant",
@@ -2833,7 +2993,7 @@
       "behavior": "FailedSteps is 1, CompletedSteps is 0, and LastUpdatedUtc advances.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs",
-        "line": 254,
+        "line": 257,
         "member": "Incursa.Platform.Tests.OutboxJoinTests.IncrementFailedAsync_WithValidMessage_IncrementsCount"
       },
       "status": "compliant",
@@ -2849,7 +3009,7 @@
       "behavior": "CompletedSteps moves from 1 after the first ack to 2 after the second.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs",
-        "line": 507,
+        "line": 510,
         "member": "Incursa.Platform.Tests.OutboxJoinTests.OutboxAck_AutomaticallyReportsJoinCompletion"
       },
       "status": "compliant",
@@ -2865,7 +3025,7 @@
       "behavior": "CompletedSteps remains 1 and FailedSteps remains 0.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs",
-        "line": 578,
+        "line": 581,
         "member": "Incursa.Platform.Tests.OutboxJoinTests.OutboxAck_MultipleAcksForSameMessage_IsIdempotent"
       },
       "status": "compliant",
@@ -2881,7 +3041,7 @@
       "behavior": "CompletedSteps is 1 and FailedSteps is 1.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs",
-        "line": 545,
+        "line": 548,
         "member": "Incursa.Platform.Tests.OutboxJoinTests.OutboxFail_AutomaticallyReportsJoinFailure"
       },
       "status": "compliant",
@@ -2897,7 +3057,7 @@
       "behavior": "The stored join status is Completed.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/OutboxJoinTests.cs",
-        "line": 283,
+        "line": 286,
         "member": "Incursa.Platform.Tests.OutboxJoinTests.UpdateStatusAsync_WithValidStatus_UpdatesJoinStatus"
       },
       "status": "compliant",
@@ -2979,6 +3139,22 @@
         "file": "tests/Incursa.Platform.Postgres.Tests/OutboxWorkQueueTests.cs",
         "line": 74,
         "member": "Incursa.Platform.Tests.OutboxWorkQueueTests.OutboxClaim_WithBatchSize_RespectsLimit"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.Postgres.Tests"
+    },
+    {
+      "testId": "Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.OutboxWorkQueueTests.OutboxClaim_WithNonPositiveBatchSize_ThrowsArgumentOutOfRangeException",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When ClaimAsync receives a non-positive batch size, then it throws ArgumentOutOfRangeException.",
+      "intent": "Enforce API guard behavior for invalid outbox claim batch sizes.",
+      "scenario": "Given ready work items and ClaimAsync called with batchSize = 0.",
+      "behavior": "ClaimAsync throws ArgumentOutOfRangeException.",
+      "source": {
+        "file": "tests/Incursa.Platform.Postgres.Tests/OutboxWorkQueueTests.cs",
+        "line": 197,
+        "member": "Incursa.Platform.Tests.OutboxWorkQueueTests.OutboxClaim_WithNonPositiveBatchSize_ThrowsArgumentOutOfRangeException"
       },
       "status": "compliant",
       "project": "Incursa.Platform.Postgres.Tests"
@@ -3233,7 +3409,7 @@
       "behavior": "The projected record returns every identifier unchanged.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs",
-        "line": 318,
+        "line": 321,
         "member": "Incursa.Platform.Tests.PostgresDapperTypeHandlerTests.AllTypesInSingleQuery_RoundTrip_WorksCorrectly"
       },
       "status": "compliant",
@@ -3249,7 +3425,7 @@
       "behavior": "The queried DatabaseIdentifier matches the inserted value.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs",
-        "line": 286,
+        "line": 289,
         "member": "Incursa.Platform.Tests.PostgresDapperTypeHandlerTests.DatabaseIdentifier_RoundTrip_WorksCorrectly"
       },
       "status": "compliant",
@@ -3265,7 +3441,7 @@
       "behavior": "The queried InboxMessageIdentifier matches the inserted value.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs",
-        "line": 126,
+        "line": 129,
         "member": "Incursa.Platform.Tests.PostgresDapperTypeHandlerTests.InboxMessageIdentifier_RoundTrip_WorksCorrectly"
       },
       "status": "compliant",
@@ -3281,7 +3457,7 @@
       "behavior": "The queried InstanceIdentifier matches the inserted value.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs",
-        "line": 254,
+        "line": 257,
         "member": "Incursa.Platform.Tests.PostgresDapperTypeHandlerTests.InstanceIdentifier_RoundTrip_WorksCorrectly"
       },
       "status": "compliant",
@@ -3297,7 +3473,7 @@
       "behavior": "The queried JoinIdentifier matches the inserted value.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs",
-        "line": 222,
+        "line": 225,
         "member": "Incursa.Platform.Tests.PostgresDapperTypeHandlerTests.JoinIdentifier_RoundTrip_WorksCorrectly"
       },
       "status": "compliant",
@@ -3313,7 +3489,7 @@
       "behavior": "The nullable query result equals the inserted OwnerToken.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs",
-        "line": 93,
+        "line": 96,
         "member": "Incursa.Platform.Tests.PostgresDapperTypeHandlerTests.NullableOwnerToken_RoundTrip_WorksCorrectly"
       },
       "status": "compliant",
@@ -3329,7 +3505,7 @@
       "behavior": "The queried OutboxMessageIdentifier matches the inserted value.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs",
-        "line": 158,
+        "line": 161,
         "member": "Incursa.Platform.Tests.PostgresDapperTypeHandlerTests.OutboxMessageIdentifier_RoundTrip_WorksCorrectly"
       },
       "status": "compliant",
@@ -3345,7 +3521,7 @@
       "behavior": "The queried OutboxWorkItemIdentifier matches the inserted value.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs",
-        "line": 190,
+        "line": 193,
         "member": "Incursa.Platform.Tests.PostgresDapperTypeHandlerTests.OutboxWorkItemIdentifier_RoundTrip_WorksCorrectly"
       },
       "status": "compliant",
@@ -3361,7 +3537,7 @@
       "behavior": "The OwnerToken query result matches the inserted token.",
       "source": {
         "file": "tests/Incursa.Platform.Postgres.Tests/PostgresDapperTypeHandlerTests.cs",
-        "line": 61,
+        "line": 64,
         "member": "Incursa.Platform.Tests.PostgresDapperTypeHandlerTests.OwnerToken_RoundTrip_WorksCorrectly"
       },
       "status": "compliant",
@@ -3800,6 +3976,38 @@
       "project": "Incursa.Platform.Postgres.Tests"
     },
     {
+      "testId": "Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresOutboxFuzzTests.Outbox_FuzzConcurrentRounds_ClaimsStayDisjointAndTerminalItemsAreNotReclaimed",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When two workers perform deterministic randomized claim rounds, then claimed sets stay disjoint and terminal items stay terminal.",
+      "intent": "Exercise queue state transitions under concurrent claimers and mixed ack/abandon/fail actions.",
+      "scenario": "Given 60 ready items and 20 deterministic rounds with two workers per round.",
+      "behavior": "Claims in each round do not overlap and terminal ids are never reclaimed later.",
+      "source": {
+        "file": "tests/Incursa.Platform.Postgres.Tests/PostgresOutboxFuzzTests.cs",
+        "line": 111,
+        "member": "Incursa.Platform.Tests.PostgresOutboxFuzzTests.Outbox_FuzzConcurrentRounds_ClaimsStayDisjointAndTerminalItemsAreNotReclaimed"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.Postgres.Tests"
+    },
+    {
+      "testId": "Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresOutboxFuzzTests.Outbox_FuzzDeterministic_TerminalItemsAreNeverReclaimed",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When deterministic randomized outbox operations run, then terminal items are never reclaimed.",
+      "intent": "Use fixed-seed fuzzing to verify claim/ack/abandon/fail invariants under varied operation sequences.",
+      "scenario": "Given 40 ready items and 40 deterministic random operation steps.",
+      "behavior": "Completed/failed terminal items are never returned by subsequent claims.",
+      "source": {
+        "file": "tests/Incursa.Platform.Postgres.Tests/PostgresOutboxFuzzTests.cs",
+        "line": 69,
+        "member": "Incursa.Platform.Tests.PostgresOutboxFuzzTests.Outbox_FuzzDeterministic_TerminalItemsAreNeverReclaimed"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.Postgres.Tests"
+    },
+    {
       "testId": "Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresOutboxServiceTests.Constructor_CreatesInstance",
       "category": "Incursa.Platform.Tests",
       "tags": [],
@@ -4019,6 +4227,54 @@
         "file": "tests/Incursa.Platform.Postgres.Tests/PostgresOutboxStoreWhiteBoxTests.cs",
         "line": 110,
         "member": "Incursa.Platform.Tests.PostgresOutboxStoreWhiteBoxTests.RescheduleAsync_IncrementsRetryCountAndSetsError"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.Postgres.Tests"
+    },
+    {
+      "testId": "Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresPublicApiContractTests.AddPostgresOutbox_ThrowsForMissingConnectionString",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When invalid outbox options are supplied, then options validation fails immediately.",
+      "intent": "Ensure Postgres option validators enforce required contracts.",
+      "scenario": "Given AddPostgresOutbox called with an empty connection string.",
+      "behavior": "An OptionsValidationException is thrown.",
+      "source": {
+        "file": "tests/Incursa.Platform.Postgres.Tests/PostgresPublicApiContractTests.cs",
+        "line": 64,
+        "member": "Incursa.Platform.Tests.PostgresPublicApiContractTests.AddPostgresOutbox_ThrowsForMissingConnectionString"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.Postgres.Tests"
+    },
+    {
+      "testId": "Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresPublicApiContractTests.AddPostgresPlatformMultiDatabaseWithList_CalledTwice_ThrowsInvalidOperationException",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When list-based registration is repeated, then registration guard rails reject duplicate setup.",
+      "intent": "Ensure platform registration lifecycle validates duplicate/invalid registration state.",
+      "scenario": "Given AddPostgresPlatformMultiDatabaseWithList called twice on the same service collection.",
+      "behavior": "The second call throws InvalidOperationException.",
+      "source": {
+        "file": "tests/Incursa.Platform.Postgres.Tests/PostgresPublicApiContractTests.cs",
+        "line": 44,
+        "member": "Incursa.Platform.Tests.PostgresPublicApiContractTests.AddPostgresPlatformMultiDatabaseWithList_CalledTwice_ThrowsInvalidOperationException"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.Postgres.Tests"
+    },
+    {
+      "testId": "Incursa.Platform.Postgres.Tests:Incursa.Platform.Tests.PostgresPublicApiContractTests.AddPostgresPlatform_RegistersCoreDependencies",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When AddPostgresPlatform is used, then core routing dependencies are registered.",
+      "intent": "Verify primary Postgres platform registration wires primitive routers/providers and platform services.",
+      "scenario": "Given a service collection configured with AddPostgresPlatform.",
+      "behavior": "Outbox/inbox/scheduler store providers and discovery services are registered.",
+      "source": {
+        "file": "tests/Incursa.Platform.Postgres.Tests/PostgresPublicApiContractTests.cs",
+        "line": 28,
+        "member": "Incursa.Platform.Tests.PostgresPublicApiContractTests.AddPostgresPlatform_RegistersCoreDependencies"
       },
       "status": "compliant",
       "project": "Incursa.Platform.Postgres.Tests"
@@ -4315,10 +4571,10 @@
       "testId": "Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.ConfiguredLeaseFactoryProviderTests.ConfiguredProvider_GetFactoryIdentifier_ReturnsUnknownForInvalidFactory",
       "category": "Incursa.Platform.Tests",
       "tags": [],
-      "summary": "When a factory not created by the provider is inspected, then its identifier is reported as \"Unknown\".",
+      "summary": "When a factory not created by the provider is inspected, then its identifier is reported as \u0022Unknown\u0022.",
       "intent": "Confirm identifier lookup only recognizes provider-managed factories.",
       "scenario": "Given an external SqlLeaseFactory not created by ConfiguredLeaseFactoryProvider.",
-      "behavior": "Then GetFactoryIdentifier returns \"Unknown\".",
+      "behavior": "Then GetFactoryIdentifier returns \u0022Unknown\u0022.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/ConfiguredLeaseFactoryProviderTests.cs",
         "line": 127,
@@ -4334,7 +4590,7 @@
       "summary": "When the obsolete discovery-based control plane overload is used, then it still wires defaults correctly.",
       "intent": "Ensure legacy discovery registration continues to configure the control plane schema.",
       "scenario": "Given AddSqlPlatformMultiDatabaseWithControlPlaneAndDiscovery called via the obsolete signature and a list-based discovery.",
-      "behavior": "Then PlatformConfiguration defaults the schema to \"infra\".",
+      "behavior": "Then PlatformConfiguration defaults the schema to \u0022infra\u0022.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/ControlPlaneConfigurationTests.cs",
         "line": 247,
@@ -4366,7 +4622,7 @@
       "summary": "When the obsolete list-based control plane overload is used, then it still wires defaults correctly.",
       "intent": "Ensure legacy registration paths continue to configure the control plane schema.",
       "scenario": "Given AddSqlPlatformMultiDatabaseWithControlPlaneAndList called via the obsolete signature.",
-      "behavior": "Then PlatformConfiguration defaults the schema to \"infra\".",
+      "behavior": "Then PlatformConfiguration defaults the schema to \u0022infra\u0022.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/ControlPlaneConfigurationTests.cs",
         "line": 201,
@@ -4397,7 +4653,7 @@
       "tags": [],
       "summary": "When list-based control plane registration specifies a schema name, then configuration uses it.",
       "intent": "Verify control-plane schema settings are propagated to configuration.",
-      "scenario": "Given AddSqlPlatformMultiDatabaseWithControlPlaneAndList called with control plane options specifying SchemaName = \"control\".",
+      "scenario": "Given AddSqlPlatformMultiDatabaseWithControlPlaneAndList called with control plane options specifying SchemaName = \u0022control\u0022.",
       "behavior": "Then PlatformConfiguration uses the control plane schema and connection string.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/ControlPlaneConfigurationTests.cs",
@@ -4411,10 +4667,10 @@
       "testId": "Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.ControlPlaneConfigurationTests.PlatformControlPlaneOptions_DefaultSchemaName_IsDbo",
       "category": "Incursa.Platform.Tests",
       "tags": [],
-      "summary": "When PlatformControlPlaneOptions is created without a schema name, then it defaults to \"infra\".",
+      "summary": "When PlatformControlPlaneOptions is created without a schema name, then it defaults to \u0022infra\u0022.",
       "intent": "Confirm control-plane options default schema aligns with platform conventions.",
       "scenario": "Given a PlatformControlPlaneOptions instance with only ConnectionString set.",
-      "behavior": "Then SchemaName is \"infra\".",
+      "behavior": "Then SchemaName is \u0022infra\u0022.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/ControlPlaneConfigurationTests.cs",
         "line": 178,
@@ -4840,6 +5096,22 @@
       "project": "Incursa.Platform.SqlServer.Tests"
     },
     {
+      "testId": "Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.DatabaseSchemaConsistencyTests.SchemaDeployment_RepeatedExecution_IsIdempotent",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When schema deployment is executed repeatedly, then execution remains idempotent.",
+      "intent": "Verify repeated schema deployment calls do not fail and preserve expected artifacts.",
+      "scenario": "Given repeated EnsureOutboxSchemaAsync and EnsureWorkQueueSchemaAsync calls on the same database.",
+      "behavior": "Then required outbox table and work-queue procedure still exist after re-execution.",
+      "source": {
+        "file": "tests/Incursa.Platform.SqlServer.Tests/DatabaseSchemaConsistencyTests.cs",
+        "line": 392,
+        "member": "Incursa.Platform.Tests.DatabaseSchemaConsistencyTests.SchemaDeployment_RepeatedExecution_IsIdempotent"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.SqlServer.Tests"
+    },
+    {
       "testId": "Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.DatabaseSchemaConsistencyTests.TimersTable_HasCorrectSchema",
       "category": "Incursa.Platform.Tests",
       "tags": [],
@@ -4881,7 +5153,7 @@
       "behavior": "Then procedure definitions include SYSUTCDATETIME.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/DatabaseSchemaConsistencyTests.cs",
-        "line": 392,
+        "line": 415,
         "member": "Incursa.Platform.Tests.DatabaseSchemaConsistencyTests.WorkQueueProcedures_UseDatabaseUtcTime"
       },
       "status": "compliant",
@@ -5035,7 +5307,7 @@
       "testId": "Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.DynamicDiscoveryEnforcementTests.PlatformWithDiscovery_ShouldNotConfigureCustomerDatabaseOptions",
       "category": "Incursa.Platform.Tests",
       "tags": [],
-      "summary": "Verifies that when using platform registration with discovery, customer database features (Inbox, Outbox, Lease, Scheduler, Fanout) do NOT have services.Configure<TOptions>() called (they should use discovery instead). Global features may have Configure<TOptions>() called.",
+      "summary": "Verifies that when using platform registration with discovery, customer database features (Inbox, Outbox, Lease, Scheduler, Fanout) do NOT have services.Configure\u003CTOptions\u003E() called (they should use discovery instead). Global features may have Configure\u003CTOptions\u003E() called.",
       "intent": "Enforce discovery-driven configuration for tenant features while allowing global options.",
       "scenario": "Given AddSqlPlatformMultiDatabaseWithControlPlaneAndDiscovery with a discovery implementation and control plane options.",
       "behavior": "Then Outbox/Inbox/Scheduler/Fanout options remain default.",
@@ -5067,7 +5339,7 @@
       "testId": "Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.DynamicDiscoveryEnforcementTests.PlatformWithList_ShouldNotConfigureCustomerDatabaseOptions",
       "category": "Incursa.Platform.Tests",
       "tags": [],
-      "summary": "Verifies that when using platform registration with a list, customer database features do NOT have services.Configure<TOptions>() called.",
+      "summary": "Verifies that when using platform registration with a list, customer database features do NOT have services.Configure\u003CTOptions\u003E() called.",
       "intent": "Ensure list-based registration still relies on discovery providers rather than direct options.",
       "scenario": "Given AddSqlPlatformMultiDatabaseWithList with two tenant databases and schema deployment disabled.",
       "behavior": "Then Outbox/Inbox/Scheduler/Fanout options remain default.",
@@ -5358,7 +5630,7 @@
       "summary": "When a known scheduler key is requested, then GetSchedulerClientByKey returns a client instance.",
       "intent": "Verify keyed scheduler client lookup works after discovery.",
       "scenario": "Given discovery provides Customer1 and initial discovery has completed.",
-      "behavior": "Then GetSchedulerClientByKey(\"Customer1\") returns a non-null client.",
+      "behavior": "Then GetSchedulerClientByKey(\u0022Customer1\u0022) returns a non-null client.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/DynamicSchedulerStoreProviderTests.cs",
         "line": 218,
@@ -5374,7 +5646,7 @@
       "summary": "When an unknown scheduler key is requested, then GetSchedulerClientByKey returns null.",
       "intent": "Ensure missing scheduler keys are reported as null lookups.",
       "scenario": "Given discovery provides Customer1 and initial discovery has completed.",
-      "behavior": "Then GetSchedulerClientByKey(\"UnknownCustomer\") returns null.",
+      "behavior": "Then GetSchedulerClientByKey(\u0022UnknownCustomer\u0022) returns null.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/DynamicSchedulerStoreProviderTests.cs",
         "line": 262,
@@ -5517,7 +5789,7 @@
       "tags": [],
       "summary": "When a tenant key is missing, then FanoutRouter throws an InvalidOperationException containing the key.",
       "intent": "Ensure invalid fanout keys are rejected with actionable errors.",
-      "scenario": "Given a FanoutRouter configured for Tenant1 only and a lookup for \"NonExistentKey\".",
+      "scenario": "Given a FanoutRouter configured for Tenant1 only and a lookup for \u0022NonExistentKey\u0022.",
       "behavior": "Then both policy and cursor repository lookups throw and mention the missing key.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/FanoutRouterIntegrationTests.cs",
@@ -6941,7 +7213,7 @@
       "tags": [],
       "summary": "When a handler throws, then the dispatcher reschedules the message with a backoff delay.",
       "intent": "Verify failing handlers trigger reschedule with an error message.",
-      "scenario": "Given a TestHandler configured to throw and a message with RetryCount > 0.",
+      "scenario": "Given a TestHandler configured to throw and a message with RetryCount \u003E 0.",
       "behavior": "Then the store records a reschedule with a positive delay and the handler error.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/OutboxHandlerTests.cs",
@@ -7053,7 +7325,7 @@
       "tags": [],
       "summary": "When handler topics are looked up with different casing, then the resolver still matches them.",
       "intent": "Ensure topic matching is case-insensitive.",
-      "scenario": "Given a resolver with a handler for \"Email.Send\" and lookups using different casing.",
+      "scenario": "Given a resolver with a handler for \u0022Email.Send\u0022 and lookups using different casing.",
       "behavior": "Then TryGet succeeds for lower-case and upper-case topic strings.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/OutboxHandlerTests.cs",
@@ -7101,7 +7373,7 @@
       "tags": [],
       "summary": "When AddOutboxHandler is called with a handler type, then it registers a singleton IOutboxHandler.",
       "intent": "Confirm DI registration for handler types.",
-      "scenario": "Given a ServiceCollection and AddOutboxHandler<TestHandler> invocation.",
+      "scenario": "Given a ServiceCollection and AddOutboxHandler\u003CTestHandler\u003E invocation.",
       "behavior": "Then the service descriptor registers TestHandler as a singleton IOutboxHandler.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/OutboxHandlerTests.cs",
@@ -7469,7 +7741,7 @@
       "tags": [],
       "summary": "When a Guid key does not match any configured identifier, then GetOutbox throws with the key in the message.",
       "intent": "Verify Guid-based lookup reports missing identifiers clearly.",
-      "scenario": "Given a router configured for \"Customer1\" and a different Guid key.",
+      "scenario": "Given a router configured for \u0022Customer1\u0022 and a different Guid key.",
       "behavior": "Then GetOutbox(Guid) throws InvalidOperationException containing the Guid string.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/OutboxRouterTests.cs",
@@ -7651,6 +7923,22 @@
         "file": "tests/Incursa.Platform.SqlServer.Tests/OutboxWorkQueueTests.cs",
         "line": 77,
         "member": "Incursa.Platform.Tests.OutboxWorkQueueTests.OutboxClaim_WithBatchSize_RespectsLimit"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.SqlServer.Tests"
+    },
+    {
+      "testId": "Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.OutboxWorkQueueTests.OutboxClaim_WithNonPositiveBatchSize_ThrowsArgumentOutOfRangeException",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When ClaimAsync receives a non-positive batch size, then it throws ArgumentOutOfRangeException.",
+      "intent": "Enforce API guard behavior for invalid outbox claim batch sizes.",
+      "scenario": "Given ready work items and ClaimAsync called with batchSize = 0.",
+      "behavior": "Then ClaimAsync throws ArgumentOutOfRangeException.",
+      "source": {
+        "file": "tests/Incursa.Platform.SqlServer.Tests/OutboxWorkQueueTests.cs",
+        "line": 223,
+        "member": "Incursa.Platform.Tests.OutboxWorkQueueTests.OutboxClaim_WithNonPositiveBatchSize_ThrowsArgumentOutOfRangeException"
       },
       "status": "compliant",
       "project": "Incursa.Platform.SqlServer.Tests"
@@ -8014,7 +8302,7 @@
       "summary": "When list-based discovery requires databases but none are found, then StartAsync throws with a missing database message.",
       "intent": "Enforce startup database requirements for list-based discovery.",
       "scenario": "Given UsesDiscovery false, RequiresDatabaseAtStartup true, and an EmptyDatabaseDiscovery.",
-      "behavior": "Then StartAsync throws an InvalidOperationException containing \"At least one database is required\".",
+      "behavior": "Then StartAsync throws an InvalidOperationException containing \u0022At least one database is required\u0022.",
       "source": {
         "file": "tests/Incursa.Platform.SqlServer.Tests/PlatformLifecycleServiceTests.cs",
         "line": 69,
@@ -8952,6 +9240,38 @@
       "project": "Incursa.Platform.SqlServer.Tests"
     },
     {
+      "testId": "Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.SqlServerOutboxFuzzTests.Outbox_FuzzConcurrentRounds_ClaimsStayDisjointAndTerminalItemsAreNotReclaimed",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When two workers perform deterministic randomized claim rounds, then claimed sets stay disjoint and terminal items stay terminal.",
+      "intent": "Exercise queue state transitions under concurrent claimers and mixed ack/abandon/fail actions.",
+      "scenario": "Given 60 ready items and 20 deterministic rounds with two workers per round.",
+      "behavior": "Then claims in each round do not overlap and terminal ids are never reclaimed later.",
+      "source": {
+        "file": "tests/Incursa.Platform.SqlServer.Tests/SqlServerOutboxFuzzTests.cs",
+        "line": 109,
+        "member": "Incursa.Platform.Tests.SqlServerOutboxFuzzTests.Outbox_FuzzConcurrentRounds_ClaimsStayDisjointAndTerminalItemsAreNotReclaimed"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.SqlServer.Tests"
+    },
+    {
+      "testId": "Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.SqlServerOutboxFuzzTests.Outbox_FuzzDeterministic_TerminalItemsAreNeverReclaimed",
+      "category": "Incursa.Platform.Tests",
+      "tags": [],
+      "summary": "When deterministic randomized outbox operations run, then terminal items are never reclaimed.",
+      "intent": "Use fixed-seed fuzzing to verify claim/ack/abandon/fail invariants under varied operation sequences.",
+      "scenario": "Given 40 ready items and 40 deterministic random operation steps.",
+      "behavior": "Then completed/failed terminal items are never returned by subsequent claims.",
+      "source": {
+        "file": "tests/Incursa.Platform.SqlServer.Tests/SqlServerOutboxFuzzTests.cs",
+        "line": 67,
+        "member": "Incursa.Platform.Tests.SqlServerOutboxFuzzTests.Outbox_FuzzDeterministic_TerminalItemsAreNeverReclaimed"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.SqlServer.Tests"
+    },
+    {
       "testId": "Incursa.Platform.SqlServer.Tests:Incursa.Platform.Tests.SystemLeaseTests.AcquireAsync_AfterLeaseReleased_CanAcquireAgain",
       "category": "Incursa.Platform.Tests",
       "tags": [],
@@ -9326,7 +9646,7 @@
       "summary": "When a UI engine is not registered for the requested engine ID, then ExecuteAsync throws.",
       "intent": "Ensure missing UI engines surface a clear error.",
       "scenario": "Given a UiEngineAdapter and a request targeting an unknown UI engine ID.",
-      "behavior": "Then ExecuteAsync throws InvalidOperationException with a \"No UI engine registered\" message.",
+      "behavior": "Then ExecuteAsync throws InvalidOperationException with a \u0022No UI engine registered\u0022 message.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/EngineRefactoringTests.cs",
         "line": 196,
@@ -9601,7 +9921,7 @@
       "behavior": "Then the filter does not catch the exception and the flag remains false.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/ExceptionFilterTests.cs",
-        "line": 556,
+        "line": 557,
         "member": "Incursa.Platform.Tests.ExceptionFilterTests.ExceptionFilter_WithCriticalException_DoesNotCatch"
       },
       "status": "compliant",
@@ -9617,7 +9937,7 @@
       "behavior": "Then IsCatchableAndExpected returns true for the SQL-like exception and false for the critical exception.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/ExceptionFilterTests.cs",
-        "line": 652,
+        "line": 653,
         "member": "Incursa.Platform.Tests.ExceptionFilterTests.IsCatchableAndExpected_RealWorldScenario_SqlExceptions"
       },
       "status": "compliant",
@@ -9694,7 +10014,7 @@
       "summary": "When IsCatchable is called with a null exception, then it throws ArgumentNullException.",
       "intent": "Guard against null exception inputs.",
       "scenario": "Given a null exception argument.",
-      "behavior": "Then an ArgumentNullException is thrown with parameter name \"exception\".",
+      "behavior": "Then an ArgumentNullException is thrown with parameter name \u0022exception\u0022.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/ExceptionFilterTests.cs",
         "line": 108,
@@ -9761,7 +10081,7 @@
       "behavior": "Then IsCatchable returns true for each provided type.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/ExceptionFilterTests.cs",
-        "line": 601,
+        "line": 602,
         "member": "Incursa.Platform.Tests.ExceptionFilterTests.IsCatchable_WithVariousCommonExceptions_ReturnsTrue"
       },
       "status": "compliant",
@@ -9774,7 +10094,7 @@
       "summary": "When IsCritical is called with a null exception, then it throws ArgumentNullException.",
       "intent": "Guard against null exception inputs for critical checks.",
       "scenario": "Given a null exception argument.",
-      "behavior": "Then an ArgumentNullException is thrown with parameter name \"exception\".",
+      "behavior": "Then an ArgumentNullException is thrown with parameter name \u0022exception\u0022.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/ExceptionFilterTests.cs",
         "line": 203,
@@ -9918,7 +10238,7 @@
       "summary": "When IsExpected is called with a null exception, then it throws ArgumentNullException.",
       "intent": "Guard against null exception inputs for expected checks.",
       "scenario": "Given a null exception argument.",
-      "behavior": "Then an ArgumentNullException is thrown with parameter name \"exception\".",
+      "behavior": "Then an ArgumentNullException is thrown with parameter name \u0022exception\u0022.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/ExceptionFilterTests.cs",
         "line": 327,
@@ -9934,7 +10254,7 @@
       "summary": "When IsExpected is called with null expected types, then it throws ArgumentNullException.",
       "intent": "Guard against null expected type arrays.",
       "scenario": "Given a non-null exception and a null expectedTypes array.",
-      "behavior": "Then an ArgumentNullException is thrown with parameter name \"expectedTypes\".",
+      "behavior": "Then an ArgumentNullException is thrown with parameter name \u0022expectedTypes\u0022.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/ExceptionFilterTests.cs",
         "line": 347,
@@ -9969,7 +10289,7 @@
       "behavior": "Then IsExpected returns true.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/ExceptionFilterTests.cs",
-        "line": 627,
+        "line": 628,
         "member": "Incursa.Platform.Tests.ExceptionFilterTests.IsExpected_WithOperationCanceledException_WorksCorrectly"
       },
       "status": "compliant",
@@ -9979,10 +10299,10 @@
       "testId": "Incursa.Platform.Tests:Incursa.Platform.Tests.FanoutSystemTests.FanoutDispatcher_ShouldCreateCorrectTopicName",
       "category": "Incursa.Platform.Tests",
       "tags": [],
-      "summary": "When a fanout topic name is constructed, then it follows the \"fanout:{fanoutTopic}:{workKey}\" convention.",
+      "summary": "When a fanout topic name is constructed, then it follows the \u0022fanout:{fanoutTopic}:{workKey}\u0022 convention.",
       "intent": "Document the fanout topic naming pattern used by the dispatcher.",
-      "scenario": "Given a fanout topic of \"etl\" and a work key of \"payments\".",
-      "behavior": "Then the expected topic is \"fanout:etl:payments\".",
+      "scenario": "Given a fanout topic of \u0022etl\u0022 and a work key of \u0022payments\u0022.",
+      "behavior": "Then the expected topic is \u0022fanout:etl:payments\u0022.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/FanoutSystemTests.cs",
         "line": 71,
@@ -10237,7 +10557,7 @@
       "tags": [],
       "summary": "When a registered metric allows a tag, then IsTagAllowed returns true.",
       "intent": "Confirm allowed tags are honored for registered metrics.",
-      "scenario": "Given a registered metric that includes the \"allowed_tag\" value.",
+      "scenario": "Given a registered metric that includes the \u0022allowed_tag\u0022 value.",
       "behavior": "Then IsTagAllowed returns true for that tag.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/MetricRegistrarTests.cs",
@@ -10253,7 +10573,7 @@
       "tags": [],
       "summary": "When a registered metric does not allow a tag, then IsTagAllowed returns false.",
       "intent": "Ensure disallowed tags are rejected even for registered metrics.",
-      "scenario": "Given a registered metric that only allows \"allowed_tag\".",
+      "scenario": "Given a registered metric that only allows \u0022allowed_tag\u0022.",
       "behavior": "Then IsTagAllowed returns false for a different tag value.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/MetricRegistrarTests.cs",
@@ -10269,7 +10589,7 @@
       "tags": [],
       "summary": "When a metric is not registered, then IsTagAllowed returns false for any tag.",
       "intent": "Verify tag checks fail for unknown metrics.",
-      "scenario": "Given a MetricRegistrar with no registration for \"unknown.metric\".",
+      "scenario": "Given a MetricRegistrar with no registration for \u0022unknown.metric\u0022.",
       "behavior": "Then IsTagAllowed returns false for the requested tag.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/MetricRegistrarTests.cs",
@@ -10317,7 +10637,7 @@
       "tags": [],
       "summary": "When a valid metric is registered, then it appears in the registry.",
       "intent": "Verify MetricRegistrar stores new metric registrations.",
-      "scenario": "Given a MetricRegistrar and a MetricRegistration for \"test.metric\".",
+      "scenario": "Given a MetricRegistrar and a MetricRegistration for \u0022test.metric\u0022.",
       "behavior": "Then GetAll returns a single entry that matches the registered metric.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/MetricRegistrarTests.cs",
@@ -11358,7 +11678,7 @@
       "summary": "When module services are added, then the module definition is registered in DI.",
       "intent": "Ensure module definitions are accessible through the service provider.",
       "scenario": "Given SampleModule is registered and configuration includes its required key.",
-      "behavior": "Then resolving IModuleDefinition returns a module with key \"sample-module\".",
+      "behavior": "Then resolving IModuleDefinition returns a module with key \u0022sample-module\u0022.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/Modularity/ModuleSystemTests.cs",
         "line": 77,
@@ -11374,7 +11694,7 @@
       "summary": "When a module is registered with its required configuration, then its services and health checks are added to DI.",
       "intent": "Verify that module registration wires up services and health checks.",
       "scenario": "Given SampleModule is registered and configuration provides its required key.",
-      "behavior": "Then MarkerService is resolvable and the health check registration includes \"sample_module\".",
+      "behavior": "Then MarkerService is resolvable and the health check registration includes \u0022sample_module\u0022.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/Modularity/ModuleSystemTests.cs",
         "line": 42,
@@ -11454,7 +11774,7 @@
       "summary": "When an engine descriptor factory returns null, then ResolveEngine throws and identifies the module/engine key.",
       "intent": "Guard against null engine factories during discovery resolution.",
       "scenario": "Given a ModuleEngineDescriptor whose factory returns null and an empty service provider.",
-      "behavior": "Then ResolveEngine throws an InvalidOperationException mentioning \"returned null\" and the descriptor key.",
+      "behavior": "Then ResolveEngine throws an InvalidOperationException mentioning \u0022returned null\u0022 and the descriptor key.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/Modularity/RequiredServiceValidationTests.cs",
         "line": 145,
@@ -11470,7 +11790,7 @@
       "summary": "When required services are satisfied, then ExecuteAsync returns the engine result.",
       "intent": "Confirm successful execution when required services are available.",
       "scenario": "Given RequiredServiceModule is registered and a TestRequiredServiceValidator lists cache and telemetry as available.",
-      "behavior": "Then the returned view model contains the expected \"ok\" value.",
+      "behavior": "Then the returned view model contains the expected \u0022ok\u0022 value.",
       "source": {
         "file": "tests/Incursa.Platform.Tests/Modularity/RequiredServiceValidationTests.cs",
         "line": 111,
@@ -11624,6 +11944,22 @@
       "project": "Incursa.Platform.TestUtilities"
     },
     {
+      "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.InboxWorkStoreBehaviorTestsBase.ReviveAsync_RequeuesDeadMessage",
+      "category": "TestUtilities",
+      "tags": [],
+      "summary": "When revive Async Requeues Dead Message, then it behaves as expected.",
+      "intent": "Document expected behavior for revive Async Requeues Dead Message.",
+      "scenario": "Given a failed inbox message that has been marked Dead.",
+      "behavior": "Then ReviveAsync makes the message claimable again.",
+      "source": {
+        "file": "tests/Incursa.Platform.TestUtilities/InboxWorkStoreBehaviorTestsBase.cs",
+        "line": 264,
+        "member": "Incursa.Platform.Tests.TestUtilities.InboxWorkStoreBehaviorTestsBase.ReviveAsync_RequeuesDeadMessage"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.TestUtilities"
+    },
+    {
       "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.OutboxStoreBehaviorTestsBase.ClaimDueAsync_ReturnsCorrelationIdAndDueTime",
       "category": "TestUtilities",
       "tags": [],
@@ -11731,6 +12067,294 @@
         "file": "tests/Incursa.Platform.TestUtilities/OutboxStoreBehaviorTestsBase.cs",
         "line": 142,
         "member": "Incursa.Platform.Tests.TestUtilities.OutboxStoreBehaviorTestsBase.RescheduleAsync_MakesMessageAvailableAgain"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.TestUtilities"
+    },
+    {
+      "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.AbandonTimersAsync_WithValidOwner_ReturnsTimerToReady",
+      "category": "TestUtilities",
+      "tags": [],
+      "summary": "When abandon Timers Async With Valid Owner Returns Timer To Ready, then it behaves as expected.",
+      "intent": "Document expected behavior for abandon Timers Async With Valid Owner Returns Timer To Ready.",
+      "scenario": "Given abandon Timers Async With Valid Owner Returns Timer To Ready.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs",
+        "line": 118,
+        "member": "Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.AbandonTimersAsync_WithValidOwner_ReturnsTimerToReady"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.TestUtilities"
+    },
+    {
+      "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.AckTimersAsync_WithValidOwner_MakesTimerUnavailable",
+      "category": "TestUtilities",
+      "tags": [],
+      "summary": "When ack Timers Async With Valid Owner Makes Timer Unavailable, then it behaves as expected.",
+      "intent": "Document expected behavior for ack Timers Async With Valid Owner Makes Timer Unavailable.",
+      "scenario": "Given ack Timers Async With Valid Owner Makes Timer Unavailable.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs",
+        "line": 92,
+        "member": "Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.AckTimersAsync_WithValidOwner_MakesTimerUnavailable"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.TestUtilities"
+    },
+    {
+      "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.ClaimTimersAsync_RespectsBatchSize",
+      "category": "TestUtilities",
+      "tags": [],
+      "summary": "When claim Timers Async Respects Batch Size, then it behaves as expected.",
+      "intent": "Document expected behavior for claim Timers Async Respects Batch Size.",
+      "scenario": "Given claim Timers Async Respects Batch Size.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs",
+        "line": 71,
+        "member": "Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.ClaimTimersAsync_RespectsBatchSize"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.TestUtilities"
+    },
+    {
+      "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.CreateJobRunsFromDueJobsAsync_CreatesRunsFromDueSchedule",
+      "category": "TestUtilities",
+      "tags": [],
+      "summary": "When create Job Runs From Due Jobs Async Creates Runs From Due Schedule, then it behaves as expected.",
+      "intent": "Document expected behavior for create Job Runs From Due Jobs Async Creates Runs From Due Schedule.",
+      "scenario": "Given create Job Runs From Due Jobs Async Creates Runs From Due Schedule.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs",
+        "line": 234,
+        "member": "Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.CreateJobRunsFromDueJobsAsync_CreatesRunsFromDueSchedule"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.TestUtilities"
+    },
+    {
+      "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.CreateOrUpdateJobAsync_ExistingJob_UsesUpdatedTopicAndPayload",
+      "category": "TestUtilities",
+      "tags": [],
+      "summary": "When create Or Update Job Async Existing Job Uses Updated Topic And Payload, then it behaves as expected.",
+      "intent": "Document expected behavior for create Or Update Job Async Existing Job Uses Updated Topic And Payload.",
+      "scenario": "Given create Or Update Job Async Existing Job Uses Updated Topic And Payload.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs",
+        "line": 193,
+        "member": "Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.CreateOrUpdateJobAsync_ExistingJob_UsesUpdatedTopicAndPayload"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.TestUtilities"
+    },
+    {
+      "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.DeleteJobAsync_RemovesPendingRuns",
+      "category": "TestUtilities",
+      "tags": [],
+      "summary": "When delete Job Async Removes Pending Runs, then it behaves as expected.",
+      "intent": "Document expected behavior for delete Job Async Removes Pending Runs.",
+      "scenario": "Given delete Job Async Removes Pending Runs.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs",
+        "line": 215,
+        "member": "Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.DeleteJobAsync_RemovesPendingRuns"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.TestUtilities"
+    },
+    {
+      "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.GetNextEventTimeAsync_WithScheduledTimer_ReturnsApproximateDueTime",
+      "category": "TestUtilities",
+      "tags": [],
+      "summary": "When get Next Event Time Async With Scheduled Timer Returns Approximate Due Time, then it behaves as expected.",
+      "intent": "Document expected behavior for get Next Event Time Async With Scheduled Timer Returns Approximate Due Time.",
+      "scenario": "Given get Next Event Time Async With Scheduled Timer Returns Approximate Due Time.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs",
+        "line": 261,
+        "member": "Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.GetNextEventTimeAsync_WithScheduledTimer_ReturnsApproximateDueTime"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.TestUtilities"
+    },
+    {
+      "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.ReapExpiredTimersAsync_ReturnsExpiredClaimsToReady",
+      "category": "TestUtilities",
+      "tags": [],
+      "summary": "When reap Expired Timers Async Returns Expired Claims To Ready, then it behaves as expected.",
+      "intent": "Document expected behavior for reap Expired Timers Async Returns Expired Claims To Ready.",
+      "scenario": "Given reap Expired Timers Async Returns Expired Claims To Ready.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs",
+        "line": 144,
+        "member": "Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.ReapExpiredTimersAsync_ReturnsExpiredClaimsToReady"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.TestUtilities"
+    },
+    {
+      "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.ScheduleTimerAsync_AndClaimTimersAsync_WithDueTimer_ReturnsClaimedId",
+      "category": "TestUtilities",
+      "tags": [],
+      "summary": "When schedule Timer Async And Claim Timers Async With Due Timer Returns Claimed Id, then it behaves as expected.",
+      "intent": "Document expected behavior for schedule Timer Async And Claim Timers Async With Due Timer Returns Claimed Id.",
+      "scenario": "Given schedule Timer Async And Claim Timers Async With Due Timer Returns Claimed Id.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs",
+        "line": 46,
+        "member": "Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.ScheduleTimerAsync_AndClaimTimersAsync_WithDueTimer_ReturnsClaimedId"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.TestUtilities"
+    },
+    {
+      "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.TriggerJobAsync_AndClaimJobRunsAsync_ReturnsClaimedRun",
+      "category": "TestUtilities",
+      "tags": [],
+      "summary": "When trigger Job Async And Claim Job Runs Async Returns Claimed Run, then it behaves as expected.",
+      "intent": "Document expected behavior for trigger Job Async And Claim Job Runs Async Returns Claimed Run.",
+      "scenario": "Given trigger Job Async And Claim Job Runs Async Returns Claimed Run.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.TestUtilities/SchedulerBehaviorTestsBase.cs",
+        "line": 171,
+        "member": "Incursa.Platform.Tests.TestUtilities.SchedulerBehaviorTestsBase.TriggerJobAsync_AndClaimJobRunsAsync_ReturnsClaimedRun"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.TestUtilities"
+    },
+    {
+      "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.AcquireAsync_AfterExpiry_ReturnsNewLease",
+      "category": "TestUtilities",
+      "tags": [],
+      "summary": "When acquire Async After Expiry Returns New Lease, then it behaves as expected.",
+      "intent": "Document expected behavior for acquire Async After Expiry Returns New Lease.",
+      "scenario": "Given acquire Async After Expiry Returns New Lease.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs",
+        "line": 204,
+        "member": "Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.AcquireAsync_AfterExpiry_ReturnsNewLease"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.TestUtilities"
+    },
+    {
+      "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.AcquireAsync_WhenOccupied_ReturnsNull",
+      "category": "TestUtilities",
+      "tags": [],
+      "summary": "When acquire Async When Occupied Returns Null, then it behaves as expected.",
+      "intent": "Document expected behavior for acquire Async When Occupied Returns Null.",
+      "scenario": "Given acquire Async When Occupied Returns Null.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs",
+        "line": 84,
+        "member": "Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.AcquireAsync_WhenOccupied_ReturnsNull"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.TestUtilities"
+    },
+    {
+      "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.AcquireAsync_WithCustomOwnerToken_UsesProvidedToken",
+      "category": "TestUtilities",
+      "tags": [],
+      "summary": "When acquire Async With Custom Owner Token Uses Provided Token, then it behaves as expected.",
+      "intent": "Document expected behavior for acquire Async With Custom Owner Token Uses Provided Token.",
+      "scenario": "Given acquire Async With Custom Owner Token Uses Provided Token.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs",
+        "line": 64,
+        "member": "Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.AcquireAsync_WithCustomOwnerToken_UsesProvidedToken"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.TestUtilities"
+    },
+    {
+      "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.AcquireAsync_WithFreeResource_ReturnsLease",
+      "category": "TestUtilities",
+      "tags": [],
+      "summary": "When acquire Async With Free Resource Returns Lease, then it behaves as expected.",
+      "intent": "Document expected behavior for acquire Async With Free Resource Returns Lease.",
+      "scenario": "Given acquire Async With Free Resource Returns Lease.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs",
+        "line": 46,
+        "member": "Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.AcquireAsync_WithFreeResource_ReturnsLease"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.TestUtilities"
+    },
+    {
+      "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.DisposeAsync_ReleasesLease_ForReacquisition",
+      "category": "TestUtilities",
+      "tags": [],
+      "summary": "When dispose Async Releases Lease For Reacquisition, then it behaves as expected.",
+      "intent": "Document expected behavior for dispose Async Releases Lease For Reacquisition.",
+      "scenario": "Given dispose Async Releases Lease For Reacquisition.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs",
+        "line": 179,
+        "member": "Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.DisposeAsync_ReleasesLease_ForReacquisition"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.TestUtilities"
+    },
+    {
+      "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.LeaseLoss_AfterExpiry_CancelsToken_AndThrowIfLostThrows",
+      "category": "TestUtilities",
+      "tags": [],
+      "summary": "When lease Loss After Expiry Cancels Token And Throw If Lost Throws, then it behaves as expected.",
+      "intent": "Document expected behavior for lease Loss After Expiry Cancels Token And Throw If Lost Throws.",
+      "scenario": "Given lease Loss After Expiry Cancels Token And Throw If Lost Throws.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs",
+        "line": 131,
+        "member": "Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.LeaseLoss_AfterExpiry_CancelsToken_AndThrowIfLostThrows"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.TestUtilities"
+    },
+    {
+      "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.TryRenewNowAsync_AfterLeaseLoss_ReturnsFalse",
+      "category": "TestUtilities",
+      "tags": [],
+      "summary": "When try Renew Now Async After Lease Loss Returns False, then it behaves as expected.",
+      "intent": "Document expected behavior for try Renew Now Async After Lease Loss Returns False.",
+      "scenario": "Given try Renew Now Async After Lease Loss Returns False.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs",
+        "line": 157,
+        "member": "Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.TryRenewNowAsync_AfterLeaseLoss_ReturnsFalse"
+      },
+      "status": "compliant",
+      "project": "Incursa.Platform.TestUtilities"
+    },
+    {
+      "testId": "Incursa.Platform.TestUtilities:Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.TryRenewNowAsync_WithValidLease_ReturnsTrueAndIncrementsFencingToken",
+      "category": "TestUtilities",
+      "tags": [],
+      "summary": "When try Renew Now Async With Valid Lease Returns True And Increments Fencing Token, then it behaves as expected.",
+      "intent": "Document expected behavior for try Renew Now Async With Valid Lease Returns True And Increments Fencing Token.",
+      "scenario": "Given try Renew Now Async With Valid Lease Returns True And Increments Fencing Token.",
+      "behavior": "Then the operation matches the expected outcome.",
+      "source": {
+        "file": "tests/Incursa.Platform.TestUtilities/SystemLeaseBehaviorTestsBase.cs",
+        "line": 108,
+        "member": "Incursa.Platform.Tests.TestUtilities.SystemLeaseBehaviorTestsBase.TryRenewNowAsync_WithValidLease_ReturnsTrueAndIncrementsFencingToken"
       },
       "status": "compliant",
       "project": "Incursa.Platform.TestUtilities"

@@ -75,7 +75,7 @@ internal sealed class SqlSchedulerBehaviorHarness : SqlServerTestBase, ISchedule
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken);
 
-        const string sql = """
+            const string sql = """
             DELETE FROM [infra].[JobRuns];
             DELETE FROM [infra].[Timers];
             DELETE FROM [infra].[Jobs];
@@ -93,7 +93,7 @@ internal sealed class SqlSchedulerBehaviorHarness : SqlServerTestBase, ISchedule
             END
             """;
 
-        await connection.ExecuteAsync(sql).ConfigureAwait(false);
+            await connection.ExecuteAsync(sql).ConfigureAwait(false);
         }
     }
 }

@@ -59,7 +59,7 @@ internal sealed class SqlInboxWorkStoreBehaviorHarness : SqlServerTestBase, IInb
         await using (connection.ConfigureAwait(false))
         {
             await connection.OpenAsync(TestContext.Current.CancellationToken);
-        await connection.ExecuteAsync($"DELETE FROM [{options.SchemaName}].[{options.TableName}]");
+            await connection.ExecuteAsync($"DELETE FROM [{options.SchemaName}].[{options.TableName}]");
         }
     }
 }

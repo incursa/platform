@@ -38,6 +38,10 @@ public abstract class SystemLeaseBehaviorTestsBase : IAsyncLifetime
         GC.SuppressFinalize(this);
     }
 
+    /// <summary>When acquire Async With Free Resource Returns Lease, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for acquire Async With Free Resource Returns Lease.</intent>
+    /// <scenario>Given acquire Async With Free Resource Returns Lease.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public async Task AcquireAsync_WithFreeResource_ReturnsLease()
     {
@@ -52,6 +56,10 @@ public abstract class SystemLeaseBehaviorTestsBase : IAsyncLifetime
         lease.ResourceName.ShouldBe("lease-free");
     }
 
+    /// <summary>When acquire Async With Custom Owner Token Uses Provided Token, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for acquire Async With Custom Owner Token Uses Provided Token.</intent>
+    /// <scenario>Given acquire Async With Custom Owner Token Uses Provided Token.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public async Task AcquireAsync_WithCustomOwnerToken_UsesProvidedToken()
     {
@@ -68,6 +76,10 @@ public abstract class SystemLeaseBehaviorTestsBase : IAsyncLifetime
         lease.OwnerToken.ShouldBe(expectedOwner);
     }
 
+    /// <summary>When acquire Async When Occupied Returns Null, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for acquire Async When Occupied Returns Null.</intent>
+    /// <scenario>Given acquire Async When Occupied Returns Null.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public async Task AcquireAsync_WhenOccupied_ReturnsNull()
     {
@@ -88,6 +100,10 @@ public abstract class SystemLeaseBehaviorTestsBase : IAsyncLifetime
         secondLease.ShouldBeNull();
     }
 
+    /// <summary>When try Renew Now Async With Valid Lease Returns True And Increments Fencing Token, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for try Renew Now Async With Valid Lease Returns True And Increments Fencing Token.</intent>
+    /// <scenario>Given try Renew Now Async With Valid Lease Returns True And Increments Fencing Token.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public async Task TryRenewNowAsync_WithValidLease_ReturnsTrueAndIncrementsFencingToken()
     {
@@ -107,6 +123,10 @@ public abstract class SystemLeaseBehaviorTestsBase : IAsyncLifetime
         lease.FencingToken.ShouldBeGreaterThan(initialToken);
     }
 
+    /// <summary>When lease Loss After Expiry Cancels Token And Throw If Lost Throws, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for lease Loss After Expiry Cancels Token And Throw If Lost Throws.</intent>
+    /// <scenario>Given lease Loss After Expiry Cancels Token And Throw If Lost Throws.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public async Task LeaseLoss_AfterExpiry_CancelsToken_AndThrowIfLostThrows()
     {
@@ -129,6 +149,10 @@ public abstract class SystemLeaseBehaviorTestsBase : IAsyncLifetime
         Should.Throw<LostLeaseException>(() => lease.ThrowIfLost());
     }
 
+    /// <summary>When try Renew Now Async After Lease Loss Returns False, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for try Renew Now Async After Lease Loss Returns False.</intent>
+    /// <scenario>Given try Renew Now Async After Lease Loss Returns False.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public async Task TryRenewNowAsync_AfterLeaseLoss_ReturnsFalse()
     {
@@ -147,6 +171,10 @@ public abstract class SystemLeaseBehaviorTestsBase : IAsyncLifetime
         renewed.ShouldBeFalse();
     }
 
+    /// <summary>When dispose Async Releases Lease For Reacquisition, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for dispose Async Releases Lease For Reacquisition.</intent>
+    /// <scenario>Given dispose Async Releases Lease For Reacquisition.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public async Task DisposeAsync_ReleasesLease_ForReacquisition()
     {
@@ -168,6 +196,10 @@ public abstract class SystemLeaseBehaviorTestsBase : IAsyncLifetime
         reacquired.ShouldNotBeNull();
     }
 
+    /// <summary>When acquire Async After Expiry Returns New Lease, then it behaves as expected.</summary>
+    /// <intent>Document expected behavior for acquire Async After Expiry Returns New Lease.</intent>
+    /// <scenario>Given acquire Async After Expiry Returns New Lease.</scenario>
+    /// <behavior>Then the operation matches the expected outcome.</behavior>
     [Fact]
     public async Task AcquireAsync_AfterExpiry_ReturnsNewLease()
     {

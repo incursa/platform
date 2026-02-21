@@ -1,17 +1,17 @@
 # Test Documentation
 
-- Total tests: 743
-- Compliant: 743 (100.0%)
+- Total tests: 764
+- Compliant: 764 (100.0%)
 - Missing required: 0
 - Invalid format: 0
 
 ## Top categories
 
-- Incursa.Platform.Tests (626)
-- Incursa.Platform.Email (38)
+- Incursa.Platform.Tests (646)
+- TestUtilities (33)
+- Incursa.Platform.Email (20)
 - Incursa.Platform.HealthProbe (17)
 - Incursa.Platform.Webhooks (14)
-- TestUtilities (14)
 
 ## Browse
 
