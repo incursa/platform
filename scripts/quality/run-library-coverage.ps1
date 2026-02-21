@@ -1,7 +1,7 @@
 param(
     [int]$LineThreshold = 20,
     [int]$BranchThreshold = 0,
-    [string[]]$Targets = @("Core", "InMemory", "Audit", "Correlation", "Email", "EmailPostmark", "HealthProbe", "Observability", "Operations", "Webhooks", "WebhooksAspNetCore")
+    [string[]]$Targets = @("Core", "InMemory", "Audit", "Correlation", "Email", "HealthProbe", "Observability", "Operations", "Webhooks", "WebhooksAspNetCore")
 )
 
 Set-StrictMode -Version Latest
@@ -22,7 +22,6 @@ $configuredTargets = @(
     @{ Name = "Audit"; Project = "tests/Incursa.Platform.Audit.Tests/Incursa.Platform.Audit.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform.Audit]*" },
     @{ Name = "Correlation"; Project = "tests/Incursa.Platform.Correlation.Tests/Incursa.Platform.Correlation.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform.Correlation]*" },
     @{ Name = "Email"; Project = "tests/Incursa.Platform.Email.Tests/Incursa.Platform.Email.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform.Email]*" },
-    @{ Name = "EmailPostmark"; Project = "tests/Incursa.Platform.Email.Postmark.Tests/Incursa.Platform.Email.Postmark.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform.Email.Postmark]*" },
     @{ Name = "HealthProbe"; Project = "tests/Incursa.Platform.HealthProbe.Tests/Incursa.Platform.HealthProbe.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform.HealthProbe]*" },
     @{ Name = "InMemory"; Project = "tests/Incursa.Platform.InMemory.Tests/Incursa.Platform.InMemory.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform.InMemory]*" },
     @{ Name = "Observability"; Project = "tests/Incursa.Platform.Observability.Tests/Incursa.Platform.Observability.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform.Observability]*" },

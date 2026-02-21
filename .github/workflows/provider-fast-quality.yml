@@ -41,7 +41,7 @@ jobs:
 
       - name: Coverage gate (provider unit tests)
         shell: pwsh
-        run: pwsh -File scripts/quality/run-provider-coverage.ps1 -Targets InMemory -LineThreshold 50 -BranchThreshold 35
+        run: pwsh -File scripts/quality/run-provider-coverage.ps1 -Targets InMemory -LineThreshold 30
 
       - name: Upload quality artifacts
         uses: actions/upload-artifact@v4

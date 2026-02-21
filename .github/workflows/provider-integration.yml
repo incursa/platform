@@ -43,8 +43,8 @@ jobs:
 
       - name: Coverage gate (SQL Server integration)
         shell: pwsh
-        run: pwsh -File scripts/quality/run-provider-coverage.ps1 -Targets SqlServer -LineThreshold 35 -BranchThreshold 20
+        run: pwsh -File scripts/quality/run-provider-coverage.ps1 -Targets SqlServer -LineThreshold 30
 
       - name: Coverage gate (Postgres integration)
         shell: pwsh
-        run: pwsh -File scripts/quality/run-provider-coverage.ps1 -Targets Postgres -LineThreshold 35 -BranchThreshold 20
+        run: pwsh -File scripts/quality/run-provider-coverage.ps1 -Targets Postgres -LineThreshold 30

@@ -117,7 +117,7 @@ foreach ($target in $selectedTargets) {
     } catch {
         $failures++
         $summary.Add("| $name | $filter | Failed coverage gate |")
-        Write-Error "Coverage gate failed for $name."
+        Write-Error "Coverage gate failed for ${name}: $($_.Exception.Message)"
     }
 }
 
