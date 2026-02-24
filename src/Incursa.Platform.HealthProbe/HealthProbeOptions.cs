@@ -5,22 +5,10 @@ namespace Incursa.Platform.HealthProbe;
 /// </summary>
 public sealed class HealthProbeOptions
 {
-    private readonly Dictionary<string, string> endpoints = new(StringComparer.OrdinalIgnoreCase);
-
     /// <summary>
-    /// Gets or sets the base URL used to resolve relative endpoints.
+    /// Gets or sets the default bucket when no explicit bucket is provided.
     /// </summary>
-    public Uri? BaseUrl { get; set; }
-
-    /// <summary>
-    /// Gets or sets the default endpoint name.
-    /// </summary>
-    public string? DefaultEndpoint { get; set; }
-
-    /// <summary>
-    /// Gets the configured endpoint map keyed by endpoint name.
-    /// </summary>
-    public IDictionary<string, string> Endpoints => endpoints;
+    public string DefaultBucket { get; set; } = HealthProbeDefaults.DefaultBucket;
 
     /// <summary>
     /// Gets or sets the health probe timeout.
@@ -28,37 +16,17 @@ public sealed class HealthProbeOptions
     public TimeSpan Timeout { get; set; } = HealthProbeDefaults.DefaultTimeout;
 
     /// <summary>
-    /// Gets or sets the API key used for authenticated probes.
+    /// Gets or sets a value indicating whether JSON output includes check data.
     /// </summary>
-    public string? ApiKey { get; set; }
-
-    /// <summary>
-    /// Gets or sets the header name for the API key.
-    /// </summary>
-    public string ApiKeyHeaderName { get; set; } = HealthProbeDefaults.DefaultApiKeyHeaderName;
-
-    /// <summary>
-    /// Gets or sets a value indicating whether insecure TLS is allowed for probing.
-    /// </summary>
-    public bool AllowInsecureTls { get; set; }
+    public bool IncludeData { get; set; }
 
     internal HealthProbeOptions Clone()
     {
-        var clone = new HealthProbeOptions
+        return new HealthProbeOptions
         {
-            BaseUrl = BaseUrl,
-            DefaultEndpoint = DefaultEndpoint,
+            DefaultBucket = DefaultBucket,
             Timeout = Timeout,
-            ApiKey = ApiKey,
-            ApiKeyHeaderName = ApiKeyHeaderName,
-            AllowInsecureTls = AllowInsecureTls,
+            IncludeData = IncludeData,
         };
-
-        foreach (var endpoint in endpoints)
-        {
-            clone.Endpoints[endpoint.Key] = endpoint.Value;
-        }
-
-        return clone;
     }
 }

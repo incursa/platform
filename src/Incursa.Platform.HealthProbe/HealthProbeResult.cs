@@ -1,4 +1,4 @@
-using System.Net;
+using Incursa.Platform.Health;
 
 namespace Incursa.Platform.HealthProbe;
 
@@ -10,24 +10,34 @@ public sealed class HealthProbeResult
     /// <summary>
     /// Initializes a new instance of the <see cref="HealthProbeResult"/> class.
     /// </summary>
-    /// <param name="isHealthy">Whether the probe reported healthy.</param>
+    /// <param name="bucket">Executed health bucket.</param>
+    /// <param name="status">Health status.</param>
     /// <param name="exitCode">Process exit code to return to the caller.</param>
-    /// <param name="message">Human readable message describing the result.</param>
-    /// <param name="statusCode">HTTP status code, if available.</param>
+    /// <param name="payload">Health report payload.</param>
     /// <param name="duration">Elapsed probe duration.</param>
-    public HealthProbeResult(bool isHealthy, int exitCode, string message, HttpStatusCode? statusCode, TimeSpan duration)
+    public HealthProbeResult(
+        string bucket,
+        string status,
+        int exitCode,
+        PlatformHealthReportPayload payload,
+        TimeSpan duration)
     {
-        IsHealthy = isHealthy;
+        Bucket = bucket;
+        Status = status;
         ExitCode = exitCode;
-        Message = message;
-        StatusCode = statusCode;
+        Payload = payload;
         Duration = duration;
     }
 
     /// <summary>
-    /// Gets a value indicating whether the probe was healthy.
+    /// Gets the executed bucket.
     /// </summary>
-    public bool IsHealthy { get; }
+    public string Bucket { get; }
+
+    /// <summary>
+    /// Gets the probe status.
+    /// </summary>
+    public string Status { get; }
 
     /// <summary>
     /// Gets the exit code for the probe.
@@ -35,17 +45,17 @@ public sealed class HealthProbeResult
     public int ExitCode { get; }
 
     /// <summary>
-    /// Gets the message describing the probe outcome.
+    /// Gets a value indicating whether the probe was healthy.
     /// </summary>
-    public string Message { get; }
-
-    /// <summary>
-    /// Gets the HTTP status code returned by the endpoint.
-    /// </summary>
-    public HttpStatusCode? StatusCode { get; }
+    public bool IsHealthy => string.Equals(Status, "Healthy", StringComparison.Ordinal);
 
     /// <summary>
     /// Gets the duration of the probe.
     /// </summary>
     public TimeSpan Duration { get; }
+
+    /// <summary>
+    /// Gets the standardized health payload.
+    /// </summary>
+    public PlatformHealthReportPayload Payload { get; }
 }

@@ -749,7 +749,7 @@ registrar.RegisterRange(new[]
         new[] { "product_category" }),
 });
 
-app.MapHealthChecks("/health");
+app.MapPlatformHealthEndpoints();
 app.Run();
 ```
 

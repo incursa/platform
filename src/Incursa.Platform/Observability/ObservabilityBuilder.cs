@@ -23,8 +23,9 @@ namespace Incursa.Platform.Observability;
 /// </summary>
 public sealed class ObservabilityBuilder
 {
-    private static readonly string[] WatchdogTags = { "watchdog", "platform" };
-    private static readonly string[] StartupLatchTags = { "live", "critical-fast" };
+    private static readonly string[] WatchdogTags = { "dep" };
+    private static readonly string[] StartupLatchTags = { "ready" };
+    private static readonly string[] SelfTags = { "live" };
     /// <summary>
     /// Initializes a new instance of the <see cref="ObservabilityBuilder"/> class.
     /// </summary>
@@ -119,6 +120,7 @@ public sealed class ObservabilityBuilder
     {
         Services.AddStartupLatch();
         Services.AddHealthChecks()
+            .AddCheck("self", static () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy("Process is running"), tags: SelfTags)
             .AddCheck<StartupLatchHealthCheck>("startup_latch", tags: StartupLatchTags)
             .AddCheck<WatchdogHealthCheck>("watchdog", tags: WatchdogTags);
         return this;

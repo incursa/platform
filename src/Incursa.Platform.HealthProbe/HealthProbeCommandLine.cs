@@ -1,38 +1,31 @@
 using System.Globalization;
+using Incursa.Platform.Health;
 
 namespace Incursa.Platform.HealthProbe;
 
 internal sealed class HealthProbeCommandLine
 {
     private HealthProbeCommandLine(
-        string? endpointName,
-        Uri? urlOverride,
+        string? bucketName,
+        bool listBuckets,
         TimeSpan? timeoutOverride,
-        string? apiKeyOverride,
-        string? apiKeyHeaderNameOverride,
-        bool allowInsecureTls,
+        bool includeData,
         bool jsonOutput)
     {
-        EndpointName = endpointName;
-        UrlOverride = urlOverride;
+        BucketName = bucketName;
+        ListBuckets = listBuckets;
         TimeoutOverride = timeoutOverride;
-        ApiKeyOverride = apiKeyOverride;
-        ApiKeyHeaderNameOverride = apiKeyHeaderNameOverride;
-        AllowInsecureTls = allowInsecureTls;
+        IncludeData = includeData;
         JsonOutput = jsonOutput;
     }
 
-    public string? EndpointName { get; }
+    public string? BucketName { get; }
 
-    public Uri? UrlOverride { get; }
+    public bool ListBuckets { get; }
 
     public TimeSpan? TimeoutOverride { get; }
 
-    public string? ApiKeyOverride { get; }
-
-    public string? ApiKeyHeaderNameOverride { get; }
-
-    public bool AllowInsecureTls { get; }
+    public bool IncludeData { get; }
 
     public bool JsonOutput { get; }
 
@@ -42,26 +35,32 @@ internal sealed class HealthProbeCommandLine
 
         if (args.Length == 0)
         {
-            throw new HealthProbeArgumentException("Missing command. Expected 'healthcheck'.");
+            throw new HealthProbeArgumentException($"Missing command. Expected '{HealthProbeDefaults.CommandName}'.");
         }
 
         if (!HealthProbeApp.IsHealthCheckInvocation(args))
         {
-            throw new HealthProbeArgumentException("Missing 'healthcheck' command.");
+            throw new HealthProbeArgumentException($"Missing '{HealthProbeDefaults.CommandName}' command.");
         }
 
-        string? endpointName = null;
-        Uri? urlOverride = null;
+        string? bucketName = null;
+        var listBuckets = false;
         TimeSpan? timeoutOverride = null;
-        string? apiKeyOverride = null;
-        string? apiKeyHeaderNameOverride = null;
-        var allowInsecureTls = false;
+        var includeData = false;
         var jsonOutput = false;
 
         var index = 1;
         if (index < args.Length && !IsFlag(args[index]))
         {
-            endpointName = args[index];
+            if (args[index].Equals("list", StringComparison.OrdinalIgnoreCase))
+            {
+                listBuckets = true;
+            }
+            else
+            {
+                bucketName = args[index];
+            }
+
             index++;
         }
 
@@ -75,20 +74,11 @@ internal sealed class HealthProbeCommandLine
 
             switch (token)
             {
-                case "--url":
-                    urlOverride = ParseUrl(RequireValue(args, ref index, token));
-                    break;
                 case "--timeout":
                     timeoutOverride = ParseTimeout(RequireValue(args, ref index, token));
                     break;
-                case "--header":
-                    apiKeyHeaderNameOverride = RequireValue(args, ref index, token);
-                    break;
-                case "--apikey":
-                    apiKeyOverride = RequireValue(args, ref index, token);
-                    break;
-                case "--insecure":
-                    allowInsecureTls = true;
+                case "--include-data":
+                    includeData = true;
                     index++;
                     break;
                 case "--json":
@@ -100,13 +90,19 @@ internal sealed class HealthProbeCommandLine
             }
         }
 
+        if (bucketName is not null
+            && !bucketName.Equals(PlatformHealthTags.Live, StringComparison.OrdinalIgnoreCase)
+            && !bucketName.Equals(PlatformHealthTags.Ready, StringComparison.OrdinalIgnoreCase)
+            && !bucketName.Equals(PlatformHealthTags.Dep, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new HealthProbeArgumentException($"Unknown bucket '{bucketName}'. Expected live, ready, or dep.");
+        }
+
         return new HealthProbeCommandLine(
-            endpointName,
-            urlOverride,
+            bucketName,
+            listBuckets,
             timeoutOverride,
-            apiKeyOverride,
-            apiKeyHeaderNameOverride,
-            allowInsecureTls,
+            includeData,
             jsonOutput);
     }
 
@@ -130,16 +126,6 @@ internal sealed class HealthProbeCommandLine
 
         index += 2;
         return value;
-    }
-
-    private static Uri ParseUrl(string value)
-    {
-        if (!Uri.TryCreate(value, UriKind.Absolute, out var uri))
-        {
-            throw new HealthProbeArgumentException($"Invalid URL '{value}'.");
-        }
-
-        return uri;
     }
 
     private static TimeSpan ParseTimeout(string value)

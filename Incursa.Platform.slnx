@@ -10,8 +10,6 @@
     <Project Path="src/Incursa.Platform.Modularity.Razor/Incursa.Platform.Modularity.Razor.csproj" />
   </Folder>
   <Folder Name="/email/">
-    <Project Path="src/Incursa.Platform.Email/Incursa.Platform.Email.csproj" />
-    <Project Path="src/Incursa.Platform.Email.AspNetCore/Incursa.Platform.Email.AspNetCore.csproj" />
   </Folder>
   <Folder Name="/operations/">
     <Project Path="src/Incursa.Platform.Operations/Incursa.Platform.Operations.csproj" />
@@ -35,6 +33,10 @@
   </Folder>
   <Folder Name="/observability/">
     <Project Path="src/Incursa.Platform.Observability/Incursa.Platform.Observability.csproj" />
+  </Folder>
+  <Folder Name="/health/">
+    <Project Path="src/Incursa.Platform.Health/Incursa.Platform.Health.csproj" />
+    <Project Path="src/Incursa.Platform.Health.AspNetCore/Incursa.Platform.Health.AspNetCore.csproj" />
   </Folder>
   <Folder Name="/metrics/">
     <Project Path="src/Incursa.Platform.Metrics.AspNetCore/Incursa.Platform.Metrics.AspNetCore.csproj" />
@@ -62,7 +64,6 @@
     <Project Path="tests/Incursa.Platform.InMemory.Tests/Incursa.Platform.InMemory.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.HealthProbe.Tests/Incursa.Platform.HealthProbe.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Postgres.Tests/Incursa.Platform.Postgres.Tests.csproj" />
-    <Project Path="tests/Incursa.Platform.Email.Tests/Incursa.Platform.Email.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Webhooks.Tests/Incursa.Platform.Webhooks.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Webhooks.AspNetCore.Tests/Incursa.Platform.Webhooks.AspNetCore.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Operations.Tests/Incursa.Platform.Operations.Tests.csproj" />

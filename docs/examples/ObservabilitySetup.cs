@@ -2,6 +2,7 @@
 // This file shows how to configure platform observability with alerts and monitoring
 
 using Incursa.Platform.Observability;
+using Incursa.Platform.Health.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Metrics;
@@ -108,12 +109,8 @@ var app = builder.Build();
 // 7. Expose Prometheus metrics endpoint
 app.MapPrometheusScrapingEndpoint();
 
-// 8. Expose health check endpoints
-app.MapHealthChecks("/health");
-app.MapHealthChecks("/health/ready", new Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckOptions
-{
-    Predicate = check => check.Tags.Contains("ready")
-});
+// 8. Expose standardized health endpoints: /healthz, /readyz, /depz
+app.MapPlatformHealthEndpoints();
 
 // 9. Optional: Add diagnostics endpoint for watchdog inspection
 app.MapGet("/diagnostics/watchdog", (IWatchdog watchdog) =>

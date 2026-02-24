@@ -31,6 +31,8 @@ Outbox, inbox, scheduler, fanout, and leases are built on a work-queue pattern: 
 - Incursa.Platform.Modularity.Razor: Razor UI module integration.
 - Incursa.Platform.Metrics.AspNetCore: ASP.NET Core OpenTelemetry/Prometheus exports.
 - Incursa.Platform.Metrics.HttpServer: Self-hosted Prometheus scrape endpoint.
+- Incursa.Platform.Health: Standard health bucket contracts, registration helpers, and report formatting (`live`, `ready`, `dep`).
+- Incursa.Platform.Health.AspNetCore: Standardized ASP.NET Core health endpoint mapping for `/healthz`, `/readyz`, and `/depz`.
 - Incursa.Platform.HealthProbe: Deploy-time healthcheck CLI with standardized exit codes.
 
 ## Modularity and Engines

@@ -5,6 +5,8 @@
     <Platform Name="x86" />
   </Configurations>
   <Folder Name="/src/">
+    <Project Path="src/Incursa.Platform.Health/Incursa.Platform.Health.csproj" />
+    <Project Path="src/Incursa.Platform.Health.AspNetCore/Incursa.Platform.Health.AspNetCore.csproj" />
     <Project Path="src/Incursa.Platform.Modularity/Incursa.Platform.Modularity.csproj" />
     <Project Path="src/Incursa.Platform.Modularity.AspNetCore/Incursa.Platform.Modularity.AspNetCore.csproj" />
     <Project Path="src/Incursa.Platform.Modularity.Razor/Incursa.Platform.Modularity.Razor.csproj" />
@@ -12,8 +14,6 @@
     <Project Path="src/Incursa.Platform.SqlServer/Incursa.Platform.SqlServer.csproj" />
     <Project Path="src/Incursa.Platform.InMemory/Incursa.Platform.InMemory.csproj" />
     <Project Path="src/Incursa.Platform.HealthProbe/Incursa.Platform.HealthProbe.csproj" />
-    <Project Path="src/Incursa.Platform.Email/Incursa.Platform.Email.csproj" />
-    <Project Path="src/Incursa.Platform.Email.AspNetCore/Incursa.Platform.Email.AspNetCore.csproj" />
     <Project Path="src/Incursa.Platform.Webhooks/Incursa.Platform.Webhooks.csproj" />
     <Project Path="src/Incursa.Platform.Webhooks.AspNetCore/Incursa.Platform.Webhooks.AspNetCore.csproj" />
     <Project Path="src/Incursa.Platform.Operations/Incursa.Platform.Operations.csproj" />
@@ -35,7 +35,6 @@
   <Project Path="tests/Incursa.Platform.InMemory.Tests/Incursa.Platform.InMemory.Tests.csproj" />
   <Project Path="tests/Incursa.Platform.HealthProbe.Tests/Incursa.Platform.HealthProbe.Tests.csproj" />
   <Project Path="tests/Incursa.Platform.Postgres.Tests/Incursa.Platform.Postgres.Tests.csproj" />
-  <Project Path="tests/Incursa.Platform.Email.Tests/Incursa.Platform.Email.Tests.csproj" />
   <Project Path="tests/Incursa.Platform.Webhooks.Tests/Incursa.Platform.Webhooks.Tests.csproj" />
   <Project Path="tests/Incursa.Platform.Webhooks.AspNetCore.Tests/Incursa.Platform.Webhooks.AspNetCore.Tests.csproj" />
   <Project Path="tests/Incursa.Platform.Operations.Tests/Incursa.Platform.Operations.Tests.csproj" />

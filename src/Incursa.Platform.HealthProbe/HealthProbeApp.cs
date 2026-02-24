@@ -1,8 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using Incursa.Platform.Health;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 
 namespace Incursa.Platform.HealthProbe;
@@ -20,7 +19,7 @@ public static class HealthProbeApp
     public static bool IsHealthCheckInvocation(string[] args)
     {
         ArgumentNullException.ThrowIfNull(args);
-        return args.Length > 0 && args[0].Equals("healthcheck", StringComparison.OrdinalIgnoreCase);
+        return args.Length > 0 && args[0].Equals(HealthProbeDefaults.CommandName, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>
@@ -51,12 +50,12 @@ public static class HealthProbeApp
         catch (HealthProbeArgumentException ex)
         {
             await Console.Error.WriteLineAsync(ex.ToString()).ConfigureAwait(false);
-            return HealthProbeExitCodes.InvalidArguments;
+            return HealthProbeExitCodes.Misconfiguration;
         }
         catch (Exception ex)
         {
             await Console.Error.WriteLineAsync(ex.ToString()).ConfigureAwait(false);
-            return HealthProbeExitCodes.Exception;
+            return HealthProbeExitCodes.Misconfiguration;
         }
     }
 
@@ -79,66 +78,82 @@ public static class HealthProbeApp
         var baseOptions = services.GetService<IOptions<HealthProbeOptions>>()?.Value ?? new HealthProbeOptions();
         var options = baseOptions.Clone();
 
+        if (commandLine.ListBuckets)
+        {
+            WriteListOutput(commandLine);
+            return HealthProbeExitCodes.Healthy;
+        }
+
         if (commandLine.TimeoutOverride.HasValue)
         {
             options.Timeout = commandLine.TimeoutOverride.Value;
         }
 
-        if (commandLine.ApiKeyOverride is not null)
+        var bucketName = commandLine.BucketName ?? options.DefaultBucket;
+        if (string.IsNullOrWhiteSpace(bucketName))
         {
-            options.ApiKey = commandLine.ApiKeyOverride;
+            throw new HealthProbeArgumentException("A health bucket is required.");
         }
 
-        if (commandLine.ApiKeyHeaderNameOverride is not null)
+        var runner = services.GetService<IHealthProbeRunner>();
+        if (runner is null)
         {
-            options.ApiKeyHeaderName = commandLine.ApiKeyHeaderNameOverride;
+            throw new InvalidOperationException("IHealthProbeRunner is not registered. Call AddIncursaHealthProbe().");
         }
 
-        if (commandLine.AllowInsecureTls)
+        using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        timeoutCts.CancelAfter(options.Timeout);
+
+        HealthProbeResult result;
+        try
         {
-            options.AllowInsecureTls = true;
+            result = await runner.RunAsync(
+                new HealthProbeRequest(bucketName, options.IncludeData || commandLine.IncludeData),
+                timeoutCts.Token).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+        {
+            Console.WriteLine($"Non-healthy [{bucketName}] timed out after {options.Timeout.TotalSeconds.ToString(CultureInfo.InvariantCulture)} seconds");
+            return HealthProbeExitCodes.NonHealthy;
+        }
+        catch (HealthProbeArgumentException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            await Console.Error.WriteLineAsync(ex.ToString()).ConfigureAwait(false);
+            return HealthProbeExitCodes.Misconfiguration;
         }
 
-        var resolution = HealthProbeUrlResolver.Resolve(options, commandLine.EndpointName, commandLine.UrlOverride);
-
-        var httpClientFactory = services.GetService<IHttpClientFactory>();
-        if (httpClientFactory is null)
-        {
-            throw new InvalidOperationException("IHttpClientFactory is not registered. Call AddIncursaHealthProbe().");
-        }
-
-        var logger = services.GetService<ILogger<HttpHealthProbeRunner>>() ?? NullLogger<HttpHealthProbeRunner>.Instance;
-        var runner = new HttpHealthProbeRunner(httpClientFactory, logger, options);
-        var result = await runner.RunAsync(
-            new HealthProbeRequest(resolution.EndpointName, resolution.Url),
-            cancellationToken).ConfigureAwait(false);
-
-        WriteOutput(commandLine, result, resolution);
+        WriteOutput(commandLine, result);
         return result.ExitCode;
     }
 
-    private static void WriteOutput(HealthProbeCommandLine commandLine, HealthProbeResult result, HealthProbeResolution resolution)
+    private static void WriteOutput(HealthProbeCommandLine commandLine, HealthProbeResult result)
     {
         if (commandLine.JsonOutput)
         {
-            var payload = new
-            {
-                endpoint = resolution.EndpointName,
-                url = resolution.Url.ToString(),
-                status = result.IsHealthy ? "Healthy" : "Unhealthy",
-                exitCode = result.ExitCode,
-                httpStatus = result.StatusCode.HasValue ? (int)result.StatusCode.Value : (int?)null,
-                durationMs = (int)Math.Round(result.Duration.TotalMilliseconds),
-                message = result.Message,
-            };
-
-            Console.WriteLine(JsonSerializer.Serialize(payload));
+            Console.WriteLine(JsonSerializer.Serialize(result.Payload));
             return;
         }
 
-        var statusCode = result.StatusCode.HasValue
-            ? ((int)result.StatusCode.Value).ToString(CultureInfo.InvariantCulture)
-            : "n/a";
-        Console.WriteLine($"{result.Message} [{resolution.EndpointName}] {resolution.Url} in {(int)Math.Round(result.Duration.TotalMilliseconds)} ms (http {statusCode})");
+        Console.WriteLine($"{result.Status} [{result.Bucket}] in {(int)Math.Round(result.Duration.TotalMilliseconds)} ms");
+    }
+
+    private static void WriteListOutput(HealthProbeCommandLine commandLine)
+    {
+        if (commandLine.JsonOutput)
+        {
+            Console.WriteLine(JsonSerializer.Serialize(new
+            {
+                buckets = new[] { PlatformHealthTags.Live, PlatformHealthTags.Ready, PlatformHealthTags.Dep },
+            }));
+            return;
+        }
+
+        Console.WriteLine(PlatformHealthTags.Live);
+        Console.WriteLine(PlatformHealthTags.Ready);
+        Console.WriteLine(PlatformHealthTags.Dep);
     }
 }

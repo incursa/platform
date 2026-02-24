@@ -70,32 +70,36 @@ services.AddStartupCheckRunner();
 - **Should:** fast config validation, quick connectivity probes with tight timeouts.
 - **Should not:** unbounded retries, long-running background work, or slow external dependencies.
 
-### Endpoint contracts
+### Standard endpoint contracts
 
-These are the intended behaviors for host apps that expose health endpoints:
+All services use the same standardized health buckets and paths:
 
-- `/health/live`
+- `/healthz`
   - Liveness only.
-  - Uses the startup latch as the only gate.
-  - No external dependencies (no DB/Auth/Blob checks).
-  - Safe for Docker health checks (fast).
+  - Must stay healthy while startup latches are held.
+  - Includes built-in `self` check.
 
-- `/health/ready`
-  - Readiness for routing.
-  - Includes critical-fast dependencies only (DB/Auth/Blob and similar), plus the startup latch.
-  - Also includes the startup latch.
-  - Intended for load balancers (for example, Cloudflare) to decide routing/monitoring.
+- `/readyz`
+  - Readiness for serving traffic.
+  - Includes startup latch and readiness checks.
+  - Returns `503` until all latches are released.
 
-- `/health/status`
-  - Full status matrix (includes slower or outbox-backed dependencies when present).
-  - Intended for dashboards and diagnostics, not routing decisions.
+- `/depz`
+  - Dependency diagnostics only.
+  - Never gates readiness routing decisions.
+  - Should use cached dependency checks to bound outbound call rate.
 
-### What can affect routing
+### Status code and payload rules
 
-- **Allowed to affect routing:** startup latch, critical-fast dependency checks (DB/Auth/Blob).
-- **Dashboards only:** slower checks, outbox-backed dependencies, best-effort or eventually consistent signals.
+- **Status code:** `200` only when overall status is `Healthy`; otherwise `503`.
+- **Payload shape:** consistent JSON across buckets with:
+  - `bucket`
+  - `status`
+  - `totalDurationMs`
+  - `checks[]` with `name`, `status`, `durationMs`, and optional `description`/`data`
 
 ### Healthcheck targeting
 
-- Docker HEALTHCHECK targets `/health/live` (fast liveness + startup latch).
-- `/health/ready` is for routing/monitoring (critical-fast ongoing dependencies).
+- Container liveness probe should target `/healthz`.
+- Traffic readiness probe should target `/readyz`.
+- `/depz` is for diagnostics and dashboards, not routing gates.

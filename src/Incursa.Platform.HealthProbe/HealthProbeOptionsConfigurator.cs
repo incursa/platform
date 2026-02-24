@@ -28,17 +28,10 @@ internal sealed class HealthProbeOptionsConfigurator : IConfigureOptions<HealthP
             return;
         }
 
-        var baseUrlValue = section["BaseUrl"];
-        if (!string.IsNullOrWhiteSpace(baseUrlValue)
-            && Uri.TryCreate(baseUrlValue, UriKind.Absolute, out var baseUrl))
+        var defaultBucketValue = section["DefaultBucket"];
+        if (!string.IsNullOrWhiteSpace(defaultBucketValue))
         {
-            options.BaseUrl = baseUrl;
-        }
-
-        var defaultEndpointValue = section["DefaultEndpoint"];
-        if (!string.IsNullOrWhiteSpace(defaultEndpointValue))
-        {
-            options.DefaultEndpoint = defaultEndpointValue;
+            options.DefaultBucket = defaultBucketValue;
         }
 
         var timeoutValue = section["TimeoutSeconds"];
@@ -49,31 +42,11 @@ internal sealed class HealthProbeOptionsConfigurator : IConfigureOptions<HealthP
             options.Timeout = TimeSpan.FromSeconds(seconds);
         }
 
-        var apiKeyValue = section["ApiKey"];
-        if (!string.IsNullOrWhiteSpace(apiKeyValue))
+        var includeDataValue = section["IncludeData"];
+        if (!string.IsNullOrWhiteSpace(includeDataValue)
+            && bool.TryParse(includeDataValue, out var includeData))
         {
-            options.ApiKey = apiKeyValue;
-        }
-
-        var headerNameValue = section["ApiKeyHeaderName"];
-        if (!string.IsNullOrWhiteSpace(headerNameValue))
-        {
-            options.ApiKeyHeaderName = headerNameValue;
-        }
-
-        var endpointsSection = section.GetSection("Endpoints");
-        if (endpointsSection.Exists())
-        {
-            options.Endpoints.Clear();
-            foreach (var child in endpointsSection.GetChildren())
-            {
-                if (string.IsNullOrWhiteSpace(child.Key) || string.IsNullOrWhiteSpace(child.Value))
-                {
-                    continue;
-                }
-
-                options.Endpoints[child.Key] = child.Value;
-            }
+            options.IncludeData = includeData;
         }
     }
 }

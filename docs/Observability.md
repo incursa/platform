@@ -73,14 +73,7 @@ services.AddPlatformObservability()
 
 ```csharp
 // In Program.cs
-app.MapHealthChecks("/health");
-
-// Or with custom options
-app.MapHealthChecks("/health", new HealthCheckOptions
-{
-    Predicate = check => check.Tags.Contains("platform"),
-    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-});
+app.MapPlatformHealthEndpoints();
 ```
 
 ## Metrics
@@ -296,12 +289,8 @@ var app = builder.Build();
 // Expose metrics
 app.MapPrometheusScrapingEndpoint();
 
-// Expose health checks
-app.MapHealthChecks("/health");
-app.MapHealthChecks("/health/ready", new HealthCheckOptions
-{
-    Predicate = check => check.Tags.Contains("ready")
-});
+// Expose standardized health endpoints
+app.MapPlatformHealthEndpoints();
 
 app.Run();
 ```
@@ -430,10 +419,10 @@ The `MetricsExporterHealthCheck` reports:
 - **Degraded** - Last flush successful but errors present
 - **Unhealthy** - Last flush older than 2 minutes
 
-Access via standard health check endpoints:
+Access via standardized health endpoints:
 
 ```csharp
-app.MapHealthChecks("/health");
+app.MapPlatformHealthEndpoints();
 ```
 
 ### Querying Metrics

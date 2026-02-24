@@ -13,9 +13,10 @@
 // limitations under the License.
 
 using System.Net;
+using Incursa.Platform.Health;
+using Incursa.Platform.Health.AspNetCore;
 using Incursa.Platform.Observability;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,12 +25,12 @@ namespace Incursa.Platform.Tests;
 
 public sealed class StartupCheckLiveHealthEndpointTests
 {
-    /// <summary>When live Endpoint Returns503 While Startup Checks Run, then it behaves as expected.</summary>
-    /// <intent>Document expected behavior for live Endpoint Returns503 While Startup Checks Run.</intent>
-    /// <scenario>Given live Endpoint Returns503 While Startup Checks Run.</scenario>
-    /// <behavior>Then the operation matches the expected outcome.</behavior>
+    /// <summary>When startup checks run, ready is unavailable while live remains healthy.</summary>
+    /// <intent>Verify startup checks gate ready and do not gate live in standardized endpoints.</intent>
+    /// <scenario>Given a blocking startup check and mapped standardized health endpoints.</scenario>
+    /// <behavior>Then /healthz is 200 and /readyz is 503 until startup checks complete.</behavior>
     [Fact]
-    public async Task LiveEndpoint_Returns503WhileStartupChecksRun()
+    public async Task StartupChecks_GateReadyOnly()
     {
         await using var app = await BuildAppAsync();
         var client = app.GetTestClient();
@@ -37,8 +38,11 @@ public sealed class StartupCheckLiveHealthEndpointTests
         var check = app.Services.GetRequiredService<BlockingStartupCheck>();
         await check.Started.WaitAsync(TestContext.Current.CancellationToken);
 
-        var starting = await client.GetAsync(new Uri("/health/live", UriKind.Relative), TestContext.Current.CancellationToken);
-        starting.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
+        var liveWhileStarting = await client.GetAsync(new Uri(PlatformHealthEndpoints.Live, UriKind.Relative), TestContext.Current.CancellationToken);
+        liveWhileStarting.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        var readyWhileStarting = await client.GetAsync(new Uri(PlatformHealthEndpoints.Ready, UriKind.Relative), TestContext.Current.CancellationToken);
+        readyWhileStarting.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
 
         check.Release();
         await check.Completed.WaitAsync(TestContext.Current.CancellationToken);
@@ -49,7 +53,7 @@ public sealed class StartupCheckLiveHealthEndpointTests
             .Single();
         await runner.Completion;
 
-        var ready = await client.GetAsync(new Uri("/health/live", UriKind.Relative), TestContext.Current.CancellationToken);
+        var ready = await client.GetAsync(new Uri(PlatformHealthEndpoints.Ready, UriKind.Relative), TestContext.Current.CancellationToken);
         ready.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
@@ -65,10 +69,7 @@ public sealed class StartupCheckLiveHealthEndpointTests
         builder.Services.AddSingleton<IStartupCheck>(sp => sp.GetRequiredService<BlockingStartupCheck>());
 
         var app = builder.Build();
-        app.MapHealthChecks("/health/live", new HealthCheckOptions
-        {
-            Predicate = check => check.Tags.Contains("live", StringComparer.Ordinal),
-        });
+        app.MapPlatformHealthEndpoints();
 
         await app.StartAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
         return app;

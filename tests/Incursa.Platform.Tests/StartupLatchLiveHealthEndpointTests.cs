@@ -13,9 +13,10 @@
 // limitations under the License.
 
 using System.Net;
+using Incursa.Platform.Health;
+using Incursa.Platform.Health.AspNetCore;
 using Incursa.Platform.Observability;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,12 +24,12 @@ namespace Incursa.Platform.Tests;
 
 public sealed class StartupLatchLiveHealthEndpointTests
 {
-    /// <summary>When live Endpoint Returns503 Until Startup Completes, then it behaves as expected.</summary>
-    /// <intent>Document expected behavior for live Endpoint Returns503 Until Startup Completes.</intent>
-    /// <scenario>Given live Endpoint Returns503 Until Startup Completes.</scenario>
-    /// <behavior>Then the operation matches the expected outcome.</behavior>
+    /// <summary>When latches are held, live remains healthy and ready is unavailable until release.</summary>
+    /// <intent>Verify standardized bucket behavior for startup latch.</intent>
+    /// <scenario>Given a held startup latch and mapped standardized health endpoints.</scenario>
+    /// <behavior>Then /healthz is 200 while /readyz is 503, and /readyz becomes 200 after release.</behavior>
     [Fact]
-    public async Task LiveEndpoint_Returns503UntilStartupCompletes()
+    public async Task StartupLatch_AffectsReadyOnly()
     {
         await using var app = await BuildAppAsync();
         var client = app.GetTestClient();
@@ -36,13 +37,16 @@ public sealed class StartupLatchLiveHealthEndpointTests
         var latch = app.Services.GetRequiredService<IStartupLatch>();
         using var step = latch.Register("platform-migrations");
 
-        var starting = await client.GetAsync(new Uri("/health/live", UriKind.Relative), TestContext.Current.CancellationToken);
-        starting.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
+        var liveWhileStarting = await client.GetAsync(new Uri(PlatformHealthEndpoints.Live, UriKind.Relative), TestContext.Current.CancellationToken);
+        liveWhileStarting.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        var readyWhileStarting = await client.GetAsync(new Uri(PlatformHealthEndpoints.Ready, UriKind.Relative), TestContext.Current.CancellationToken);
+        readyWhileStarting.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
 
         step.Dispose();
 
-        var ready = await client.GetAsync(new Uri("/health/live", UriKind.Relative), TestContext.Current.CancellationToken);
-        ready.StatusCode.ShouldBe(HttpStatusCode.OK);
+        var readyAfterRelease = await client.GetAsync(new Uri(PlatformHealthEndpoints.Ready, UriKind.Relative), TestContext.Current.CancellationToken);
+        readyAfterRelease.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
     private static async Task<WebApplication> BuildAppAsync()
@@ -54,10 +58,7 @@ public sealed class StartupLatchLiveHealthEndpointTests
             .AddPlatformHealthChecks();
 
         var app = builder.Build();
-        app.MapHealthChecks("/health/live", new HealthCheckOptions
-        {
-            Predicate = check => check.Tags.Contains("live", StringComparer.Ordinal),
-        });
+        app.MapPlatformHealthEndpoints();
 
         await app.StartAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
         return app;

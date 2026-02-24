@@ -7,74 +7,64 @@ namespace Incursa.Platform.HealthProbe.Tests;
 /// </summary>
 public sealed class HealthProbeCommandLineTests
 {
-    private static readonly string[] DefaultArgs = { "healthcheck" };
-    private static readonly string[] DeployArgs = { "healthcheck", "deploy" };
-    private static readonly string[] UnknownFlagArgs = { "healthcheck", "--nope" };
+    private static readonly string[] DefaultArgs = { "health" };
+    private static readonly string[] DepArgs = { "health", "dep" };
+    private static readonly string[] UnknownFlagArgs = { "health", "--nope" };
     private static readonly string[] OverridesArgs =
     {
-        "healthcheck",
+        "health",
         "ready",
-        "--url",
-        "https://example.test/health",
         "--timeout",
         "5",
-        "--header",
-        "X-Test",
-        "--apikey",
-        "secret",
-        "--insecure",
+        "--include-data",
         "--json",
     };
-    /// <summary>Given only the base command, then parsing leaves EndpointName null and JsonOutput false.</summary>
-    /// <intent>Describe default parsing with no endpoint or flags.</intent>
-    /// <scenario>Given arguments containing only "healthcheck".</scenario>
-    /// <behavior>EndpointName remains null and JsonOutput stays false.</behavior>
+    /// <summary>Given only the base command, then parsing leaves BucketName null and JsonOutput false.</summary>
+    /// <intent>Describe default parsing with no bucket or flags.</intent>
+    /// <scenario>Given arguments containing only "health".</scenario>
+    /// <behavior>BucketName remains null and JsonOutput stays false.</behavior>
     [Fact]
     public void ParseDefaultsToConfiguredEndpoint()
     {
         var commandLine = HealthProbeCommandLine.Parse(DefaultArgs);
 
-        commandLine.EndpointName.ShouldBeNull();
+        commandLine.BucketName.ShouldBeNull();
         commandLine.JsonOutput.ShouldBeFalse();
     }
 
-    /// <summary>Given an explicit endpoint argument, then parsing uses it as EndpointName.</summary>
-    /// <intent>Describe parsing of a positional endpoint argument.</intent>
-    /// <scenario>Given arguments "healthcheck" and "deploy".</scenario>
-    /// <behavior>EndpointName is "deploy".</behavior>
+    /// <summary>Given an explicit bucket argument, then parsing uses it as BucketName.</summary>
+    /// <intent>Describe parsing of a positional bucket argument.</intent>
+    /// <scenario>Given arguments "health" and "dep".</scenario>
+    /// <behavior>BucketName is "dep".</behavior>
     [Fact]
-    public void ParseUsesExplicitEndpointName()
+    public void ParseUsesExplicitBucketName()
     {
-        var commandLine = HealthProbeCommandLine.Parse(DeployArgs);
+        var commandLine = HealthProbeCommandLine.Parse(DepArgs);
 
-        commandLine.EndpointName.ShouldBe("deploy");
+        commandLine.BucketName.ShouldBe("dep");
     }
 
     /// <summary>When override flags are provided, then parsing populates each override option.</summary>
-    /// <intent>Describe parsing of URL, timeout, header, API key, TLS, and JSON flags.</intent>
-    /// <scenario>Given arguments with url, timeout, header, apikey, insecure, and json options.</scenario>
-    /// <behavior>EndpointName and all override properties match the provided values.</behavior>
+    /// <intent>Describe parsing of timeout, include-data, and json flags.</intent>
+    /// <scenario>Given arguments with timeout, include-data, and json options.</scenario>
+    /// <behavior>BucketName and all override properties match the provided values.</behavior>
     [Fact]
     public void ParseUsesOverrides()
     {
         var commandLine = HealthProbeCommandLine.Parse(OverridesArgs);
 
-        commandLine.EndpointName.ShouldBe("ready");
-        commandLine.UrlOverride.ShouldNotBeNull();
-        commandLine.UrlOverride!.ToString().ShouldBe("https://example.test/health");
+        commandLine.BucketName.ShouldBe("ready");
         commandLine.TimeoutOverride.ShouldBe(TimeSpan.FromSeconds(5));
-        commandLine.ApiKeyHeaderNameOverride.ShouldBe("X-Test");
-        commandLine.ApiKeyOverride.ShouldBe("secret");
-        commandLine.AllowInsecureTls.ShouldBeTrue();
+        commandLine.IncludeData.ShouldBeTrue();
         commandLine.JsonOutput.ShouldBeTrue();
     }
 
-    /// <summary>Given no URL override, then running the health check returns InvalidArguments.</summary>
-    /// <intent>Describe validation when required URL input is missing.</intent>
-    /// <scenario>Given a service provider and a command line containing only "healthcheck".</scenario>
-    /// <behavior>The returned exit code is InvalidArguments.</behavior>
+    /// <summary>Given health checks are not registered, then running the health command returns Misconfiguration.</summary>
+    /// <intent>Describe validation when host DI is missing health check services.</intent>
+    /// <scenario>Given a service provider and a command line containing only "health".</scenario>
+    /// <behavior>The returned exit code is Misconfiguration.</behavior>
     [Fact]
-    public async Task TryRunReturnsInvalidWhenUrlMissing()
+    public async Task TryRunReturnsMisconfigurationWhenHealthServiceMissing()
     {
         var services = new ServiceCollection()
             .AddIncursaHealthProbe()
@@ -85,7 +75,7 @@ public sealed class HealthProbeCommandLineTests
             services,
             CancellationToken.None);
 
-        exitCode.ShouldBe(HealthProbeExitCodes.InvalidArguments);
+        exitCode.ShouldBe(HealthProbeExitCodes.Misconfiguration);
     }
 
     /// <summary>When an unknown flag is provided, then parsing throws a HealthProbeArgumentException.</summary>

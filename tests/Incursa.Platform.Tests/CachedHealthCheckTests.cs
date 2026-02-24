@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Incursa.Platform.HealthChecks;
+using Incursa.Platform.Health;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Time.Testing;
@@ -359,4 +359,3 @@ public class CachedHealthCheckTests
         }
     }
 }
-

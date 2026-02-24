@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Incursa.Platform\Incursa.Platform.csproj" />
+    <ProjectReference Include="..\..\src\Incursa.Platform.Health\Incursa.Platform.Health.csproj" />
     <ProjectReference Include="..\..\src\Incursa.Platform.HealthProbe\Incursa.Platform.HealthProbe.csproj" />
     <ProjectReference Include="..\..\tools\testdocs\src\Incursa.TestDocs.Analyzers\Incursa.TestDocs.Analyzers.csproj">
       <PrivateAssets>all</PrivateAssets>
