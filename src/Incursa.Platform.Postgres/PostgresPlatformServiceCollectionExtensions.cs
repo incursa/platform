@@ -13,7 +13,6 @@
 // limitations under the License.
 
 
-using Incursa.Platform.Email;
 using Incursa.Platform.Idempotency;
 using Incursa.Platform.Metrics;
 using Incursa.Platform.Observability;
@@ -655,7 +654,6 @@ public static class PostgresPlatformServiceCollectionExtensions
             new RoundRobinInboxSelectionStrategy());
 
         services.TryAddSingleton<IInboxWorkStore>(ResolveDefaultInboxWorkStore);
-        services.TryAddSingleton<Observability.InboxRecoveryService>();
 
         // Register multi-inbox cleanup service
         services.AddHostedService<MultiInboxCleanupService>(sp => new MultiInboxCleanupService(
@@ -901,32 +899,6 @@ public static class PostgresPlatformServiceCollectionExtensions
         services.AddPostgresOperations(operationOptions);
     }
 
-    private static void RegisterEmailOutbox(IServiceCollection services, PostgresPlatformOptions options)
-    {
-        var emailOutboxOptions = new PostgresEmailOutboxOptions
-        {
-            ConnectionString = options.ConnectionString,
-            SchemaName = options.SchemaName,
-            EnableSchemaDeployment = options.EnableSchemaDeployment,
-        };
-
-        options.ConfigureEmailOutbox?.Invoke(emailOutboxOptions);
-        services.AddPostgresEmailOutbox(emailOutboxOptions);
-    }
-
-    private static void RegisterEmailDelivery(IServiceCollection services, PostgresPlatformOptions options)
-    {
-        var emailDeliveryOptions = new PostgresEmailDeliveryOptions
-        {
-            ConnectionString = options.ConnectionString,
-            SchemaName = options.SchemaName,
-            EnableSchemaDeployment = options.EnableSchemaDeployment,
-        };
-
-        options.ConfigureEmailDelivery?.Invoke(emailDeliveryOptions);
-        services.AddPostgresEmailDelivery(emailDeliveryOptions);
-    }
-
     private static IOutbox ResolveDefaultOutbox(IServiceProvider provider)
     {
         var storeProvider = provider.GetRequiredService<IOutboxStoreProvider>();
@@ -1005,6 +977,4 @@ public static class PostgresPlatformServiceCollectionExtensions
         return router.GetSchedulerClient(key);
     }
 }
-
-
 

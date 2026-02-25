@@ -34,10 +34,6 @@ public static class SqlServerSchemaMigrator
             .ApplyTenantBundleAsync(connectionString, schemaName, NullLogger.Instance, cancellationToken)
             .ConfigureAwait(false);
 
-        await SqlServerSchemaMigrations
-            .ApplyEmailOutboxAsync(connectionString, schemaName, "EmailOutbox", NullLogger.Instance, cancellationToken)
-            .ConfigureAwait(false);
-
         if (includeControlPlaneBundle)
         {
             await SqlServerSchemaMigrations

@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using Incursa.Platform.Audit;
-using Incursa.Platform.Email;
 using Incursa.Platform.Metrics;
 using Incursa.Platform.Operations;
 
@@ -71,6 +70,4 @@ public sealed class SqlPlatformOptions
     /// <summary>Optional operations options customization.</summary>
     public Action<SqlOperationOptions>? ConfigureOperations { get; set; }
 
-    /// <summary>Optional email outbox options customization.</summary>
-    public Action<SqlEmailOutboxOptions>? ConfigureEmailOutbox { get; set; }
 }

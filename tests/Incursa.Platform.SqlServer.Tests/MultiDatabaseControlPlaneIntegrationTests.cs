@@ -116,6 +116,7 @@ public class MultiDatabaseControlPlaneIntegrationTests
         foreach (var db in tenants)
         {
             processed.ShouldContain($"payload-from-{db.Name}");
+            await WaitForDispatchedCountAsync(db, expectedCount: 1, timeoutSeconds: 10);
             var dispatchedCount = await GetIsProcessedCountAsync(db);
             dispatchedCount.ShouldBe(1, $"Expected one processed row in {db.Name}");
         }
@@ -152,6 +153,7 @@ public class MultiDatabaseControlPlaneIntegrationTests
         await EnqueueTestMessagesAsync(host.Services, tenants, processed);
         await WaitForDispatchAsync(processed, tenants.Count, timeoutSeconds: 10);
 
+        await WaitForDispatchedCountAsync(tenants[0], expectedCount: 1, timeoutSeconds: 10);
         var dispatchedCount = await GetIsProcessedCountAsync(tenants[0]);
         dispatchedCount.ShouldBe(1);
 
@@ -189,6 +191,7 @@ public class MultiDatabaseControlPlaneIntegrationTests
 
         foreach (var db in tenants)
         {
+            await WaitForDispatchedCountAsync(db, expectedCount: 1, timeoutSeconds: 10);
             var dispatchedCount = await GetIsProcessedCountAsync(db);
             dispatchedCount.ShouldBe(1, $"Expected one processed row in {db.Name}");
         }
@@ -225,6 +228,7 @@ public class MultiDatabaseControlPlaneIntegrationTests
         await EnqueueTestMessagesAsync(host.Services, tenants, processed);
         await WaitForDispatchAsync(processed, tenants.Count, timeoutSeconds: 10);
 
+        await WaitForDispatchedCountAsync(tenants[0], expectedCount: 1, timeoutSeconds: 10);
         var dispatchedCount = await GetIsProcessedCountAsync(tenants[0]);
         dispatchedCount.ShouldBe(1);
 
@@ -413,6 +417,29 @@ SELECT COUNT(*) FROM [{database.SchemaName}].[Outbox] WHERE IsProcessed = 1
             .ShouldBe(expectedCount, $"Processed payloads: {string.Join(", ", processedPayloads)}");
     }
 
+    private async Task WaitForDispatchedCountAsync(
+        PlatformDatabase database,
+        int expectedCount,
+        int timeoutSeconds)
+    {
+        var deadline = DateTime.UtcNow.AddSeconds(timeoutSeconds);
+        var currentCount = 0;
+        while (DateTime.UtcNow < deadline)
+        {
+            currentCount = await GetIsProcessedCountAsync(database).ConfigureAwait(false);
+            if (currentCount >= expectedCount)
+            {
+                return;
+            }
+
+            await Task.Delay(TimeSpan.FromMilliseconds(250), TestContext.Current.CancellationToken).ConfigureAwait(false);
+        }
+
+        currentCount.ShouldBe(
+            expectedCount,
+            $"Timed out waiting for dispatched row count in {database.Name}");
+    }
+
     private sealed class StaticDiscovery : IPlatformDatabaseDiscovery
     {
         private readonly IReadOnlyCollection<PlatformDatabase> databases;
@@ -451,4 +478,3 @@ SELECT COUNT(*) FROM [{database.SchemaName}].[Outbox] WHERE IsProcessed = 1
         }
     }
 }
-

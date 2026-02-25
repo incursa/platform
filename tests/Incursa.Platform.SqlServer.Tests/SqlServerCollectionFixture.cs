@@ -27,6 +27,8 @@ namespace Incursa.Platform.Tests;
 public sealed class SqlServerCollectionFixture : IAsyncLifetime
 {
     private const string SaPassword = "Str0ng!Passw0rd!";
+    private static readonly TimeSpan ServerReadyTimeout = TimeSpan.FromMinutes(3);
+    private static readonly TimeSpan ProbeInterval = TimeSpan.FromSeconds(1);
     private readonly SemaphoreSlim recoveryLock = new(1, 1);
     private IContainer msSqlContainer;
     private string? connectionString;
@@ -140,7 +142,7 @@ public sealed class SqlServerCollectionFixture : IAsyncLifetime
 
     private static async Task WaitForServerReadyAsync(string connectionString, CancellationToken cancellationToken)
     {
-        var timeoutAt = DateTimeOffset.UtcNow.AddSeconds(60);
+        var timeoutAt = DateTimeOffset.UtcNow.Add(ServerReadyTimeout);
 
         while (DateTimeOffset.UtcNow < timeoutAt)
         {
@@ -155,11 +157,11 @@ public sealed class SqlServerCollectionFixture : IAsyncLifetime
             }
             catch (SqlException)
             {
-                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken).ConfigureAwait(false);
+                await Task.Delay(ProbeInterval, cancellationToken).ConfigureAwait(false);
             }
             catch (InvalidOperationException)
             {
-                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken).ConfigureAwait(false);
+                await Task.Delay(ProbeInterval, cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -241,7 +243,7 @@ public sealed class SqlServerCollectionFixture : IAsyncLifetime
 
     private static async Task EnsureTempDbOnlineAsync(string connectionString, CancellationToken cancellationToken)
     {
-        var timeoutAt = DateTimeOffset.UtcNow.AddSeconds(60);
+        var timeoutAt = DateTimeOffset.UtcNow.Add(ServerReadyTimeout);
         while (DateTimeOffset.UtcNow < timeoutAt)
         {
             try
@@ -268,7 +270,7 @@ public sealed class SqlServerCollectionFixture : IAsyncLifetime
             {
             }
 
-            await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken).ConfigureAwait(false);
+            await Task.Delay(ProbeInterval, cancellationToken).ConfigureAwait(false);
         }
 
         throw new TimeoutException("SQL Server tempdb did not report ONLINE before timeout.");

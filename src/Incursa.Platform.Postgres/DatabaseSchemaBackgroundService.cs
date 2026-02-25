@@ -33,8 +33,6 @@ internal sealed class DatabaseSchemaBackgroundService : BackgroundService
     private readonly IOptionsMonitor<PostgresMetricsExporterOptions> metricsOptions;
     private readonly IOptionsMonitor<PostgresOperationOptions> operationOptions;
     private readonly IOptionsMonitor<PostgresAuditOptions> auditOptions;
-    private readonly IOptionsMonitor<PostgresEmailOutboxOptions> emailOutboxOptions;
-    private readonly IOptionsMonitor<PostgresEmailDeliveryOptions> emailDeliveryOptions;
     private readonly IOptionsMonitor<PostgresSystemLeaseOptions> systemLeaseOptions;
     private readonly DatabaseSchemaCompletion schemaCompletion;
     private readonly PlatformConfiguration? platformConfiguration;
@@ -51,8 +49,6 @@ internal sealed class DatabaseSchemaBackgroundService : BackgroundService
         IOptionsMonitor<PostgresMetricsExporterOptions> metricsOptions,
         IOptionsMonitor<PostgresOperationOptions> operationOptions,
         IOptionsMonitor<PostgresAuditOptions> auditOptions,
-        IOptionsMonitor<PostgresEmailOutboxOptions> emailOutboxOptions,
-        IOptionsMonitor<PostgresEmailDeliveryOptions> emailDeliveryOptions,
         IOptionsMonitor<PostgresSystemLeaseOptions> systemLeaseOptions,
         DatabaseSchemaCompletion schemaCompletion,
         PlatformConfiguration? platformConfiguration = null,
@@ -68,8 +64,6 @@ internal sealed class DatabaseSchemaBackgroundService : BackgroundService
         this.metricsOptions = metricsOptions;
         this.operationOptions = operationOptions;
         this.auditOptions = auditOptions;
-        this.emailOutboxOptions = emailOutboxOptions;
-        this.emailDeliveryOptions = emailDeliveryOptions;
         this.systemLeaseOptions = systemLeaseOptions;
         this.schemaCompletion = schemaCompletion;
         this.platformConfiguration = platformConfiguration;
@@ -169,18 +163,6 @@ internal sealed class DatabaseSchemaBackgroundService : BackgroundService
                 if (auditOpts.EnableSchemaDeployment && !string.IsNullOrEmpty(auditOpts.ConnectionString))
                 {
                     deploymentTasks.Add(DeployAuditSchemaAsync(auditOpts, stoppingToken));
-                }
-
-                var emailOutboxOpts = emailOutboxOptions.CurrentValue;
-                if (emailOutboxOpts.EnableSchemaDeployment && !string.IsNullOrEmpty(emailOutboxOpts.ConnectionString))
-                {
-                    deploymentTasks.Add(DeployEmailOutboxSchemaAsync(emailOutboxOpts, stoppingToken));
-                }
-
-                var emailDeliveryOpts = emailDeliveryOptions.CurrentValue;
-                if (emailDeliveryOpts.EnableSchemaDeployment && !string.IsNullOrEmpty(emailDeliveryOpts.ConnectionString))
-                {
-                    deploymentTasks.Add(DeployEmailDeliverySchemaAsync(emailDeliveryOpts, stoppingToken));
                 }
 
                 // Deploy system lease schema if enabled
@@ -386,18 +368,6 @@ internal sealed class DatabaseSchemaBackgroundService : BackgroundService
             return audit;
         }
 
-        var emailOutbox = emailOutboxOptions.CurrentValue.ConnectionString;
-        if (!string.IsNullOrWhiteSpace(emailOutbox))
-        {
-            return emailOutbox;
-        }
-
-        var emailDelivery = emailDeliveryOptions.CurrentValue.ConnectionString;
-        if (!string.IsNullOrWhiteSpace(emailDelivery))
-        {
-            return emailDelivery;
-        }
-
         var leases = systemLeaseOptions.CurrentValue.ConnectionString;
         if (!string.IsNullOrWhiteSpace(leases))
         {
@@ -442,30 +412,6 @@ internal sealed class DatabaseSchemaBackgroundService : BackgroundService
             options.AuditAnchorsTable).ConfigureAwait(false);
     }
 
-    private async Task DeployEmailOutboxSchemaAsync(PostgresEmailOutboxOptions options, CancellationToken cancellationToken)
-    {
-        logger.LogDebug(
-            "Deploying email outbox schema to {Schema}.{Table}",
-            options.SchemaName,
-            options.TableName);
-        await DatabaseSchemaManager.EnsureEmailOutboxSchemaAsync(
-            options.ConnectionString,
-            options.SchemaName,
-            options.TableName).ConfigureAwait(false);
-    }
-
-    private async Task DeployEmailDeliverySchemaAsync(PostgresEmailDeliveryOptions options, CancellationToken cancellationToken)
-    {
-        logger.LogDebug(
-            "Deploying email delivery schema to {Schema}.{Table}",
-            options.SchemaName,
-            options.TableName);
-        await DatabaseSchemaManager.EnsureEmailDeliverySchemaAsync(
-            options.ConnectionString,
-            options.SchemaName,
-            options.TableName).ConfigureAwait(false);
-    }
-
     private async Task DeploySystemLeaseSchemaAsync(PostgresSystemLeaseOptions options, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(options.ConnectionString))
@@ -501,6 +447,5 @@ internal sealed class DatabaseSchemaBackgroundService : BackgroundService
             schemaName).ConfigureAwait(false);
     }
 }
-
 
 

@@ -13,6 +13,7 @@
     <ProjectReference Include="..\..\src\Incursa.Platform.ExactlyOnce\Incursa.Platform.ExactlyOnce.csproj" />
     <ProjectReference Include="..\..\src\Incursa.Platform.Modularity\Incursa.Platform.Modularity.csproj" />
     <ProjectReference Include="..\..\src\Incursa.Platform.Modularity.Razor\Incursa.Platform.Modularity.Razor.csproj" />
+    <ProjectReference Include="..\..\src\Incursa.Platform.Audit.WorkOS\Incursa.Platform.Audit.WorkOS.csproj" />
     <ProjectReference Include="..\Incursa.Platform.TestUtilities\Incursa.Platform.TestUtilities.csproj" />
     <ProjectReference Include="..\..\tools\testdocs\src\Incursa.TestDocs.Analyzers\Incursa.TestDocs.Analyzers.csproj">
       <PrivateAssets>all</PrivateAssets>

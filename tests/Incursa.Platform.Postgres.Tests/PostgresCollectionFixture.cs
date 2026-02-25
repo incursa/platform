@@ -24,6 +24,8 @@ namespace Incursa.Platform.Tests;
 /// </summary>
 public sealed class PostgresCollectionFixture : IAsyncLifetime
 {
+    private static readonly TimeSpan ServerReadyTimeout = TimeSpan.FromMinutes(2);
+    private static readonly TimeSpan ProbeInterval = TimeSpan.FromSeconds(1);
     private readonly PostgreSqlContainer postgresContainer;
     private string? connectionString;
     private int databaseCounter;
@@ -46,8 +48,11 @@ public sealed class PostgresCollectionFixture : IAsyncLifetime
         var builder = new NpgsqlConnectionStringBuilder(postgresContainer.GetConnectionString())
         {
             Pooling = false,
+            Timeout = 60,
+            CommandTimeout = 120,
         };
         connectionString = builder.ConnectionString;
+        await WaitForServerReadyAsync(connectionString, TestContext.Current.CancellationToken).ConfigureAwait(false);
     }
 
     public async ValueTask DisposeAsync()
@@ -78,6 +83,7 @@ public sealed class PostgresCollectionFixture : IAsyncLifetime
 #pragma warning disable CA2100
             await using var command = new NpgsqlCommand($"CREATE DATABASE \"{dbName}\"", connection);
 #pragma warning restore CA2100
+            command.CommandTimeout = 120;
             await command.ExecuteNonQueryAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
 
             var dbBuilder = new NpgsqlConnectionStringBuilder(connectionString)
@@ -89,7 +95,33 @@ public sealed class PostgresCollectionFixture : IAsyncLifetime
             return dbBuilder.ConnectionString;
         }
     }
+
+    private static async Task WaitForServerReadyAsync(string connectionString, CancellationToken cancellationToken)
+    {
+        var timeoutAt = DateTimeOffset.UtcNow.Add(ServerReadyTimeout);
+
+        while (DateTimeOffset.UtcNow < timeoutAt)
+        {
+            try
+            {
+                var connection = new NpgsqlConnection(connectionString);
+                await using (connection.ConfigureAwait(false))
+                {
+                    await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+                    return;
+                }
+            }
+            catch (NpgsqlException)
+            {
+                await Task.Delay(ProbeInterval, cancellationToken).ConfigureAwait(false);
+            }
+            catch (InvalidOperationException)
+            {
+                await Task.Delay(ProbeInterval, cancellationToken).ConfigureAwait(false);
+            }
+        }
+
+        throw new TimeoutException("PostgreSQL did not become available before the timeout.");
+    }
 }
-
-
 

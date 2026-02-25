@@ -84,7 +84,22 @@ internal class SqlOutboxStore : IOutboxStore
 
             // Fetch the full message details for claimed IDs
             var sql = $"""
-                SELECT * 
+                SELECT
+                    Id,
+                    Payload,
+                    Topic,
+                    CreatedAt,
+                    IsProcessed,
+                    ProcessedAt,
+                    ProcessedBy,
+                    RetryCount,
+                    LastError,
+                    MessageId,
+                    CorrelationId,
+                    CASE
+                        WHEN DueTimeUtc IS NULL THEN NULL
+                        ELSE CAST(CAST(DueTimeUtc AS datetime2(3)) AT TIME ZONE 'UTC' AS datetimeoffset(3))
+                    END AS DueTimeUtc
                 FROM [{schemaName}].[{tableName}]
                 WHERE Id IN @Ids
                 """;
@@ -178,7 +193,7 @@ internal class SqlOutboxStore : IOutboxStore
             };
             abandonCommand.Parameters.AddWithValue("@OwnerToken", ownerToken.Value);
             abandonCommand.Parameters.AddWithValue("@LastError", lastError ?? (object)DBNull.Value);
-            abandonCommand.Parameters.AddWithValue("@DueTimeUtc", nextAttempt.UtcDateTime);
+            abandonCommand.Parameters.AddWithValue("@DueTimeUtc", nextAttempt.ToUniversalTime());
             var parameter = abandonCommand.Parameters.AddWithValue("@Ids", idsTable);
             parameter.SqlDbType = System.Data.SqlDbType.Structured;
             parameter.TypeName = $"[{schemaName}].[GuidIdList]";

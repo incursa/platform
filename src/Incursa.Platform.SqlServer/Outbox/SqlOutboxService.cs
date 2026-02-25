@@ -111,7 +111,7 @@ internal class SqlOutboxService : IOutbox
                         Topic = topic,
                         Payload = payload,
                         CorrelationId = correlationId,
-                        DueTimeUtc = dueTimeUtc?.UtcDateTime,
+                        DueTimeUtc = dueTimeUtc?.ToUniversalTime(),
                     }, transaction: transaction).ConfigureAwait(false);
 
                     await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
@@ -164,7 +164,7 @@ internal class SqlOutboxService : IOutbox
             Topic = topic,
             Payload = payload,
             CorrelationId = correlationId,
-            DueTimeUtc = dueTimeUtc?.UtcDateTime,
+            DueTimeUtc = dueTimeUtc?.ToUniversalTime(),
         }, transaction: transaction).ConfigureAwait(false);
     }
 

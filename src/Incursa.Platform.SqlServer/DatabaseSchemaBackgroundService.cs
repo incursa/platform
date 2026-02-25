@@ -31,7 +31,6 @@ internal sealed class DatabaseSchemaBackgroundService : BackgroundService
     private readonly IOptionsMonitor<SqlFanoutOptions> fanoutOptions;
     private readonly IOptionsMonitor<SqlIdempotencyOptions> idempotencyOptions;
     private readonly IOptionsMonitor<MetricsExporterOptions> metricsOptions;
-    private readonly IOptionsMonitor<SqlEmailOutboxOptions> emailOutboxOptions;
     private readonly IOptionsMonitor<SystemLeaseOptions> systemLeaseOptions;
     private readonly DatabaseSchemaCompletion schemaCompletion;
     private readonly PlatformConfiguration? platformConfiguration;
@@ -46,7 +45,6 @@ internal sealed class DatabaseSchemaBackgroundService : BackgroundService
         IOptionsMonitor<SqlFanoutOptions> fanoutOptions,
         IOptionsMonitor<SqlIdempotencyOptions> idempotencyOptions,
         IOptionsMonitor<MetricsExporterOptions> metricsOptions,
-        IOptionsMonitor<SqlEmailOutboxOptions> emailOutboxOptions,
         IOptionsMonitor<SystemLeaseOptions> systemLeaseOptions,
         DatabaseSchemaCompletion schemaCompletion,
         PlatformConfiguration? platformConfiguration = null,
@@ -60,7 +58,6 @@ internal sealed class DatabaseSchemaBackgroundService : BackgroundService
         this.fanoutOptions = fanoutOptions;
         this.idempotencyOptions = idempotencyOptions;
         this.metricsOptions = metricsOptions;
-        this.emailOutboxOptions = emailOutboxOptions;
         this.systemLeaseOptions = systemLeaseOptions;
         this.schemaCompletion = schemaCompletion;
         this.platformConfiguration = platformConfiguration;
@@ -148,12 +145,6 @@ internal sealed class DatabaseSchemaBackgroundService : BackgroundService
                 if (idempotencyOpts.EnableSchemaDeployment && !string.IsNullOrEmpty(idempotencyOpts.ConnectionString))
                 {
                     deploymentTasks.Add(DeployIdempotencySchemaAsync(idempotencyOpts, stoppingToken));
-                }
-
-                var emailOutboxOpts = emailOutboxOptions.CurrentValue;
-                if (emailOutboxOpts.EnableSchemaDeployment && !string.IsNullOrEmpty(emailOutboxOpts.ConnectionString))
-                {
-                    deploymentTasks.Add(DeployEmailOutboxSchemaAsync(emailOutboxOpts, stoppingToken));
                 }
 
                 // Deploy system lease schema if enabled
@@ -352,12 +343,6 @@ internal sealed class DatabaseSchemaBackgroundService : BackgroundService
             return idempotency;
         }
 
-        var emailOutbox = emailOutboxOptions.CurrentValue.ConnectionString;
-        if (!string.IsNullOrWhiteSpace(emailOutbox))
-        {
-            return emailOutbox;
-        }
-
         var leases = systemLeaseOptions.CurrentValue.ConnectionString;
         if (!string.IsNullOrWhiteSpace(leases))
         {
@@ -371,15 +356,6 @@ internal sealed class DatabaseSchemaBackgroundService : BackgroundService
     {
         logger.LogDebug("Deploying idempotency schema to {Schema}.{Table}", options.SchemaName, options.TableName);
         await DatabaseSchemaManager.EnsureIdempotencySchemaAsync(
-            options.ConnectionString,
-            options.SchemaName,
-            options.TableName).ConfigureAwait(false);
-    }
-
-    private async Task DeployEmailOutboxSchemaAsync(SqlEmailOutboxOptions options, CancellationToken cancellationToken)
-    {
-        logger.LogDebug("Deploying email outbox schema to {Schema}.{Table}", options.SchemaName, options.TableName);
-        await DatabaseSchemaManager.EnsureEmailOutboxSchemaAsync(
             options.ConnectionString,
             options.SchemaName,
             options.TableName).ConfigureAwait(false);

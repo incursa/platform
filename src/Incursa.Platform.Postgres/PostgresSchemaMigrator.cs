@@ -42,14 +42,6 @@ public static class PostgresSchemaMigrator
             .ApplyAuditAsync(connectionString, schemaName, "AuditEvents", "AuditAnchors", NullLogger.Instance, cancellationToken)
             .ConfigureAwait(false);
 
-        await PostgresSchemaMigrations
-            .ApplyEmailOutboxAsync(connectionString, schemaName, "EmailOutbox", NullLogger.Instance, cancellationToken)
-            .ConfigureAwait(false);
-
-        await PostgresSchemaMigrations
-            .ApplyEmailDeliveryAsync(connectionString, schemaName, "EmailDeliveryEvents", NullLogger.Instance, cancellationToken)
-            .ConfigureAwait(false);
-
         if (includeControlPlaneBundle)
         {
             await PostgresSchemaMigrations

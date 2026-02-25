@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using Incursa.Platform.Audit;
-using Incursa.Platform.Email;
 using Incursa.Platform.Metrics;
 using Incursa.Platform.Operations;
 using Microsoft.Extensions.DependencyInjection;
@@ -200,7 +199,6 @@ public static class SqlPlatformServiceCollectionExtensions
         RegisterMetrics(services, options);
         RegisterAudit(services, options);
         RegisterOperations(services, options);
-        RegisterEmailOutbox(services, options);
 
         services.TryAddSingleton<IOutbox>(ResolveDefaultOutbox);
         services.TryAddSingleton<IInbox>(ResolveDefaultInbox);
@@ -399,19 +397,6 @@ public static class SqlPlatformServiceCollectionExtensions
 
         services.TryAddSingleton<IOperationTracker, SqlOperationTracker>();
         services.TryAddSingleton<IOperationWatcher, SqlOperationWatcher>();
-    }
-
-    private static void RegisterEmailOutbox(IServiceCollection services, SqlPlatformOptions options)
-    {
-        var emailOutboxOptions = new SqlEmailOutboxOptions
-        {
-            ConnectionString = options.ConnectionString,
-            SchemaName = options.SchemaName,
-            EnableSchemaDeployment = options.EnableSchemaDeployment,
-        };
-
-        options.ConfigureEmailOutbox?.Invoke(emailOutboxOptions);
-        services.AddSqlEmailOutbox(emailOutboxOptions);
     }
 
     private static IOutbox ResolveDefaultOutbox(IServiceProvider provider)

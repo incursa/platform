@@ -53,7 +53,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Incursa.Platform\Incursa.Platform.csproj" />
     <ProjectReference Include="..\Incursa.Platform.Audit\Incursa.Platform.Audit.csproj" />
-    <ProjectReference Include="..\Incursa.Platform.Email\Incursa.Platform.Email.csproj" />
     <ProjectReference Include="..\Incursa.Platform.Operations\Incursa.Platform.Operations.csproj" />
     <ProjectReference Include="..\Incursa.Platform.Idempotency\Incursa.Platform.Idempotency.csproj" />
     <ProjectReference Include="..\Incursa.Platform.Observability\Incursa.Platform.Observability.csproj" />

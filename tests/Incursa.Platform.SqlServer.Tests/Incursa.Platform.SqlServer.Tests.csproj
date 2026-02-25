@@ -9,7 +9,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Incursa.Platform\Incursa.Platform.csproj" />
     <ProjectReference Include="..\..\src\Incursa.Platform.SqlServer\Incursa.Platform.SqlServer.csproj" />
-    <ProjectReference Include="..\..\src\Incursa.Platform.Email\Incursa.Platform.Email.csproj" />
     <ProjectReference Include="..\..\src\Incursa.Platform.Modularity\Incursa.Platform.Modularity.csproj" />
     <ProjectReference Include="..\..\src\Incursa.Platform.Modularity.Razor\Incursa.Platform.Modularity.Razor.csproj" />
     <ProjectReference Include="..\..\src\Incursa.Platform.Operations\Incursa.Platform.Operations.csproj" />
