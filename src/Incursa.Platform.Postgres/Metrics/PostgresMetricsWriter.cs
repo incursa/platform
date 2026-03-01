@@ -39,6 +39,7 @@ internal sealed class PostgresMetricsWriter
 
         var tagsJson = JsonSerializer.Serialize(seriesKey.Tags);
         var tagHash = ComputeTagHash(tagsJson);
+        var databaseId = seriesKey.DatabaseId ?? Guid.Empty;
 
         var metricDefTable = PostgresSqlHelper.Qualify(schemaName, "MetricDef");
         var metricSeriesTable = PostgresSqlHelper.Qualify(schemaName, "MetricSeries");
@@ -58,17 +59,17 @@ internal sealed class PostgresMetricsWriter
 
         var seriesId = await connection.ExecuteScalarAsync<long>(
             $"""
-            INSERT INTO {metricSeriesTable} ("MetricDefId", "Service", "InstanceId", "TagsJson", "TagHash")
-            VALUES (@MetricDefId, @Service, @InstanceId, @TagsJson, @TagHash)
-            ON CONFLICT ("MetricDefId", "Service", "InstanceId", "TagHash") DO UPDATE
+            INSERT INTO {metricSeriesTable} ("MetricDefId", "DatabaseId", "Service", "TagsJson", "TagHash")
+            VALUES (@MetricDefId, @DatabaseId, @Service, @TagsJson, @TagHash)
+            ON CONFLICT ("MetricDefId", "DatabaseId", "Service", "TagHash") DO UPDATE
             SET "TagsJson" = EXCLUDED."TagsJson"
             RETURNING "SeriesId";
             """,
             new
             {
                 MetricDefId = metricDefId,
+                DatabaseId = databaseId,
                 Service = seriesKey.Service,
-                InstanceId = seriesKey.InstanceId,
                 TagsJson = tagsJson,
                 TagHash = tagHash,
             }).ConfigureAwait(false);

@@ -1662,12 +1662,13 @@ internal static class DatabaseSchemaManager
             CREATE TABLE [{{schemaName}}].[MetricSeries] (
               SeriesId      BIGINT IDENTITY PRIMARY KEY,
               MetricDefId   INT NOT NULL REFERENCES [{{schemaName}}].[MetricDef](MetricDefId),
+              DatabaseId    UNIQUEIDENTIFIER NOT NULL DEFAULT '00000000-0000-0000-0000-000000000000',
               Service       NVARCHAR(64) NOT NULL,
-              InstanceId    UNIQUEIDENTIFIER NOT NULL,
+              InstanceId    UNIQUEIDENTIFIER NOT NULL DEFAULT '00000000-0000-0000-0000-000000000000',
               TagsJson      NVARCHAR(1024) NOT NULL DEFAULT (N'{}'),
               TagHash       VARBINARY(32) NOT NULL,
               CreatedUtc    DATETIMEOFFSET(3) NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-              CONSTRAINT UQ_MetricSeries UNIQUE (MetricDefId, Service, InstanceId, TagHash)
+              CONSTRAINT UQ_MetricSeries UNIQUE (MetricDefId, DatabaseId, Service, TagHash)
             );
             """;
     }
@@ -1776,6 +1777,7 @@ internal static class DatabaseSchemaManager
               @Description NVARCHAR(512),
               @Service NVARCHAR(64),
               @InstanceId UNIQUEIDENTIFIER,
+              @DatabaseId UNIQUEIDENTIFIER = NULL,
               @TagsJson NVARCHAR(1024),
               @TagHash VARBINARY(32),
               @SeriesId BIGINT OUTPUT
@@ -1783,6 +1785,7 @@ internal static class DatabaseSchemaManager
             BEGIN
               SET NOCOUNT ON;
               DECLARE @MetricDefId INT;
+              SET @DatabaseId = ISNULL(@DatabaseId, @InstanceId);
 
               SELECT @MetricDefId = MetricDefId FROM [{schemaName}].[MetricDef] WHERE Name = @Name;
               IF @MetricDefId IS NULL
@@ -1793,16 +1796,16 @@ internal static class DatabaseSchemaManager
               END
 
               MERGE [{schemaName}].[MetricSeries] WITH (HOLDLOCK) AS T
-              USING (SELECT @MetricDefId AS MetricDefId, @Service AS Service, @InstanceId AS InstanceId, @TagHash AS TagHash) AS S
-                ON (T.MetricDefId = S.MetricDefId AND T.Service = S.Service AND T.InstanceId = S.InstanceId AND T.TagHash = S.TagHash)
+              USING (SELECT @MetricDefId AS MetricDefId, @DatabaseId AS DatabaseId, @Service AS Service, @TagHash AS TagHash) AS S
+                ON (T.MetricDefId = S.MetricDefId AND T.DatabaseId = S.DatabaseId AND T.Service = S.Service AND T.TagHash = S.TagHash)
               WHEN MATCHED THEN
                 UPDATE SET TagsJson = @TagsJson
               WHEN NOT MATCHED THEN
-                INSERT (MetricDefId, Service, InstanceId, TagsJson, TagHash)
-                VALUES(@MetricDefId, @Service, @InstanceId, @TagsJson, @TagHash);
+                INSERT (MetricDefId, DatabaseId, Service, InstanceId, TagsJson, TagHash)
+                VALUES(@MetricDefId, @DatabaseId, @Service, @DatabaseId, @TagsJson, @TagHash);
 
               SELECT @SeriesId = SeriesId FROM [{schemaName}].[MetricSeries]
-              WHERE MetricDefId = @MetricDefId AND Service = @Service AND InstanceId = @InstanceId AND TagHash = @TagHash;
+              WHERE MetricDefId = @MetricDefId AND DatabaseId = @DatabaseId AND Service = @Service AND TagHash = @TagHash;
             END
             """;
     }

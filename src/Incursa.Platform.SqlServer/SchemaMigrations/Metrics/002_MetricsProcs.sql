@@ -5,12 +5,14 @@ CREATE OR ALTER PROCEDURE [$SchemaName$].SpUpsertSeries
   @Description NVARCHAR(512),
   @Service NVARCHAR(64),
   @InstanceId UNIQUEIDENTIFIER,
+  @DatabaseId UNIQUEIDENTIFIER = NULL,
   @TagsJson NVARCHAR(1024),
   @TagHash VARBINARY(32),
   @SeriesId BIGINT OUTPUT
 AS
 BEGIN
   SET NOCOUNT ON;
+  SET @DatabaseId = ISNULL(@DatabaseId, @InstanceId);
 
   DECLARE @MetricDefId INT;
   SELECT @MetricDefId = MetricDefId FROM [$SchemaName$].MetricDef WHERE Name = @Name;
@@ -22,16 +24,16 @@ BEGIN
   END
 
   MERGE [$SchemaName$].MetricSeries WITH (HOLDLOCK) AS T
-  USING (SELECT @MetricDefId AS MetricDefId, @Service AS Service, @InstanceId AS InstanceId, @TagHash AS TagHash) AS S
-    ON (T.MetricDefId = S.MetricDefId AND T.Service = S.Service AND T.InstanceId = S.InstanceId AND T.TagHash = S.TagHash)
+  USING (SELECT @MetricDefId AS MetricDefId, @DatabaseId AS DatabaseId, @Service AS Service, @TagHash AS TagHash) AS S
+    ON (T.MetricDefId = S.MetricDefId AND T.DatabaseId = S.DatabaseId AND T.Service = S.Service AND T.TagHash = S.TagHash)
   WHEN MATCHED THEN
     UPDATE SET TagsJson = @TagsJson
   WHEN NOT MATCHED THEN
-    INSERT (MetricDefId, Service, InstanceId, TagsJson, TagHash)
-    VALUES(@MetricDefId, @Service, @InstanceId, @TagsJson, @TagHash);
+    INSERT (MetricDefId, DatabaseId, Service, InstanceId, TagsJson, TagHash)
+    VALUES(@MetricDefId, @DatabaseId, @Service, @DatabaseId, @TagsJson, @TagHash);
 
   SELECT @SeriesId = SeriesId FROM [$SchemaName$].MetricSeries
-  WHERE MetricDefId = @MetricDefId AND Service = @Service AND InstanceId = @InstanceId AND TagHash = @TagHash;
+  WHERE MetricDefId = @MetricDefId AND DatabaseId = @DatabaseId AND Service = @Service AND TagHash = @TagHash;
 END
 GO
 

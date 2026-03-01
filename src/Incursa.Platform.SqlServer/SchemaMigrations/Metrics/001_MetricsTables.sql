@@ -45,12 +45,13 @@ BEGIN
     CREATE TABLE [$SchemaName$].MetricSeries (
       SeriesId      BIGINT IDENTITY PRIMARY KEY,
       MetricDefId   INT NOT NULL REFERENCES [$SchemaName$].MetricDef(MetricDefId),
+      DatabaseId    UNIQUEIDENTIFIER NOT NULL DEFAULT '00000000-0000-0000-0000-000000000000',
       Service       NVARCHAR(64) NOT NULL,
-      InstanceId    UNIQUEIDENTIFIER NOT NULL,
+      InstanceId    UNIQUEIDENTIFIER NOT NULL DEFAULT '00000000-0000-0000-0000-000000000000',
       TagsJson      NVARCHAR(1024) NOT NULL DEFAULT (N'{}'),
       TagHash       VARBINARY(32) NOT NULL,
       CreatedUtc    DATETIMEOFFSET(3) NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-      CONSTRAINT UQ_MetricSeries UNIQUE (MetricDefId, Service, InstanceId, TagHash)
+      CONSTRAINT UQ_MetricSeries UNIQUE (MetricDefId, DatabaseId, Service, TagHash)
     );
 END
 GO
@@ -61,16 +62,28 @@ BEGIN
         ALTER TABLE [$SchemaName$].MetricSeries ADD SeriesId BIGINT IDENTITY(1,1) NOT NULL;
     IF COL_LENGTH('[$SchemaName$].MetricSeries', 'MetricDefId') IS NULL
         ALTER TABLE [$SchemaName$].MetricSeries ADD MetricDefId INT NOT NULL DEFAULT 0;
+    IF COL_LENGTH('[$SchemaName$].MetricSeries', 'DatabaseId') IS NULL
+        ALTER TABLE [$SchemaName$].MetricSeries ADD DatabaseId UNIQUEIDENTIFIER NOT NULL DEFAULT '00000000-0000-0000-0000-000000000000';
     IF COL_LENGTH('[$SchemaName$].MetricSeries', 'Service') IS NULL
         ALTER TABLE [$SchemaName$].MetricSeries ADD Service NVARCHAR(64) NOT NULL DEFAULT N'';
     IF COL_LENGTH('[$SchemaName$].MetricSeries', 'InstanceId') IS NULL
-        ALTER TABLE [$SchemaName$].MetricSeries ADD InstanceId UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID();
+        ALTER TABLE [$SchemaName$].MetricSeries ADD InstanceId UNIQUEIDENTIFIER NOT NULL DEFAULT '00000000-0000-0000-0000-000000000000';
     IF COL_LENGTH('[$SchemaName$].MetricSeries', 'TagsJson') IS NULL
         ALTER TABLE [$SchemaName$].MetricSeries ADD TagsJson NVARCHAR(1024) NOT NULL DEFAULT (N'{}');
     IF COL_LENGTH('[$SchemaName$].MetricSeries', 'TagHash') IS NULL
         ALTER TABLE [$SchemaName$].MetricSeries ADD TagHash VARBINARY(32) NOT NULL DEFAULT 0x;
     IF COL_LENGTH('[$SchemaName$].MetricSeries', 'CreatedUtc') IS NULL
         ALTER TABLE [$SchemaName$].MetricSeries ADD CreatedUtc DATETIMEOFFSET(3) NOT NULL DEFAULT SYSDATETIMEOFFSET();
+END
+GO
+
+IF NOT EXISTS (
+    SELECT 1 FROM sys.indexes
+    WHERE name = 'UQ_MetricSeries_Def_Db_Service_TagHash'
+      AND object_id = OBJECT_ID(N'[$SchemaName$].MetricSeries', N'U'))
+BEGIN
+    CREATE UNIQUE INDEX UQ_MetricSeries_Def_Db_Service_TagHash
+        ON [$SchemaName$].MetricSeries (MetricDefId, DatabaseId, Service, TagHash);
 END
 GO
 
