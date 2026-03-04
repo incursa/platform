@@ -802,7 +802,7 @@ Configuration options for platform observability.
 Members:
 - `public bool EnableMetrics` — Gets or sets a value indicating whether metrics are enabled. Default: true.
 - `public bool EnableLogging` — Gets or sets a value indicating whether logging is enabled. Default: false.
-- `public string MetricsPrefix` — Gets or sets the metrics prefix. Default: "bravellian.platform".
+- `public string MetricsPrefix` — Gets or sets the metrics prefix. Default: "incursa.platform".
 - `public WatchdogOptions Watchdog` — Gets or sets the watchdog options.
 
 ### ObservabilityServiceCollectionExtensions (class)

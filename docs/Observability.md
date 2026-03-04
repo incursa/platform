@@ -30,7 +30,7 @@ services.AddPlatformObservability(options =>
 {
     options.EnableMetrics = true;           // default: true
     options.EnableLogging = false;          // default: false
-    options.MetricsPrefix = "bravellian.platform";
+    options.MetricsPrefix = "incursa.platform";
 
     options.Watchdog = new WatchdogOptions
     {
@@ -81,28 +81,28 @@ app.MapPlatformHealthEndpoints();
 The following metrics are available via the `Incursa.Platform` meter:
 
 ### Watchdog & Heartbeat
-- `bravellian.platform.watchdog.heartbeat_total` (counter) - Total heartbeats emitted
-- `bravellian.platform.watchdog.alerts_total` (counter) - Total alerts raised (tags: `kind`, `component`)
+- `incursa.platform.watchdog.heartbeat_total` (counter) - Total heartbeats emitted
+- `incursa.platform.watchdog.alerts_total` (counter) - Total alerts raised (tags: `kind`, `component`)
 
 ### Scheduler
-- `bravellian.platform.scheduler.jobs_due_total` (counter) - Jobs that became due
-- `bravellian.platform.scheduler.jobs_executed_total` (counter, tags: `job_type`) - Jobs executed
-- `bravellian.platform.scheduler.job_delay` (histogram, unit: `s`, tags: `job_type`) - Job delay (start - due time)
-- `bravellian.platform.scheduler.job_runtime` (histogram, unit: `s`, tags: `job_type`) - Job execution duration
+- `incursa.platform.scheduler.jobs_due_total` (counter) - Jobs that became due
+- `incursa.platform.scheduler.jobs_executed_total` (counter, tags: `job_type`) - Jobs executed
+- `incursa.platform.scheduler.job_delay` (histogram, unit: `s`, tags: `job_type`) - Job delay (start - due time)
+- `incursa.platform.scheduler.job_runtime` (histogram, unit: `s`, tags: `job_type`) - Job execution duration
 
 ### Outbox
-- `bravellian.platform.outbox.enqueued_total` (counter, tags: `queue`) - Messages enqueued
-- `bravellian.platform.outbox.dequeued_total` (counter, tags: `queue`) - Messages dequeued
-- `bravellian.platform.outbox.inflight` (updown counter, tags: `queue`) - In-flight messages
+- `incursa.platform.outbox.enqueued_total` (counter, tags: `queue`) - Messages enqueued
+- `incursa.platform.outbox.dequeued_total` (counter, tags: `queue`) - Messages dequeued
+- `incursa.platform.outbox.inflight` (updown counter, tags: `queue`) - In-flight messages
 
 ### Inbox
-- `bravellian.platform.inbox.received_total` (counter, tags: `queue`) - Messages received
-- `bravellian.platform.inbox.processed_total` (counter, tags: `queue`, `result`) - Messages processed (result: ok|retry|deadletter)
-- `bravellian.platform.inbox.deadlettered_total` (counter, tags: `queue`, `reason`) - Messages dead-lettered
+- `incursa.platform.inbox.received_total` (counter, tags: `queue`) - Messages received
+- `incursa.platform.inbox.processed_total` (counter, tags: `queue`, `result`) - Messages processed (result: ok|retry|deadletter)
+- `incursa.platform.inbox.deadlettered_total` (counter, tags: `queue`, `reason`) - Messages dead-lettered
 
 ### QoS
-- `bravellian.platform.qos.retry_total` (counter, tags: `component`, `reason`) - Retry attempts
-- `bravellian.platform.qos.retry_delay` (histogram, unit: `s`, tags: `component`) - Retry delay duration
+- `incursa.platform.qos.retry_total` (counter, tags: `component`, `reason`) - Retry attempts
+- `incursa.platform.qos.retry_delay` (histogram, unit: `s`, tags: `component`) - Retry delay duration
 
 ## OpenTelemetry Integration
 
@@ -436,7 +436,7 @@ SELECT
 FROM infra.MetricSeries s
 JOIN infra.MetricPointMinute m ON s.SeriesId = m.SeriesId
 JOIN infra.MetricDef d ON s.MetricDefId = d.MetricDefId
-WHERE d.Name = 'bravellian.platform.outbox.enqueued_total'
+WHERE d.Name = 'incursa.platform.outbox.enqueued_total'
   AND m.BucketStartUtc >= DATEADD(HOUR, -1, GETUTCDATE());
 
 -- Get P95 latency across all instances
@@ -445,7 +445,7 @@ SELECT
 FROM infra.MetricSeries s
 JOIN infra.MetricPointMinute m ON s.SeriesId = m.SeriesId
 JOIN infra.MetricDef d ON s.MetricDefId = d.MetricDefId
-WHERE d.Name = 'bravellian.platform.scheduler.job_runtime'
+WHERE d.Name = 'incursa.platform.scheduler.job_runtime'
   AND m.BucketStartUtc >= DATEADD(HOUR, -1, GETUTCDATE());
 ```
 

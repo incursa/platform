@@ -87,7 +87,7 @@ Provider quality automation and baselines:
 ## Optional
 
 Advanced patterns: multi-database routing, fanout/join coordination, and internal work-queue mechanics.
-CLI tools: `tools/migrations` ships `bravellian-schema` for applying SQL Server/Postgres schema migrations from the command line.
+CLI tools: `tools/migrations` ships `incursa-schema` for applying SQL Server/Postgres schema migrations from the command line.
 
 ## Repository Scope Governance
 
