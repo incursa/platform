@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -23,11 +24,13 @@ namespace Incursa.Platform;
 /// </summary>
 internal sealed class GlobalOutboxPollingService : BackgroundService
 {
+    private const int MaxFailureBackoffMs = 30_000;
     private readonly GlobalOutboxDispatcher dispatcher;
     private readonly IDatabaseSchemaCompletion? schemaCompletion;
     private readonly TimeSpan pollingInterval;
     private readonly ILogger<GlobalOutboxPollingService> logger;
     private readonly int batchSize;
+    private int consecutiveFailureCount;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GlobalOutboxPollingService"/> class.
@@ -67,7 +70,7 @@ internal sealed class GlobalOutboxPollingService : BackgroundService
                 await schemaCompletion.SchemaDeploymentCompleted.ConfigureAwait(false);
                 logger.LogInformation("Database schema deployment completed successfully");
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ExceptionFilter.IsCatchable(ex))
             {
                 logger.LogWarning(ex, "Schema deployment failed, but continuing with global outbox processing");
             }
@@ -75,9 +78,11 @@ internal sealed class GlobalOutboxPollingService : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
+            var delay = pollingInterval;
             try
             {
                 var processedCount = await dispatcher.RunOnceAsync(batchSize, stoppingToken).ConfigureAwait(false);
+                consecutiveFailureCount = 0;
                 if (processedCount > 0)
                 {
                     logger.LogDebug(
@@ -90,14 +95,32 @@ internal sealed class GlobalOutboxPollingService : BackgroundService
                 logger.LogDebug("Global outbox polling service stopped due to cancellation");
                 break;
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ExceptionFilter.IsCatchable(ex))
             {
-                logger.LogError(ex, "Error in global outbox polling iteration - continuing with next iteration");
+                consecutiveFailureCount++;
+                var failureBackoff = ComputeFailureBackoff(consecutiveFailureCount);
+                if (failureBackoff > delay)
+                {
+                    delay = failureBackoff;
+                }
+
+                logger.LogWarning(
+                    ex,
+                    "Error in global outbox polling iteration. Applying {BackoffMs}ms failure backoff before retrying",
+                    failureBackoff.TotalMilliseconds);
             }
 
-            await Task.Delay(pollingInterval, stoppingToken).ConfigureAwait(false);
+            await Task.Delay(delay, stoppingToken).ConfigureAwait(false);
         }
 
         logger.LogInformation("Global outbox polling service stopped");
+    }
+
+    private static TimeSpan ComputeFailureBackoff(int failureCount)
+    {
+        var cappedFailureCount = Math.Min(10, Math.Max(1, failureCount));
+        var baseMs = (int)Math.Pow(2, cappedFailureCount - 1) * 250;
+        var jitter = RandomNumberGenerator.GetInt32(0, 250);
+        return TimeSpan.FromMilliseconds(Math.Min(MaxFailureBackoffMs, baseMs + jitter));
     }
 }

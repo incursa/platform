@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Builder;
 using Incursa.Platform.Health;
 using Incursa.Platform.Health.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;

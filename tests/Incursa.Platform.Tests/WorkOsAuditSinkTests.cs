@@ -1,10 +1,10 @@
+using System.Data;
 using Incursa.Platform.Audit;
 using Incursa.Platform.Audit.WorkOS;
 using Incursa.Platform.Audit.WorkOS.Internal;
 using Incursa.Platform.Outbox;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
-using System.Data;
 
 namespace Incursa.Platform.Tests;
 
@@ -21,7 +21,7 @@ public sealed class WorkOsAuditSinkTests
 
         Assert.NotNull(message);
         Assert.Equal(options.OutboxTopic, message!.Topic);
-        Assert.Contains("user.signed_in", message.Payload, StringComparison.Ordinal);
+        Assert.Contains("user.signed.in", message.Payload, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -81,7 +81,7 @@ public sealed class WorkOsAuditSinkTests
         return new AuditEvent(
             AuditEventId.NewId(),
             DateTimeOffset.UtcNow,
-            "user.signed_in",
+            "user.signed.in",
             "User signed in",
             EventOutcome.Success,
             [new EventAnchor("tenant", "tenant_1", "Subject"), new EventAnchor("resource", "resource_1", "Participant")],
@@ -125,43 +125,43 @@ public sealed class WorkOsAuditSinkTests
         }
 
         public Task EnqueueAsync(string topic, string payload, string? correlationId, DateTimeOffset? dueTimeUtc, CancellationToken cancellationToken)
-            => throw new NotImplementedException();
+            => throw new NotSupportedException();
 
         public Task EnqueueAsync(string topic, string payload, IDbTransaction transaction, CancellationToken cancellationToken)
-            => throw new NotImplementedException();
+            => throw new NotSupportedException();
 
         public Task EnqueueAsync(string topic, string payload, IDbTransaction transaction, string? correlationId, CancellationToken cancellationToken)
-            => throw new NotImplementedException();
+            => throw new NotSupportedException();
 
         public Task EnqueueAsync(string topic, string payload, IDbTransaction transaction, string? correlationId, DateTimeOffset? dueTimeUtc, CancellationToken cancellationToken)
-            => throw new NotImplementedException();
+            => throw new NotSupportedException();
 
         public Task<IReadOnlyList<OutboxWorkItemIdentifier>> ClaimAsync(OwnerToken ownerToken, int leaseSeconds, int batchSize, CancellationToken cancellationToken)
-            => throw new NotImplementedException();
+            => throw new NotSupportedException();
 
         public Task AckAsync(OwnerToken ownerToken, IEnumerable<OutboxWorkItemIdentifier> ids, CancellationToken cancellationToken)
-            => throw new NotImplementedException();
+            => throw new NotSupportedException();
 
         public Task AbandonAsync(OwnerToken ownerToken, IEnumerable<OutboxWorkItemIdentifier> ids, CancellationToken cancellationToken)
-            => throw new NotImplementedException();
+            => throw new NotSupportedException();
 
         public Task FailAsync(OwnerToken ownerToken, IEnumerable<OutboxWorkItemIdentifier> ids, CancellationToken cancellationToken)
-            => throw new NotImplementedException();
+            => throw new NotSupportedException();
 
         public Task ReapExpiredAsync(CancellationToken cancellationToken)
-            => throw new NotImplementedException();
+            => throw new NotSupportedException();
 
         public Task<JoinIdentifier> StartJoinAsync(long tenantId, int expectedSteps, string? metadata, CancellationToken cancellationToken)
-            => throw new NotImplementedException();
+            => throw new NotSupportedException();
 
         public Task AttachMessageToJoinAsync(JoinIdentifier joinId, OutboxMessageIdentifier outboxMessageId, CancellationToken cancellationToken)
-            => throw new NotImplementedException();
+            => throw new NotSupportedException();
 
         public Task ReportStepCompletedAsync(JoinIdentifier joinId, OutboxMessageIdentifier outboxMessageId, CancellationToken cancellationToken)
-            => throw new NotImplementedException();
+            => throw new NotSupportedException();
 
         public Task ReportStepFailedAsync(JoinIdentifier joinId, OutboxMessageIdentifier outboxMessageId, CancellationToken cancellationToken)
-            => throw new NotImplementedException();
+            => throw new NotSupportedException();
     }
 
     private sealed class FakePublisher : IWorkOsAuditPublisher

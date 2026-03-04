@@ -21,6 +21,7 @@ namespace Incursa.Platform;
 /// </summary>
 internal sealed class SqlLeaseFactory : ISystemLeaseFactory
 {
+    private const int MaxAcquireAttempts = 3;
     private readonly LeaseFactoryConfig config;
     private readonly ILogger<SqlLeaseFactory> logger;
 
@@ -48,25 +49,60 @@ internal sealed class SqlLeaseFactory : ISystemLeaseFactory
         // Create context with host information if none provided
         var finalContextJson = contextJson ?? CreateDefaultContext();
 
-        var lease = await SqlLease.AcquireAsync(
-            config.ConnectionString,
-            config.SchemaName,
-            resourceName,
-            leaseDuration,
-            config.RenewPercent,
-            config.UseGate,
-            config.GateTimeoutMs,
-            finalContextJson,
-            ownerToken,
-            cancellationToken,
-            logger).ConfigureAwait(false);
-
-        if (lease != null)
+        for (var attempt = 1; attempt <= MaxAcquireAttempts; attempt++)
         {
-            SchedulerMetrics.LeasesAcquired.Add(1, [new("resource", resourceName)]);
+            try
+            {
+                var lease = await SqlLease.AcquireAsync(
+                    config.ConnectionString,
+                    config.SchemaName,
+                    resourceName,
+                    leaseDuration,
+                    config.RenewPercent,
+                    config.UseGate,
+                    config.GateTimeoutMs,
+                    finalContextJson,
+                    ownerToken,
+                    cancellationToken,
+                    logger).ConfigureAwait(false);
+
+                if (lease != null)
+                {
+                    SchedulerMetrics.LeasesAcquired.Add(1, [new("resource", resourceName)]);
+                }
+
+                return lease;
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                throw;
+            }
+            catch (Exception ex) when (SqlServerFailureClassifier.ShouldRetry(ex) && attempt < MaxAcquireAttempts)
+            {
+                var delay = ComputeRetryDelay(attempt);
+                logger.LogWarning(
+                    ex,
+                    "Transient SQL failure ({FailureCategory}) acquiring lease for resource '{ResourceName}'. Retrying in {DelayMs}ms (attempt {Attempt}/{MaxAttempts})",
+                    SqlServerFailureClassifier.GetCategoryName(ex),
+                    resourceName,
+                    delay.TotalMilliseconds,
+                    attempt,
+                    MaxAcquireAttempts);
+
+                await Task.Delay(delay, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception ex) when (SqlServerFailureClassifier.IsInfrastructureFailure(ex))
+            {
+                logger.LogWarning(
+                    ex,
+                    "Infrastructure SQL failure ({FailureCategory}) acquiring lease for resource '{ResourceName}'",
+                    SqlServerFailureClassifier.GetCategoryName(ex),
+                    resourceName);
+                throw;
+            }
         }
 
-        return lease;
+        return null;
     }
 
     private static string CreateDefaultContext()
@@ -81,5 +117,13 @@ internal sealed class SqlLeaseFactory : ISystemLeaseFactory
         };
 
         return JsonSerializer.Serialize(context);
+    }
+
+    private static TimeSpan ComputeRetryDelay(int attempt)
+    {
+        var cappedAttempt = Math.Min(8, Math.Max(1, attempt));
+        var baseMs = (int)Math.Pow(2, cappedAttempt - 1) * 200;
+        var jitter = Random.Shared.Next(0, 200);
+        return TimeSpan.FromMilliseconds(Math.Min(5000, baseMs + jitter));
     }
 }

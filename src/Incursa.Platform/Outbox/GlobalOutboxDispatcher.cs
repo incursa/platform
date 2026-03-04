@@ -159,39 +159,42 @@ internal sealed class GlobalOutboxDispatcher
         }
         catch (OutboxPermanentFailureException ex)
         {
+            var failureText = OutboxFailureText.FromException(ex);
             logger.LogWarning(
-                ex,
                 "Permanent failure processing global message {MessageId} with topic '{Topic}'. Marking as failed.",
                 message.Id,
                 message.Topic);
-            await store.FailAsync(message.Id, ex.ToString(), cancellationToken).ConfigureAwait(false);
+            await store.FailAsync(message.Id, failureText, cancellationToken).ConfigureAwait(false);
             SchedulerMetrics.OutboxMessagesFailed.Add(1);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ExceptionFilter.IsCatchable(ex))
         {
+            var failureText = OutboxFailureText.FromException(ex);
             var nextAttempt = message.RetryCount + 1;
             if (nextAttempt >= maxAttempts)
             {
                 logger.LogWarning(
-                    ex,
-                    "Handler failed for global message {MessageId} with topic '{Topic}' (attempt {AttemptCount}). Marking as permanently failed",
+                    "Handler failed for global message {MessageId} with topic '{Topic}' (attempt {AttemptCount}). Marking as permanently failed. Error: {ErrorType}: {ErrorMessage}",
                     message.Id,
                     message.Topic,
-                    nextAttempt);
-                await store.FailAsync(message.Id, ex.ToString(), cancellationToken).ConfigureAwait(false);
+                    nextAttempt,
+                    ex.GetType().Name,
+                    ex.Message);
+                await store.FailAsync(message.Id, failureText, cancellationToken).ConfigureAwait(false);
                 SchedulerMetrics.OutboxMessagesFailed.Add(1);
                 return;
             }
 
             var delay = backoffPolicy(nextAttempt);
             logger.LogWarning(
-                ex,
-                "Handler failed for global message {MessageId} with topic '{Topic}' (attempt {AttemptCount}). Rescheduling with {DelayMs}ms delay",
+                "Handler failed for global message {MessageId} with topic '{Topic}' (attempt {AttemptCount}). Rescheduling with {DelayMs}ms delay. Error: {ErrorType}: {ErrorMessage}",
                 message.Id,
                 message.Topic,
                 nextAttempt,
-                delay.TotalMilliseconds);
-            await store.RescheduleAsync(message.Id, delay, ex.ToString(), cancellationToken).ConfigureAwait(false);
+                delay.TotalMilliseconds,
+                ex.GetType().Name,
+                ex.Message);
+            await store.RescheduleAsync(message.Id, delay, failureText, cancellationToken).ConfigureAwait(false);
             SchedulerMetrics.OutboxMessagesFailed.Add(1);
         }
         finally

@@ -66,7 +66,7 @@ internal class SqlInboxWorkStore : IInboxWorkStore
             using var connection = new SqlConnection(connectionString);
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
-            var messageIds = await connection.QueryAsync<string>(
+            var claimCommand = new CommandDefinition(
                 $"[{schemaName}].[{tableName}_Claim]",
                 new
                 {
@@ -74,7 +74,10 @@ internal class SqlInboxWorkStore : IInboxWorkStore
                     LeaseSeconds = leaseSeconds,
                     BatchSize = batchSize,
                 },
-                commandType: System.Data.CommandType.StoredProcedure).ConfigureAwait(false);
+                commandType: System.Data.CommandType.StoredProcedure,
+                cancellationToken: cancellationToken);
+
+            var messageIds = await connection.QueryAsync<string>(claimCommand).ConfigureAwait(false);
 
             var result = messageIds.ToList();
             logger.LogDebug(
@@ -92,6 +95,24 @@ internal class SqlInboxWorkStore : IInboxWorkStore
                 new KeyValuePair<string, object?>("store", schemaName));
 
             return result;
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            logger.LogDebug("Claim inbox operation was canceled for owner {OwnerToken}", ownerToken);
+            throw;
+        }
+        catch (Exception ex) when (SqlServerFailureClassifier.IsInfrastructureFailure(ex))
+        {
+            logger.LogWarning(
+                ex,
+                "Infrastructure failure ({FailureCategory}) while claiming inbox messages for owner {OwnerToken} in {Schema}.{Table} on {Server}/{Database}",
+                SqlServerFailureClassifier.GetCategoryName(ex),
+                ownerToken,
+                schemaName,
+                tableName,
+                serverName,
+                databaseName);
+            throw;
         }
         catch (Exception ex)
         {
@@ -457,9 +478,11 @@ internal class SqlInboxWorkStore : IInboxWorkStore
             using var connection = new SqlConnection(connectionString);
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
-            var result = await connection.QuerySingleAsync<int>(
+            var reapCommand = new CommandDefinition(
                 $"[{schemaName}].[{tableName}_ReapExpired]",
-                commandType: System.Data.CommandType.StoredProcedure).ConfigureAwait(false);
+                commandType: System.Data.CommandType.StoredProcedure,
+                cancellationToken: cancellationToken);
+            var result = await connection.QuerySingleAsync<int>(reapCommand).ConfigureAwait(false);
 
             if (result > 0)
             {
@@ -519,7 +542,11 @@ internal class SqlInboxWorkStore : IInboxWorkStore
                                 WHERE MessageId = @MessageId
                 """;
 
-            var row = await connection.QuerySingleOrDefaultAsync(sql, new { MessageId = messageId }).ConfigureAwait(false);
+            var getCommand = new CommandDefinition(
+                sql,
+                new { MessageId = messageId },
+                cancellationToken: cancellationToken);
+            var row = await connection.QuerySingleOrDefaultAsync(getCommand).ConfigureAwait(false);
 
             if (row == null)
             {

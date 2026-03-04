@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
+using System.Security.Cryptography;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -24,12 +24,14 @@ namespace Incursa.Platform;
 /// </summary>
 internal sealed class MultiOutboxPollingService : BackgroundService
 {
+    private const int MaxFailureBackoffMs = 30_000;
     private readonly MultiOutboxDispatcher dispatcher;
     private readonly IMonotonicClock mono;
     private readonly IDatabaseSchemaCompletion? schemaCompletion;
     private readonly double intervalSeconds;
     private readonly int batchSize;
     private readonly ILogger<MultiOutboxPollingService> logger;
+    private int consecutiveFailureCount;
 
     public MultiOutboxPollingService(
         MultiOutboxDispatcher dispatcher,
@@ -63,7 +65,7 @@ internal sealed class MultiOutboxPollingService : BackgroundService
                 await schemaCompletion.SchemaDeploymentCompleted.ConfigureAwait(false);
                 logger.LogInformation("Database schema deployment completed successfully");
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ExceptionFilter.IsCatchable(ex))
             {
                 // Log and continue - schema deployment errors should not prevent outbox processing
                 logger.LogWarning(ex, "Schema deployment failed, but continuing with outbox processing");
@@ -73,10 +75,13 @@ internal sealed class MultiOutboxPollingService : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             var next = mono.Seconds + intervalSeconds;
+            var failureBackoff = TimeSpan.Zero;
 
             try
             {
                 var processedCount = await dispatcher.RunOnceAsync(batchSize, stoppingToken).ConfigureAwait(false);
+                consecutiveFailureCount = 0;
+
                 if (processedCount > 0)
                 {
                     logger.LogDebug("Multi-outbox polling iteration completed: {ProcessedCount} messages processed", processedCount);
@@ -87,14 +92,23 @@ internal sealed class MultiOutboxPollingService : BackgroundService
                 logger.LogDebug("Multi-outbox polling service stopped due to cancellation");
                 break;
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ExceptionFilter.IsCatchable(ex))
             {
-                // Log and continue - don't let processing errors stop the service
-                logger.LogError(ex, "Error in multi-outbox polling iteration - continuing with next iteration");
+                consecutiveFailureCount++;
+                failureBackoff = ComputeFailureBackoff(consecutiveFailureCount);
+                logger.LogWarning(
+                    ex,
+                    "Error in multi-outbox polling iteration. Applying {BackoffMs}ms failure backoff before retrying",
+                    failureBackoff.TotalMilliseconds);
             }
 
             // Sleep until next interval, using monotonic clock to avoid time jumps
             var sleep = Math.Max(0, next - mono.Seconds);
+            if (failureBackoff > TimeSpan.Zero)
+            {
+                sleep = Math.Max(sleep, failureBackoff.TotalSeconds);
+            }
+
             if (sleep > 0)
             {
                 await Task.Delay(TimeSpan.FromSeconds(sleep), stoppingToken).ConfigureAwait(false);
@@ -102,5 +116,13 @@ internal sealed class MultiOutboxPollingService : BackgroundService
         }
 
         logger.LogInformation("Multi-outbox polling service stopped");
+    }
+
+    private static TimeSpan ComputeFailureBackoff(int failureCount)
+    {
+        var cappedFailureCount = Math.Min(10, Math.Max(1, failureCount));
+        var baseMs = (int)Math.Pow(2, cappedFailureCount - 1) * 250;
+        var jitter = RandomNumberGenerator.GetInt32(0, 250);
+        return TimeSpan.FromMilliseconds(Math.Min(MaxFailureBackoffMs, baseMs + jitter));
     }
 }

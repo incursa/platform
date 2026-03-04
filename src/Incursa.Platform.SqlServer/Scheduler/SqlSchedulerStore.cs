@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
+using System.Data.Common;
 using Cronos;
 using Dapper;
 using Microsoft.Data.SqlClient;
@@ -99,7 +99,12 @@ internal sealed class SqlSchedulerStore : ISchedulerStore
     public async Task<DateTimeOffset?> GetNextEventTimeAsync(CancellationToken cancellationToken = default)
     {
         using var connection = new SqlConnection(connectionString);
-        return await connection.ExecuteScalarAsync<DateTimeOffset?>(getNextEventTimeSql).ConfigureAwait(false);
+        await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+
+        var command = new CommandDefinition(
+            getNextEventTimeSql,
+            cancellationToken: cancellationToken);
+        return await connection.ExecuteScalarAsync<DateTimeOffset?>(command).ConfigureAwait(false);
     }
 
     public async Task<int> CreateJobRunsFromDueJobsAsync(ISystemLease lease, CancellationToken cancellationToken = default)
@@ -119,8 +124,12 @@ internal sealed class SqlSchedulerStore : ISchedulerStore
             """;
 
             var dbConnection = transaction.Connection ?? throw new InvalidOperationException("Transaction connection was not available.");
-            var dueJobs = (await dbConnection.QueryAsync<(Guid Id, string CronSchedule)>(
-                findDueJobsSql, new { Now = timeProvider.GetUtcNow() }, transaction).ConfigureAwait(false)).AsList();
+            var dueJobsCommand = new CommandDefinition(
+                findDueJobsSql,
+                new { Now = timeProvider.GetUtcNow() },
+                transaction,
+                cancellationToken: cancellationToken);
+            var dueJobs = (await dbConnection.QueryAsync<(Guid Id, string CronSchedule)>(dueJobsCommand).ConfigureAwait(false)).AsList();
 
             if (dueJobs.Count == 0)
             {
@@ -165,7 +174,12 @@ internal sealed class SqlSchedulerStore : ISchedulerStore
                         VALUES (@RunId, @JobId, @ScheduledTime, 'Pending');
             """;
 
-            await transaction.Connection.ExecuteAsync(insertRunSql, runsToInsert, transaction).ConfigureAwait(false);
+            var insertCommand = new CommandDefinition(
+                insertRunSql,
+                runsToInsert,
+                transaction,
+                cancellationToken: cancellationToken);
+            await transaction.Connection.ExecuteAsync(insertCommand).ConfigureAwait(false);
 
             var updateJobSql = $"""
 
@@ -174,19 +188,24 @@ internal sealed class SqlSchedulerStore : ISchedulerStore
                         WHERE Id = @JobId;
             """;
 
-            await transaction.Connection.ExecuteAsync(updateJobSql, jobsToUpdate, transaction).ConfigureAwait(false);
+            var updateCommand = new CommandDefinition(
+                updateJobSql,
+                jobsToUpdate,
+                transaction,
+                cancellationToken: cancellationToken);
+            await transaction.Connection.ExecuteAsync(updateCommand).ConfigureAwait(false);
 
             await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
             return dueJobs.Count;
         }
         catch (LostLeaseException)
         {
-            await transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);
+            await TryRollbackAsync(transaction, cancellationToken).ConfigureAwait(false);
             throw;
         }
         catch
         {
-            await transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);
+            await TryRollbackAsync(transaction, cancellationToken).ConfigureAwait(false);
             throw;
         }
         finally
@@ -203,10 +222,11 @@ internal sealed class SqlSchedulerStore : ISchedulerStore
         using var connection = new SqlConnection(connectionString);
         await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
-        var dueTimers = await connection.QueryAsync<(Guid Id, string Topic, string Payload)>(
+        var claimCommand = new CommandDefinition(
             claimTimersSql,
-            new { InstanceId = instanceId, FencingToken = lease.FencingToken, BatchSize = batchSize })
-            .ConfigureAwait(false);
+            new { InstanceId = instanceId, FencingToken = lease.FencingToken, BatchSize = batchSize },
+            cancellationToken: cancellationToken);
+        var dueTimers = await connection.QueryAsync<(Guid Id, string Topic, string Payload)>(claimCommand).ConfigureAwait(false);
 
         return dueTimers.ToList();
     }
@@ -219,10 +239,11 @@ internal sealed class SqlSchedulerStore : ISchedulerStore
         using var connection = new SqlConnection(connectionString);
         await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
-        var dueJobs = await connection.QueryAsync<(Guid Id, Guid JobId, string Topic, string Payload)>(
+        var claimCommand = new CommandDefinition(
             claimJobsSql,
-            new { InstanceId = instanceId, FencingToken = lease.FencingToken, BatchSize = batchSize })
-            .ConfigureAwait(false);
+            new { InstanceId = instanceId, FencingToken = lease.FencingToken, BatchSize = batchSize },
+            cancellationToken: cancellationToken);
+        var dueJobs = await connection.QueryAsync<(Guid Id, Guid JobId, string Topic, string Payload)>(claimCommand).ConfigureAwait(false);
 
         return dueJobs.ToList();
     }
@@ -232,10 +253,26 @@ internal sealed class SqlSchedulerStore : ISchedulerStore
         using var connection = new SqlConnection(connectionString);
         await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
-        await connection.ExecuteAsync(schedulerStateUpdateSql, new
+        var command = new CommandDefinition(
+            schedulerStateUpdateSql,
+            new
+            {
+                FencingToken = lease.FencingToken,
+                LastRunAt = timeProvider.GetUtcNow(),
+            },
+            cancellationToken: cancellationToken);
+        await connection.ExecuteAsync(command).ConfigureAwait(false);
+    }
+
+    private static async Task TryRollbackAsync(DbTransaction transaction, CancellationToken cancellationToken)
+    {
+        try
         {
-            FencingToken = lease.FencingToken,
-            LastRunAt = timeProvider.GetUtcNow(),
-        }).ConfigureAwait(false);
+            await transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);
+        }
+        catch
+        {
+            // Preserve the original processing exception when rollback fails.
+        }
     }
 }

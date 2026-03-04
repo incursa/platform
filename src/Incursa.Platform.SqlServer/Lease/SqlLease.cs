@@ -226,7 +226,7 @@ internal sealed class SqlLease : ISystemLease
             {
                 await ReleaseLeaseAsync().ConfigureAwait(false);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ExceptionFilter.IsCatchable(ex))
             {
                 logger.LogWarning(ex, "Failed to release lease for resource '{ResourceName}' with owner token '{OwnerToken}'",
                     ResourceName, OwnerToken);
@@ -251,13 +251,17 @@ internal sealed class SqlLease : ISystemLease
 
         try
         {
-            var renewed = await RenewLeaseAsync(CancellationToken.None).ConfigureAwait(false);
-            if (!renewed)
+            var renewed = await RenewWithRetryAsync(linkedCts.Token).ConfigureAwait(false);
+            if (!renewed && !linkedCts.IsCancellationRequested && !isDisposed)
             {
                 MarkAsLost();
             }
         }
-        catch (Exception ex)
+        catch (OperationCanceledException) when (linkedCts.IsCancellationRequested || isDisposed)
+        {
+            // Expected during shutdown/dispose.
+        }
+        catch (Exception ex) when (ExceptionFilter.IsCatchable(ex))
         {
             logger.LogWarning(ex, "Error during lease renewal for resource '{ResourceName}' with owner token '{OwnerToken}'",
                 ResourceName, OwnerToken);
@@ -265,6 +269,40 @@ internal sealed class SqlLease : ISystemLease
             // Consider the lease lost on renewal errors
             MarkAsLost();
         }
+    }
+
+    private async Task<bool> RenewWithRetryAsync(CancellationToken cancellationToken)
+    {
+        const int maxAttempts = 3;
+
+        for (var attempt = 1; attempt <= maxAttempts; attempt++)
+        {
+            try
+            {
+                return await RenewLeaseAsync(cancellationToken).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                throw;
+            }
+            catch (Exception ex) when (ExceptionFilter.IsCatchable(ex)
+                && SqlServerFailureClassifier.ShouldRetry(ex)
+                && attempt < maxAttempts)
+            {
+                var delay = ComputeRetryDelay(attempt);
+                logger.LogWarning(
+                    ex,
+                    "Transient SQL failure ({FailureCategory}) renewing lease for resource '{ResourceName}'. Retrying in {DelayMs}ms (attempt {Attempt}/{MaxAttempts})",
+                    SqlServerFailureClassifier.GetCategoryName(ex),
+                    ResourceName,
+                    delay.TotalMilliseconds,
+                    attempt,
+                    maxAttempts);
+                await Task.Delay(delay, cancellationToken).ConfigureAwait(false);
+            }
+        }
+
+        return false;
     }
 
     [SuppressMessage("Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "Uses stored procedure name derived from configured schema.")]
@@ -356,5 +394,13 @@ internal sealed class SqlLease : ISystemLease
         logger.LogWarning(
             "Lease lost for resource '{ResourceName}' with owner token '{OwnerToken}'",
             ResourceName, OwnerToken);
+    }
+
+    private static TimeSpan ComputeRetryDelay(int attempt)
+    {
+        var cappedAttempt = Math.Min(8, Math.Max(1, attempt));
+        var baseMs = (int)Math.Pow(2, cappedAttempt - 1) * 200;
+        var jitter = Random.Shared.Next(0, 200);
+        return TimeSpan.FromMilliseconds(Math.Min(5000, baseMs + jitter));
     }
 }

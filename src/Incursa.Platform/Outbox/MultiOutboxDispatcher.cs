@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 
 namespace Incursa.Platform;
@@ -165,11 +164,6 @@ internal sealed class MultiOutboxDispatcher
             storeIdentifier,
             batchSize);
 
-        using var batchScope = logger.BeginScope(new Dictionary<string, object?>(StringComparer.Ordinal)
-        {
-            ["store"] = storeIdentifier,
-        });
-
         var messages = await selectedStore.ClaimDueAsync(batchSize, cancellationToken).ConfigureAwait(false);
 
         if (messages.Count == 0)
@@ -209,7 +203,7 @@ internal sealed class MultiOutboxDispatcher
                 // Stop processing if cancellation is requested
                 break;
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ExceptionFilter.IsCatchable(ex))
             {
                 // Log unexpected errors but continue processing other messages
                 logger.LogError(
@@ -241,12 +235,6 @@ internal sealed class MultiOutboxDispatcher
         CancellationToken cancellationToken)
     {
         var stopwatch = Stopwatch.StartNew();
-
-        using var messageScope = logger.BeginScope(new Dictionary<string, object?>(StringComparer.Ordinal)
-        {
-            ["workItemId"] = message.Id,
-            ["store"] = storeIdentifier,
-        });
 
         try
         {
@@ -291,31 +279,33 @@ internal sealed class MultiOutboxDispatcher
         }
         catch (OutboxPermanentFailureException ex)
         {
+            var failureText = OutboxFailureText.FromException(ex);
             logger.LogWarning(
-                ex,
                 "Permanent failure processing message {MessageId} with topic '{Topic}' from store '{StoreIdentifier}'. Marking as failed.",
                 message.Id,
                 message.Topic,
                 storeIdentifier);
 
-            await store.FailAsync(message.Id, ex.ToString(), cancellationToken).ConfigureAwait(false);
+            await store.FailAsync(message.Id, failureText, cancellationToken).ConfigureAwait(false);
             SchedulerMetrics.OutboxMessagesFailed.Add(1);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ExceptionFilter.IsCatchable(ex))
         {
+            var failureText = OutboxFailureText.FromException(ex);
             var nextAttempt = message.RetryCount + 1;
 
             if (nextAttempt >= maxAttempts)
             {
                 logger.LogWarning(
-                    ex,
-                    "Handler failed for message {MessageId} with topic '{Topic}' from store '{StoreIdentifier}' (attempt {AttemptCount}). Marking as permanently failed",
+                    "Handler failed for message {MessageId} with topic '{Topic}' from store '{StoreIdentifier}' (attempt {AttemptCount}). Marking as permanently failed. Error: {ErrorType}: {ErrorMessage}",
                     message.Id,
                     message.Topic,
                     storeIdentifier,
-                    nextAttempt);
+                    nextAttempt,
+                    ex.GetType().Name,
+                    ex.Message);
 
-                await store.FailAsync(message.Id, ex.ToString(), cancellationToken).ConfigureAwait(false);
+                await store.FailAsync(message.Id, failureText, cancellationToken).ConfigureAwait(false);
                 SchedulerMetrics.OutboxMessagesFailed.Add(1);
                 return;
             }
@@ -324,15 +314,16 @@ internal sealed class MultiOutboxDispatcher
             var delay = backoffPolicy(nextAttempt);
 
             logger.LogWarning(
-                ex,
-                "Handler failed for message {MessageId} with topic '{Topic}' from store '{StoreIdentifier}' (attempt {AttemptCount}). Rescheduling with {DelayMs}ms delay",
+                "Handler failed for message {MessageId} with topic '{Topic}' from store '{StoreIdentifier}' (attempt {AttemptCount}). Rescheduling with {DelayMs}ms delay. Error: {ErrorType}: {ErrorMessage}",
                 message.Id,
                 message.Topic,
                 storeIdentifier,
                 nextAttempt,
-                delay.TotalMilliseconds);
+                delay.TotalMilliseconds,
+                ex.GetType().Name,
+                ex.Message);
 
-            await store.RescheduleAsync(message.Id, delay, ex.ToString(), cancellationToken).ConfigureAwait(false);
+            await store.RescheduleAsync(message.Id, delay, failureText, cancellationToken).ConfigureAwait(false);
             SchedulerMetrics.OutboxMessagesFailed.Add(1);
         }
         finally

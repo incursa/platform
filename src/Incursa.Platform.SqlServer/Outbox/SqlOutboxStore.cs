@@ -64,7 +64,7 @@ internal class SqlOutboxStore : IOutboxStore
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
             // Call the work queue Claim stored procedure
-            var claimedIds = await connection.QueryAsync<Guid>(
+            var claimCommand = new CommandDefinition(
                 $"[{schemaName}].[{tableName}_Claim]",
                 new
                 {
@@ -72,7 +72,9 @@ internal class SqlOutboxStore : IOutboxStore
                     LeaseSeconds = leaseSeconds,
                     BatchSize = limit,
                 },
-                commandType: System.Data.CommandType.StoredProcedure).ConfigureAwait(false);
+                commandType: System.Data.CommandType.StoredProcedure,
+                cancellationToken: cancellationToken);
+            var claimedIds = await connection.QueryAsync<Guid>(claimCommand).ConfigureAwait(false);
 
             var idList = claimedIds.ToList();
 
@@ -104,11 +106,32 @@ internal class SqlOutboxStore : IOutboxStore
                 WHERE Id IN @Ids
                 """;
 
-            var messages = await connection.QueryAsync<OutboxMessage>(sql, new { Ids = idList }).ConfigureAwait(false);
+            var fetchCommand = new CommandDefinition(
+                sql,
+                new { Ids = idList },
+                cancellationToken: cancellationToken);
+            var messages = await connection.QueryAsync<OutboxMessage>(fetchCommand).ConfigureAwait(false);
             var messageList = messages.ToList();
 
             logger.LogDebug("Successfully claimed {ClaimedCount} outbox messages for processing", messageList.Count);
             return messageList;
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            logger.LogDebug("Claim due outbox operation was canceled.");
+            throw;
+        }
+        catch (Exception ex) when (SqlServerFailureClassifier.IsInfrastructureFailure(ex))
+        {
+            logger.LogWarning(
+                ex,
+                "Infrastructure failure ({FailureCategory}) while claiming outbox messages from {Schema}.{Table} on {Server}/{Database}",
+                SqlServerFailureClassifier.GetCategoryName(ex),
+                schemaName,
+                tableName,
+                serverName,
+                databaseName);
+            throw;
         }
         catch (Exception ex)
         {
@@ -147,6 +170,24 @@ internal class SqlOutboxStore : IOutboxStore
 
             logger.LogDebug("Successfully marked outbox message {MessageId} as dispatched", id);
         }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            logger.LogDebug("Mark dispatched outbox operation was canceled for message {MessageId}", id);
+            throw;
+        }
+        catch (Exception ex) when (SqlServerFailureClassifier.IsInfrastructureFailure(ex))
+        {
+            logger.LogWarning(
+                ex,
+                "Infrastructure failure ({FailureCategory}) while marking outbox message {MessageId} as dispatched in {Schema}.{Table} on {Server}/{Database}",
+                SqlServerFailureClassifier.GetCategoryName(ex),
+                id,
+                schemaName,
+                tableName,
+                serverName,
+                databaseName);
+            throw;
+        }
         catch (Exception ex)
         {
             logger.LogError(
@@ -176,9 +217,11 @@ internal class SqlOutboxStore : IOutboxStore
 
         var nextAttempt = now.Add(delay);
 
+        var normalizedError = OutboxFailureText.Normalize(lastError);
+
         logger.LogDebug(
             "Rescheduling outbox message {MessageId} for next attempt at {NextAttempt} due to error: {Error}",
-            id, nextAttempt, lastError);
+            id, nextAttempt, normalizedError);
 
         try
         {
@@ -192,7 +235,7 @@ internal class SqlOutboxStore : IOutboxStore
                 CommandType = System.Data.CommandType.StoredProcedure,
             };
             abandonCommand.Parameters.AddWithValue("@OwnerToken", ownerToken.Value);
-            abandonCommand.Parameters.AddWithValue("@LastError", lastError ?? (object)DBNull.Value);
+            abandonCommand.Parameters.AddWithValue("@LastError", normalizedError);
             abandonCommand.Parameters.AddWithValue("@DueTimeUtc", nextAttempt.ToUniversalTime());
             var parameter = abandonCommand.Parameters.AddWithValue("@Ids", idsTable);
             parameter.SqlDbType = System.Data.SqlDbType.Structured;
@@ -201,6 +244,24 @@ internal class SqlOutboxStore : IOutboxStore
             await abandonCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 
             logger.LogDebug("Successfully rescheduled outbox message {MessageId} for {NextAttempt}", id, nextAttempt);
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            logger.LogDebug("Reschedule outbox operation was canceled for message {MessageId}", id);
+            throw;
+        }
+        catch (Exception ex) when (SqlServerFailureClassifier.IsInfrastructureFailure(ex))
+        {
+            logger.LogWarning(
+                ex,
+                "Infrastructure failure ({FailureCategory}) while rescheduling outbox message {MessageId} in {Schema}.{Table} on {Server}/{Database}",
+                SqlServerFailureClassifier.GetCategoryName(ex),
+                id,
+                schemaName,
+                tableName,
+                serverName,
+                databaseName);
+            throw;
         }
         catch (Exception ex)
         {
@@ -218,7 +279,9 @@ internal class SqlOutboxStore : IOutboxStore
 
     public async Task FailAsync(OutboxWorkItemIdentifier id, string lastError, CancellationToken cancellationToken)
     {
-        logger.LogWarning("Permanently failing outbox message {MessageId} due to error: {Error}", id, lastError);
+        var normalizedError = OutboxFailureText.Normalize(lastError);
+
+        logger.LogWarning("Permanently failing outbox message {MessageId} due to error: {Error}", id, normalizedError);
 
         try
         {
@@ -232,7 +295,7 @@ internal class SqlOutboxStore : IOutboxStore
                 CommandType = System.Data.CommandType.StoredProcedure,
             };
             command.Parameters.AddWithValue("@OwnerToken", ownerToken.Value);
-            command.Parameters.AddWithValue("@LastError", lastError ?? (object)DBNull.Value);
+            command.Parameters.AddWithValue("@LastError", normalizedError);
             command.Parameters.AddWithValue("@ProcessedBy", $"{Environment.MachineName}:FAILED");
             var parameter = command.Parameters.AddWithValue("@Ids", idsTable);
             parameter.SqlDbType = System.Data.SqlDbType.Structured;
@@ -241,6 +304,24 @@ internal class SqlOutboxStore : IOutboxStore
             await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 
             logger.LogWarning("Successfully marked outbox message {MessageId} as permanently failed", id);
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            logger.LogDebug("Fail outbox operation was canceled for message {MessageId}", id);
+            throw;
+        }
+        catch (Exception ex) when (SqlServerFailureClassifier.IsInfrastructureFailure(ex))
+        {
+            logger.LogWarning(
+                ex,
+                "Infrastructure failure ({FailureCategory}) while failing outbox message {MessageId} in {Schema}.{Table} on {Server}/{Database}",
+                SqlServerFailureClassifier.GetCategoryName(ex),
+                id,
+                schemaName,
+                tableName,
+                serverName,
+                databaseName);
+            throw;
         }
         catch (Exception ex)
         {

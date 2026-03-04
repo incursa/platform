@@ -208,6 +208,41 @@ public class OutboxHandlerTests : SqlServerTestBase
         rescheduled.Value.Error.ShouldContain("Test exception");
     }
 
+    /// <summary>When a handler throws a very large error message, then persisted outbox failure text is bounded.</summary>
+    /// <intent>Prevent unbounded LastError growth during repeated handler failures.</intent>
+    /// <scenario>Given a handler throwing InvalidOperationException with a large message payload.</scenario>
+    /// <behavior>Then the message is rescheduled with bounded error text.</behavior>
+    [Fact]
+    public async Task MultiOutboxDispatcher_HandlerThrows_PersistsBoundedFailureText()
+    {
+        // Arrange
+        var testHandler = new TestHandler("Test.Topic")
+        {
+            ExceptionToThrow = new InvalidOperationException(new string('x', OutboxFailureText.MaxLength * 2)),
+        };
+        var resolver = new OutboxHandlerResolver(new[] { testHandler });
+        var store = new TestOutboxStore();
+        var dispatcher = CreateDispatcher(store, resolver);
+
+        store.AddMessage(new OutboxMessage
+        {
+            Id = OutboxWorkItemIdentifier.GenerateNew(),
+            Topic = "Test.Topic",
+            Payload = "test payload",
+            RetryCount = 0,
+        });
+
+        // Act
+        var processed = await dispatcher.RunOnceAsync(10, CancellationToken.None);
+
+        // Assert
+        processed.ShouldBe(1);
+        store.RescheduledMessages.ShouldHaveSingleItem();
+        var error = store.RescheduledMessages[0].Value.Error;
+        error.Length.ShouldBeLessThanOrEqualTo(OutboxFailureText.MaxLength);
+        error.ShouldContain("InvalidOperationException");
+    }
+
     /// <summary>When a message hits max attempts, then the dispatcher fails it instead of rescheduling.</summary>
     /// <intent>Ensure poison messages are failed when retries are exhausted.</intent>
     /// <scenario>Given a message with RetryCount = 2 and maxAttempts = 3 with a failing handler.</scenario>
@@ -245,6 +280,36 @@ public class OutboxHandlerTests : SqlServerTestBase
         store.FailedMessages.ShouldHaveSingleItem();
         store.FailedMessages[0].Key.ShouldBe(message.Id);
         store.RescheduledMessages.ShouldBeEmpty();
+    }
+
+    /// <summary>When a handler throws a critical exception, then dispatching bubbles the exception.</summary>
+    /// <intent>Ensure critical process exceptions are not swallowed into retry/failure paths.</intent>
+    /// <scenario>Given a handler that throws OutOfMemoryException for a claimed message.</scenario>
+    /// <behavior>Then RunOnceAsync throws OutOfMemoryException and no retry/fail metadata is written.</behavior>
+    [Fact]
+    public async Task MultiOutboxDispatcher_CriticalException_BubblesOut()
+    {
+        // Arrange
+        var testHandler = new TestHandler("Test.Topic")
+        {
+            ExceptionToThrow = new OutOfMemoryException("Critical OOM"),
+        };
+        var resolver = new OutboxHandlerResolver(new[] { testHandler });
+        var store = new TestOutboxStore();
+        var dispatcher = CreateDispatcher(store, resolver);
+
+        store.AddMessage(new OutboxMessage
+        {
+            Id = OutboxWorkItemIdentifier.GenerateNew(),
+            Topic = "Test.Topic",
+            Payload = "test payload",
+            RetryCount = 0,
+        });
+
+        // Act / Assert
+        await Should.ThrowAsync<OutOfMemoryException>(() => dispatcher.RunOnceAsync(10, CancellationToken.None));
+        store.RescheduledMessages.ShouldBeEmpty();
+        store.FailedMessages.ShouldBeEmpty();
     }
 
     /// <summary>When a message is processed successfully, then the dispatcher completes and dispatches it.</summary>
@@ -487,6 +552,7 @@ public class OutboxHandlerTests : SqlServerTestBase
         public List<OutboxMessage> HandledMessages { get; } = new List<OutboxMessage>();
 
         public bool ShouldThrow { get; set; }
+        public Exception? ExceptionToThrow { get; set; }
 
         public TestHandler(string topic)
         {
@@ -498,6 +564,11 @@ public class OutboxHandlerTests : SqlServerTestBase
         public Task HandleAsync(OutboxMessage message, CancellationToken cancellationToken)
         {
             HandledMessages.Add(message);
+
+            if (ExceptionToThrow != null)
+            {
+                throw ExceptionToThrow;
+            }
 
             if (ShouldThrow)
             {
