@@ -31,6 +31,10 @@ internal sealed class MetricsExporterHealthCheck : IHealthCheck
     public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         var data = new Dictionary<string, object>(StringComparer.Ordinal);
+        data["minute_series_count"] = _exporterService.MinuteSeriesCount;
+        data["hourly_series_count"] = _exporterService.HourlySeriesCount;
+        data["dropped_minute_series_count"] = _exporterService.DroppedMinuteSeriesCount;
+        data["dropped_hourly_series_count"] = _exporterService.DroppedHourlySeriesCount;
 
         if (_exporterService.LastFlushUtc.HasValue)
         {

@@ -39,6 +39,21 @@ public sealed class MetricsExporterOptions
     public bool EnableCentralRollup { get; set; } = true;
 
     /// <summary>
+    /// Gets or sets the maximum number of minute-level metric series to keep in memory.
+    /// </summary>
+    public int MaxMinuteSeries { get; set; } = 12000;
+
+    /// <summary>
+    /// Gets or sets the maximum number of hourly-level metric series to keep in memory.
+    /// </summary>
+    public int MaxHourlySeries { get; set; } = 12000;
+
+    /// <summary>
+    /// Gets or sets the minimum interval between warning logs when series caps are hit.
+    /// </summary>
+    public TimeSpan SeriesCapWarningInterval { get; set; } = TimeSpan.FromMinutes(1);
+
+    /// <summary>
     /// Gets or sets the retention period for minute data in days.
     /// </summary>
     public int MinuteRetentionDays { get; set; } = 14;
