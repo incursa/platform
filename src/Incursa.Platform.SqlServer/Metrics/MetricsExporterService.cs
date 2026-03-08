@@ -14,7 +14,9 @@
 
 
 using System.Collections.Concurrent;
+using System.Collections.ObjectModel;
 using System.Diagnostics.Metrics;
+using System.Text;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -25,6 +27,9 @@ namespace Incursa.Platform.Metrics;
 /// </summary>
 internal sealed class MetricsExporterService : BackgroundService
 {
+    private static readonly IReadOnlyDictionary<string, string> EmptyTags =
+        new ReadOnlyDictionary<string, string>(new Dictionary<string, string>(StringComparer.Ordinal));
+
     private readonly ILogger<MetricsExporterService> _logger;
     private readonly MetricsExporterOptions _options;
     private readonly IPlatformDatabaseDiscovery _databaseDiscovery;
@@ -32,11 +37,15 @@ internal sealed class MetricsExporterService : BackgroundService
     private readonly MeterListener _listener;
     private readonly Guid _instanceId;
     private readonly ConcurrentDictionary<string, MetricDefinition> _metricDefinitions;
-    private readonly ConcurrentDictionary<MetricSeriesKey, MetricAggregator> _minuteAggregators;
-    private readonly ConcurrentDictionary<MetricSeriesKey, MetricAggregator> _hourlyAggregators;
+    private readonly ConcurrentDictionary<SeriesLookupKey, SeriesAggregationState> _minuteAggregators;
+    private readonly ConcurrentDictionary<SeriesLookupKey, SeriesAggregationState> _hourlyAggregators;
+    private readonly Lock _seriesDropLogLock = new();
+    private DateTime? _lastSeriesDropLogUtc;
     private DateTime? _lastFlushUtc;
     private DateTime? _lastHourlyFlushUtc;
     private string? _lastError;
+    private long _droppedMinuteSeriesCount;
+    private long _droppedHourlySeriesCount;
 
     public MetricsExporterService(
         ILogger<MetricsExporterService> logger,
@@ -50,8 +59,8 @@ internal sealed class MetricsExporterService : BackgroundService
         _metricRegistrar = metricRegistrar ?? throw new ArgumentNullException(nameof(metricRegistrar));
         _instanceId = Guid.NewGuid();
         _metricDefinitions = new ConcurrentDictionary<string, MetricDefinition>(StringComparer.Ordinal);
-        _minuteAggregators = new ConcurrentDictionary<MetricSeriesKey, MetricAggregator>();
-        _hourlyAggregators = new ConcurrentDictionary<MetricSeriesKey, MetricAggregator>();
+        _minuteAggregators = new ConcurrentDictionary<SeriesLookupKey, SeriesAggregationState>();
+        _hourlyAggregators = new ConcurrentDictionary<SeriesLookupKey, SeriesAggregationState>();
 
         _listener = new MeterListener
         {
@@ -80,6 +89,26 @@ internal sealed class MetricsExporterService : BackgroundService
     /// </summary>
     public string? LastError => _lastError;
 
+    /// <summary>
+    /// Gets the current minute-series count retained in memory.
+    /// </summary>
+    public int MinuteSeriesCount => _minuteAggregators.Count;
+
+    /// <summary>
+    /// Gets the current hourly-series count retained in memory.
+    /// </summary>
+    public int HourlySeriesCount => _hourlyAggregators.Count;
+
+    /// <summary>
+    /// Gets the total number of dropped minute-series admissions.
+    /// </summary>
+    public long DroppedMinuteSeriesCount => Interlocked.Read(ref _droppedMinuteSeriesCount);
+
+    /// <summary>
+    /// Gets the total number of dropped hourly-series admissions.
+    /// </summary>
+    public long DroppedHourlySeriesCount => Interlocked.Read(ref _droppedHourlySeriesCount);
+
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         if (!_options.Enabled)
@@ -104,7 +133,7 @@ internal sealed class MetricsExporterService : BackgroundService
                 // Expected during shutdown
                 break;
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!IsFatalException(ex))
             {
                 _lastError = ex.ToString();
                 _logger.LogError(ex, "Error during metrics flush");
@@ -145,44 +174,187 @@ internal sealed class MetricsExporterService : BackgroundService
                 }
             }
 
-            var normalizedDatabaseId = databaseId ?? Guid.Empty;
-
-            var seriesKey = new MetricSeriesKey
-            {
-                MetricName = metricName,
-                DatabaseId = normalizedDatabaseId,
-                Service = service,
-                InstanceId = _instanceId,
-                Tags = filteredTags,
-            };
-
             // Determine aggregation kind
             var aggKind = DetermineAggregationKind(instrument);
-
-            // Store metric definition
-            _metricDefinitions.TryAdd(metricName, new MetricDefinition
-            {
-                Name = metricName,
-                Unit = unit,
-                AggKind = aggKind,
-                Description = instrument.Description ?? metricName,
-            });
-
-            // Record to minute aggregator
-            var minuteAggregator = _minuteAggregators.GetOrAdd(seriesKey, _ => new MetricAggregator(_options.ReservoirSize));
-            minuteAggregator.Record(value);
-
-            // Record to hourly aggregator if enabled
-            if (_options.EnableCentralRollup && !string.IsNullOrEmpty(_options.CentralConnectionString))
-            {
-                var hourlyAggregator = _hourlyAggregators.GetOrAdd(seriesKey, _ => new MetricAggregator(_options.ReservoirSize));
-                hourlyAggregator.Record(value);
-            }
+            var description = instrument.Description ?? metricName;
+            RecordMeasurement(metricName, unit, aggKind, description, databaseId, service, filteredTags, value);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (!IsFatalException(ex))
         {
             _logger.LogWarning(ex, "Error recording measurement for {InstrumentName}", instrument.Name);
         }
+    }
+
+    internal static bool IsFatalException(Exception ex)
+    {
+        return ex is OutOfMemoryException
+            or StackOverflowException
+            or AccessViolationException
+            or AppDomainUnloadedException
+            or BadImageFormatException;
+    }
+
+    internal void RecordMeasurementForTesting(
+        string metricName,
+        string unit,
+        MetricAggregationKind aggKind,
+        string description,
+        Guid? databaseId,
+        string service,
+        IReadOnlyDictionary<string, string> tags,
+        double value)
+    {
+        RecordMeasurement(metricName, unit, aggKind, description, databaseId, service, tags, value);
+    }
+
+    private void RecordMeasurement(
+        string metricName,
+        string unit,
+        MetricAggregationKind aggKind,
+        string description,
+        Guid? databaseId,
+        string service,
+        IReadOnlyDictionary<string, string> tags,
+        double value)
+    {
+        var normalizedDatabaseId = databaseId ?? Guid.Empty;
+        var canonicalTagSignature = BuildTagSignature(tags);
+        var lookupKey = new SeriesLookupKey(
+            metricName,
+            normalizedDatabaseId,
+            service,
+            _instanceId,
+            canonicalTagSignature);
+
+        _metricDefinitions.TryAdd(metricName, new MetricDefinition
+        {
+            Name = metricName,
+            Unit = unit,
+            AggKind = aggKind,
+            Description = description,
+        });
+
+        if (!TryRecordValue(_minuteAggregators, lookupKey, metricName, normalizedDatabaseId, service, tags, value, _options.MaxMinuteSeries, isHourly: false))
+        {
+            return;
+        }
+
+        if (_options.EnableCentralRollup && !string.IsNullOrEmpty(_options.CentralConnectionString))
+        {
+            _ = TryRecordValue(_hourlyAggregators, lookupKey, metricName, normalizedDatabaseId, service, tags, value, _options.MaxHourlySeries, isHourly: true);
+        }
+    }
+
+    private bool TryRecordValue(
+        ConcurrentDictionary<SeriesLookupKey, SeriesAggregationState> store,
+        SeriesLookupKey lookupKey,
+        string metricName,
+        Guid databaseId,
+        string service,
+        IReadOnlyDictionary<string, string> tags,
+        double value,
+        int configuredCap,
+        bool isHourly)
+    {
+        if (store.TryGetValue(lookupKey, out var existingState))
+        {
+            existingState.Aggregator.Record(value);
+            return true;
+        }
+
+        var cap = configuredCap <= 0 ? int.MaxValue : configuredCap;
+        if (store.Count >= cap)
+        {
+            TrackSeriesDrop(isHourly, cap);
+            return false;
+        }
+
+        var canonicalTags = CreateCanonicalTags(tags);
+        var seriesKey = new MetricSeriesKey
+        {
+            MetricName = metricName,
+            DatabaseId = databaseId,
+            Service = service,
+            InstanceId = _instanceId,
+            Tags = canonicalTags,
+        };
+
+        var addedState = store.GetOrAdd(
+            lookupKey,
+            _ => new SeriesAggregationState(seriesKey, new MetricAggregator(_options.ReservoirSize)));
+        addedState.Aggregator.Record(value);
+        return true;
+    }
+
+    private void TrackSeriesDrop(bool isHourly, int cap)
+    {
+        if (isHourly)
+        {
+            Interlocked.Increment(ref _droppedHourlySeriesCount);
+        }
+        else
+        {
+            Interlocked.Increment(ref _droppedMinuteSeriesCount);
+        }
+
+        var now = DateTime.UtcNow;
+        var interval = _options.SeriesCapWarningInterval <= TimeSpan.Zero
+            ? TimeSpan.FromMinutes(1)
+            : _options.SeriesCapWarningInterval;
+
+        lock (_seriesDropLogLock)
+        {
+            if (_lastSeriesDropLogUtc.HasValue && now - _lastSeriesDropLogUtc.Value < interval)
+            {
+                return;
+            }
+
+            _lastSeriesDropLogUtc = now;
+            _logger.LogWarning(
+                "Metrics series cap reached for {Level} aggregation. New series are being dropped. Cap={Cap}, MinuteSeriesCount={MinuteSeriesCount}, HourlySeriesCount={HourlySeriesCount}, DroppedMinuteSeries={DroppedMinuteSeriesCount}, DroppedHourlySeries={DroppedHourlySeriesCount}",
+                isHourly ? "hourly" : "minute",
+                cap,
+                MinuteSeriesCount,
+                HourlySeriesCount,
+                DroppedMinuteSeriesCount,
+                DroppedHourlySeriesCount);
+        }
+    }
+
+    private static IReadOnlyDictionary<string, string> CreateCanonicalTags(IReadOnlyDictionary<string, string> tags)
+    {
+        if (tags.Count == 0)
+        {
+            return EmptyTags;
+        }
+
+        var ordered = tags
+            .OrderBy(kvp => kvp.Key, StringComparer.Ordinal)
+            .ToDictionary(kvp => kvp.Key, kvp => kvp.Value, StringComparer.Ordinal);
+        return new ReadOnlyDictionary<string, string>(ordered);
+    }
+
+    private static string BuildTagSignature(IReadOnlyDictionary<string, string> tags)
+    {
+        if (tags.Count == 0)
+        {
+            return string.Empty;
+        }
+
+        var builder = new StringBuilder();
+        foreach (var tag in tags.OrderBy(kvp => kvp.Key, StringComparer.Ordinal))
+        {
+            builder.Append(tag.Key.Length);
+            builder.Append(':');
+            builder.Append(tag.Key);
+            builder.Append('=');
+            builder.Append(tag.Value.Length);
+            builder.Append(':');
+            builder.Append(tag.Value);
+            builder.Append(';');
+        }
+
+        return builder.ToString();
     }
 
     private static MetricAggregationKind DetermineAggregationKind(Instrument instrument)
@@ -222,14 +394,12 @@ internal sealed class MetricsExporterService : BackgroundService
         var databases = await _databaseDiscovery.DiscoverDatabasesAsync(cancellationToken).ConfigureAwait(false);
 
         // Group aggregators by database
-        var aggregatorsByDatabase = _minuteAggregators
-            .GroupBy(kvp => kvp.Key.DatabaseId)
+        var aggregatorsByDatabase = _minuteAggregators.Values
+            .GroupBy(state => state.SeriesKey.DatabaseId)
             .ToList();
 
         foreach (var databaseGroup in aggregatorsByDatabase)
         {
-            var databaseId = databaseGroup.Key;
-
             // For now, write to the first database (or a default database)
             // In a multi-database setup, you'd map databaseId to the appropriate database
             var targetDb = databases.FirstOrDefault();
@@ -242,21 +412,19 @@ internal sealed class MetricsExporterService : BackgroundService
         }
 
         _lastFlushUtc = DateTime.UtcNow;
-
         await UpdateHeartbeatAsync(cancellationToken).ConfigureAwait(false);
     }
 
     private async Task FlushDatabaseGroupAsync(
-        IGrouping<Guid?, KeyValuePair<MetricSeriesKey, MetricAggregator>> databaseGroup,
+        IGrouping<Guid?, SeriesAggregationState> databaseGroup,
         string connectionString,
         DateTime bucketStart,
         CancellationToken cancellationToken)
     {
-        foreach (var kvp in databaseGroup)
+        foreach (var state in databaseGroup)
         {
-            var seriesKey = kvp.Key;
-            var aggregator = kvp.Value;
-            var snapshot = aggregator.GetSnapshotAndReset();
+            var seriesKey = state.SeriesKey;
+            var snapshot = state.Aggregator.GetSnapshotAndReset();
 
             if (snapshot.Count == 0)
             {
@@ -279,7 +447,7 @@ internal sealed class MetricsExporterService : BackgroundService
                         cancellationToken).ConfigureAwait(false);
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!IsFatalException(ex))
             {
                 _logger.LogWarning(ex, "Error writing minute metric for series {MetricName}", seriesKey.MetricName);
             }
@@ -301,7 +469,7 @@ internal sealed class MetricsExporterService : BackgroundService
                     _lastError,
                     cancellationToken).ConfigureAwait(false);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!IsFatalException(ex))
             {
                 _logger.LogWarning(ex, "Error updating heartbeat");
             }
@@ -331,11 +499,10 @@ internal sealed class MetricsExporterService : BackgroundService
         var now = DateTime.UtcNow;
         var bucketStart = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0, DateTimeKind.Utc).AddHours(-1);
 
-        foreach (var kvp in _hourlyAggregators)
+        foreach (var state in _hourlyAggregators.Values)
         {
-            var seriesKey = kvp.Key;
-            var aggregator = kvp.Value;
-            var snapshot = aggregator.GetSnapshotAndReset();
+            var seriesKey = state.SeriesKey;
+            var snapshot = state.Aggregator.GetSnapshotAndReset();
 
             if (snapshot.Count == 0)
             {
@@ -358,7 +525,7 @@ internal sealed class MetricsExporterService : BackgroundService
                         cancellationToken).ConfigureAwait(false);
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!IsFatalException(ex))
             {
                 _logger.LogWarning(ex, "Error writing hourly metric for series {MetricName}", seriesKey.MetricName);
             }
@@ -369,5 +536,25 @@ internal sealed class MetricsExporterService : BackgroundService
     {
         _listener.Dispose();
         base.Dispose();
+    }
+
+    private sealed record SeriesLookupKey(
+        string MetricName,
+        Guid DatabaseId,
+        string Service,
+        Guid InstanceId,
+        string TagSignature);
+
+    private sealed class SeriesAggregationState
+    {
+        public SeriesAggregationState(MetricSeriesKey seriesKey, MetricAggregator aggregator)
+        {
+            SeriesKey = seriesKey;
+            Aggregator = aggregator;
+        }
+
+        public MetricSeriesKey SeriesKey { get; }
+
+        public MetricAggregator Aggregator { get; }
     }
 }
