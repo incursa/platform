@@ -1,113 +1,137 @@
 using System.Net;
 using Incursa.Platform;
+using Incursa.Platform.HealthProbe;
 using Incursa.Platform.SmokeWeb.Smoke;
 
-var builder = WebApplication.CreateBuilder(args);
+return await MainAsync(args).ConfigureAwait(false);
 
-builder.AddServiceDefaults();
-
-builder.Services.Configure<SmokeOptions>(builder.Configuration.GetSection("Smoke"));
-
-var smokeOptions = builder.Configuration.GetSection("Smoke").Get<SmokeOptions>() ?? new SmokeOptions();
-var provider = NormalizeProvider(smokeOptions.Provider);
-
-var sqlConnection = ResolveConnectionString(
-    builder.Configuration,
-    smokeOptions.SqlServerConnectionString,
-    "SqlServer",
-    "sqlplatform");
-
-var postgresConnection = ResolveConnectionString(
-    builder.Configuration,
-    smokeOptions.PostgresConnectionString,
-    "Postgres",
-    "pgplatform");
-
-switch (provider)
+static async Task<int> MainAsync(string[] args)
 {
-    case SmokeProvider.SqlServer:
-        if (string.IsNullOrWhiteSpace(sqlConnection))
-        {
-            throw new InvalidOperationException("SQL Server provider selected but no connection string was provided.");
-        }
+    if (HealthProbeApp.IsHealthCheckInvocation(args))
+    {
+        var hostBuilder = Host.CreateApplicationBuilder(args);
+        ConfigureSharedServices(hostBuilder);
+        hostBuilder.UseIncursaHealthProbe();
 
-        builder.Services.AddSqlPlatform(new SqlPlatformOptions
-        {
-            ConnectionString = sqlConnection,
-            SchemaName = smokeOptions.SchemaName,
-            EnableSchemaDeployment = smokeOptions.EnableSchemaDeployment,
-        });
-        break;
+        using var host = hostBuilder.Build();
+        return await HealthProbeApp.RunHealthCheckAsync(args, host.Services, CancellationToken.None).ConfigureAwait(false);
+    }
 
-    case SmokeProvider.Postgres:
-        if (string.IsNullOrWhiteSpace(postgresConnection))
-        {
-            throw new InvalidOperationException("Postgres provider selected but no connection string was provided.");
-        }
+    var builder = WebApplication.CreateBuilder(args);
+    ConfigureSharedServices(builder);
+    builder.UseIncursaHealthProbe();
 
-        builder.Services.AddPostgresPlatform(new PostgresPlatformOptions
-        {
-            ConnectionString = postgresConnection,
-            SchemaName = smokeOptions.SchemaName,
-            EnableSchemaDeployment = smokeOptions.EnableSchemaDeployment,
-        });
-        break;
+    var app = builder.Build();
 
-    case SmokeProvider.InMemory:
-        builder.Services.AddInMemoryPlatformMultiDatabaseWithList(new[]
-        {
-            new InMemoryPlatformDatabase { Name = "default" },
-        });
-        break;
+    app.MapDefaultEndpoints();
 
-    default:
-        throw new InvalidOperationException($"Unknown smoke provider '{provider}'.");
+    app.MapGet("/", (SmokeRuntimeInfo info) =>
+        Results.Content(BuildHomePage(info), "text/html"));
+
+    app.MapGet("/api/status", (SmokeTestState state, SmokeRuntimeInfo info) =>
+        Results.Ok(state.GetStatusSnapshot(info.Provider)));
+
+    app.MapPost("/api/run", async (SmokeTestRunner runner, CancellationToken ct) =>
+    {
+        var run = await runner.StartAsync(ct).ConfigureAwait(false);
+        return Results.Ok(run.ToSnapshot());
+    });
+
+    app.MapPost("/api/reset", (SmokeTestState state) =>
+    {
+        state.Reset();
+        return Results.Ok();
+    });
+
+    await app.RunAsync().ConfigureAwait(false);
+    return 0;
 }
 
-builder.Services.AddSingleton(new SmokeRuntimeInfo
+static void ConfigureSharedServices(IHostApplicationBuilder builder)
 {
-    Provider = provider,
-    SchemaName = smokeOptions.SchemaName,
-    EnableSchemaDeployment = smokeOptions.EnableSchemaDeployment,
-    ConnectionString = provider switch
+    ArgumentNullException.ThrowIfNull(builder);
+
+    builder.AddServiceDefaults();
+
+    builder.Services.Configure<SmokeOptions>(builder.Configuration.GetSection("Smoke"));
+
+    var smokeOptions = builder.Configuration.GetSection("Smoke").Get<SmokeOptions>() ?? new SmokeOptions();
+    var provider = NormalizeProvider(smokeOptions.Provider);
+
+    var sqlConnection = ResolveConnectionString(
+        builder.Configuration,
+        smokeOptions.SqlServerConnectionString,
+        "SqlServer",
+        "sqlplatform");
+
+    var postgresConnection = ResolveConnectionString(
+        builder.Configuration,
+        smokeOptions.PostgresConnectionString,
+        "Postgres",
+        "pgplatform");
+
+    switch (provider)
     {
-        SmokeProvider.SqlServer => sqlConnection,
-        SmokeProvider.Postgres => postgresConnection,
-        _ => null,
-    },
-    ConnectionStringSource = provider switch
+        case SmokeProvider.SqlServer:
+            if (string.IsNullOrWhiteSpace(sqlConnection))
+            {
+                throw new InvalidOperationException("SQL Server provider selected but no connection string was provided.");
+            }
+
+            builder.Services.AddSqlPlatform(new SqlPlatformOptions
+            {
+                ConnectionString = sqlConnection,
+                SchemaName = smokeOptions.SchemaName,
+                EnableSchemaDeployment = smokeOptions.EnableSchemaDeployment,
+            });
+            break;
+
+        case SmokeProvider.Postgres:
+            if (string.IsNullOrWhiteSpace(postgresConnection))
+            {
+                throw new InvalidOperationException("Postgres provider selected but no connection string was provided.");
+            }
+
+            builder.Services.AddPostgresPlatform(new PostgresPlatformOptions
+            {
+                ConnectionString = postgresConnection,
+                SchemaName = smokeOptions.SchemaName,
+                EnableSchemaDeployment = smokeOptions.EnableSchemaDeployment,
+            });
+            break;
+
+        case SmokeProvider.InMemory:
+            builder.Services.AddInMemoryPlatformMultiDatabaseWithList(new[]
+            {
+                new InMemoryPlatformDatabase { Name = "default" },
+            });
+            break;
+
+        default:
+            throw new InvalidOperationException($"Unknown smoke provider '{provider}'.");
+    }
+
+    builder.Services.AddSingleton(new SmokeRuntimeInfo
     {
-        SmokeProvider.SqlServer => ResolveConnectionStringSource(builder.Configuration, smokeOptions.SqlServerConnectionString, "SqlServer", "sqlplatform"),
-        SmokeProvider.Postgres => ResolveConnectionStringSource(builder.Configuration, smokeOptions.PostgresConnectionString, "Postgres", "pgplatform"),
-        _ => null,
-    },
-});
+        Provider = provider,
+        SchemaName = smokeOptions.SchemaName,
+        EnableSchemaDeployment = smokeOptions.EnableSchemaDeployment,
+        ConnectionString = provider switch
+        {
+            SmokeProvider.SqlServer => sqlConnection,
+            SmokeProvider.Postgres => postgresConnection,
+            _ => null,
+        },
+        ConnectionStringSource = provider switch
+        {
+            SmokeProvider.SqlServer => ResolveConnectionStringSource(builder.Configuration, smokeOptions.SqlServerConnectionString, "SqlServer", "sqlplatform"),
+            SmokeProvider.Postgres => ResolveConnectionStringSource(builder.Configuration, smokeOptions.PostgresConnectionString, "Postgres", "pgplatform"),
+            _ => null,
+        },
+    });
 
-builder.Services.AddSmokeServices();
-
-var app = builder.Build();
-
-app.MapDefaultEndpoints();
-
-app.MapGet("/", (SmokeRuntimeInfo info) =>
-    Results.Content(BuildHomePage(info), "text/html"));
-
-app.MapGet("/api/status", (SmokeTestState state, SmokeRuntimeInfo info) =>
-    Results.Ok(state.GetStatusSnapshot(info.Provider)));
-
-app.MapPost("/api/run", async (SmokeTestRunner runner, CancellationToken ct) =>
-{
-    var run = await runner.StartAsync(ct).ConfigureAwait(false);
-    return Results.Ok(run.ToSnapshot());
-});
-
-app.MapPost("/api/reset", (SmokeTestState state) =>
-{
-    state.Reset();
-    return Results.Ok();
-});
-
-app.Run();
+    builder.Services.AddSmokeServices();
+}
 
 static string NormalizeProvider(string provider)
 {

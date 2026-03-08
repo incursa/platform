@@ -9,12 +9,14 @@ internal sealed class HealthProbeCommandLine
         string? bucketName,
         bool listBuckets,
         TimeSpan? timeoutOverride,
+        HealthProbeMode? modeOverride,
         bool includeData,
         bool jsonOutput)
     {
         BucketName = bucketName;
         ListBuckets = listBuckets;
         TimeoutOverride = timeoutOverride;
+        ModeOverride = modeOverride;
         IncludeData = includeData;
         JsonOutput = jsonOutput;
     }
@@ -24,6 +26,8 @@ internal sealed class HealthProbeCommandLine
     public bool ListBuckets { get; }
 
     public TimeSpan? TimeoutOverride { get; }
+
+    public HealthProbeMode? ModeOverride { get; }
 
     public bool IncludeData { get; }
 
@@ -46,6 +50,7 @@ internal sealed class HealthProbeCommandLine
         string? bucketName = null;
         var listBuckets = false;
         TimeSpan? timeoutOverride = null;
+        HealthProbeMode? modeOverride = null;
         var includeData = false;
         var jsonOutput = false;
 
@@ -77,6 +82,9 @@ internal sealed class HealthProbeCommandLine
                 case "--timeout":
                     timeoutOverride = ParseTimeout(RequireValue(args, ref index, token));
                     break;
+                case "--mode":
+                    modeOverride = ParseMode(RequireValue(args, ref index, token));
+                    break;
                 case "--include-data":
                     includeData = true;
                     index++;
@@ -102,6 +110,7 @@ internal sealed class HealthProbeCommandLine
             bucketName,
             listBuckets,
             timeoutOverride,
+            modeOverride,
             includeData,
             jsonOutput);
     }
@@ -141,5 +150,20 @@ internal sealed class HealthProbeCommandLine
         }
 
         return TimeSpan.FromSeconds(seconds);
+    }
+
+    private static HealthProbeMode ParseMode(string value)
+    {
+        if (value.Equals("inprocess", StringComparison.OrdinalIgnoreCase))
+        {
+            return HealthProbeMode.InProcess;
+        }
+
+        if (value.Equals("http", StringComparison.OrdinalIgnoreCase))
+        {
+            return HealthProbeMode.Http;
+        }
+
+        throw new HealthProbeArgumentException($"Unknown mode '{value}'. Expected inprocess or http.");
     }
 }

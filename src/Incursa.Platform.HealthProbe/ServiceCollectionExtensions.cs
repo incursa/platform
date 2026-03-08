@@ -32,6 +32,13 @@ public static class ServiceCollectionExtensions
             services.Configure(configure);
         }
 
+        services.AddHttpClient(HttpHealthProbeRunner.HttpClientName, static client =>
+        {
+            client.Timeout = Timeout.InfiniteTimeSpan;
+        });
+
+        services.AddTransient<InProcessHealthProbeRunner>();
+        services.AddTransient<HttpHealthProbeRunner>();
         services.AddTransient<IHealthProbeRunner, InProcessHealthProbeRunner>();
 
         return services;

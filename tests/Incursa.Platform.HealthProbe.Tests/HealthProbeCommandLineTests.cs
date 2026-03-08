@@ -10,12 +10,15 @@ public sealed class HealthProbeCommandLineTests
     private static readonly string[] DefaultArgs = { "health" };
     private static readonly string[] DepArgs = { "health", "dep" };
     private static readonly string[] UnknownFlagArgs = { "health", "--nope" };
+    private static readonly string[] UnknownModeArgs = { "health", "--mode", "grpc" };
     private static readonly string[] OverridesArgs =
     {
         "health",
         "ready",
         "--timeout",
         "5",
+        "--mode",
+        "http",
         "--include-data",
         "--json",
     };
@@ -55,6 +58,7 @@ public sealed class HealthProbeCommandLineTests
 
         commandLine.BucketName.ShouldBe("ready");
         commandLine.TimeoutOverride.ShouldBe(TimeSpan.FromSeconds(5));
+        commandLine.ModeOverride.ShouldBe(HealthProbeMode.Http);
         commandLine.IncludeData.ShouldBeTrue();
         commandLine.JsonOutput.ShouldBeTrue();
     }
@@ -89,5 +93,18 @@ public sealed class HealthProbeCommandLineTests
             HealthProbeCommandLine.Parse(UnknownFlagArgs));
 
         exception.Message.ShouldContain("Unknown option");
+    }
+
+    /// <summary>When an unknown mode is provided, then parsing throws a HealthProbeArgumentException.</summary>
+    /// <intent>Describe mode validation for unsupported mode names.</intent>
+    /// <scenario>Given arguments including "--mode grpc".</scenario>
+    /// <behavior>Parsing throws and the message mentions an unknown mode.</behavior>
+    [Fact]
+    public void ParseThrowsForUnknownMode()
+    {
+        var exception = Should.Throw<HealthProbeArgumentException>(() =>
+            HealthProbeCommandLine.Parse(UnknownModeArgs));
+
+        exception.Message.ShouldContain("Unknown mode");
     }
 }

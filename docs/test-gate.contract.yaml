@@ -1,0 +1,40 @@
+version: 1
+domain: PayeWaive internal application delivery
+scope:
+  solutionPath: src/PayeWaive.All.slnx
+  includes:
+    - src/**
+  excludes:
+    - src/**/bin/**
+    - src/**/obj/**
+    - src/app/tests/PayeWaive.App.Engine.Tests/**/*.g.cs
+coverage:
+  lineMin: 0.00
+  branchMin: 0.00
+expectations:
+  confidenceTarget: advisory confidence based on the curated advisory lane plus blocking and known-issue context
+  evidence:
+    - Advisory lane results are the primary Workbench confidence input and intentionally combine the maintained smoke suites with additional trustworthy product suites, including rescued Tier 1 subsets when they run green without special environment setup.
+    - Blocking lane results from src/blocking.runsettings remain the fast required validation lane.
+    - Smoke coverage should keep health endpoints, tenant permission checks, email queue behavior, payables match rules, and the PayApp approval seam visible.
+    - Observational KnownIssue results add context for known gaps, but they are not release gates.
+related:
+  docs:
+    - docs/testing-operating-model.md
+    - docs/testing-known-issues.md
+    - docs/testing-validation-verification-report.md
+  files:
+    - build-local.ps1
+    - run-advisory-quality-tests.ps1
+    - run-smoke-tests.ps1
+    - run-observational-tests.ps1
+    - src/blocking.runsettings
+    - src/observational.runsettings
+    - src/smoke.runsettings
+intentionalGaps:
+  - subject: Box sandbox and other credential-gated external integrations
+    rationale: These scenarios require secrets or sandbox state that are not part of the routine CI-safe blocking lane.
+  - subject: Vista and other manual ERP integration workflows
+    rationale: These workflows still depend on manual environment coordination and are tracked outside the automated blocking lane.
+  - subject: Docker-heavy or environment-specific legacy integration cases
+    rationale: Some integration coverage still depends on local infrastructure that is intentionally not required for the first Workbench quality pass.

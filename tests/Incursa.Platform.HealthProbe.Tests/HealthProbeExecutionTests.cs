@@ -1,3 +1,7 @@
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 using Incursa.Platform.Health;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -54,13 +58,129 @@ public sealed class HealthProbeExecutionTests
         exitCode.ShouldBe(HealthProbeExitCodes.NonHealthy);
     }
 
-    private static ServiceProvider BuildServiceProvider()
+    [Fact]
+    public async Task RunHealthCheckAsync_UsesConfiguredHttpMode_WhenModeIsHttp()
+    {
+        using var handler = new StubHttpMessageHandler(static request =>
+        {
+            var json = """
+{
+  "bucket": "ready",
+  "status": "Healthy",
+  "totalDurationMs": 1.5,
+  "checks": []
+}
+""";
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(json, Encoding.UTF8, "application/json"),
+            };
+        });
+
+        using var services = BuildServiceProvider(
+            configure: options =>
+            {
+                options.Mode = HealthProbeMode.Http;
+                options.Http.BaseUrl = new Uri("https://probe.example.local");
+                options.Http.ApiKey = "secret";
+            },
+            httpHandler: handler);
+
+        var exitCode = await HealthProbeApp.RunHealthCheckAsync(
+            ["health", "ready"],
+            services,
+            TestContext.Current.CancellationToken);
+
+        exitCode.ShouldBe(HealthProbeExitCodes.Healthy);
+        handler.RequestCount.ShouldBe(1);
+        handler.LastRequest.ShouldNotBeNull();
+        handler.LastRequest!.RequestUri.ShouldBe(new Uri("https://probe.example.local/readyz"));
+        handler.LastRequest.Headers.TryGetValues("X-Api-Key", out var apiKeyValues).ShouldBeTrue();
+        apiKeyValues.ShouldNotBeNull();
+        apiKeyValues.Single().ShouldBe("secret");
+    }
+
+    [Fact]
+    public async Task RunHealthCheckAsync_ModeFlagOverridesConfiguration()
+    {
+        using var handler = new StubHttpMessageHandler(static _ => new HttpResponseMessage(HttpStatusCode.ServiceUnavailable));
+        using var services = BuildServiceProvider(
+            configure: options =>
+            {
+                options.Mode = HealthProbeMode.Http;
+                options.Http.BaseUrl = new Uri("https://probe.example.local");
+            },
+            httpHandler: handler);
+
+        var exitCode = await HealthProbeApp.RunHealthCheckAsync(
+            ["health", "ready", "--mode", "inprocess"],
+            services,
+            TestContext.Current.CancellationToken);
+
+        exitCode.ShouldBe(HealthProbeExitCodes.Healthy);
+        handler.RequestCount.ShouldBe(0);
+    }
+
+    private static ServiceProvider BuildServiceProvider(
+        Action<HealthProbeOptions>? configure = null,
+        StubHttpMessageHandler? httpHandler = null)
     {
         var services = new ServiceCollection()
             .AddLogging();
         services.AddPlatformHealthChecks();
-        services.AddIncursaHealthProbe();
+        services.AddIncursaHealthProbe(configure);
+
+        if (httpHandler is not null)
+        {
+            services.AddSingleton<IHttpClientFactory>(_ =>
+                new StubHttpClientFactory(new HttpClient(httpHandler)
+                {
+                    Timeout = Timeout.InfiniteTimeSpan,
+                }));
+        }
 
         return services.BuildServiceProvider();
+    }
+
+    private sealed class StubHttpClientFactory : IHttpClientFactory, IDisposable
+    {
+        private readonly HttpClient httpClient;
+
+        public StubHttpClientFactory(HttpClient httpClient)
+        {
+            this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        }
+
+        public HttpClient CreateClient(string name)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(name);
+            return httpClient;
+        }
+
+        public void Dispose()
+        {
+            httpClient.Dispose();
+        }
+    }
+
+    private sealed class StubHttpMessageHandler : HttpMessageHandler
+    {
+        private readonly Func<HttpRequestMessage, HttpResponseMessage> responseFactory;
+
+        public StubHttpMessageHandler(Func<HttpRequestMessage, HttpResponseMessage> responseFactory)
+        {
+            this.responseFactory = responseFactory ?? throw new ArgumentNullException(nameof(responseFactory));
+        }
+
+        public HttpRequestMessage? LastRequest { get; private set; }
+
+        public int RequestCount { get; private set; }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            LastRequest = request;
+            RequestCount++;
+            return Task.FromResult(responseFactory(request));
+        }
     }
 }

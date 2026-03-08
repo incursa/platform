@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Incursa.Platform\Incursa.Platform.csproj" />
+    <ProjectReference Include="..\..\src\Incursa.Platform.HealthProbe\Incursa.Platform.HealthProbe.csproj" />
     <ProjectReference Include="..\..\src\Incursa.Platform.SqlServer\Incursa.Platform.SqlServer.csproj" />
     <ProjectReference Include="..\..\src\Incursa.Platform.Postgres\Incursa.Platform.Postgres.csproj" />
     <ProjectReference Include="..\..\src\Incursa.Platform.InMemory\Incursa.Platform.InMemory.csproj" />

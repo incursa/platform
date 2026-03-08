@@ -6,6 +6,11 @@ namespace Incursa.Platform.HealthProbe;
 public sealed class HealthProbeOptions
 {
     /// <summary>
+    /// Gets or sets the probe execution mode.
+    /// </summary>
+    public HealthProbeMode Mode { get; set; } = HealthProbeMode.InProcess;
+
+    /// <summary>
     /// Gets or sets the default bucket when no explicit bucket is provided.
     /// </summary>
     public string DefaultBucket { get; set; } = HealthProbeDefaults.DefaultBucket;
@@ -20,13 +25,20 @@ public sealed class HealthProbeOptions
     /// </summary>
     public bool IncludeData { get; set; }
 
+    /// <summary>
+    /// Gets or sets HTTP probe options.
+    /// </summary>
+    public HealthProbeHttpOptions Http { get; set; } = new();
+
     internal HealthProbeOptions Clone()
     {
         return new HealthProbeOptions
         {
+            Mode = Mode,
             DefaultBucket = DefaultBucket,
             Timeout = Timeout,
             IncludeData = IncludeData,
+            Http = Http.Clone(),
         };
     }
 }

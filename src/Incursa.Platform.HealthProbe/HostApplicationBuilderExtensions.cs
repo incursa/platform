@@ -13,8 +13,8 @@ public static class HostApplicationBuilderExtensions
     /// <param name="builder">The host application builder.</param>
     /// <param name="configure">Optional configuration action.</param>
     /// <returns>The original builder for chaining.</returns>
-    public static HostApplicationBuilder UseIncursaHealthProbe(
-        this HostApplicationBuilder builder,
+    public static IHostApplicationBuilder UseIncursaHealthProbe(
+        this IHostApplicationBuilder builder,
         Action<HealthProbeOptions>? configure = null)
     {
         ArgumentNullException.ThrowIfNull(builder);

@@ -89,17 +89,18 @@ public static class HealthProbeApp
             options.Timeout = commandLine.TimeoutOverride.Value;
         }
 
+        if (commandLine.ModeOverride.HasValue)
+        {
+            options.Mode = commandLine.ModeOverride.Value;
+        }
+
         var bucketName = commandLine.BucketName ?? options.DefaultBucket;
         if (string.IsNullOrWhiteSpace(bucketName))
         {
             throw new HealthProbeArgumentException("A health bucket is required.");
         }
 
-        var runner = services.GetService<IHealthProbeRunner>();
-        if (runner is null)
-        {
-            throw new InvalidOperationException("IHealthProbeRunner is not registered. Call AddIncursaHealthProbe().");
-        }
+        var runner = ResolveRunner(services, options.Mode);
 
         using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         timeoutCts.CancelAfter(options.Timeout);
@@ -155,5 +156,20 @@ public static class HealthProbeApp
         Console.WriteLine(PlatformHealthTags.Live);
         Console.WriteLine(PlatformHealthTags.Ready);
         Console.WriteLine(PlatformHealthTags.Dep);
+    }
+
+    private static IHealthProbeRunner ResolveRunner(IServiceProvider services, HealthProbeMode mode)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+
+        return mode switch
+        {
+            HealthProbeMode.InProcess => services.GetService<InProcessHealthProbeRunner>()
+                ?? services.GetService<IHealthProbeRunner>()
+                ?? throw new InvalidOperationException("In-process health probe runner is not registered. Call AddIncursaHealthProbe()."),
+            HealthProbeMode.Http => services.GetService<HttpHealthProbeRunner>()
+                ?? throw new InvalidOperationException("HTTP health probe runner is not registered. Call AddIncursaHealthProbe()."),
+            _ => throw new HealthProbeArgumentException($"Unknown mode '{mode}'. Expected inprocess or http."),
+        };
     }
 }

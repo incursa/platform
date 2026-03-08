@@ -28,6 +28,17 @@ internal sealed class HealthProbeOptionsConfigurator : IConfigureOptions<HealthP
             return;
         }
 
+        var modeValue = section["Mode"];
+        if (!string.IsNullOrWhiteSpace(modeValue))
+        {
+            if (!Enum.TryParse<HealthProbeMode>(modeValue, true, out var mode))
+            {
+                throw new HealthProbeArgumentException($"Unknown mode '{modeValue}'. Expected inprocess or http.");
+            }
+
+            options.Mode = mode;
+        }
+
         var defaultBucketValue = section["DefaultBucket"];
         if (!string.IsNullOrWhiteSpace(defaultBucketValue))
         {
@@ -47,6 +58,67 @@ internal sealed class HealthProbeOptionsConfigurator : IConfigureOptions<HealthP
             && bool.TryParse(includeDataValue, out var includeData))
         {
             options.IncludeData = includeData;
+        }
+
+        ConfigureHttpOptions(section.GetSection("Http"), options.Http);
+    }
+
+    private static void ConfigureHttpOptions(IConfigurationSection section, HealthProbeHttpOptions http)
+    {
+        ArgumentNullException.ThrowIfNull(section);
+        ArgumentNullException.ThrowIfNull(http);
+
+        if (!section.Exists())
+        {
+            return;
+        }
+
+        var baseUrl = section["BaseUrl"];
+        if (!string.IsNullOrWhiteSpace(baseUrl))
+        {
+            if (!Uri.TryCreate(baseUrl, UriKind.Absolute, out var parsed))
+            {
+                throw new HealthProbeArgumentException($"Invalid HTTP base URL '{baseUrl}'.");
+            }
+
+            http.BaseUrl = parsed;
+        }
+
+        var livePath = section["LivePath"];
+        if (!string.IsNullOrWhiteSpace(livePath))
+        {
+            http.LivePath = livePath;
+        }
+
+        var readyPath = section["ReadyPath"];
+        if (!string.IsNullOrWhiteSpace(readyPath))
+        {
+            http.ReadyPath = readyPath;
+        }
+
+        var depPath = section["DepPath"];
+        if (!string.IsNullOrWhiteSpace(depPath))
+        {
+            http.DepPath = depPath;
+        }
+
+        var apiKey = section["ApiKey"];
+        if (!string.IsNullOrWhiteSpace(apiKey))
+        {
+            http.ApiKey = apiKey;
+        }
+
+        var apiKeyHeaderName = section["ApiKeyHeaderName"];
+        if (!string.IsNullOrWhiteSpace(apiKeyHeaderName))
+        {
+            http.ApiKeyHeaderName = apiKeyHeaderName;
+        }
+
+        var allowInsecureTls = section["AllowInsecureTls"];
+        if (!string.IsNullOrWhiteSpace(allowInsecureTls)
+            && bool.TryParse(allowInsecureTls, out var parsedAllowInsecureTls))
+        {
+            http.AllowInsecureTls = parsedAllowInsecureTls;
         }
     }
 }

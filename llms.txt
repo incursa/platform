@@ -22,6 +22,8 @@ Outbox, inbox, scheduler, fanout, and leases are built on a work-queue pattern: 
 - Incursa.Platform.Observability: Shared conventions and helpers (event names, tag keys, emitters) for audit/ops/metrics consistency.
 - Incursa.Platform.Idempotency: At-most-once semantics for a logical key with TryBegin/Complete/Fail.
 - Incursa.Platform.ExactlyOnce: Best-effort exactly-once execution workflow with idempotency and optional verification probes.
+- Incursa.Platform.Storage: Provider-agnostic storage substrate contracts for partition-aware records/lookups, payloads, work queues, and coordination.
+- Incursa.Integrations.Storage.Azure: Azure Tables/Blobs/Queues provider for `Incursa.Platform.Storage` with blob-lease coordination and Azure-specific DI/options.
 - Incursa.Platform.Email: Outbox-driven email delivery with idempotency, send policies, and provider adapters.
 - Incursa.Platform.Email.AspNetCore: ASP.NET Core DI helpers and hosted processing loop.
 - Incursa.Platform.Webhooks: Provider-agnostic webhook ingestion; authenticate/classify/enqueue/handle with retries.
@@ -33,7 +35,7 @@ Outbox, inbox, scheduler, fanout, and leases are built on a work-queue pattern: 
 - Incursa.Platform.Metrics.HttpServer: Self-hosted Prometheus scrape endpoint.
 - Incursa.Platform.Health: Standard health bucket contracts, registration helpers, and report formatting (`live`, `ready`, `dep`).
 - Incursa.Platform.Health.AspNetCore: Standardized ASP.NET Core health endpoint mapping for `/healthz`, `/readyz`, and `/depz`.
-- Incursa.Platform.HealthProbe: Deploy-time healthcheck CLI with standardized exit codes.
+- Incursa.Platform.HealthProbe: Deploy-time healthcheck CLI with standardized exit codes and dual execution modes (in-process or HTTP).
 
 ## Modularity and Engines
 
@@ -63,6 +65,9 @@ Cross-library interface quality specs and traceability live under `specs/librari
 
 Tests use xUnit v3, Shouldly, and NSubstitute. Integration tests rely on Docker SQL Server and Postgres via Testcontainers.
 Shared primitive conformance harnesses are in `tests/Incursa.Platform.TestUtilities/`.
+Storage substrate contract tests live in `tests/Incursa.Platform.Storage.Tests/`.
+Azure storage provider unit and opt-in Azurite integration tests live in `tests/Incursa.Integrations.Storage.Azure.Tests/`.
+Azurite-backed tests use `INCURSA_AZURE_STORAGE_CONNECTION_STRING`; optional table tests also require `INCURSA_AZURE_STORAGE_ENABLE_TABLES=true`.
 SQL Server scheduler/lease conformance entry suites:
 - `tests/Incursa.Platform.SqlServer.Tests/SqlSchedulerBehaviorTests.cs`
 - `tests/Incursa.Platform.SqlServer.Tests/SqlSystemLeaseBehaviorTests.cs`
@@ -88,6 +93,7 @@ Provider quality automation and baselines:
 
 Advanced patterns: multi-database routing, fanout/join coordination, and internal work-queue mechanics.
 CLI tools: `tools/migrations` ships `incursa-schema` for applying SQL Server/Postgres schema migrations from the command line.
+Health probe startup guidance: `docs/health-probe-dual-mode.md`.
 
 ## Repository Scope Governance
 

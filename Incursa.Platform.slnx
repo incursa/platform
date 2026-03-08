@@ -18,6 +18,10 @@
     <Project Path="src/Incursa.Platform.Postgres/Incursa.Platform.Postgres.csproj" />
     <Project Path="src/Incursa.Platform.SqlServer/Incursa.Platform.SqlServer.csproj" />
     <Project Path="src/Incursa.Platform.InMemory/Incursa.Platform.InMemory.csproj" />
+    <Project Path="src/Incursa.Integrations.Storage.Azure/Incursa.Integrations.Storage.Azure.csproj" />
+  </Folder>
+  <Folder Name="/storage/">
+    <Project Path="src/Incursa.Platform.Storage/Incursa.Platform.Storage.csproj" />
   </Folder>
   <Folder Name="/audit/">
     <Project Path="src/Incursa.Platform.Audit/Incursa.Platform.Audit.csproj" />
@@ -71,6 +75,8 @@
     <Project Path="tests/Incursa.Platform.Audit.Tests/Incursa.Platform.Audit.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Correlation.Tests/Incursa.Platform.Correlation.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Observability.Tests/Incursa.Platform.Observability.Tests.csproj" />
+    <Project Path="tests/Incursa.Platform.Storage.Tests/Incursa.Platform.Storage.Tests.csproj" />
+    <Project Path="tests/Incursa.Integrations.Storage.Azure.Tests/Incursa.Integrations.Storage.Azure.Tests.csproj" />
   </Folder>
   <Folder Name="/_src/">
     <File Path=".editorconfig" />
