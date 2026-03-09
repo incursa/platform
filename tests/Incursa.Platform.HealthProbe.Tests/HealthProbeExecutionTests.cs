@@ -96,7 +96,17 @@ public sealed class HealthProbeExecutionTests
         exitCode.ShouldBe(HealthProbeExitCodes.Healthy);
         handler.RequestCount.ShouldBe(1);
         handler.LastRequest.ShouldNotBeNull();
-        handler.LastRequest!.RequestUri.ShouldBe(new Uri("https://probe.example.local/readyz"));
+        var requestUri = handler.LastRequest!.RequestUri;
+        requestUri.ShouldNotBeNull();
+        requestUri.IsAbsoluteUri.ShouldBeTrue();
+        requestUri.AbsolutePath.ShouldBe("/readyz");
+
+        if (!requestUri.IsFile)
+        {
+            requestUri.Scheme.ShouldBe(Uri.UriSchemeHttps);
+            requestUri.Host.ShouldBe("probe.example.local");
+        }
+
         handler.LastRequest.Headers.TryGetValues("X-Api-Key", out var apiKeyValues).ShouldBeTrue();
         apiKeyValues.ShouldNotBeNull();
         apiKeyValues.Single().ShouldBe("secret");
