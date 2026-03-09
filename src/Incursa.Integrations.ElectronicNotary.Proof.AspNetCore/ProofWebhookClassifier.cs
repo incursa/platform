@@ -1,7 +1,7 @@
 namespace Incursa.Integrations.ElectronicNotary.Proof.AspNetCore;
 
 using System.Text.Json;
-using Bravellian.Platform.Webhooks;
+using Incursa.Platform.Webhooks;
 
 internal sealed class ProofWebhookClassifier : IWebhookClassifier
 {

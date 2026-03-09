@@ -1,7 +1,7 @@
 namespace Incursa.Integrations.ElectronicNotary.Proof.AspNetCore;
 
-using Bravellian.Platform.Webhooks;
-using Bravellian.Platform.Webhooks.AspNetCore;
+using Incursa.Platform.Webhooks;
+using Incursa.Platform.Webhooks.AspNetCore;
 using Incursa.Integrations.ElectronicNotary.Proof;
 using Incursa.Integrations.ElectronicNotary.Proof.AspNetCore.Persistence;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +38,7 @@ public static class ProofWebhookServiceCollectionExtensions
         services.TryAddEnumerable(ServiceDescriptor.Singleton<IProofWebhookHandler, NoOpProofWebhookHandler>());
         services.TryAddSingleton<IProofHealingTransactionRegistry, NoOpProofHealingTransactionRegistry>();
         services.AddSingleton<IWebhookProvider, ProofWebhookProvider>();
-        services.AddBravellianWebhooks();
+        services.AddIncursaWebhooks();
         services.AddProofHealing();
 
         return services;

@@ -1,6 +1,6 @@
 namespace Incursa.Integrations.ElectronicNotary.Proof.AspNetCore;
 
-using Bravellian.Platform.Webhooks;
+using Incursa.Platform.Webhooks;
 using Microsoft.AspNetCore.Http;
 
 internal static class ProofWebhookEndpoint

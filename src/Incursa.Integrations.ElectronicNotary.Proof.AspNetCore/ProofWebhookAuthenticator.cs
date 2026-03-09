@@ -2,7 +2,7 @@ namespace Incursa.Integrations.ElectronicNotary.Proof.AspNetCore;
 
 using System.Security.Cryptography;
 using System.Text;
-using Bravellian.Platform.Webhooks;
+using Incursa.Platform.Webhooks;
 using Incursa.Integrations.ElectronicNotary.Proof;
 using Microsoft.Extensions.Options;
 

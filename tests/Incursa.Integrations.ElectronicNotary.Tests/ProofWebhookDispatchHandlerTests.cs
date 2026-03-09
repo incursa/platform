@@ -1,11 +1,11 @@
 namespace Incursa.Integrations.ElectronicNotary.Tests;
 
 using System.Text;
-using Bravellian.Platform.Webhooks;
 using FluentAssertions;
 using Incursa.Integrations.ElectronicNotary.Proof.AspNetCore;
 using Incursa.Integrations.ElectronicNotary.Proof.Contracts;
 using Incursa.Integrations.ElectronicNotary.Proof.Types;
+using Incursa.Platform.Webhooks;
 
 [TestClass]
 public sealed class ProofWebhookDispatchHandlerTests

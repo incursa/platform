@@ -1,5 +1,4 @@
-// <copyright file="SanityTests.cs" company="Bravellian">
-// CONFIDENTIAL - Copyright (c) Bravellian. All rights reserved.
+// Copyright (c) Incursa
 // See NOTICE.md for full restrictions and usage terms.
 // </copyright>
 

@@ -1,6 +1,6 @@
 namespace Incursa.Integrations.ElectronicNotary.Proof.AspNetCore;
 
-using Bravellian.Platform.Webhooks;
+using Incursa.Platform.Webhooks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;

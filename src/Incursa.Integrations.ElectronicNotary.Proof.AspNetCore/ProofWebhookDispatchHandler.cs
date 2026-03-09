@@ -2,7 +2,7 @@ namespace Incursa.Integrations.ElectronicNotary.Proof.AspNetCore;
 
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
-using Bravellian.Platform.Webhooks;
+using Incursa.Platform.Webhooks;
 using Incursa.Integrations.ElectronicNotary.Proof.Contracts;
 
 internal sealed class ProofWebhookDispatchHandler : IWebhookHandler

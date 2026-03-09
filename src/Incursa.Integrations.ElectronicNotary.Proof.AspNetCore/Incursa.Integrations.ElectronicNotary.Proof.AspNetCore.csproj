@@ -3,13 +3,11 @@
   <ItemGroup>
     <ProjectReference Include="..\Incursa.Integrations.ElectronicNotary.Proof\Incursa.Integrations.ElectronicNotary.Proof.csproj" />
     <ProjectReference Include="..\Incursa.Integrations.ElectronicNotary.Abstractions\Incursa.Integrations.ElectronicNotary.Abstractions.csproj" />
+    <ProjectReference Include="..\Incursa.Platform.Webhooks\Incursa.Platform.Webhooks.csproj" />
+    <ProjectReference Include="..\Incursa.Platform.Webhooks.AspNetCore\Incursa.Platform.Webhooks.AspNetCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bravellian.Platform.Correlation" Version="2026.2.3.1131" />
-    <PackageReference Include="Bravellian.Platform.Observability" Version="2026.2.3.1131" />
-    <PackageReference Include="Bravellian.Platform.Webhooks" Version="2026.2.3.1131" />
-    <PackageReference Include="Bravellian.Platform.Webhooks.AspNetCore" Version="2026.2.3.1131" />
     <PackageReference Include="dbup-core" Version="6.0.15" />
     <PackageReference Include="dbup-postgresql" Version="6.1.5" />
     <PackageReference Include="dbup-sqlserver" Version="6.0.16" />
