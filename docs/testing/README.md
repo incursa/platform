@@ -2,6 +2,8 @@
 
 This folder describes the XML doc schema for MSTest, xUnit, and NUnit tests and hosts generated documentation.
 
+The `Test Documentation` GitHub workflow is intended as a PR/manual documentation aid. It publishes generated artifacts and PR summaries without acting as a main-branch merge gate while the broader test inventory continues to evolve.
+
 Workbench quality integration uses:
 
 - Authored intent contract: `docs/30-contracts/test-gate.contract.yaml`

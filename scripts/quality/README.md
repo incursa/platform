@@ -44,9 +44,12 @@
 
 ## Related Workflows
 - `.github/workflows/provider-fast-quality.yml`
+- PR/manual fast provider validation for traceability, coverage, and non-Docker tests
 - `.github/workflows/provider-integration.yml`
+- nightly/manual provider integration lane for Docker-backed SQL Server and Postgres validation
 - `.github/workflows/provider-mutation.yml`
 - `.github/workflows/library-fast-quality.yml`
+- PR/manual fast library validation for traceability, coverage, and non-Docker tests
 - `.github/workflows/workbench-quality.yml`
 
 ## Workbench Quality Workflow

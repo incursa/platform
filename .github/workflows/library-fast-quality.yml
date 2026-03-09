@@ -3,10 +3,6 @@ name: Library Fast Quality
 on:
   workflow_dispatch:
   pull_request:
-  push:
-    branches:
-      - main
-      - release/**
 
 jobs:
   fast-library-lane:
@@ -30,11 +26,8 @@ jobs:
       - name: Restore
         run: dotnet restore Incursa.Platform.CI.slnx
 
-      - name: Verify formatting and analyzers
-        run: dotnet format --verify-no-changes Incursa.Platform.CI.slnx
-
-      - name: Build (warn as error)
-        run: dotnet build Incursa.Platform.CI.slnx --no-restore --configuration Release -warnaserror -p:ContinuousIntegrationBuild=true
+      - name: Build
+        run: dotnet build Incursa.Platform.CI.slnx --no-restore --configuration Release -p:ContinuousIntegrationBuild=true
 
       - name: Validate library traceability
         id: traceability

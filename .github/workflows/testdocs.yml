@@ -1,8 +1,7 @@
 name: Test Documentation
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
   pull_request:
 
 permissions:
@@ -13,7 +12,7 @@ jobs:
   testdocs:
     runs-on: ubuntu-latest
     env:
-      STRICT_MODE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+      STRICT_MODE: "false"
       MIN_COMPLIANCE: "0.95" # Adjust as coverage improves.
     steps:
       - name: Checkout

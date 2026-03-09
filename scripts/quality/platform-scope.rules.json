@@ -1,7 +1,9 @@
 {
   "approvedProviderAdapters": [
     "Postmark",
-    "WorkOS"
+    "WorkOS",
+    "Cloudflare",
+    "ElectronicNotary"
   ],
   "disallowedProviderCandidates": [
     "Postmark",
