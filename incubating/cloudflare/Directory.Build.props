@@ -1,0 +1,34 @@
+<Project>
+  <!-- Single entry point for project-wide conventions. -->
+  <PropertyGroup>
+    <RepoRootPath>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))</RepoRootPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsAnalyzerOrGenerator>false</IsAnalyzerOrGenerator>
+    <IsAnalyzerOrGenerator Condition="'$(MSBuildProjectExtension)' == '.csproj' AND ($([System.String]::Copy('$(MSBuildProjectName)').StartsWith('Bravellian.Generators')) OR $([System.String]::Copy('$(MSBuildProjectName)').StartsWith('Bravellian.Analyzers')))">true</IsAnalyzerOrGenerator>
+
+    <IsTestProject>false</IsTestProject>
+    <IsTestProject Condition="'$(MSBuildProjectExtension)' == '.csproj' AND ($([System.String]::Copy('$(MSBuildProjectName)').EndsWith('Tests')) OR $([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.Tests')))">true</IsTestProject>
+
+    <!-- Optional overlay for third-party analyzers -->
+    <UseExtendedAnalyzers>false</UseExtendedAnalyzers>
+  </PropertyGroup>
+
+  <!-- Metadata first (all C# projects) -->
+  <Import Project="metadata.props" Condition="'$(MSBuildProjectExtension)' == '.csproj'" />
+
+  <!-- Analyzer/generator projects -->
+  <Import Project="analyzers.props" Condition="'$(IsAnalyzerOrGenerator)' == 'true'" />
+
+  <!-- Regular projects (includes tests) -->
+  <Import Project="common.props" Condition="'$(MSBuildProjectExtension)' == '.csproj' AND '$(IsAnalyzerOrGenerator)' == 'false'" />
+  <Import Project="tests.props" Condition="'$(MSBuildProjectExtension)' == '.csproj' AND '$(IsAnalyzerOrGenerator)' == 'false' AND '$(IsTestProject)' == 'true'" />
+  <Import Project="non-tests.props" Condition="'$(MSBuildProjectExtension)' == '.csproj' AND '$(IsAnalyzerOrGenerator)' == 'false' AND '$(IsTestProject)' == 'false'" />
+
+  <!-- Required strict validation -->
+  <Import Project="strongvalidation.core.props" Condition="'$(MSBuildProjectExtension)' == '.csproj' AND '$(IsAnalyzerOrGenerator)' == 'false'" />
+
+  <!-- Optional extended analyzer overlay -->
+  <Import Project="strongvalidation.extended.props" Condition="'$(MSBuildProjectExtension)' == '.csproj' AND '$(IsAnalyzerOrGenerator)' == 'false' AND '$(UseExtendedAnalyzers)' == 'true'" />
+</Project>

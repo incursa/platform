@@ -113,13 +113,33 @@ jobs:
         shell: pwsh
         run: pwsh -File scripts/quality/run-blocking-tests.ps1 -NoRestore -NoBuild
 
-      - name: Pack NuGet packages
-        run: dotnet pack Incursa.Platform.CI.slnx --configuration Release --output ./nupkgs -p:PackageVersion=${{ steps.git_version.outputs.semVer }}
+      - name: Fetch main for affected package diff
+        run: git fetch origin main --depth=1
+
+      - name: Determine merge base
+        id: diff_base
+        shell: pwsh
+        run: |
+          $mergeBase = (git merge-base origin/main HEAD).Trim()
+          if ([string]::IsNullOrWhiteSpace($mergeBase)) {
+            throw "Could not resolve merge base against origin/main."
+          }
+
+          echo "mergeBase=$mergeBase" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+      - name: Regenerate package catalog
+        shell: pwsh
+        run: pwsh -File eng/Generate-PackageCatalog.ps1
+
+      - name: Pack affected public packages
+        shell: pwsh
+        run: pwsh -File eng/Pack-PublicPackages.ps1 -Configuration Release -OutputPath ./nupkgs -PackageVersion ${{ steps.git_version.outputs.semVer }} -AffectedOnly -Base ${{ steps.diff_base.outputs.mergeBase }} -Head HEAD
 
       - name: Upload package artifact
         uses: actions/upload-artifact@v4
         with:
           name: nupkgs
+          if-no-files-found: warn
           path: ./nupkgs/*.nupkg
 
       - name: Upload blocking artifacts

@@ -1,0 +1,22 @@
+# Incursa WorkOS Integration
+
+Independent WorkOS integration repository for Incursa.
+
+Primary solution: `Incursa.Integrations.WorkOS.slnx`.
+
+## Modules
+
+- Abstractions
+- WorkOS provider package (runtime services, persistence adapters, host-agnostic app-auth contracts)
+- ASP.NET Core integration
+
+## Commands
+
+- Restore: `dotnet restore Incursa.Integrations.WorkOS.slnx`
+- Build: `dotnet build Incursa.Integrations.WorkOS.slnx -c Release`
+- Test: `dotnet test --solution Incursa.Integrations.WorkOS.slnx -c Release`
+- Pack: `pwsh -File scripts/pack.ps1`
+
+## Scope Governance
+
+Boundary policy: `docs/quality/repo-scope-boundary.md`.

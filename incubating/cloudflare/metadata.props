@@ -1,0 +1,21 @@
+<Project>
+  <!-- Metadata applied to ALL C# projects. -->
+  <PropertyGroup>
+    <Company>Incursa</Company>
+    <Authors>Incursa</Authors>
+    <Copyright>© Incursa. All rights reserved.</Copyright>
+
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <RepositoryUrl Condition="'$(RepositoryUrl)' == '' AND '$(GITHUB_SERVER_URL)' != '' AND '$(GITHUB_REPOSITORY)' != ''">$(GITHUB_SERVER_URL)/$(GITHUB_REPOSITORY)</RepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRelease>true</PublishRelease>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+    <PackageReference Include="DotNet.ReproducibleBuilds.Isolated" PrivateAssets="All" />
+  </ItemGroup>
+</Project>

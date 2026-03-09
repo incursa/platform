@@ -5,6 +5,11 @@
     <NoWarn>$(NoWarn);MA0051;CA1848;CA1873;NU5104</NoWarn>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(MSBuildProjectExtension)' == '.csproj'">
+    <!-- Packages are opt-in via explicit project metadata and the package catalog. -->
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
   <!-- Keep global Using directives -->
   <ItemGroup Condition="'$(MSBuildProjectExtension)' != '.dcproj' AND '$(MSBuildProjectExtension)' != '.sqlproj' AND $(MSBuildProjectName.StartsWith('Incursa.Generators')) == false AND $(MSBuildProjectName.StartsWith('Incursa.Database')) == false">
     <Using Include="System" />

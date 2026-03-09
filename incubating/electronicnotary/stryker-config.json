@@ -1,0 +1,25 @@
+{
+  "stryker-config": {
+    "project-file": "tests/Incursa.Integrations.ElectronicNotary.Tests/Incursa.Integrations.ElectronicNotary.Tests.csproj",
+    "reporters": [
+      "progress",
+      "html",
+      "json"
+    ],
+    "coverage-analysis": "perTest",
+    "mutation-level": "standard",
+    "disable-bail": true,
+    "thresholds": {
+      "high": 75,
+      "low": 60,
+      "break": 55
+    },
+    "mutate": [
+      "src/Incursa.Integrations.ElectronicNotary.Proof/ProofClient.cs",
+      "src/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore/ProofWebhookAuthenticator.cs",
+      "src/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore/ProofWebhookDispatchHandler.cs",
+      "src/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore/ProofHealingHostedService.cs",
+      "src/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore/Persistence/ProofHealingDatabaseStore.cs"
+    ]
+  }
+}

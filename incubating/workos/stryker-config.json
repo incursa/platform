@@ -1,0 +1,26 @@
+{
+  "$schema": "https://raw.githubusercontent.com/stryker-mutator/stryker-net/master/src/Stryker.CLI/Stryker.CLI/schema/stryker-config-schema.json",
+  "solution": "Incursa.Integrations.WorkOS.slnx",
+  "test-projects": [
+    "tests/Incursa.Integrations.WorkOS.Tests/Incursa.Integrations.WorkOS.Tests.csproj"
+  ],
+  "project": "src/Incursa.Integrations.WorkOS.Core/Incursa.Integrations.WorkOS.Core.csproj",
+  "mutate": [
+    "**/WorkOsApiKeyAuthenticator.cs",
+    "**/WorkOsManagementHttpClient.cs",
+    "**/WorkOsWebhookVerifier.cs",
+    "**/WorkOsWebhookProcessor.cs",
+    "**/WorkOsScopeAuthorizer.cs"
+  ],
+  "test-case-filter": "TestCategory!=Integration&TestCategory!=Fuzz",
+  "reporters": [
+    "json",
+    "html",
+    "progress"
+  ],
+  "thresholds": {
+    "high": 75,
+    "low": 60,
+    "break": 65
+  }
+}

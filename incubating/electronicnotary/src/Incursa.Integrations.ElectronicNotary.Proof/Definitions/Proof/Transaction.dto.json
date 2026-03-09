@@ -1,0 +1,45 @@
+{
+  "name": "Transaction",
+  "namespace": "Incursa.Integrations.ElectronicNotary.Proof.Contracts",
+  "documentation": "Represents a Proof transaction response payload.",
+  "properties": [
+    {
+      "name": "Id",
+      "type": "Incursa.Integrations.ElectronicNotary.Proof.Types.ProofTransactionId",
+      "jsonProperty": "id",
+      "documentation": "Gets the unique transaction identifier."
+    },
+    {
+      "name": "DetailedStatus",
+      "type": "Incursa.Integrations.ElectronicNotary.Proof.Types.ProofTransactionDetailedStatus",
+      "required": false,
+      "nullable": true,
+      "jsonProperty": "detailed_status",
+      "documentation": "Gets the detailed transaction lifecycle status."
+    },
+    {
+      "name": "Status",
+      "type": "string",
+      "required": false,
+      "nullable": true,
+      "jsonProperty": "status",
+      "documentation": "Gets the coarse transaction status string returned by Proof."
+    },
+    {
+      "name": "CreatedAt",
+      "type": "DateTimeOffset",
+      "required": false,
+      "nullable": true,
+      "jsonProperty": "created_at",
+      "documentation": "Gets when the transaction was created."
+    },
+    {
+      "name": "UpdatedAt",
+      "type": "DateTimeOffset",
+      "required": false,
+      "nullable": true,
+      "jsonProperty": "updated_at",
+      "documentation": "Gets when the transaction was last updated."
+    }
+  ]
+}

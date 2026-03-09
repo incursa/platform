@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <!-- Repository-specific package versions. -->
+  <ItemGroup>
+    <PackageVersion Include="Bravellian.Generators" Version="2025.12.15.1154" />
+    <PackageVersion Include="Bravellian.Platform.Correlation" Version="2026.2.3.1131" />
+    <PackageVersion Include="Bravellian.Platform.InMemory" Version="2026.2.3.1131" />
+    <PackageVersion Include="Bravellian.Platform.Observability" Version="2026.2.3.1131" />
+    <PackageVersion Include="Bravellian.Platform.Webhooks" Version="2026.2.3.1131" />
+    <PackageVersion Include="Bravellian.Platform.Webhooks.AspNetCore" Version="2026.2.3.1131" />
+    <PackageVersion Include="Bravellian.Types" Version="2025.12.23.1151" />
+    <PackageVersion Include="dbup-core" Version="6.0.15" />
+    <PackageVersion Include="dbup-postgresql" Version="6.1.5" />
+    <PackageVersion Include="dbup-sqlserver" Version="6.0.16" />
+    <PackageVersion Include="FluentAssertions" Version="8.8.0" />
+    <PackageVersion Include="FluentValidation" Version="11.12.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="10.0.2" />
+    <PackageVersion Include="Microsoft.Data.SqlClient" Version="6.1.4" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.2" />
+    <PackageVersion Include="Npgsql" Version="10.0.1" />
+  </ItemGroup>
+</Project>

@@ -1,116 +1,133 @@
-# Incursa Platform
+# Incursa Platform Monorepo
 
-> .NET 10 platform for SQL-backed distributed work-queue primitives (outbox/inbox, schedulers, leases) with claim-ack-abandon semantics and database-authoritative timing.
+`Incursa.Platform` is the public monorepo for reusable infrastructure/platform libraries. Keep public packages generic, capability-oriented, and explainable without private business or product context. If imported code is useful but not clearly ready for the public package surface, keep it in `incubating/` and mark it non-packable.
 
-Primary solutions: `Incursa.Platform.slnx` and `Incursa.Platform.CI.slnx`. Packages live under `src/`, tests under `tests/`, docs under `docs/`, and SQL Server schema artifacts under `src/Incursa.Platform.SqlServer/Database/`.
+## Repository map
 
-## Getting Started
-Install the core package and a provider (SqlServer or Postgres), register the scheduler/outbox/inbox services, and enable schema deployment if you want automatic table creation. Use discovery-based registration for multi-tenant scenarios.
+- `src/`: public source packages
+- `tests/`: unit/integration tests and smoke/sample apps
+- `tools/`: shipped analyzers and helper CLIs
+- `eng/`: package catalog and release helpers
+- `docs/`: architecture, quality policy, and package guidance
+- `incubating/`: preserved staging imports and non-public experiments
 
-## Core Patterns and APIs
+## Primary solutions
 
-Outbox, inbox, scheduler, fanout, and leases are built on a work-queue pattern: claim → ack → abandon, with database-authoritative timing. Use these primitives when you need durable background processing, predictable retries, and at-least-once delivery with idempotency guards.
+- `Incursa.Platform.slnx`: day-to-day solution for public packages, tests, tools, and monorepo docs
+- `Incursa.Platform.CI.slnx`: build/test/pack solution for the public surface
+- `Incursa.Platform.Incubating.slnx`: preserved solution for imported code that is intentionally outside default CI/release paths
 
-## Module Overview (When to use / How it works)
+## Public package families
 
-- Incursa.Platform: Core abstractions and orchestration for platform primitives; provider packages supply concrete storage and schema deployment.
-- Incursa.Platform.SqlServer / Postgres: Database-backed implementations of outbox/inbox/scheduler/fanout/leases/metrics with optional schema deployment.
-- Incursa.Platform.InMemory: In-memory implementations of outbox/inbox/scheduler/fanout/leases for testing and single-process development.
-- Incursa.Platform.Audit: Immutable audit timeline; write append-only events and query by anchors.
-- Incursa.Platform.Correlation: Correlation context and header propagation to stitch workflows end-to-end.
-- Incursa.Platform.Operations: Track long-running operations with progress, events, and stalled detection.
-- Incursa.Platform.Observability: Shared conventions and helpers (event names, tag keys, emitters) for audit/ops/metrics consistency.
-- Incursa.Platform.Idempotency: At-most-once semantics for a logical key with TryBegin/Complete/Fail.
-- Incursa.Platform.ExactlyOnce: Best-effort exactly-once execution workflow with idempotency and optional verification probes.
-- Incursa.Platform.Storage: Provider-agnostic storage substrate contracts for partition-aware records/lookups, payloads, work queues, and coordination.
-- Incursa.Integrations.Storage.Azure: Azure Tables/Blobs/Queues provider for `Incursa.Platform.Storage` with blob-lease coordination and Azure-specific DI/options.
-- Incursa.Platform.Email: Outbox-driven email delivery with idempotency, send policies, and provider adapters.
-- Incursa.Platform.Email.AspNetCore: ASP.NET Core DI helpers and hosted processing loop.
-- Incursa.Platform.Webhooks: Provider-agnostic webhook ingestion; authenticate/classify/enqueue/handle with retries.
-- Incursa.Platform.Webhooks.AspNetCore: ASP.NET Core endpoints and DI wiring for webhooks.
-- Incursa.Platform.Modularity: Engine-first module model for UI, webhooks, and background workflows.
-- Incursa.Platform.Modularity.AspNetCore: ASP.NET Core helpers for modularity hosting.
-- Incursa.Platform.Modularity.Razor: Razor UI module integration.
-- Incursa.Platform.Metrics.AspNetCore: ASP.NET Core OpenTelemetry/Prometheus exports.
-- Incursa.Platform.Metrics.HttpServer: Self-hosted Prometheus scrape endpoint.
-- Incursa.Platform.Health: Standard health bucket contracts, registration helpers, and report formatting (`live`, `ready`, `dep`).
-- Incursa.Platform.Health.AspNetCore: Standardized ASP.NET Core health endpoint mapping for `/healthz`, `/readyz`, and `/depz`.
-- Incursa.Platform.HealthProbe: Deploy-time healthcheck CLI with standardized exit codes and dual execution modes (in-process or HTTP).
+Core:
 
-## Modularity and Engines
+- `src/Incursa.Platform/`
 
-Modularity provides engine descriptors and manifests to expose UI/webhook/worker capabilities. Use it when you need discovery and composition of modules with structured inputs/outputs.
+Capabilities:
 
-## Observability and Operations
+- `src/Incursa.Platform.Audit/`
+- `src/Incursa.Platform.Correlation/`
+- `src/Incursa.Platform.Email/`
+- `src/Incursa.Platform.ExactlyOnce/`
+- `src/Incursa.Platform.Health/`
+- `src/Incursa.Platform.HealthProbe/`
+- `src/Incursa.Platform.Idempotency/`
+- `src/Incursa.Platform.Modularity/`
+- `src/Incursa.Platform.Observability/`
+- `src/Incursa.Platform.Operations/`
+- `src/Incursa.Platform.Storage/`
+- `src/Incursa.Platform.Webhooks/`
 
-Observability focuses on consistent audit/operation/metric conventions. Operations track long-running jobs and provide progress snapshots; audit records immutable timeline events.
+Providers:
 
-## Database and Schema
+- `src/Incursa.Platform.SqlServer/`
+- `src/Incursa.Platform.Postgres/`
+- `src/Incursa.Platform.InMemory/`
+- `src/Incursa.Platform.Email.SqlServer/`
+- `src/Incursa.Platform.Email.Postgres/`
+- `src/Incursa.Integrations.Storage.Azure/`
 
-SQL Server schema scripts live under `src/Incursa.Platform.SqlServer/Database/`. Providers can auto-deploy schema or use manual scripts. Multi-database patterns use discovery and routers to span tenant databases.
+Public integrations:
 
-## Specifications
+- `src/Incursa.Platform.Audit.WorkOS/`
+- `src/Incursa.Platform.Email.Postmark/`
 
-Outbox, inbox, and join coordination specifications define behavior requirements and guarantees.
-Provider-specific primitive specs and traceability live under `specs/providers/`:
-- `sqlserver-primitives-spec.md`
-- `postgres-primitives-spec.md`
-- `inmemory-primitives-spec.md`
-- `provider-conformance-matrix.md`
-Cross-library interface quality specs and traceability live under `specs/libraries/`:
-- `library-interface-quality-spec.md`
-- `library-conformance-matrix.md`
+Hosting adapters:
 
-## Testing
+- `src/Incursa.Platform.Email.AspNetCore/`
+- `src/Incursa.Platform.Health.AspNetCore/`
+- `src/Incursa.Platform.Metrics.AspNetCore/`
+- `src/Incursa.Platform.Metrics.HttpServer/`
+- `src/Incursa.Platform.Modularity.AspNetCore/`
+- `src/Incursa.Platform.Modularity.Razor/`
+- `src/Incursa.Platform.Webhooks.AspNetCore/`
 
-Tests use xUnit v3, Shouldly, and NSubstitute. Integration tests rely on Docker SQL Server and Postgres via Testcontainers.
-Shared primitive conformance harnesses are in `tests/Incursa.Platform.TestUtilities/`.
-Storage substrate contract tests live in `tests/Incursa.Platform.Storage.Tests/`.
-Azure storage provider unit and opt-in Azurite integration tests live in `tests/Incursa.Integrations.Storage.Azure.Tests/`.
-Azurite-backed tests use `INCURSA_AZURE_STORAGE_CONNECTION_STRING`; optional table tests also require `INCURSA_AZURE_STORAGE_ENABLE_TABLES=true`.
-SQL Server scheduler/lease conformance entry suites:
-- `tests/Incursa.Platform.SqlServer.Tests/SqlSchedulerBehaviorTests.cs`
-- `tests/Incursa.Platform.SqlServer.Tests/SqlSystemLeaseBehaviorTests.cs`
-Postgres scheduler/lease conformance entry suites:
-- `tests/Incursa.Platform.Postgres.Tests/PostgresSchedulerBehaviorTests.cs`
-- `tests/Incursa.Platform.Postgres.Tests/PostgresSystemLeaseBehaviorTests.cs`
-Provider quality automation and baselines:
-- Fast quality lane: `.github/workflows/provider-fast-quality.yml`
-- Docker-backed integration lane: `.github/workflows/provider-integration.yml`
-- Scoped mutation lane: `.github/workflows/provider-mutation.yml`
-- Cross-library fast lane: `.github/workflows/library-fast-quality.yml`
-- Commit CI lane topology: `.github/workflows/commit-ci.yml`
-- Main/release lane topology: `.github/workflows/main-release-ci-cd.yml`
-- Workbench quality workflow: `.github/workflows/workbench-quality.yml`
-- Docker image pre-pull script: `scripts/testing/prepull-test-images.ps1`
-- Coverage/mutation/traceability scripts: `scripts/quality/`
-- Lane runsettings: `runsettings/smoke.runsettings`, `runsettings/blocking.runsettings`, `runsettings/observational.runsettings`
-- Smoke lane runner: `scripts/quality/run-smoke-tests.ps1`
-- Smoke lane membership is explicit via `Category=Smoke` on the curated fast-lane tests.
-- Blocking lane runner: `scripts/quality/run-blocking-tests.ps1`
-- Observational lane runner: `scripts/quality/run-observational-tests.ps1`
-- Advisory evidence runner: `scripts/quality/run-advisory-quality-tests.ps1`
-- Full Workbench evidence workflow: `scripts/quality/run-quality-evidence.ps1`
-- Workbench authored testing-intent contract: `docs/30-contracts/test-gate.contract.yaml`
-- Workbench operating model: `docs/testing-operating-model.md`
-- Known-issue register: `docs/testing-known-issues.md`
-- Workbench agent skill: `.codex/skills/workbench-quality-evidence/SKILL.md`
-- Baseline report: `docs/quality/provider-quality-baseline.md`
-- Cross-library baseline report: `docs/quality/library-hardening-baseline.md`
-- In-memory portability checklist: `docs/quality/inmemory-portability-checklist.md`
+Tools:
 
-## Smoke Web App
+- `tools/observability/src/Incursa.Platform.Observability.Analyzers/`
+- `tools/testdocs/src/Incursa.TestDocs.Analyzers/`
+- `tools/testdocs/src/TestDocs.Cli/`
+- `tools/migrations/src/Incursa.Platform.SchemaMigrations.Cli/`
 
-`tests/Incursa.Platform.SmokeWeb/` hosts a minimal ASP.NET Core web UI to exercise outbox, inbox, scheduler, fanout, and leases. `tests/Incursa.Platform.Smoke.AppHost/` is an Aspire app host that starts SQL Server + Postgres containers and the smoke site. Configure provider via `Smoke:Provider` (SqlServer, Postgres, InMemory) and supply connection strings as needed.
+## Imported integration provenance
 
-## Optional
+- `C:\src\incursa\integrations-postmark` was merged into the public email family:
+  - `src/Incursa.Platform.Email/`
+  - `src/Incursa.Platform.Email.AspNetCore/`
+  - `src/Incursa.Platform.Email.Postmark/`
+  - `src/Incursa.Platform.Email.SqlServer/`
+  - `src/Incursa.Platform.Email.Postgres/`
+  - `tests/Incursa.Platform.Email.Tests/`
+- `C:\src\incursa\integrations-workos` is preserved under `incubating/workos/`; the public WorkOS slice remains `src/Incursa.Platform.Audit.WorkOS/`
+- `C:\src\incursa\integrations-cloudflare` is preserved under `incubating/cloudflare/`
+- `C:\src\incursa\integrations-electronicnotary` is preserved under `incubating/electronicnotary/`
 
-Advanced patterns: multi-database routing, fanout/join coordination, and internal work-queue mechanics.
-CLI tools: `tools/migrations` ships `incursa-schema` for applying SQL Server/Postgres schema migrations from the command line.
-Health probe startup guidance: `docs/health-probe-dual-mode.md`.
+See `docs/architecture/imported-integrations.md` for the boundary decisions and resulting landing zones.
 
-## Repository Scope Governance
+## Authoritative governance files
 
-Scope boundary policy lives at `docs/quality/repo-scope-boundary.md`.
-Automated guardrail runs via `scripts/quality/validate-platform-scope.ps1` using rules in `scripts/quality/platform-scope.rules.json`.
-CI enforcement workflow: `.github/workflows/scope-boundary.yml`.
+- `eng/package-catalog.json`: authoritative project classification and pack/publish allowlist
+- `eng/Generate-PackageCatalog.ps1`: regenerates the catalog from the repo tree
+- `eng/Resolve-AffectedProjects.ps1`: calculates changed projects and reverse dependencies
+- `eng/Pack-PublicPackages.ps1`: packs only catalog-allowlisted projects
+- `docs/architecture/monorepo.md`: package families, zones, and pack/release policy
+- `docs/quality/repo-scope-boundary.md`: what belongs in `src/` vs `incubating/`
+- `scripts/quality/platform-scope.rules.json`: scope guardrails for provider-token validation
+- `incubating/README.md`: staging rules for non-public code
+
+## Pack and release model
+
+- Default all projects to `IsPackable=false`
+- Default all builds to `GeneratePackageOnBuild=false`
+- Opt public packages and shipped tools in explicitly with `IsPackable=true`
+- Keep `incubating/` non-packable and non-publishable
+- Use `eng/package-catalog.json` as the allowlist
+- Commit CI packs affected public packages only
+- Main/release CI packs publishable packages, but nuget.org publication is manual
+
+## Orientation commands
+
+Run these first when you need a current repo map or diagnostics:
+
+```powershell
+pwsh -File .codex/skills/dotnet-repo-discovery/scripts/discover-dotnet-repo.ps1
+pwsh -File .codex/skills/dotnet-build-diagnostics/scripts/run-build-diagnostics.ps1
+pwsh -File .codex/skills/dotnet-format-analyzers/scripts/run-format-analyzers.ps1
+```
+
+When tests are involved:
+
+```bash
+bash .codex/skills/dotnet-test-triage/scripts/run-test-triage.sh
+```
+
+## Validation commands
+
+```powershell
+dotnet restore Incursa.Platform.CI.slnx
+dotnet tool restore
+dotnet build Incursa.Platform.CI.slnx -c Release
+dotnet test Incursa.Platform.CI.slnx -c Release
+pwsh -File eng/Generate-PackageCatalog.ps1
+pwsh -File eng/Pack-PublicPackages.ps1 -Configuration Release -OutputPath ./nupkgs
+```

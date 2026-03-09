@@ -1,0 +1,10 @@
+<Project>
+  <!-- Properties for analyzer/generator projects. -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>$(WarningsAsErrors);NU1605</WarningsAsErrors>
+    <NoWarn>$(NoWarn);CS8632</NoWarn>
+  </PropertyGroup>
+</Project>

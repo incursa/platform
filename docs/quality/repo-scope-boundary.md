@@ -1,37 +1,53 @@
 # Platform Scope Boundary
 
-This document defines what belongs in the `platform` repository versus provider-specific integration repositories.
+This repository is the public monorepo for the `Incursa.Platform` family. It is intentionally scoped to reusable infrastructure/platform packages, shipped tooling, and a small set of public provider adapters that fit the capability model of the repo.
 
-## Boundary Decision
+## Boundary decision
 
-- `platform` owns provider-agnostic distributed systems primitives and reusable framework contracts.
-- `integrations-*` repositories own provider-specific adapters and operational workflows.
-- External-provider integration packages are released independently from `platform`.
+- `src/` is for public, explainable packages that can stand on their own without private app/business/domain context.
+- `incubating/` is for preserved code that may still be valuable, but is not yet clean enough for the public release surface.
+- `tests/` and `tools/` stay inside the monorepo when they support the public packages and release process.
 
-## In Scope For `platform`
+## In scope for `src/`
 
-- Work-queue primitives (`outbox`, `inbox`, `scheduler`, `fanout`, `leases`) and core orchestration.
-- Storage providers (`SqlServer`, `Postgres`, `InMemory`) for core primitives.
-- Shared cross-cutting libraries (`Observability`, `Correlation`, `Audit`, `Operations`, `Idempotency`, `ExactlyOnce`).
-- Provider-agnostic integration frameworks such as `Email` and `Webhooks` contracts.
+- Core durable-processing primitives and abstractions.
+- Reusable cross-cutting capabilities such as audit, operations, observability, idempotency, exactly-once, correlation, webhooks, modularity, storage, and email.
+- Storage/database providers and provider adapters for those capabilities.
+- Capability-specific integrations for widely used public services when the boundary is clear.
+- Hosting adapters and ASP.NET Core integration packages.
+- Shipped analyzers and CLIs that support the public package family.
 
-## Out Of Scope For `platform`
+## Move to `incubating/` when any of these are true
 
-- New external provider product integrations (for example WorkOS, Cloudflare, electronic notary providers).
-- Provider-specific domain workflows that can evolve independently from platform primitives.
-- Provider libraries requiring separate release cadence or risk isolation.
+- The code mixes reusable infrastructure with product workflows, UX flows, policy logic, or tenant-specific conventions.
+- The public package boundary is still unclear.
+- The imported repository is a broad vendor bucket that should be split by capability before it ships.
+- The code is useful to preserve, but not yet appropriate to publish from this monorepo.
 
-## Rules For New Work
+## Current decisions
 
-1. New external provider integration goes to a dedicated `integrations-<provider>` repository by default.
-2. `platform` may only add provider-specific code when it is an approved reference adapter.
-3. Approved reference adapters must be explicitly listed in `scripts/quality/platform-scope.rules.json`.
-4. Any boundary exception requires updating this doc and the scope rules in the same PR.
+Public provider/service adapters allowed in `src/`:
 
-## Current Portfolio Mapping
+- `Incursa.Platform.Audit.WorkOS`
+- `Incursa.Platform.Email.Postmark`
+- `Incursa.Integrations.Storage.Azure`
 
-- `platform`: platform primitives and reusable contracts.
-- `integrations-workos`: WorkOS auth, webhook, and management integration surface.
-- `integrations-cloudflare`: Cloudflare KV/R2/custom-hostname/load-balancer integrations.
-- `integrations-electronicnotary`: electronic notary domain contracts and proof integration.
-- `integrations-postmark`: authoritative home for Postmark-specific integration packages.
+Preserved in `incubating/` until further split/cleanup:
+
+- `incubating/cloudflare/`
+- `incubating/workos/` outside the existing audit sink slice
+- `incubating/electronicnotary/`
+
+## Release guardrails
+
+- All projects default to `IsPackable=false` and `GeneratePackageOnBuild=false`.
+- Only catalog-allowlisted projects in `eng/package-catalog.json` can be packed or published.
+- `incubating/` projects are non-packable and non-publishable by default.
+- Commit CI packs only affected public packages.
+- Main/release CI may pack publishable packages, but public publishing is manual.
+
+## Scope enforcement
+
+- Token-based guardrails live in `scripts/quality/platform-scope.rules.json`.
+- Validation runs through `scripts/quality/validate-platform-scope.ps1`.
+- Imported repo provenance and landing zones are documented in `docs/architecture/imported-integrations.md`.

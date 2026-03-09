@@ -1,0 +1,23 @@
+# Incursa Integrations Cloudflare
+
+Independent Cloudflare integration repository for Incursa applications.
+
+Primary solution: `Incursa.Integrations.Cloudflare.slnx`.
+
+## Capabilities
+
+- Cloudflare R2 object storage helpers
+- Cloudflare KV helpers
+- SSL for SaaS custom hostname onboarding/sync services
+- Cloudflare load-balancer monitor/pool/load-balancer clients
+
+## Commands
+
+- Restore: `dotnet restore Incursa.Integrations.Cloudflare.slnx`
+- Build: `dotnet build Incursa.Integrations.Cloudflare.slnx -c Release`
+- Test: `dotnet test --solution Incursa.Integrations.Cloudflare.slnx -c Release`
+- Pack: `pwsh -File scripts/pack.ps1`
+
+## Scope Governance
+
+Boundary policy: `docs/quality/repo-scope-boundary.md`.

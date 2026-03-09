@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <Description>ASP.NET Core hosting glue for Incursa WorkOS integrations, including middleware, endpoints, and app-auth HTTP wiring.</Description>
+    <PackageTags>incursa;workos;aspnetcore;middleware;webhooks;authentication;authorization;dotnet</PackageTags>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Incursa.Integrations.WorkOS.Abstractions\Incursa.Integrations.WorkOS.Abstractions.csproj" />
+    <ProjectReference Include="..\Incursa.Integrations.WorkOS\Incursa.Integrations.WorkOS.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Incursa.Integrations.WorkOS.AppAuth.AspNetCore\**\*.cs" Exclude="..\Incursa.Integrations.WorkOS.AppAuth.AspNetCore\bin\**\*;..\Incursa.Integrations.WorkOS.AppAuth.AspNetCore\obj\**\*" LinkBase="AppAuth.AspNetCore" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
+  </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PACKAGE_README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+</Project>

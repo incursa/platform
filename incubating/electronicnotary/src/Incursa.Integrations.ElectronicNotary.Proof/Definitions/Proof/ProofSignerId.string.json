@@ -1,0 +1,6 @@
+{
+  "name": "ProofSignerId",
+  "namespace": "Incursa.Integrations.ElectronicNotary.Proof.Types",
+  "documentation": "Represents a Proof signer identifier (for example, oc_xxx123).",
+  "regex": "^oc_[A-Za-z0-9]+$"
+}

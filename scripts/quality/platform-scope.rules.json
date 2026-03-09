@@ -1,5 +1,8 @@
 {
-  "approvedProviderAdapters": [],
+  "approvedProviderAdapters": [
+    "Postmark",
+    "WorkOS"
+  ],
   "disallowedProviderCandidates": [
     "Postmark",
     "WorkOS",

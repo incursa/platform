@@ -1,0 +1,36 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/incubating/cloudflare/src/">
+    <Project Path="incubating/cloudflare/src/Incursa.Integrations.Cloudflare/Incursa.Integrations.Cloudflare.csproj" />
+    <Project Path="incubating/cloudflare/src/Incursa.Integrations.Cloudflare.KvProbe/Incursa.Integrations.Cloudflare.KvProbe.csproj" />
+  </Folder>
+  <Folder Name="/incubating/cloudflare/tests/">
+    <Project Path="incubating/cloudflare/tests/Incursa.Integrations.Cloudflare.IntegrationTests/Incursa.Integrations.Cloudflare.IntegrationTests.csproj" />
+    <Project Path="incubating/cloudflare/tests/Incursa.Integrations.Cloudflare.Tests/Incursa.Integrations.Cloudflare.Tests.csproj" />
+  </Folder>
+  <Folder Name="/incubating/workos/src/">
+    <Project Path="incubating/workos/src/Incursa.Integrations.WorkOS/Incursa.Integrations.WorkOS.csproj" />
+    <Project Path="incubating/workos/src/Incursa.Integrations.WorkOS.Abstractions/Incursa.Integrations.WorkOS.Abstractions.csproj" />
+    <Project Path="incubating/workos/src/Incursa.Integrations.WorkOS.AspNetCore/Incursa.Integrations.WorkOS.AspNetCore.csproj" />
+  </Folder>
+  <Folder Name="/incubating/workos/tests/">
+    <Project Path="incubating/workos/tests/Incursa.Integrations.WorkOS.Tests/Incursa.Integrations.WorkOS.Tests.csproj" />
+  </Folder>
+  <Folder Name="/incubating/electronicnotary/src/">
+    <Project Path="incubating/electronicnotary/src/Incursa.Integrations.ElectronicNotary/Incursa.Integrations.ElectronicNotary.csproj" />
+    <Project Path="incubating/electronicnotary/src/Incursa.Integrations.ElectronicNotary.Abstractions/Incursa.Integrations.ElectronicNotary.Abstractions.csproj" />
+    <Project Path="incubating/electronicnotary/src/Incursa.Integrations.ElectronicNotary.Proof/Incursa.Integrations.ElectronicNotary.Proof.csproj" />
+    <Project Path="incubating/electronicnotary/src/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore.csproj" />
+  </Folder>
+  <Folder Name="/incubating/electronicnotary/tests/">
+    <Project Path="incubating/electronicnotary/tests/Incursa.Integrations.ElectronicNotary.Tests/Incursa.Integrations.ElectronicNotary.Tests.csproj" />
+  </Folder>
+  <Folder Name="/repo/">
+    <File Path="incubating/README.md" />
+    <File Path="docs/architecture/imported-integrations.md" />
+  </Folder>
+</Solution>

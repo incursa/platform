@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Workbench Config",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["paths", "ids", "git", "github"],
+  "properties": {
+    "paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["docsRoot", "workRoot", "itemsDir", "doneDir", "templatesDir", "workboardFile"],
+      "properties": {
+        "docsRoot": { "type": "string", "minLength": 1 },
+        "workRoot": { "type": "string", "minLength": 1 },
+        "itemsDir": { "type": "string", "minLength": 1 },
+        "doneDir": { "type": "string", "minLength": 1 },
+        "templatesDir": { "type": "string", "minLength": 1 },
+        "workboardFile": { "type": "string", "minLength": 1 }
+      }
+    },
+    "ids": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "prefixes"],
+      "properties": {
+        "width": { "type": "integer", "minimum": 1, "maximum": 8 },
+        "prefixes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["bug", "task", "spike"],
+          "properties": {
+            "bug": { "type": "string", "minLength": 1 },
+            "task": { "type": "string", "minLength": 1 },
+            "spike": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "git": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["branchPattern", "commitMessagePattern", "defaultBaseBranch", "requireCleanWorkingTree"],
+      "properties": {
+        "branchPattern": { "type": "string", "minLength": 1 },
+        "commitMessagePattern": { "type": "string", "minLength": 1 },
+        "defaultBaseBranch": { "type": "string", "minLength": 1 },
+        "requireCleanWorkingTree": { "type": "boolean" }
+      }
+    },
+    "github": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "defaultDraft"],
+      "properties": {
+        "provider": { "type": "string", "enum": ["octokit", "gh"] },
+        "defaultDraft": { "type": "boolean" },
+        "host": { "type": "string", "minLength": 1 },
+        "owner": { "type": "string", "minLength": 1 },
+        "repository": { "type": "string", "minLength": 1 }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "linkExclude": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "docExclude": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "tui": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "theme": { "type": "string", "minLength": 1 },
+        "useEmoji": { "type": "boolean" },
+        "autoRefreshSeconds": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

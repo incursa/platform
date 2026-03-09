@@ -1,0 +1,15 @@
+<Project Sdk="MSTest.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Incursa.Integrations.ElectronicNotary\Incursa.Integrations.ElectronicNotary.csproj" />
+    <ProjectReference Include="..\..\src\Incursa.Integrations.ElectronicNotary.Proof\Incursa.Integrations.ElectronicNotary.Proof.csproj" />
+    <ProjectReference Include="..\..\src\Incursa.Integrations.ElectronicNotary.Proof.AspNetCore\Incursa.Integrations.ElectronicNotary.Proof.AspNetCore.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Bravellian.Platform.InMemory" />
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" />
+  </ItemGroup>
+</Project>

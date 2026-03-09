@@ -1,0 +1,5 @@
+<Project>
+  <!-- Backward-compat shim: prefer strongvalidation.core.props + strongvalidation.extended.props. -->
+  <Import Project="strongvalidation.core.props" />
+  <Import Project="strongvalidation.extended.props" Condition="'$(UseExtendedAnalyzers)' == 'true'" />
+</Project>

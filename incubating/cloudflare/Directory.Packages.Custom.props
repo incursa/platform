@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <!-- Repository-specific package versions. This file is intentionally not managed by template sync. -->
+  <ItemGroup>
+    <!-- Example:
+    <PackageVersion Include="Some.Package" Version="1.2.3" />
+    -->
+  </ItemGroup>
+</Project>

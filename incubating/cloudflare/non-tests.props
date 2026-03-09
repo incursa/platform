@@ -1,0 +1,28 @@
+<Project>
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId Condition="'$(PackageId)' == ''">$(MSBuildProjectName)</PackageId>
+    <VersionPrefix Condition="'$(VersionPrefix)' == ''">0.1.0</VersionPrefix>
+    <Version Condition="'$(Version)' == '' AND '$(PackageVersion)' == ''">$(VersionPrefix)</Version>
+    <PackageIcon Condition="'$(PackageIcon)' == ''">nuget_icon.png</PackageIcon>
+    <PackageReadmeFile Condition="'$(PackageReadmeFile)' == ''">PACKAGE_README.md</PackageReadmeFile>
+
+    <!-- Emit XML docs for consumers, but don't require doc comments everywhere. -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(IsPackable)' == 'true'">
+    <None Include="$(RepoRootPath)assets\nuget_icon.png" Pack="true" PackagePath="\" Visible="false" Link="nuget_icon.png" />
+    <None Include="$(RepoRootPath)PACKAGE_README.md" Pack="true" PackagePath="\" Visible="false" Link="PACKAGE_README.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Enables testing internals without making them public. -->
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>$(MSBuildProjectName).Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+</Project>

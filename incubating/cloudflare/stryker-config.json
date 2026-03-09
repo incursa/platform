@@ -1,0 +1,29 @@
+{
+  "$schema": "https://raw.githubusercontent.com/stryker-mutator/stryker-net/master/src/Stryker.CLI/Stryker.CLI/schema/stryker-config.schema.json",
+  "stryker-config": {
+    "solution": "Incursa.Integrations.Cloudflare.slnx",
+    "project": "src/Incursa.Integrations.Cloudflare/Incursa.Integrations.Cloudflare.csproj",
+    "test-projects": [
+      "tests/Incursa.Integrations.Cloudflare.Tests/Incursa.Integrations.Cloudflare.Tests.csproj"
+    ],
+    "mutate": [
+      "**/Internal/CloudflareApiTransport.cs",
+      "**/Clients/CloudflareKvClient.cs",
+      "**/Storage/CloudflareR2BlobStore.cs",
+      "**/Services/CloudflareDomainOnboardingService.cs",
+      "**/Storage/InMemoryCloudflareKvStore.cs",
+      "**/Storage/InMemoryCloudflareR2BlobStore.cs",
+      "**/DependencyInjection/CloudflareServiceCollectionExtensions.cs"
+    ],
+    "thresholds": {
+      "high": 80,
+      "low": 65,
+      "break": 65
+    },
+    "reporters": [
+      "html",
+      "progress",
+      "json"
+    ]
+  }
+}

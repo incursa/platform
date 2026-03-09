@@ -1,0 +1,70 @@
+default_language_version:
+  python: python3
+
+exclude: |
+  (?x)(
+    ^artifacts/|
+    ^nupkgs/|
+    ^docs/tabler/|
+    ^src/external/
+  )
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        files: "(?i)\\.(md|markdown|mdx|ya?ml|json|ps1|sh|cmd|bat|csproj|slnx?|props|targets|config|editorconfig|txt)$"
+        exclude: "^src/.+\\.(json|md)$"
+      - id: end-of-file-fixer
+        files: "(?i)\\.(md|markdown|mdx|ya?ml|json|ps1|sh|cmd|bat|csproj|slnx?|props|targets|config|editorconfig|txt)$"
+        exclude: "^src/.+\\.(json|md)$"
+      - id: check-yaml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-added-large-files
+        args: ["--maxkb=5120"]
+      - id: detect-private-key
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+        files: "(?i)\\.(cs|csproj|sln|slnx|props|targets|md|markdown|mdx|ya?ml|json|ps1|sh|cmd|bat|config|editorconfig|txt)$"
+      - id: check-xml
+
+  - repo: local
+    hooks:
+      - id: dotnet-format-apply
+        name: dotnet format (whitespace+style+analyzers)
+        language: system
+        entry: >
+          pwsh -NoProfile -Command
+          "$sln = Get-ChildItem -Path . -Filter *.slnx -File | Select-Object -First 1;
+          if (-not $sln) { $sln = Get-ChildItem -Path . -Filter *.sln -File | Select-Object -First 1 };
+          if (-not $sln) { throw 'No solution file found at repo root.' };
+          dotnet format $sln.Name"
+        pass_filenames: false
+        stages: [manual]
+      - id: dotnet-build
+        name: dotnet build
+        language: system
+        entry: >
+          pwsh -NoProfile -Command
+          "$sln = Get-ChildItem -Path . -Filter *.slnx -File | Select-Object -First 1;
+          if (-not $sln) { $sln = Get-ChildItem -Path . -Filter *.sln -File | Select-Object -First 1 };
+          if (-not $sln) { throw 'No solution file found at repo root.' };
+          dotnet build $sln.Name -c Release"
+        stages: [manual]
+        files: "(?i)\\.(cs|csproj|sln|slnx|props|targets)$"
+        pass_filenames: false
+      - id: dotnet-test
+        name: dotnet test
+        language: system
+        entry: >
+          pwsh -NoProfile -Command
+          "$sln = Get-ChildItem -Path . -Filter *.slnx -File | Select-Object -First 1;
+          if (-not $sln) { $sln = Get-ChildItem -Path . -Filter *.sln -File | Select-Object -First 1 };
+          if (-not $sln) { throw 'No solution file found at repo root.' };
+          dotnet test $sln.Name -c Release --no-build --filter 'Category!=Integration&RequiresDocker!=true'"
+        stages: [manual]
+        files: "(?i)\\.(cs|csproj|sln|slnx|props|targets)$"
+        pass_filenames: false

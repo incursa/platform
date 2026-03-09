@@ -1,0 +1,18 @@
+{
+  "name": "ProofDocumentRequirement",
+  "namespace": "Incursa.Integrations.ElectronicNotary.Proof.Types",
+  "values": {
+    "Notarization": {
+      "value": "notarization",
+      "documentation": "Requires notarization for the document."
+    },
+    "Esign": {
+      "value": "esign",
+      "documentation": "Requires electronic signature for the document."
+    },
+    "IdentityConfirmation": {
+      "value": "identity_confirmation",
+      "documentation": "Requires identity confirmation for the document."
+    }
+  }
+}

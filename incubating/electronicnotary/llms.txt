@@ -1,0 +1,23 @@
+# Incursa Integrations ElectronicNotary
+
+Independent electronic notary integration repository for Incursa applications.
+
+Primary solution: `Incursa.Integrations.ElectronicNotary.slnx`.
+
+## Packages
+
+- `Incursa.Integrations.ElectronicNotary.Abstractions`
+- `Incursa.Integrations.ElectronicNotary`
+- `Incursa.Integrations.ElectronicNotary.Proof`
+- `Incursa.Integrations.ElectronicNotary.Proof.AspNetCore`
+
+## Commands
+
+- Restore: `dotnet restore Incursa.Integrations.ElectronicNotary.slnx`
+- Build: `dotnet build Incursa.Integrations.ElectronicNotary.slnx -c Release`
+- Test: `dotnet test --solution Incursa.Integrations.ElectronicNotary.slnx -c Release`
+- Pack: `pwsh -File scripts/pack.ps1`
+
+## Scope Governance
+
+Boundary policy: `docs/quality/repo-scope-boundary.md`.

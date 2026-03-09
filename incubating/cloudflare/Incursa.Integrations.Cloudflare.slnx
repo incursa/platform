@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Incursa.Integrations.Cloudflare/Incursa.Integrations.Cloudflare.csproj" />
+    <Project Path="src/Incursa.Integrations.Cloudflare.KvProbe/Incursa.Integrations.Cloudflare.KvProbe.csproj" />
+  </Folder>
+
+  <Folder Name="/tests/">
+    <Project Path="tests/Incursa.Integrations.Cloudflare.Tests/Incursa.Integrations.Cloudflare.Tests.csproj" />
+    <Project Path="tests/Incursa.Integrations.Cloudflare.IntegrationTests/Incursa.Integrations.Cloudflare.IntegrationTests.csproj" />
+  </Folder>
+</Solution>

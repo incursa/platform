@@ -1,0 +1,7 @@
+<Project Sdk="MSTest.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Incursa.Integrations.WorkOS.Abstractions\Incursa.Integrations.WorkOS.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\Incursa.Integrations.WorkOS.AspNetCore\Incursa.Integrations.WorkOS.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\src\Incursa.Integrations.WorkOS\Incursa.Integrations.WorkOS.csproj" />
+  </ItemGroup>
+</Project>

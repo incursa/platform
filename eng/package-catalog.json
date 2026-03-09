@@ -1,0 +1,888 @@
+{
+  "generatedAt": "2026-03-08T20:56:33.5051739-06:00",
+  "generatedBy": "eng/Generate-PackageCatalog.ps1",
+  "projects": [
+    {
+      "projectPath": "incubating/cloudflare/src/Incursa.Integrations.Cloudflare.KvProbe/Incursa.Integrations.Cloudflare.KvProbe.csproj",
+      "packageId": "Incursa.Integrations.Cloudflare.KvProbe",
+      "zone": "incubating",
+      "category": "smoke",
+      "classification": "smoke/sample",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-cloudflare"
+      },
+      "notes": "Provider-specific probe/sample kept with the incubating Cloudflare import."
+    },
+    {
+      "projectPath": "incubating/cloudflare/src/Incursa.Integrations.Cloudflare/Incursa.Integrations.Cloudflare.csproj",
+      "packageId": "Incursa.Integrations.Cloudflare",
+      "zone": "incubating",
+      "category": "incubating",
+      "classification": "incubating",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-cloudflare"
+      },
+      "notes": "Mixed Cloudflare vendor surface spanning storage, custom hostnames, and load-balancing; retained in incubating until split by capability."
+    },
+    {
+      "projectPath": "incubating/cloudflare/tests/Incursa.Integrations.Cloudflare.IntegrationTests/Incursa.Integrations.Cloudflare.IntegrationTests.csproj",
+      "packageId": "Incursa.Integrations.Cloudflare.IntegrationTests",
+      "zone": "incubating",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-cloudflare"
+      },
+      "notes": "Tests preserved with the incubating import."
+    },
+    {
+      "projectPath": "incubating/cloudflare/tests/Incursa.Integrations.Cloudflare.Tests/Incursa.Integrations.Cloudflare.Tests.csproj",
+      "packageId": "Incursa.Integrations.Cloudflare.Tests",
+      "zone": "incubating",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-cloudflare"
+      },
+      "notes": "Tests preserved with the incubating import."
+    },
+    {
+      "projectPath": "incubating/electronicnotary/src/Incursa.Integrations.ElectronicNotary.Abstractions/Incursa.Integrations.ElectronicNotary.Abstractions.csproj",
+      "packageId": "Incursa.Integrations.ElectronicNotary.Abstractions",
+      "zone": "incubating",
+      "category": "incubating",
+      "classification": "incubating",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-electronicnotary"
+      },
+      "notes": "Electronic notary provider code retained in incubating because the current surface mixes provider APIs with workflow/healing behavior."
+    },
+    {
+      "projectPath": "incubating/electronicnotary/src/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore.csproj",
+      "packageId": "Incursa.Integrations.ElectronicNotary.Proof.AspNetCore",
+      "zone": "incubating",
+      "category": "incubating",
+      "classification": "incubating",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-electronicnotary"
+      },
+      "notes": "Electronic notary provider code retained in incubating because the current surface mixes provider APIs with workflow/healing behavior."
+    },
+    {
+      "projectPath": "incubating/electronicnotary/src/Incursa.Integrations.ElectronicNotary.Proof/Incursa.Integrations.ElectronicNotary.Proof.csproj",
+      "packageId": "Incursa.Integrations.ElectronicNotary.Proof",
+      "zone": "incubating",
+      "category": "incubating",
+      "classification": "incubating",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-electronicnotary"
+      },
+      "notes": "Electronic notary provider code retained in incubating because the current surface mixes provider APIs with workflow/healing behavior."
+    },
+    {
+      "projectPath": "incubating/electronicnotary/src/Incursa.Integrations.ElectronicNotary/Incursa.Integrations.ElectronicNotary.csproj",
+      "packageId": "Incursa.Integrations.ElectronicNotary",
+      "zone": "incubating",
+      "category": "incubating",
+      "classification": "incubating",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-electronicnotary"
+      },
+      "notes": "Electronic notary provider code retained in incubating because the current surface mixes provider APIs with workflow/healing behavior."
+    },
+    {
+      "projectPath": "incubating/electronicnotary/tests/Incursa.Integrations.ElectronicNotary.Tests/Incursa.Integrations.ElectronicNotary.Tests.csproj",
+      "packageId": "Incursa.Integrations.ElectronicNotary.Tests",
+      "zone": "incubating",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-electronicnotary"
+      },
+      "notes": "Tests preserved with the incubating import."
+    },
+    {
+      "projectPath": "incubating/workos/src/Incursa.Integrations.WorkOS.Abstractions/Incursa.Integrations.WorkOS.Abstractions.csproj",
+      "packageId": "Incursa.Integrations.WorkOS.Abstractions",
+      "zone": "incubating",
+      "category": "incubating",
+      "classification": "incubating",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-workos"
+      },
+      "notes": "Broad WorkOS auth, webhook, management, and widget surface retained in incubating until it is split into capability-specific packages."
+    },
+    {
+      "projectPath": "incubating/workos/src/Incursa.Integrations.WorkOS.AspNetCore/Incursa.Integrations.WorkOS.AspNetCore.csproj",
+      "packageId": "Incursa.Integrations.WorkOS.AspNetCore",
+      "zone": "incubating",
+      "category": "incubating",
+      "classification": "incubating",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-workos"
+      },
+      "notes": "Broad WorkOS auth, webhook, management, and widget surface retained in incubating until it is split into capability-specific packages."
+    },
+    {
+      "projectPath": "incubating/workos/src/Incursa.Integrations.WorkOS/Incursa.Integrations.WorkOS.csproj",
+      "packageId": "Incursa.Integrations.WorkOS",
+      "zone": "incubating",
+      "category": "incubating",
+      "classification": "incubating",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-workos"
+      },
+      "notes": "Broad WorkOS auth, webhook, management, and widget surface retained in incubating until it is split into capability-specific packages."
+    },
+    {
+      "projectPath": "incubating/workos/tests/Incursa.Integrations.WorkOS.Tests/Incursa.Integrations.WorkOS.Tests.csproj",
+      "packageId": "Incursa.Integrations.WorkOS.Tests",
+      "zone": "incubating",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-workos"
+      },
+      "notes": "Tests preserved with the incubating import."
+    },
+    {
+      "projectPath": "src/Incursa.Integrations.Storage.Azure/Incursa.Integrations.Storage.Azure.csproj",
+      "packageId": "Incursa.Integrations.Storage.Azure",
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Public Azure storage provider adapter for Incursa.Platform.Storage."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Audit.WorkOS/Incursa.Platform.Audit.WorkOS.csproj",
+      "packageId": "Incursa.Platform.Audit.WorkOS",
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Capability-specific WorkOS audit sink package retained in the public source surface."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Audit/Incursa.Platform.Audit.csproj",
+      "packageId": "Incursa.Platform.Audit",
+      "zone": "src",
+      "category": "capabilities",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Public capability package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Correlation/Incursa.Platform.Correlation.csproj",
+      "packageId": "Incursa.Platform.Correlation",
+      "zone": "src",
+      "category": "capabilities",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Public capability package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Email.AspNetCore/Incursa.Platform.Email.AspNetCore.csproj",
+      "packageId": "Incursa.Platform.Email.AspNetCore",
+      "zone": "src",
+      "category": "hosting",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-postmark"
+      },
+      "notes": "Hosting adapter for the public email capability family imported from the Postmark/email integration repo."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Email.Postgres/Incursa.Platform.Email.Postgres.csproj",
+      "packageId": "Incursa.Platform.Email.Postgres",
+      "zone": "src",
+      "category": "providers",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-postmark"
+      },
+      "notes": "Database provider adapter for the public email capability family imported from the Postmark/email integration repo."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Email.Postmark/Incursa.Platform.Email.Postmark.csproj",
+      "packageId": "Incursa.Platform.Email.Postmark",
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-postmark"
+      },
+      "notes": "Postmark provider adapter imported from the Postmark/email integration repo and normalized into the platform monorepo."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Email.SqlServer/Incursa.Platform.Email.SqlServer.csproj",
+      "packageId": "Incursa.Platform.Email.SqlServer",
+      "zone": "src",
+      "category": "providers",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-postmark"
+      },
+      "notes": "Database provider adapter for the public email capability family imported from the Postmark/email integration repo."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Email/Incursa.Platform.Email.csproj",
+      "packageId": "Incursa.Platform.Email",
+      "zone": "src",
+      "category": "capabilities",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-postmark"
+      },
+      "notes": "Provider-agnostic email capability package imported from the Postmark/email integration repo."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.ExactlyOnce/Incursa.Platform.ExactlyOnce.csproj",
+      "packageId": "Incursa.Platform.ExactlyOnce",
+      "zone": "src",
+      "category": "capabilities",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Public capability package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Health.AspNetCore/Incursa.Platform.Health.AspNetCore.csproj",
+      "packageId": "Incursa.Platform.Health.AspNetCore",
+      "zone": "src",
+      "category": "hosting",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Hosting adapter or ASP.NET Core integration package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Health/Incursa.Platform.Health.csproj",
+      "packageId": "Incursa.Platform.Health",
+      "zone": "src",
+      "category": "capabilities",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Public capability package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.HealthProbe/Incursa.Platform.HealthProbe.csproj",
+      "packageId": "Incursa.Platform.HealthProbe",
+      "zone": "src",
+      "category": "capabilities",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Public capability package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Idempotency/Incursa.Platform.Idempotency.csproj",
+      "packageId": "Incursa.Platform.Idempotency",
+      "zone": "src",
+      "category": "capabilities",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Public capability package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.InMemory/Incursa.Platform.InMemory.csproj",
+      "packageId": "Incursa.Platform.InMemory",
+      "zone": "src",
+      "category": "providers",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Provider implementation package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Metrics.AspNetCore/Incursa.Platform.Metrics.AspNetCore.csproj",
+      "packageId": "Incursa.Platform.Metrics.AspNetCore",
+      "zone": "src",
+      "category": "hosting",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Hosting adapter or ASP.NET Core integration package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Metrics.HttpServer/Incursa.Platform.Metrics.HttpServer.csproj",
+      "packageId": "Incursa.Platform.Metrics.HttpServer",
+      "zone": "src",
+      "category": "hosting",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Hosting adapter or ASP.NET Core integration package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Modularity.AspNetCore/Incursa.Platform.Modularity.AspNetCore.csproj",
+      "packageId": "Incursa.Platform.Modularity.AspNetCore",
+      "zone": "src",
+      "category": "hosting",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Hosting adapter or ASP.NET Core integration package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Modularity.Razor/Incursa.Platform.Modularity.Razor.csproj",
+      "packageId": "Incursa.Platform.Modularity.Razor",
+      "zone": "src",
+      "category": "hosting",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Hosting adapter or ASP.NET Core integration package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Modularity/Incursa.Platform.Modularity.csproj",
+      "packageId": "Incursa.Platform.Modularity",
+      "zone": "src",
+      "category": "capabilities",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Public capability package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Observability/Incursa.Platform.Observability.csproj",
+      "packageId": "Incursa.Platform.Observability",
+      "zone": "src",
+      "category": "capabilities",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Public capability package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Operations/Incursa.Platform.Operations.csproj",
+      "packageId": "Incursa.Platform.Operations",
+      "zone": "src",
+      "category": "capabilities",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Public capability package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Postgres/Incursa.Platform.Postgres.csproj",
+      "packageId": "Incursa.Platform.Postgres",
+      "zone": "src",
+      "category": "providers",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Provider implementation package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.SqlServer/Incursa.Platform.SqlServer.csproj",
+      "packageId": "Incursa.Platform.SqlServer",
+      "zone": "src",
+      "category": "providers",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Provider implementation package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Storage/Incursa.Platform.Storage.csproj",
+      "packageId": "Incursa.Platform.Storage",
+      "zone": "src",
+      "category": "capabilities",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Public capability package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Webhooks.AspNetCore/Incursa.Platform.Webhooks.AspNetCore.csproj",
+      "packageId": "Incursa.Platform.Webhooks.AspNetCore",
+      "zone": "src",
+      "category": "hosting",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Hosting adapter or ASP.NET Core integration package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Webhooks/Incursa.Platform.Webhooks.csproj",
+      "packageId": "Incursa.Platform.Webhooks",
+      "zone": "src",
+      "category": "capabilities",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Public capability package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform/Incursa.Platform.csproj",
+      "packageId": "Incursa.Platform",
+      "zone": "src",
+      "category": "core",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Core durable processing abstractions and orchestration."
+    },
+    {
+      "projectPath": "tests/Incursa.Integrations.Storage.Azure.Tests/Incursa.Integrations.Storage.Azure.Tests.csproj",
+      "packageId": "Incursa.Integrations.Storage.Azure.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.Audit.Tests/Incursa.Platform.Audit.Tests.csproj",
+      "packageId": "Incursa.Platform.Audit.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.Correlation.Tests/Incursa.Platform.Correlation.Tests.csproj",
+      "packageId": "Incursa.Platform.Correlation.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.Email.Tests/Incursa.Platform.Email.Tests.csproj",
+      "packageId": "Incursa.Platform.Email.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-postmark"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.HealthProbe.Tests/Incursa.Platform.HealthProbe.Tests.csproj",
+      "packageId": "Incursa.Platform.HealthProbe.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.InMemory.Tests/Incursa.Platform.InMemory.Tests.csproj",
+      "packageId": "Incursa.Platform.InMemory.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.Observability.Tests/Incursa.Platform.Observability.Tests.csproj",
+      "packageId": "Incursa.Platform.Observability.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.Operations.Tests/Incursa.Platform.Operations.Tests.csproj",
+      "packageId": "Incursa.Platform.Operations.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.Postgres.Tests/Incursa.Platform.Postgres.Tests.csproj",
+      "packageId": "Incursa.Platform.Postgres.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.Smoke.AppHost/Incursa.Platform.Smoke.AppHost.csproj",
+      "packageId": "Incursa.Platform.Smoke.AppHost",
+      "zone": "tests",
+      "category": "smoke",
+      "classification": "smoke/sample",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Smoke/sample coverage project preserved for hosted verification and demo flows."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.Smoke.ServiceDefaults/Incursa.Platform.Smoke.ServiceDefaults.csproj",
+      "packageId": "Incursa.Platform.Smoke.ServiceDefaults",
+      "zone": "tests",
+      "category": "smoke",
+      "classification": "smoke/sample",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Smoke/sample coverage project preserved for hosted verification and demo flows."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.SmokeWeb/Incursa.Platform.SmokeWeb.csproj",
+      "packageId": "Incursa.Platform.SmokeWeb",
+      "zone": "tests",
+      "category": "smoke",
+      "classification": "smoke/sample",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Smoke/sample coverage project preserved for hosted verification and demo flows."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.SqlServer.Tests/Incursa.Platform.SqlServer.Tests.csproj",
+      "packageId": "Incursa.Platform.SqlServer.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.Storage.Tests/Incursa.Platform.Storage.Tests.csproj",
+      "packageId": "Incursa.Platform.Storage.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.Tests/Incursa.Platform.Tests.csproj",
+      "packageId": "Incursa.Platform.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.TestUtilities/Incursa.Platform.TestUtilities.csproj",
+      "packageId": "Incursa.Platform.TestUtilities",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.Webhooks.AspNetCore.Tests/Incursa.Platform.Webhooks.AspNetCore.Tests.csproj",
+      "packageId": "Incursa.Platform.Webhooks.AspNetCore.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.Webhooks.Tests/Incursa.Platform.Webhooks.Tests.csproj",
+      "packageId": "Incursa.Platform.Webhooks.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tools/migrations/src/Incursa.Platform.SchemaMigrations.Cli/Incursa.Platform.SchemaMigrations.Cli.csproj",
+      "packageId": "Incursa.Platform.SchemaMigrations.Cli",
+      "zone": "tools",
+      "category": "tools",
+      "classification": "tool-only",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Tooling/analyzer package intentionally shipped from this monorepo."
+    },
+    {
+      "projectPath": "tools/observability/src/Incursa.Platform.Observability.Analyzers/Incursa.Platform.Observability.Analyzers.csproj",
+      "packageId": "Incursa.Platform.Observability.Analyzers",
+      "zone": "tools",
+      "category": "tools",
+      "classification": "tool-only",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Tooling/analyzer package intentionally shipped from this monorepo."
+    },
+    {
+      "projectPath": "tools/testdocs/src/Incursa.TestDocs.Analyzers/Incursa.TestDocs.Analyzers.csproj",
+      "packageId": "Incursa.TestDocs.Analyzers",
+      "zone": "tools",
+      "category": "tools",
+      "classification": "tool-only",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Tooling/analyzer package intentionally shipped from this monorepo."
+    },
+    {
+      "projectPath": "tools/testdocs/src/TestDocs.Cli/TestDocs.Cli.csproj",
+      "packageId": "Incursa.TestDocs.Cli",
+      "zone": "tools",
+      "category": "tools",
+      "classification": "tool-only",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Tooling/analyzer package intentionally shipped from this monorepo."
+    }
+  ]
+}

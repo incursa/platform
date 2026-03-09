@@ -1,0 +1,13 @@
+{
+  "name": "AddDocumentRequest",
+  "namespace": "Incursa.Integrations.ElectronicNotary.Proof.Contracts",
+  "documentation": "Represents the payload used to add a document to an existing transaction.",
+  "properties": [
+    {
+      "name": "Resource",
+      "type": "string",
+      "jsonProperty": "resource",
+      "documentation": "Gets the resource URL for the new document."
+    }
+  ]
+}

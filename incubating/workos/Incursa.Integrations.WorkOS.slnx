@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Incursa.Integrations.WorkOS.Abstractions/Incursa.Integrations.WorkOS.Abstractions.csproj" />
+    <Project Path="src/Incursa.Integrations.WorkOS.AspNetCore/Incursa.Integrations.WorkOS.AspNetCore.csproj" />
+    <Project Path="src/Incursa.Integrations.WorkOS/Incursa.Integrations.WorkOS.csproj" />
+  </Folder>
+
+  <Folder Name="/tests/">
+    <Project Path="tests/Incursa.Integrations.WorkOS.Tests/Incursa.Integrations.WorkOS.Tests.csproj" />
+  </Folder>
+</Solution>

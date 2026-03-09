@@ -1,0 +1,12 @@
+{
+  "apiBaseUrl": "https://api.cloudflare.com/client/v4",
+  "apiToken": "replace-with-cloudflare-api-token",
+  "accountId": "replace-with-account-id",
+  "namespaceId": "replace-with-namespace-id",
+  "keyPrefix": "kvprobe/local",
+  "listPrefix": "kvprobe/local",
+  "value": "hello-from-kv-probe",
+  "keepKey": false,
+  "requestTimeoutSeconds": 8,
+  "retryCount": 2
+}

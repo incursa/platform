@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "incursa.workbench": {
+      "version": "2026.2.20.344",
+      "commands": [
+        "workbench"
+      ],
+      "rollForward": false
+    }
+  }
+}

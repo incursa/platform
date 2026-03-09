@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Workbench Work Item Front Matter",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "type", "status", "created"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[A-Z]+-\\d{4}$" },
+    "type": { "type": "string", "enum": ["bug", "task", "spike"] },
+    "status": { "type": "string", "enum": ["draft", "ready", "in-progress", "blocked", "done", "dropped"] },
+    "created": { "type": "string", "format": "date" },
+    "title": { "type": "string" },
+    "priority": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+    "owner": { "type": ["string", "null"] },
+    "updated": { "type": ["string", "null"], "format": "date" },
+    "githubSynced": { "type": ["string", "null"], "format": "date-time" },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "related": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["specs", "adrs", "files", "prs", "issues"],
+      "properties": {
+        "specs": { "type": "array", "items": { "type": "string" } },
+        "adrs": { "type": "array", "items": { "type": "string" } },
+        "files": { "type": "array", "items": { "type": "string" } },
+        "prs": { "type": "array", "items": { "type": "string" } },
+        "issues": { "type": "array", "items": { "type": "string" } },
+        "branches": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}
