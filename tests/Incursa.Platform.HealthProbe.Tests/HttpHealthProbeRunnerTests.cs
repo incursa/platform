@@ -9,6 +9,41 @@ namespace Incursa.Platform.HealthProbe.Tests;
 public sealed class HttpHealthProbeRunnerTests
 {
     [Fact]
+    public async Task RunAsync_AllowsAbsoluteHttpsPath_WhenBaseUrlIsMissing()
+    {
+        using var handler = new StubHttpMessageHandler(static request =>
+            new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(
+                    """
+{
+  "bucket": "ready",
+  "status": "Healthy",
+  "totalDurationMs": 1.5,
+  "checks": []
+}
+""",
+                    Encoding.UTF8,
+                    "application/json"),
+            });
+        var runner = CreateRunner(
+            handler,
+            configure: options =>
+            {
+                options.Http.BaseUrl = null;
+                options.Http.ReadyPath = "https://probe.example.local/readyz";
+            });
+
+        var result = await runner.RunAsync(
+            new HealthProbeRequest("ready", false),
+            TestContext.Current.CancellationToken);
+
+        result.ExitCode.ShouldBe(HealthProbeExitCodes.Healthy);
+        handler.LastRequest.ShouldNotBeNull();
+        handler.LastRequest!.RequestUri.ShouldBe(new Uri("https://probe.example.local/readyz"));
+    }
+
+    [Fact]
     public async Task RunAsync_ReturnsNonHealthy_WhenPayloadIsInvalid()
     {
         using var handler = new StubHttpMessageHandler(static _ =>
@@ -107,8 +142,11 @@ public sealed class HttpHealthProbeRunnerTests
             this.responseFactory = responseFactory ?? throw new ArgumentNullException(nameof(responseFactory));
         }
 
+        public HttpRequestMessage? LastRequest { get; private set; }
+
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            LastRequest = request;
             return Task.FromResult(responseFactory(request));
         }
     }

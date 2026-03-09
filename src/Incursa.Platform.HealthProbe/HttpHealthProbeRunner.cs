@@ -128,7 +128,9 @@ public sealed class HttpHealthProbeRunner : IHealthProbeRunner
         ArgumentException.ThrowIfNullOrWhiteSpace(bucket);
 
         var rawPath = ResolveBucketPath(options, bucket);
-        if (Uri.TryCreate(rawPath, UriKind.Absolute, out var absoluteUri))
+        if (Uri.TryCreate(rawPath, UriKind.Absolute, out var absoluteUri) &&
+            (absoluteUri.Scheme.Equals(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) ||
+             absoluteUri.Scheme.Equals(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)))
         {
             return absoluteUri;
         }
