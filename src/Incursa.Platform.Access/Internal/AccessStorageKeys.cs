@@ -5,11 +5,13 @@ using Incursa.Platform.Storage;
 
 internal static class AccessStorageKeys
 {
+    public static StoragePartitionKey ScopeRootPartition() => new("access-scope-root");
+
     public static StorageRecordKey User(AccessUserId userId) =>
         new(new StoragePartitionKey("access-user"), new StorageRowKey(Safe(userId.Value)));
 
     public static StorageRecordKey ScopeRoot(ScopeRootId scopeRootId) =>
-        new(new StoragePartitionKey("access-scope-root"), new StorageRowKey(Safe(scopeRootId.Value)));
+        new(ScopeRootPartition(), new StorageRowKey(Safe(scopeRootId.Value)));
 
     public static StorageRecordKey Tenant(TenantId tenantId) =>
         new(new StoragePartitionKey("access-tenant"), new StorageRowKey(Safe(tenantId.Value)));

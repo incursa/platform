@@ -29,10 +29,12 @@ This repository is the public monorepo for the `Incursa.Platform` family. It is 
 Public provider/service adapters allowed in `src/`:
 
 - `Incursa.Platform.Access.WorkOS`
+- `Incursa.Platform.Access.AspNetCore`
 - `Incursa.Platform.Audit.WorkOS`
 - `Incursa.Platform.CustomDomains.Cloudflare`
 - `Incursa.Platform.Dns.Cloudflare`
 - `Incursa.Platform.Email.Postmark`
+- `Incursa.Platform.Webhooks.WorkOS`
 - `Incursa.Integrations.Storage.Azure`
 
 Preserved in `incubating/` until further split/cleanup:

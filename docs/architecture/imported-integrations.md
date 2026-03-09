@@ -36,18 +36,23 @@ Result:
 
 - public packages added:
   - `src/Incursa.Platform.Access/`
+  - `src/Incursa.Platform.Access.AspNetCore/`
   - `src/Incursa.Platform.Access.WorkOS/`
+  - `src/Incursa.Platform.Webhooks.WorkOS/`
 - public package retained:
   - `src/Incursa.Platform.Audit.WorkOS/`
 - public tests added:
   - `tests/Incursa.Platform.Access.Tests/`
+  - `tests/Incursa.Platform.Access.AspNetCore.Tests/`
+  - `tests/Incursa.Platform.Webhooks.WorkOS.Tests/`
 - preserved import: `incubating/workos/`
 
 Why incubated:
 
 - the imported repo is still a broad vendor surface spanning auth, webhook, widget, claims, and management concerns
 - only the organization-membership-to-access slice was cleanly expressible as a layer 1 adapter under a public layer 2 access capability
-- the next credible promotions are likely `Incursa.Platform.Access.AspNetCore` and `Incursa.Platform.Webhooks.WorkOS`, not a new standalone identity core
+- request-time access context resolution and webhook authentication/classification were small enough to promote without creating a standalone identity core
+- session selection, onboarding middleware, widgets, management clients, profile hydration, and the old vendor-owned webhook pipeline remain broader than the clean public boundary
 
 ## `C:\src\incursa\integrations-cloudflare`
 

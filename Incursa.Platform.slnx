@@ -7,6 +7,10 @@
   <Folder Name="/src/core/">
     <Project Path="src/Incursa.Platform/Incursa.Platform.csproj" />
   </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Incursa.Platform.Access.AspNetCore/Incursa.Platform.Access.AspNetCore.csproj" />
+    <Project Path="src/Incursa.Platform.Webhooks.WorkOS/Incursa.Platform.Webhooks.WorkOS.csproj" />
+  </Folder>
   <Folder Name="/src/capabilities/">
     <Project Path="src/Incursa.Platform.Access/Incursa.Platform.Access.csproj" />
     <Project Path="src/Incursa.Platform.Audit/Incursa.Platform.Audit.csproj" />
@@ -50,6 +54,7 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Incursa.Integrations.Storage.Azure.Tests/Incursa.Integrations.Storage.Azure.Tests.csproj" />
+    <Project Path="tests/Incursa.Platform.Access.AspNetCore.Tests/Incursa.Platform.Access.AspNetCore.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Access.Tests/Incursa.Platform.Access.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Audit.Tests/Incursa.Platform.Audit.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Correlation.Tests/Incursa.Platform.Correlation.Tests.csproj" />
@@ -67,6 +72,7 @@
     <Project Path="tests/Incursa.Platform.TestUtilities/Incursa.Platform.TestUtilities.csproj" />
     <Project Path="tests/Incursa.Platform.Webhooks.AspNetCore.Tests/Incursa.Platform.Webhooks.AspNetCore.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Webhooks.Tests/Incursa.Platform.Webhooks.Tests.csproj" />
+    <Project Path="tests/Incursa.Platform.Webhooks.WorkOS.Tests/Incursa.Platform.Webhooks.WorkOS.Tests.csproj" />
   </Folder>
   <Folder Name="/tests/smoke/">
     <Project Path="tests/Incursa.Platform.Smoke.AppHost/Incursa.Platform.Smoke.AppHost.csproj" />
@@ -103,4 +109,6 @@
   </Folder>
   <Folder Name="/tools/observability/" />
   <Folder Name="/tools/observability/src/" />
+  <Folder Name="/tools/testdocs/" />
+  <Folder Name="/tools/testdocs/src/" />
 </Solution>

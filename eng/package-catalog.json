@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-09T00:18:33.1546352-06:00",
+  "generatedAt": "2026-03-09T00:47:35.8772421-06:00",
   "generatedBy": "eng/Generate-PackageCatalog.ps1",
   "projects": [
     {
@@ -197,6 +197,20 @@
         "sourcePath": "C:/src/incursa/platform"
       },
       "notes": "Public Azure storage provider adapter for Incursa.Platform.Storage."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Access.AspNetCore/Incursa.Platform.Access.AspNetCore.csproj",
+      "packageId": "Incursa.Platform.Access.AspNetCore",
+      "zone": "src",
+      "category": "hosting",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Hosting adapter or ASP.NET Core integration package."
     },
     {
       "projectPath": "src/Incursa.Platform.Access.WorkOS/Incursa.Platform.Access.WorkOS.csproj",
@@ -633,6 +647,20 @@
       "notes": "Hosting adapter or ASP.NET Core integration package."
     },
     {
+      "projectPath": "src/Incursa.Platform.Webhooks.WorkOS/Incursa.Platform.Webhooks.WorkOS.csproj",
+      "packageId": "Incursa.Platform.Webhooks.WorkOS",
+      "zone": "src",
+      "category": "capabilities",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Public capability package."
+    },
+    {
       "projectPath": "src/Incursa.Platform.Webhooks/Incursa.Platform.Webhooks.csproj",
       "packageId": "Incursa.Platform.Webhooks",
       "zone": "src",
@@ -663,6 +691,20 @@
     {
       "projectPath": "tests/Incursa.Integrations.Storage.Azure.Tests/Incursa.Integrations.Storage.Azure.Tests.csproj",
       "packageId": "Incursa.Integrations.Storage.Azure.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.Access.AspNetCore.Tests/Incursa.Platform.Access.AspNetCore.Tests.csproj",
+      "packageId": "Incursa.Platform.Access.AspNetCore.Tests",
       "zone": "tests",
       "category": "tests",
       "classification": "test-only",
@@ -943,6 +985,20 @@
     {
       "projectPath": "tests/Incursa.Platform.Webhooks.Tests/Incursa.Platform.Webhooks.Tests.csproj",
       "packageId": "Incursa.Platform.Webhooks.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.Webhooks.WorkOS.Tests/Incursa.Platform.Webhooks.WorkOS.Tests.csproj",
+      "packageId": "Incursa.Platform.Webhooks.WorkOS.Tests",
       "zone": "tests",
       "category": "tests",
       "classification": "test-only",

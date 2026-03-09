@@ -27,6 +27,22 @@ internal sealed class StorageBackedAccessQueryService : IAccessQueryService
         return item?.Value;
     }
 
+    public async Task<ScopeRoot?> GetPersonalScopeRootAsync(AccessUserId ownerUserId, CancellationToken cancellationToken = default)
+    {
+        await foreach (var item in storage.ScopeRoots.QueryPartitionAsync(
+                           AccessStorageKeys.ScopeRootPartition(),
+                           StoragePartitionQuery.All(),
+                           cancellationToken).ConfigureAwait(false))
+        {
+            if (item.Value.Kind == ScopeRootKind.Personal && item.Value.OwnerUserId == ownerUserId)
+            {
+                return item.Value;
+            }
+        }
+
+        return null;
+    }
+
     public async Task<ScopeRoot?> GetScopeRootByExternalLinkAsync(
         string provider,
         string externalId,

@@ -41,13 +41,57 @@ Does not own:
 - canonical access storage outside `Incursa.Platform.Access`
 - claims middleware, widget integration, webhook pipelines, or broader WorkOS app-auth concerns
 
+### `src/Incursa.Platform.Access.AspNetCore/`
+
+Owns:
+
+- request-time access context resolution for ASP.NET Core
+- claims, route, and query mapping into the canonical `Incursa.Platform.Access` model
+- current access subject, scope-root, and tenant resolution backed by `IAccessQueryService`
+- personal-scope fallback and WorkOS-friendly organization-claim defaults without duplicating the access model
+
+Does not own:
+
+- a second identity or permission model
+- cookie/session onboarding workflows or app-auth redirect behavior
+- WorkOS management/profile hydration or broader middleware sprawl
+
 ### What remains in `incubating/workos/`
 
 Still incubating because it is broader than the clean access adapter boundary:
 
 - app-auth and ASP.NET Core middleware
-- claims/session and organization-context accessors
-- widgets, webhook handling, management clients, and other workflow-heavy vendor surfaces
+- cookie/session selection, onboarding enforcement, and broader app-auth behavior
+- widgets, management clients, profile/session enrichment, and other workflow-heavy vendor surfaces
+
+## Webhook capability family
+
+### `src/Incursa.Platform.Webhooks/`
+
+Owns:
+
+- provider-neutral webhook envelopes, ingestion, and processing contracts
+- inbox-backed dedupe and retry handling
+- provider registry and handler composition
+
+Does not own:
+
+- provider-specific signature algorithms or payload parsing rules
+- vendor-owned endpoint pipelines or dedupe stores
+
+### `src/Incursa.Platform.Webhooks.WorkOS/`
+
+Owns:
+
+- WorkOS signature validation over the shared webhook authenticator contract
+- WorkOS payload classification into provider event id, event type, dedupe key, and partition key
+- provider registration that plugs into the existing `Incursa.Platform.Webhooks` pipeline
+
+Does not own:
+
+- a separate ASP.NET Core endpoint, processor, or persistence model
+- broader WorkOS management, widget, or app-auth behavior
+- transactional guarantees beyond the shared inbox/idempotency pipeline
 
 ## DNS capability family
 
@@ -126,14 +170,19 @@ Still incubating because it is outside the clean public DNS/custom-domain bounda
 - load-balancing and probe utilities
 - broader Cloudflare umbrella registration and any workflow-heavy vendor code that is not cleanly DNS or custom-domain scoped
 
-## Deferred WorkOS candidates
+## Remaining WorkOS deferrals
 
-The remaining WorkOS material is not being promoted into a new layer 2 package in this pass. The cleanest future candidates are:
+The remaining WorkOS material is still not being promoted into a standalone identity layer 2 package in this pass. The promoted slices are intentionally small:
 
-- an access-focused ASP.NET Core/request-context adapter that hangs off `Incursa.Platform.Access`
-- a provider-specific webhook adapter that hangs off `Incursa.Platform.Webhooks`
+- `Incursa.Platform.Access.AspNetCore` for request-time access context integration
+- `Incursa.Platform.Webhooks.WorkOS` for thin webhook authentication/classification
 
-Those slices remain incubating until their public API is smaller and more clearly capability-oriented.
+The following still remain incubating until their public API is smaller and more clearly capability-oriented:
+
+- cookie/session organization selection and onboarding middleware
+- widgets, profile enrichment, and broader app-auth workflows
+- management clients and other vendor-heavy operational surfaces
+- the old vendor-owned webhook endpoint/processor/dedupe pipeline
 
 ## Source of truth and synchronization
 
@@ -163,6 +212,22 @@ services.AddAccess(registry =>
 });
 
 services.AddWorkOsAccess();
+services.AddAccessAspNetCore(options =>
+{
+    options.ScopeRootExternalLinkProvider = "workos";
+    options.ScopeRootExternalLinkResourceType = "organization";
+});
+```
+
+Webhooks:
+
+```csharp
+services.AddIncursaWebhooks();
+
+services.AddWorkOsWebhooks(options =>
+{
+    options.SigningSecret = configuration["WorkOS:WebhookSigningSecret"]!;
+});
 ```
 
 DNS:

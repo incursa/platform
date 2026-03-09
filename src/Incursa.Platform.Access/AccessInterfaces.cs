@@ -53,6 +53,8 @@ public interface IAccessQueryService
 
     Task<ScopeRoot?> GetScopeRootAsync(ScopeRootId scopeRootId, CancellationToken cancellationToken = default);
 
+    Task<ScopeRoot?> GetPersonalScopeRootAsync(AccessUserId ownerUserId, CancellationToken cancellationToken = default);
+
     Task<ScopeRoot?> GetScopeRootByExternalLinkAsync(
         string provider,
         string externalId,

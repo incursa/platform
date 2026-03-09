@@ -79,9 +79,11 @@ Integrations:
 - `Incursa.Platform.CustomDomains.Cloudflare`
 - `Incursa.Platform.Dns.Cloudflare`
 - `Incursa.Platform.Email.Postmark`
+- `Incursa.Platform.Webhooks.WorkOS`
 
 Hosting:
 
+- `Incursa.Platform.Access.AspNetCore`
 - `Incursa.Platform.Email.AspNetCore`
 - `Incursa.Platform.Health.AspNetCore`
 - `Incursa.Platform.Metrics.AspNetCore`
