@@ -5,6 +5,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.4.0" />
     <PackageReference Include="Incursa.Generators" Version="2026.2.19.38" PrivateAssets="all" IncludeAssets="analyzers;build;buildtransitive" />
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.2" />
