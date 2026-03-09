@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Incursa.Platform.Dns\Incursa.Platform.Dns.csproj" />
-    <ProjectReference Include="..\..\src\Incursa.Platform.Dns.Cloudflare\Incursa.Platform.Dns.Cloudflare.csproj" />
+    <ProjectReference Include="..\..\src\Incursa.Integrations.Cloudflare.Dns\Incursa.Integrations.Cloudflare.Dns.csproj" />
   </ItemGroup>
 
   <ItemGroup>

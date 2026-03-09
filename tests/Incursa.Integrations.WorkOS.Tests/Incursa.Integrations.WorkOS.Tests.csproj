@@ -1,0 +1,20 @@
+<Project Sdk="MSTest.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Remove="Microsoft.NET.Test.Sdk" />
+    <PackageReference Remove="xunit.v3" />
+    <PackageReference Remove="xunit.runner.visualstudio" />
+    <PackageReference Remove="coverlet.collector" />
+    <PackageReference Remove="coverlet.msbuild" />
+    <Using Remove="Xunit" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Incursa.Integrations.WorkOS.Abstractions\Incursa.Integrations.WorkOS.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\Incursa.Integrations.WorkOS.AspNetCore\Incursa.Integrations.WorkOS.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\src\Incursa.Integrations.WorkOS\Incursa.Integrations.WorkOS.csproj" />
+  </ItemGroup>
+</Project>

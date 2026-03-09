@@ -14,6 +14,7 @@ This repository is the public monorepo for the `Incursa.Platform` family. It is 
 - Reusable cross-cutting capabilities such as access, audit, DNS, operations, observability, idempotency, exactly-once, correlation, webhooks, modularity, storage, and email.
 - Storage/database providers and provider adapters for those capabilities.
 - Capability-specific integrations for widely used public services when the boundary is clear.
+- Public layer 1 vendor integrations when they have a clean package boundary, tests, and release metadata.
 - Hosting adapters and ASP.NET Core integration packages.
 - Shipped analyzers and CLIs that support the public package family.
 
@@ -28,20 +29,32 @@ This repository is the public monorepo for the `Incursa.Platform` family. It is 
 
 Public provider/service adapters allowed in `src/`:
 
-- `Incursa.Platform.Access.WorkOS`
+- `Incursa.Integrations.WorkOS.Access`
 - `Incursa.Platform.Access.AspNetCore`
-- `Incursa.Platform.Audit.WorkOS`
-- `Incursa.Platform.CustomDomains.Cloudflare`
-- `Incursa.Platform.Dns.Cloudflare`
+- `Incursa.Integrations.WorkOS`
+- `Incursa.Integrations.WorkOS.Abstractions`
+- `Incursa.Integrations.WorkOS.Audit`
+- `Incursa.Integrations.WorkOS.AspNetCore`
+- `Incursa.Integrations.WorkOS.Webhooks`
+- `Incursa.Integrations.Cloudflare`
+- `Incursa.Integrations.Cloudflare.CustomDomains`
+- `Incursa.Integrations.Cloudflare.Dns`
+- `Incursa.Integrations.ElectronicNotary`
+- `Incursa.Integrations.ElectronicNotary.Abstractions`
+- `Incursa.Integrations.ElectronicNotary.Proof`
+- `Incursa.Integrations.ElectronicNotary.Proof.AspNetCore`
 - `Incursa.Platform.Email.Postmark`
-- `Incursa.Platform.Webhooks.WorkOS`
 - `Incursa.Integrations.Storage.Azure`
 
-Preserved in `incubating/` until further split/cleanup:
+Naming convention:
 
-- `incubating/cloudflare/` outside the DNS zone/record and custom-domain slices
-- `incubating/workos/` outside the access and audit slices
-- `incubating/electronicnotary/`
+- provider-neutral capabilities and hosting adapters use `Incursa.Platform.*`
+- public vendor-owned layer 1 adapters should prefer `Incursa.Integrations.*`
+- `incubating/` is not a synonym for vendor-specific; it is reserved for code that is not yet ready to ship publicly
+
+Reserved for `incubating/`:
+
+- future staging imports and non-public experiments only
 
 ## Release guardrails
 

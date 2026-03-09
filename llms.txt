@@ -9,7 +9,7 @@
 - `tools/`: shipped analyzers and helper CLIs
 - `eng/`: package catalog and release helpers
 - `docs/`: architecture, quality policy, and package guidance
-- `incubating/`: preserved staging imports and non-public experiments
+- `incubating/`: reserved staging area for future non-public imports and experiments
 
 ## Primary solutions
 
@@ -52,12 +52,20 @@ Providers:
 
 Public integrations:
 
-- `src/Incursa.Platform.Access.WorkOS/`
-- `src/Incursa.Platform.Audit.WorkOS/`
-- `src/Incursa.Platform.CustomDomains.Cloudflare/`
-- `src/Incursa.Platform.Dns.Cloudflare/`
+- `src/Incursa.Integrations.WorkOS/`
+- `src/Incursa.Integrations.WorkOS.Abstractions/`
+- `src/Incursa.Integrations.WorkOS.Access/`
+- `src/Incursa.Integrations.WorkOS.AspNetCore/`
+- `src/Incursa.Integrations.WorkOS.Audit/`
+- `src/Incursa.Integrations.WorkOS.Webhooks/`
+- `src/Incursa.Integrations.Cloudflare/`
+- `src/Incursa.Integrations.Cloudflare.CustomDomains/`
+- `src/Incursa.Integrations.Cloudflare.Dns/`
+- `src/Incursa.Integrations.ElectronicNotary/`
+- `src/Incursa.Integrations.ElectronicNotary.Abstractions/`
+- `src/Incursa.Integrations.ElectronicNotary.Proof/`
+- `src/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore/`
 - `src/Incursa.Platform.Email.Postmark/`
-- `src/Incursa.Platform.Webhooks.WorkOS/`
 
 Hosting adapters:
 
@@ -86,26 +94,36 @@ Tools:
   - `src/Incursa.Platform.Email.SqlServer/`
   - `src/Incursa.Platform.Email.Postgres/`
   - `tests/Incursa.Platform.Email.Tests/`
-- `C:\src\incursa\integrations-workos` now feeds the public access adapter slice plus the existing audit sink:
+- `C:\src\incursa\integrations-workos` now feeds the public access capability plus WorkOS layer 1 packages:
   - `src/Incursa.Platform.Access/`
   - `src/Incursa.Platform.Access.AspNetCore/`
-  - `src/Incursa.Platform.Access.WorkOS/`
-  - `src/Incursa.Platform.Audit.WorkOS/`
-  - `src/Incursa.Platform.Webhooks.WorkOS/`
+  - `src/Incursa.Integrations.WorkOS/`
+  - `src/Incursa.Integrations.WorkOS.Abstractions/`
+  - `src/Incursa.Integrations.WorkOS.Access/`
+  - `src/Incursa.Integrations.WorkOS.Audit/`
+  - `src/Incursa.Integrations.WorkOS.AspNetCore/`
+  - `src/Incursa.Integrations.WorkOS.Webhooks/`
   - `tests/Incursa.Platform.Access.Tests/`
   - `tests/Incursa.Platform.Access.AspNetCore.Tests/`
-  - `tests/Incursa.Platform.Webhooks.WorkOS.Tests/`
-  - broader WorkOS auth/widget/webhook material remains under `incubating/workos/`
-  - a standalone provider-neutral identity package was deferred; the promoted slices are access request-context integration and a thin webhook adapter, while broader app-auth, widget, session, and management code remains incubating
-- `C:\src\incursa\integrations-cloudflare` now feeds the public DNS and custom-domain slices:
+  - `tests/Incursa.Integrations.WorkOS.Tests/`
+  - `tests/Incursa.Integrations.WorkOS.Webhooks.Tests/`
+  - public vendor-specific WorkOS packages use the `Incursa.Integrations.WorkOS.*` family
+- `C:\src\incursa\integrations-cloudflare` now feeds the public capability families plus Cloudflare layer 1 packages:
+  - `src/Incursa.Integrations.Cloudflare/`
+  - `src/Incursa.Integrations.Cloudflare.CustomDomains/`
+  - `src/Incursa.Integrations.Cloudflare.Dns/`
   - `src/Incursa.Platform.CustomDomains/`
-  - `src/Incursa.Platform.CustomDomains.Cloudflare/`
   - `tests/Incursa.Platform.CustomDomains.Tests/`
   - `src/Incursa.Platform.Dns/`
-  - `src/Incursa.Platform.Dns.Cloudflare/`
   - `tests/Incursa.Platform.Dns.Tests/`
-  - broader Cloudflare load-balancing, probe, storage, and non-promoted vendor-bucket code remains under `incubating/cloudflare/`
-- `C:\src\incursa\integrations-electronicnotary` is preserved under `incubating/electronicnotary/`
+  - `tests/Incursa.Integrations.Cloudflare.Tests/`
+  - `tests/Incursa.Integrations.Cloudflare.IntegrationTests/`
+- `C:\src\incursa\integrations-electronicnotary` now feeds:
+  - `src/Incursa.Integrations.ElectronicNotary/`
+  - `src/Incursa.Integrations.ElectronicNotary.Abstractions/`
+  - `src/Incursa.Integrations.ElectronicNotary.Proof/`
+  - `src/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore/`
+  - `tests/Incursa.Integrations.ElectronicNotary.Tests/`
 
 See `docs/architecture/imported-integrations.md` for the boundary decisions and resulting landing zones.
 
@@ -127,7 +145,7 @@ See `docs/architecture/imported-integrations.md` for the boundary decisions and 
 - Default all projects to `IsPackable=false`
 - Default all builds to `GeneratePackageOnBuild=false`
 - Opt public packages and shipped tools in explicitly with `IsPackable=true`
-- Keep `incubating/` non-packable and non-publishable
+- Keep `incubating/` non-packable and non-publishable when used
 - Use `eng/package-catalog.json` as the allowlist
 - Commit CI packs affected public packages only
 - Main/release CI packs publishable packages, but nuget.org publication is manual

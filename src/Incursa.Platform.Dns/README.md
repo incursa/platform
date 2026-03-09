@@ -1,6 +1,10 @@
 # Incursa.Platform.Dns
 
-`Incursa.Platform.Dns` provides the layer 2, provider-neutral DNS capability for Incursa Platform.
+`Incursa.Platform.Dns` is the layer 2, provider-neutral DNS capability for the monorepo. It models zones and records in a provider-neutral way so that local application state stays stable even when the backing DNS provider changes.
+
+## When To Start Here
+
+Start here when you need a reusable DNS model, zone administration, record management, or reconciliation behavior that should not leak Cloudflare or any other provider directly into application code.
 
 ## What It Owns
 
@@ -14,6 +18,12 @@
 - provider SDK types or provider-specific transport
 - certificate onboarding or domain ownership workflows
 - vendor-specific orchestration beyond the generalized DNS model
+
+## Related Packages
+
+- `Incursa.Integrations.Cloudflare.Dns` for Cloudflare DNS integration
+- `Incursa.Platform.CustomDomains` for custom-hostname lifecycle state built above or beside DNS
+- `Incursa.Platform.Storage` for the backing record and lookup stores
 
 ## Registration
 

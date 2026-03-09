@@ -1,24 +1,25 @@
 # Incursa.Platform.Operations
 
-`Incursa.Platform.Operations` provides provider-agnostic operation tracking primitives for long-running workflows.
+`Incursa.Platform.Operations` provides the provider-neutral operation tracking model for long-running workflows, background jobs, and other observable unit-of-work lifecycles.
 
-## Install
+## What It Owns
 
-```bash
-dotnet add package Incursa.Platform.Operations
-```
+- operation identifiers and status models
+- tracker and watcher interfaces for progress and events
+- snapshot and event contracts for querying current and historical state
 
-## What You Get
+## What It Does Not Own
 
-- Operation identifiers and status models
-- Tracker and watcher interfaces for progress/events
-- Snapshot/event contracts for querying current and historical state
+- vendor-specific workflow engines
+- orchestration transport layers
+- application-specific job definitions
+
+## Related Packages
+
+- `Incursa.Platform.Observability` for event and tag naming conventions
+- `Incursa.Platform.Correlation` for cross-boundary correlation
+- `Incursa.Platform.Audit` when operation milestones must become immutable audit records
 
 ## Typical Use
 
 Use this package to model operation progress and lifecycle state independent of your chosen persistence implementation.
-
-## Documentation
-
-- https://github.com/incursa/platform/blob/main/docs/operations/README.md
-- https://github.com/incursa/platform/blob/main/docs/INDEX.md

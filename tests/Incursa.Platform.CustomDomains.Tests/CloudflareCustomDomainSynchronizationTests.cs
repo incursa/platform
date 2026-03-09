@@ -2,7 +2,7 @@ namespace Incursa.Platform.CustomDomains.Tests;
 
 using System.Net;
 using System.Text;
-using Incursa.Platform.CustomDomains.Cloudflare;
+using Incursa.Integrations.Cloudflare.CustomDomains;
 
 [Trait("Category", "Unit")]
 public sealed class CloudflareCustomDomainSynchronizationTests

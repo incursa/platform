@@ -1,7 +1,7 @@
 using System.Data;
 using Incursa.Platform.Audit;
-using Incursa.Platform.Audit.WorkOS;
-using Incursa.Platform.Audit.WorkOS.Internal;
+using Incursa.Integrations.WorkOS.Audit;
+using Incursa.Integrations.WorkOS.Audit.Internal;
 using Incursa.Platform.Outbox;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>Incursa.Integrations.Cloudflare.KvProbe</RootNamespace>
+    <NoWarn>$(NoWarn);AD0001;RS0030;VSTHRD103;S6966;S1075;S127;S3626;SA1201;SA1313;SA1402;MA0048</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Incursa.Integrations.Cloudflare\Incursa.Integrations.Cloudflare.csproj" />
+  </ItemGroup>
+</Project>

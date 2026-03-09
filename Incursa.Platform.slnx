@@ -7,10 +7,6 @@
   <Folder Name="/src/core/">
     <Project Path="src/Incursa.Platform/Incursa.Platform.csproj" />
   </Folder>
-  <Folder Name="/src/">
-    <Project Path="src/Incursa.Platform.Access.AspNetCore/Incursa.Platform.Access.AspNetCore.csproj" />
-    <Project Path="src/Incursa.Platform.Webhooks.WorkOS/Incursa.Platform.Webhooks.WorkOS.csproj" />
-  </Folder>
   <Folder Name="/src/capabilities/">
     <Project Path="src/Incursa.Platform.Access/Incursa.Platform.Access.csproj" />
     <Project Path="src/Incursa.Platform.Audit/Incursa.Platform.Audit.csproj" />
@@ -37,13 +33,24 @@
     <Project Path="src/Incursa.Platform.SqlServer/Incursa.Platform.SqlServer.csproj" />
   </Folder>
   <Folder Name="/src/integrations/">
-    <Project Path="src/Incursa.Platform.Access.WorkOS/Incursa.Platform.Access.WorkOS.csproj" />
-    <Project Path="src/Incursa.Platform.Audit.WorkOS/Incursa.Platform.Audit.WorkOS.csproj" />
-    <Project Path="src/Incursa.Platform.CustomDomains.Cloudflare/Incursa.Platform.CustomDomains.Cloudflare.csproj" />
-    <Project Path="src/Incursa.Platform.Dns.Cloudflare/Incursa.Platform.Dns.Cloudflare.csproj" />
+    <Project Path="src/Incursa.Integrations.Cloudflare/Incursa.Integrations.Cloudflare.csproj" />
+    <Project Path="src/Incursa.Integrations.Cloudflare.CustomDomains/Incursa.Integrations.Cloudflare.CustomDomains.csproj" />
+    <Project Path="src/Incursa.Integrations.Cloudflare.Dns/Incursa.Integrations.Cloudflare.Dns.csproj" />
+    <Project Path="src/Incursa.Integrations.Cloudflare.KvProbe/Incursa.Integrations.Cloudflare.KvProbe.csproj" />
+    <Project Path="src/Incursa.Integrations.ElectronicNotary/Incursa.Integrations.ElectronicNotary.csproj" />
+    <Project Path="src/Incursa.Integrations.ElectronicNotary.Abstractions/Incursa.Integrations.ElectronicNotary.Abstractions.csproj" />
+    <Project Path="src/Incursa.Integrations.ElectronicNotary.Proof/Incursa.Integrations.ElectronicNotary.Proof.csproj" />
+    <Project Path="src/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore.csproj" />
+    <Project Path="src/Incursa.Integrations.WorkOS/Incursa.Integrations.WorkOS.csproj" />
+    <Project Path="src/Incursa.Integrations.WorkOS.Abstractions/Incursa.Integrations.WorkOS.Abstractions.csproj" />
+    <Project Path="src/Incursa.Integrations.WorkOS.Access/Incursa.Integrations.WorkOS.Access.csproj" />
+    <Project Path="src/Incursa.Integrations.WorkOS.Audit/Incursa.Integrations.WorkOS.Audit.csproj" />
+    <Project Path="src/Incursa.Integrations.WorkOS.AspNetCore/Incursa.Integrations.WorkOS.AspNetCore.csproj" />
+    <Project Path="src/Incursa.Integrations.WorkOS.Webhooks/Incursa.Integrations.WorkOS.Webhooks.csproj" />
     <Project Path="src/Incursa.Platform.Email.Postmark/Incursa.Platform.Email.Postmark.csproj" />
   </Folder>
   <Folder Name="/src/hosting/">
+    <Project Path="src/Incursa.Platform.Access.AspNetCore/Incursa.Platform.Access.AspNetCore.csproj" />
     <Project Path="src/Incursa.Platform.Email.AspNetCore/Incursa.Platform.Email.AspNetCore.csproj" />
     <Project Path="src/Incursa.Platform.Health.AspNetCore/Incursa.Platform.Health.AspNetCore.csproj" />
     <Project Path="src/Incursa.Platform.Metrics.AspNetCore/Incursa.Platform.Metrics.AspNetCore.csproj" />
@@ -53,7 +60,11 @@
     <Project Path="src/Incursa.Platform.Webhooks.AspNetCore/Incursa.Platform.Webhooks.AspNetCore.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Incursa.Integrations.Cloudflare.IntegrationTests/Incursa.Integrations.Cloudflare.IntegrationTests.csproj" />
+    <Project Path="tests/Incursa.Integrations.Cloudflare.Tests/Incursa.Integrations.Cloudflare.Tests.csproj" />
+    <Project Path="tests/Incursa.Integrations.ElectronicNotary.Tests/Incursa.Integrations.ElectronicNotary.Tests.csproj" />
     <Project Path="tests/Incursa.Integrations.Storage.Azure.Tests/Incursa.Integrations.Storage.Azure.Tests.csproj" />
+    <Project Path="tests/Incursa.Integrations.WorkOS.Tests/Incursa.Integrations.WorkOS.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Access.AspNetCore.Tests/Incursa.Platform.Access.AspNetCore.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Access.Tests/Incursa.Platform.Access.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Audit.Tests/Incursa.Platform.Audit.Tests.csproj" />
@@ -71,8 +82,8 @@
     <Project Path="tests/Incursa.Platform.Tests/Incursa.Platform.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.TestUtilities/Incursa.Platform.TestUtilities.csproj" />
     <Project Path="tests/Incursa.Platform.Webhooks.AspNetCore.Tests/Incursa.Platform.Webhooks.AspNetCore.Tests.csproj" />
+    <Project Path="tests/Incursa.Integrations.WorkOS.Webhooks.Tests/Incursa.Integrations.WorkOS.Webhooks.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Webhooks.Tests/Incursa.Platform.Webhooks.Tests.csproj" />
-    <Project Path="tests/Incursa.Platform.Webhooks.WorkOS.Tests/Incursa.Platform.Webhooks.WorkOS.Tests.csproj" />
   </Folder>
   <Folder Name="/tests/smoke/">
     <Project Path="tests/Incursa.Platform.Smoke.AppHost/Incursa.Platform.Smoke.AppHost.csproj" />

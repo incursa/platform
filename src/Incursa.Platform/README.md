@@ -1,15 +1,40 @@
 # Incursa.Platform
 
-Core platform abstractions and orchestration. SQL Server integrations live in `Incursa.Platform.SqlServer`.
+`Incursa.Platform` is the foundational package family for the monorepo. It provides the core runtime building blocks that the higher-level capability packages build on.
 
-## Install
+## What This Package Family Is For
 
-```bash
-dotnet add package Incursa.Platform
-dotnet add package Incursa.Platform.SqlServer
-```
+Use `Incursa.Platform` when you need the base infrastructure pieces that sit underneath storage-backed workflows, inbox/outbox processing, orchestration, and shared platform runtime concerns.
 
-## Usage
+This package is intentionally foundational. More opinionated domain capabilities live in sibling packages such as:
+
+- `Incursa.Platform.Access`
+- `Incursa.Platform.Storage`
+- `Incursa.Platform.Webhooks`
+- `Incursa.Platform.Email`
+- `Incursa.Platform.Operations`
+
+## What It Owns
+
+- base orchestration and platform runtime primitives
+- shared registration helpers for the core platform runtime
+- support for inbox and outbox style processing
+- one-time execution and startup coordination helpers
+
+## What It Does Not Own
+
+- vendor-specific integrations
+- provider-neutral business capability models like access or DNS
+- application-specific domain logic
+
+## Related Packages
+
+- `Incursa.Platform.SqlServer` for SQL Server-backed infrastructure and runtime hosting
+- `Incursa.Platform.Postgres` for PostgreSQL-backed infrastructure
+- `Incursa.Platform.Storage` for provider-neutral storage contracts
+- `Incursa.Platform.Observability` for shared observability conventions
+
+## Typical Use
 
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
@@ -21,46 +46,10 @@ builder.Services.AddSqlPlatform(
         options.EnableSchemaDeployment = true;
         options.EnableSchedulerWorkers = true;
     });
-
-var app = builder.Build();
-```
-
-## Examples
-
-### One-time execution registry
-
-Use <xref:Incursa.Platform.OnceExecutionRegistry> to guard idempotent startup tasks or DI registrations.
-
-```csharp
-var registry = new OnceExecutionRegistry();
-
-if (!registry.CheckAndMark("platform:di"))
-{
-    builder.Services.AddSqlPlatform("Server=localhost;Database=MyApp;Trusted_Connection=true;");
-}
-
-if (registry.HasRun("platform:di"))
-{
-    logger.LogInformation("Platform services already registered.");
-}
-```
-
-### Outbox + Inbox configuration
-
-Use `SqlPlatformOptions.ConfigureOutbox` and `SqlPlatformOptions.ConfigureInbox` to tune
-outbox/inbox behavior while keeping a single registration call.
-
-### Discovery-based registration
-
-```csharp
-builder.Services.AddSingleton<IPlatformDatabaseDiscovery>(new MyTenantDiscovery());
-
-builder.Services.AddSqlPlatformMultiDatabaseWithDiscovery(enableSchemaDeployment: true);
 ```
 
 ## Documentation
 
-- https://github.com/incursa/platform
-- docs/INDEX.md
-- docs/outbox-quickstart.md
-- docs/inbox-quickstart.md
+- `docs/architecture/monorepo.md`
+- `docs/outbox-quickstart.md`
+- `docs/inbox-quickstart.md`

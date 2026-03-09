@@ -1,105 +1,120 @@
 # Incursa Platform
 
-`Incursa.Platform` is the public monorepo for Incursa infrastructure and platform libraries. It holds reusable cross-cutting capabilities, storage providers, hosting adapters, and selected public service integrations that can be explained without private product context.
+`Incursa.Platform` is a public .NET monorepo for reusable platform capabilities, hosting adapters, and vendor integrations. The repository is organized around two package layers:
 
-## Monorepo shape
+- Layer 2 capability packages in `src/Incursa.Platform.*`
+- Layer 1 vendor integration packages in `src/Incursa.Integrations.*`
 
-- `src/`: public packages that are allowed to ship from this repository
-- `tests/`: automated tests plus smoke/sample apps
-- `tools/`: analyzers and build/runtime helpers that are intentionally shipped
-- `eng/`: package catalog, affected-project resolution, and pack/release helpers
-- `docs/`: architecture, guidance, quality rules, and reference docs
-- `incubating/`: preserved imports and staging code that remain non-packable and non-publishable by default
+The goal is to keep provider-neutral contracts and domain models clean, small, and reusable, while still shipping first-class vendor-specific adapters for the systems those capabilities need to talk to.
 
-Authoritative governance lives in:
+## Start Here
 
-- `eng/package-catalog.json`
-- `docs/architecture/monorepo.md`
-- `docs/architecture/imported-integrations.md`
-- `docs/quality/repo-scope-boundary.md`
-- `incubating/README.md`
+- [Monorepo architecture](docs/architecture/monorepo.md)
+- [Layer 2 capability model](docs/architecture/layer-2-capabilities.md)
+- [Imported integrations and provider boundaries](docs/architecture/imported-integrations.md)
+- [Repository scope and public-surface rules](docs/quality/repo-scope-boundary.md)
+- [Curated repository map for contributors and LLMs](llms.txt)
 
-## Package families
+## Repository Layout
 
-Core and foundations:
+- [`src/`](src/) contains public packages that are intended to ship from this repository.
+- [`tests/`](tests/) contains automated tests and sample or smoke-host projects.
+- [`docs/`](docs/) contains architecture notes, quality rules, runbooks, and reference material.
+- [`eng/`](eng/) contains packaging, affected-project, and release support scripts.
+- [`tools/`](tools/) contains shipped build/runtime helpers and test-support utilities.
+- [`incubating/`](incubating/) is a staging area reserved for code that is not yet ready for the public source tree.
 
-- `Incursa.Platform`
+## Layer 2 Capabilities
 
-Reusable capabilities:
+These packages define the reusable, provider-neutral capability surface of the platform.
 
-- `Incursa.Platform.Audit`
-- `Incursa.Platform.Correlation`
-- `Incursa.Platform.Email`
-- `Incursa.Platform.ExactlyOnce`
-- `Incursa.Platform.Health`
-- `Incursa.Platform.HealthProbe`
-- `Incursa.Platform.Idempotency`
-- `Incursa.Platform.Modularity`
-- `Incursa.Platform.Observability`
-- `Incursa.Platform.Operations`
-- `Incursa.Platform.Storage`
-- `Incursa.Platform.Webhooks`
+### Core and foundation
 
-Providers and data adapters:
+- [`Incursa.Platform`](src/Incursa.Platform/) for foundational infrastructure, orchestration, and cross-cutting runtime building blocks
+- [`Incursa.Platform.Storage`](src/Incursa.Platform.Storage/) for partition-aware storage contracts used by capability and adapter packages
+- [`Incursa.Platform.Observability`](src/Incursa.Platform.Observability/) for shared observability conventions and event/tag naming
+- [`Incursa.Platform.Correlation`](src/Incursa.Platform.Correlation/) for correlation context propagation
+- [`Incursa.Platform.Audit`](src/Incursa.Platform.Audit/) for immutable audit-event contracts
+- [`Incursa.Platform.Operations`](src/Incursa.Platform.Operations/) for long-running operation tracking primitives
 
-- `Incursa.Platform.SqlServer`
-- `Incursa.Platform.Postgres`
-- `Incursa.Platform.InMemory`
-- `Incursa.Platform.Email.SqlServer`
-- `Incursa.Platform.Email.Postgres`
-- `Incursa.Integrations.Storage.Azure`
+### Business and integration capabilities
 
-Public service integrations:
+- [`Incursa.Platform.Access`](src/Incursa.Platform.Access/) for users, scope roots, tenants, memberships, assignments, grants, and effective-access evaluation
+- [`Incursa.Platform.Dns`](src/Incursa.Platform.Dns/) for provider-neutral zone and record management
+- [`Incursa.Platform.CustomDomains`](src/Incursa.Platform.CustomDomains/) for managed custom-domain and custom-hostname lifecycle state
+- [`Incursa.Platform.Email`](src/Incursa.Platform.Email/) for outbound email contracts, queueing, dispatch, and delivery workflow primitives
+- [`Incursa.Platform.Webhooks`](src/Incursa.Platform.Webhooks/) for provider-agnostic webhook ingestion and classification primitives
+- [`Incursa.Platform.Health`](src/Incursa.Platform.Health/) for service and subsystem health surfaces
+- [`Incursa.Platform.Modularity`](src/Incursa.Platform.Modularity/) for module registration and engine composition
 
-- `Incursa.Platform.Audit.WorkOS`
-- `Incursa.Platform.Email.Postmark`
+### Hosting and provider-neutral adapters
 
-Hosting adapters:
+- [`Incursa.Platform.Access.AspNetCore`](src/Incursa.Platform.Access.AspNetCore/)
+- [`Incursa.Platform.Email.AspNetCore`](src/Incursa.Platform.Email.AspNetCore/)
+- [`Incursa.Platform.Health.AspNetCore`](src/Incursa.Platform.Health.AspNetCore/)
+- [`Incursa.Platform.Metrics.AspNetCore`](src/Incursa.Platform.Metrics.AspNetCore/)
+- [`Incursa.Platform.Metrics.HttpServer`](src/Incursa.Platform.Metrics.HttpServer/)
+- [`Incursa.Platform.Modularity.AspNetCore`](src/Incursa.Platform.Modularity.AspNetCore/)
+- [`Incursa.Platform.Modularity.Razor`](src/Incursa.Platform.Modularity.Razor/)
+- [`Incursa.Platform.Webhooks.AspNetCore`](src/Incursa.Platform.Webhooks.AspNetCore/)
 
-- `Incursa.Platform.Email.AspNetCore`
-- `Incursa.Platform.Health.AspNetCore`
-- `Incursa.Platform.Metrics.AspNetCore`
-- `Incursa.Platform.Metrics.HttpServer`
-- `Incursa.Platform.Modularity.AspNetCore`
-- `Incursa.Platform.Modularity.Razor`
-- `Incursa.Platform.Webhooks.AspNetCore`
+### Storage and persistence adapters
 
-Tools:
+- [`Incursa.Platform.InMemory`](src/Incursa.Platform.InMemory/)
+- [`Incursa.Platform.Postgres`](src/Incursa.Platform.Postgres/)
+- [`Incursa.Platform.SqlServer`](src/Incursa.Platform.SqlServer/)
+- [`Incursa.Platform.Email.Postgres`](src/Incursa.Platform.Email.Postgres/)
+- [`Incursa.Platform.Email.SqlServer`](src/Incursa.Platform.Email.SqlServer/)
+- [`Incursa.Platform.Email.Postmark`](src/Incursa.Platform.Email.Postmark/)
 
-- `Incursa.Platform.Observability.Analyzers`
-- `Incursa.TestDocs.Analyzers`
-- `Incursa.TestDocs.Cli`
-- `Incursa.Platform.SchemaMigrations.Cli`
+## Layer 1 Integrations
 
-## Imported integrations
+These packages are vendor-specific adapters. They are public, packable packages, but they are intentionally scoped to a particular provider.
 
-The monorepo now absorbs the public email/Postmark family and preserves broader vendor imports under `incubating/` until they have clear package boundaries.
+### WorkOS
 
-- `C:\src\incursa\integrations-postmark` merged into `src/Incursa.Platform.Email*` plus `tests/Incursa.Platform.Email.Tests`
-- `C:\src\incursa\integrations-workos` preserved under `incubating/workos/`; the existing public `Incursa.Platform.Audit.WorkOS` package remains the supported public WorkOS slice
-- `C:\src\incursa\integrations-cloudflare` preserved under `incubating/cloudflare/`
-- `C:\src\incursa\integrations-electronicnotary` preserved under `incubating/electronicnotary/`
+- [`Incursa.Integrations.WorkOS`](src/Incursa.Integrations.WorkOS/)
+- [`Incursa.Integrations.WorkOS.Abstractions`](src/Incursa.Integrations.WorkOS.Abstractions/)
+- [`Incursa.Integrations.WorkOS.Access`](src/Incursa.Integrations.WorkOS.Access/)
+- [`Incursa.Integrations.WorkOS.AspNetCore`](src/Incursa.Integrations.WorkOS.AspNetCore/)
+- [`Incursa.Integrations.WorkOS.Audit`](src/Incursa.Integrations.WorkOS.Audit/)
+- [`Incursa.Integrations.WorkOS.Webhooks`](src/Incursa.Integrations.WorkOS.Webhooks/)
+- [`Incursa.Integrations.WorkOS.AppAuth.Abstractions`](src/Incursa.Integrations.WorkOS.AppAuth.Abstractions/)
+- [`Incursa.Integrations.WorkOS.AppAuth.AspNetCore`](src/Incursa.Integrations.WorkOS.AppAuth.AspNetCore/)
 
-## Solutions
+### Cloudflare
 
-- `Incursa.Platform.slnx`: primary working solution for public packages, tests, tools, and monorepo docs
-- `Incursa.Platform.CI.slnx`: CI/build solution for public source, tests, smoke apps, and shipped tools
-- `Incursa.Platform.Incubating.slnx`: preserved staging solution for imported code that is not part of the public release surface
+- [`Incursa.Integrations.Cloudflare`](src/Incursa.Integrations.Cloudflare/)
+- [`Incursa.Integrations.Cloudflare.Dns`](src/Incursa.Integrations.Cloudflare.Dns/)
+- [`Incursa.Integrations.Cloudflare.CustomDomains`](src/Incursa.Integrations.Cloudflare.CustomDomains/)
+- [`Incursa.Integrations.Cloudflare.KvProbe`](src/Incursa.Integrations.Cloudflare.KvProbe/)
 
-## Pack and release policy
+### Electronic notary
 
-Projects do not become NuGet packages by accident.
+- [`Incursa.Integrations.ElectronicNotary`](src/Incursa.Integrations.ElectronicNotary/)
+- [`Incursa.Integrations.ElectronicNotary.Abstractions`](src/Incursa.Integrations.ElectronicNotary.Abstractions/)
+- [`Incursa.Integrations.ElectronicNotary.Proof`](src/Incursa.Integrations.ElectronicNotary.Proof/)
+- [`Incursa.Integrations.ElectronicNotary.Proof.AspNetCore`](src/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore/)
 
-- `Directory.Build.props` defaults all `.csproj` projects to `IsPackable=false`
-- `Directory.Build.targets` defaults all builds to `GeneratePackageOnBuild=false`
-- public packages opt back in explicitly with `IsPackable=true`
-- `incubating/` projects are forced non-packable/non-publishable
-- `eng/package-catalog.json` is the allowlist for pack/publish behavior
-- `eng/Pack-PublicPackages.ps1` packs only the catalog-selected projects
-- commit CI packs only affected public packages
-- main/release CI can pack publishable packages, but nuget.org publishing is manual via workflow dispatch
+### Storage providers
 
-## Local validation
+- [`Incursa.Integrations.Storage.Azure`](src/Incursa.Integrations.Storage.Azure/)
+
+## How To Navigate The Repo
+
+- Start with a layer 2 package if you are trying to understand the platform’s public domain model or capability boundary.
+- Start with a layer 1 integration package if you already know the provider you need and want the vendor-specific adapter.
+- Use the architecture docs before moving code between package families; those documents define what belongs in capability packages versus provider packages.
+
+## Packaging And Release Model
+
+- Public packages live under `src/`.
+- Packability is explicitly opted into per project.
+- [`eng/package-catalog.json`](eng/package-catalog.json) is the allowlist used by repo tooling for package discovery and packing.
+- [`eng/Generate-PackageCatalog.ps1`](eng/Generate-PackageCatalog.ps1) refreshes the package catalog.
+- [`eng/Pack-PublicPackages.ps1`](eng/Pack-PublicPackages.ps1) packs the public package set.
+
+## Local Validation
 
 ```powershell
 dotnet restore Incursa.Platform.CI.slnx
@@ -109,5 +124,3 @@ dotnet test Incursa.Platform.CI.slnx -c Release
 pwsh -File eng/Generate-PackageCatalog.ps1
 pwsh -File eng/Pack-PublicPackages.ps1 -Configuration Release -OutputPath ./nupkgs
 ```
-
-Repo-specific orientation and curated references live in `llms.txt`.

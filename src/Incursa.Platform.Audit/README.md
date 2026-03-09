@@ -1,24 +1,26 @@
 # Incursa.Platform.Audit
 
-`Incursa.Platform.Audit` provides provider-agnostic primitives for recording and querying immutable audit events.
+`Incursa.Platform.Audit` provides the provider-neutral audit-event model for the monorepo. It gives capabilities and integrations a common way to record immutable audit history without coupling the public surface to any single sink or storage implementation.
 
-## Install
+## What It Owns
 
-```bash
-dotnet add package Incursa.Platform.Audit
-```
+- immutable audit-event contracts
+- actors, targets, outcomes, and anchor modeling
+- reader and writer abstractions for audit stores
+- shared validation helpers for stable audit payloads and metadata
 
-## What You Get
+## What It Does Not Own
 
-- Strongly typed audit event models (`AuditEvent`, `AuditActor`, anchors, outcomes)
-- Validation helpers for consistent payloads and metadata
-- Reader/writer abstractions for provider-specific implementations
+- provider-specific delivery or export APIs
+- access-specific audit policy
+- application-specific event naming conventions beyond the shared primitives
+
+## Related Packages
+
+- `Incursa.Platform.Access` for access-domain audit journaling
+- `Incursa.Integrations.WorkOS.Audit` for asynchronous WorkOS delivery
+- `Incursa.Platform.Observability` for adjacent operation and tracing conventions
 
 ## Typical Use
 
-Use this package when you want a stable audit contract in core code while keeping storage/provider choices in adapter packages.
-
-## Documentation
-
-- https://github.com/incursa/platform/blob/main/docs/audit/README.md
-- https://github.com/incursa/platform/blob/main/docs/INDEX.md
+Use this package when you want a stable audit contract in core code while keeping storage or provider choices in adapter packages.

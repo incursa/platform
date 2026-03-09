@@ -1,6 +1,6 @@
 # Imported Integrations
 
-This repository now preserves the provenance and landing zone of the local sibling integration repositories that were inspected during the monorepo cleanup.
+This repository preserves the provenance and landing zone of the sibling integration repositories that were folded into the monorepo.
 
 ## `C:\src\incursa\integrations-postmark`
 
@@ -20,84 +20,91 @@ Resulting packages:
 Notes:
 
 - `Incursa.Email.Abstractions` and `Incursa.Email.Core` were consolidated into `Incursa.Platform.Email`
-- package/namespace identity was normalized to the `Incursa.Platform.Email*` family
-- the imported email test slice was rewritten to the repo’s xUnit-based test conventions
+- package and namespace identity was normalized to the `Incursa.Platform.Email*` family
+- the imported email test slice was rewritten to the repo's xUnit-based test conventions
 
 ## `C:\src\incursa\integrations-workos`
 
 Decision:
 
-- keep the existing public `src/Incursa.Platform.Audit.WorkOS/` package
-- promote the provider-neutral access capability plus a focused WorkOS access adapter into `src/`
-- defer broader WorkOS promotion until the remaining slices can hang cleanly off existing capability families
-- preserve the broader imported WorkOS repository under `incubating/` until the remaining surfaces are split into capability-specific public packages
+- keep `Incursa.Platform.Access` as the provider-neutral source-of-truth capability
+- promote the remaining WorkOS vendor packages into public `Incursa.Integrations.WorkOS.*` packages
 
 Result:
 
-- public packages added:
+- capability packages:
   - `src/Incursa.Platform.Access/`
   - `src/Incursa.Platform.Access.AspNetCore/`
-  - `src/Incursa.Platform.Access.WorkOS/`
-  - `src/Incursa.Platform.Webhooks.WorkOS/`
-- public package retained:
-  - `src/Incursa.Platform.Audit.WorkOS/`
-- public tests added:
+- public vendor packages:
+  - `src/Incursa.Integrations.WorkOS/`
+  - `src/Incursa.Integrations.WorkOS.Abstractions/`
+  - `src/Incursa.Integrations.WorkOS.Access/`
+  - `src/Incursa.Integrations.WorkOS.AspNetCore/`
+  - `src/Incursa.Integrations.WorkOS.Audit/`
+  - `src/Incursa.Integrations.WorkOS.Webhooks/`
+- tests:
   - `tests/Incursa.Platform.Access.Tests/`
   - `tests/Incursa.Platform.Access.AspNetCore.Tests/`
-  - `tests/Incursa.Platform.Webhooks.WorkOS.Tests/`
-- preserved import: `incubating/workos/`
+  - `tests/Incursa.Integrations.WorkOS.Tests/`
+  - `tests/Incursa.Integrations.WorkOS.Webhooks.Tests/`
 
-Why incubated:
+Notes:
 
-- the imported repo is still a broad vendor surface spanning auth, webhook, widget, claims, and management concerns
-- only the organization-membership-to-access slice was cleanly expressible as a layer 1 adapter under a public layer 2 access capability
-- request-time access context resolution and webhook authentication/classification were small enough to promote without creating a standalone identity core
-- session selection, onboarding middleware, widgets, management clients, profile hydration, and the old vendor-owned webhook pipeline remain broader than the clean public boundary
+- public layer 1 WorkOS packages use the `Incursa.Integrations.WorkOS.*` family
+- the associated provider-neutral capability and hosting packages remain in `Incursa.Platform.*`
 
 ## `C:\src\incursa\integrations-cloudflare`
 
 Decision:
 
-- extract the provider-neutral DNS capability plus a focused Cloudflare DNS adapter into `src/`
-- extract the provider-neutral custom-domain capability plus a focused Cloudflare custom-hostname adapter into `src/`
-- preserve the broader repository under `incubating/` instead of promoting the full vendor bucket directly
+- keep `Incursa.Platform.Dns` and `Incursa.Platform.CustomDomains` as provider-neutral capabilities
+- promote the remaining Cloudflare vendor packages into public `Incursa.Integrations.Cloudflare.*` packages
 
 Result:
 
-- public packages added:
+- capability packages:
   - `src/Incursa.Platform.CustomDomains/`
-  - `src/Incursa.Platform.CustomDomains.Cloudflare/`
   - `src/Incursa.Platform.Dns/`
-  - `src/Incursa.Platform.Dns.Cloudflare/`
-- public tests added:
+- public vendor packages:
+  - `src/Incursa.Integrations.Cloudflare/`
+  - `src/Incursa.Integrations.Cloudflare.CustomDomains/`
+  - `src/Incursa.Integrations.Cloudflare.Dns/`
+  - `src/Incursa.Integrations.Cloudflare.KvProbe/`
+- tests:
   - `tests/Incursa.Platform.CustomDomains.Tests/`
   - `tests/Incursa.Platform.Dns.Tests/`
-- preserved import: `incubating/cloudflare/`
+  - `tests/Incursa.Integrations.Cloudflare.Tests/`
+  - `tests/Incursa.Integrations.Cloudflare.IntegrationTests/`
 
-Why incubated:
+Notes:
 
-- the current code is still a mixed vendor bucket covering storage, probing, KV, R2, load-balancing, and broader Cloudflare registration concerns
-- the DNS zone/record slice and the managed custom-hostname slice were cleanly expressible as layer 1 adapters under public layer 2 capabilities
+- Cloudflare-specific adapters and broader vendor primitives now live in `Incursa.Integrations.Cloudflare.*`
+- `Incursa.Integrations.Cloudflare.KvProbe` remains a public source-tree executable and is intentionally non-packable
 
 ## `C:\src\incursa\integrations-electronicnotary`
 
 Decision:
 
-- preserve the repository under `incubating/`
+- promote the vendor packages into public `Incursa.Integrations.ElectronicNotary.*` packages
 
 Result:
 
-- preserved import: `incubating/electronicnotary/`
+- public vendor packages:
+  - `src/Incursa.Integrations.ElectronicNotary/`
+  - `src/Incursa.Integrations.ElectronicNotary.Abstractions/`
+  - `src/Incursa.Integrations.ElectronicNotary.Proof/`
+  - `src/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore/`
+- tests:
+  - `tests/Incursa.Integrations.ElectronicNotary.Tests/`
 
-Why incubated:
+Notes:
 
-- the current surface mixes provider-facing code with workflow/healing/orchestration behavior
-- it is not yet a clean public infrastructure package boundary
+- these remain vendor-specific layer 1 integrations
+- they are public and packable even where the provider surface is specialized
 
 ## Summary
 
 - no imported repository was deleted
-- the email/Postmark family was promoted into the public monorepo
-- WorkOS now has a public audit slice plus a focused access adapter, with the broader vendor surface still incubated
-- Cloudflare now has public DNS and custom-domain slices, with the broader vendor surface still incubated
-- electronic-notary code was preserved under `incubating/` for later refactoring or extraction
+- provider-neutral capability families remain in `Incursa.Platform.*`
+- vendor-specific public packages now live in `src/` under `Incursa.Integrations.*`
+- `incubating/` is reserved for future staging code rather than active vendor package families

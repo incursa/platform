@@ -1,24 +1,25 @@
 # Incursa.Platform.Correlation
 
-`Incursa.Platform.Correlation` provides primitives for propagating correlation context across background workflows and HTTP boundaries.
+`Incursa.Platform.Correlation` provides the shared correlation primitives used to connect HTTP requests, background workflows, operations, and audit trails.
 
-## Install
+## What It Owns
 
-```bash
-dotnet add package Incursa.Platform.Correlation
-```
+- correlation ID value types and context objects
+- context accessor abstractions for ambient and request-scoped usage
+- header serialization helpers for cross-service propagation
 
-## What You Get
+## What It Does Not Own
 
-- Correlation ID value types and context objects
-- Context accessor abstractions for ambient/request-scoped usage
-- Header serialization helpers for cross-service propagation
+- tracing exporters or vendor-specific telemetry sinks
+- operation history storage
+- audit records themselves
+
+## Related Packages
+
+- `Incursa.Platform.Observability` for shared event and tag conventions
+- `Incursa.Platform.Operations` for long-running workflow tracking
+- `Incursa.Platform.Audit` for immutable audit history
 
 ## Typical Use
 
 Use this package when you need consistent identifiers for tracing, diagnostics, and audit stitching across service boundaries.
-
-## Documentation
-
-- https://github.com/incursa/platform/blob/main/docs/correlation/README.md
-- https://github.com/incursa/platform/blob/main/docs/INDEX.md

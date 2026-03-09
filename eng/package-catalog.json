@@ -1,188 +1,118 @@
 {
-  "generatedAt": "2026-03-09T00:47:35.8772421-06:00",
+  "generatedAt": "2026-03-09T09:36:55.1661412-06:00",
   "generatedBy": "eng/Generate-PackageCatalog.ps1",
   "projects": [
     {
-      "projectPath": "incubating/cloudflare/src/Incursa.Integrations.Cloudflare.KvProbe/Incursa.Integrations.Cloudflare.KvProbe.csproj",
+      "projectPath": "src/Incursa.Integrations.Cloudflare.CustomDomains/Incursa.Integrations.Cloudflare.CustomDomains.csproj",
+      "packageId": "Incursa.Integrations.Cloudflare.CustomDomains",
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-cloudflare"
+      },
+      "notes": "Capability-specific provider adapter package."
+    },
+    {
+      "projectPath": "src/Incursa.Integrations.Cloudflare.Dns/Incursa.Integrations.Cloudflare.Dns.csproj",
+      "packageId": "Incursa.Integrations.Cloudflare.Dns",
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-cloudflare"
+      },
+      "notes": "Capability-specific provider adapter package."
+    },
+    {
+      "projectPath": "src/Incursa.Integrations.Cloudflare.KvProbe/Incursa.Integrations.Cloudflare.KvProbe.csproj",
       "packageId": "Incursa.Integrations.Cloudflare.KvProbe",
-      "zone": "incubating",
-      "category": "smoke",
-      "classification": "smoke/sample",
+      "zone": "src",
+      "category": "tools",
+      "classification": "tool-only",
       "packable": false,
       "publishable": false,
       "origin": {
         "kind": "imported-repo",
         "sourcePath": "C:/src/incursa/integrations-cloudflare"
       },
-      "notes": "Provider-specific probe/sample kept with the incubating Cloudflare import."
+      "notes": "Provider-specific Cloudflare probe executable kept in the public source tree."
     },
     {
-      "projectPath": "incubating/cloudflare/src/Incursa.Integrations.Cloudflare/Incursa.Integrations.Cloudflare.csproj",
+      "projectPath": "src/Incursa.Integrations.Cloudflare/Incursa.Integrations.Cloudflare.csproj",
       "packageId": "Incursa.Integrations.Cloudflare",
-      "zone": "incubating",
-      "category": "incubating",
-      "classification": "incubating",
-      "packable": false,
-      "publishable": false,
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
       "origin": {
         "kind": "imported-repo",
         "sourcePath": "C:/src/incursa/integrations-cloudflare"
       },
-      "notes": "Mixed Cloudflare vendor surface spanning storage, load-balancing, probes, and broader edge/domain workflows; retained in incubating until split by capability."
+      "notes": "Capability-specific provider adapter package."
     },
     {
-      "projectPath": "incubating/cloudflare/tests/Incursa.Integrations.Cloudflare.IntegrationTests/Incursa.Integrations.Cloudflare.IntegrationTests.csproj",
-      "packageId": "Incursa.Integrations.Cloudflare.IntegrationTests",
-      "zone": "incubating",
-      "category": "tests",
-      "classification": "test-only",
-      "packable": false,
-      "publishable": false,
-      "origin": {
-        "kind": "imported-repo",
-        "sourcePath": "C:/src/incursa/integrations-cloudflare"
-      },
-      "notes": "Tests preserved with the incubating import."
-    },
-    {
-      "projectPath": "incubating/cloudflare/tests/Incursa.Integrations.Cloudflare.Tests/Incursa.Integrations.Cloudflare.Tests.csproj",
-      "packageId": "Incursa.Integrations.Cloudflare.Tests",
-      "zone": "incubating",
-      "category": "tests",
-      "classification": "test-only",
-      "packable": false,
-      "publishable": false,
-      "origin": {
-        "kind": "imported-repo",
-        "sourcePath": "C:/src/incursa/integrations-cloudflare"
-      },
-      "notes": "Tests preserved with the incubating import."
-    },
-    {
-      "projectPath": "incubating/electronicnotary/src/Incursa.Integrations.ElectronicNotary.Abstractions/Incursa.Integrations.ElectronicNotary.Abstractions.csproj",
+      "projectPath": "src/Incursa.Integrations.ElectronicNotary.Abstractions/Incursa.Integrations.ElectronicNotary.Abstractions.csproj",
       "packageId": "Incursa.Integrations.ElectronicNotary.Abstractions",
-      "zone": "incubating",
-      "category": "incubating",
-      "classification": "incubating",
-      "packable": false,
-      "publishable": false,
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
       "origin": {
         "kind": "imported-repo",
         "sourcePath": "C:/src/incursa/integrations-electronicnotary"
       },
-      "notes": "Electronic notary provider code retained in incubating because the current surface mixes provider APIs with workflow/healing behavior."
+      "notes": "Capability-specific provider adapter package."
     },
     {
-      "projectPath": "incubating/electronicnotary/src/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore.csproj",
+      "projectPath": "src/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore.csproj",
       "packageId": "Incursa.Integrations.ElectronicNotary.Proof.AspNetCore",
-      "zone": "incubating",
-      "category": "incubating",
-      "classification": "incubating",
-      "packable": false,
-      "publishable": false,
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
       "origin": {
         "kind": "imported-repo",
         "sourcePath": "C:/src/incursa/integrations-electronicnotary"
       },
-      "notes": "Electronic notary provider code retained in incubating because the current surface mixes provider APIs with workflow/healing behavior."
+      "notes": "Capability-specific provider adapter package."
     },
     {
-      "projectPath": "incubating/electronicnotary/src/Incursa.Integrations.ElectronicNotary.Proof/Incursa.Integrations.ElectronicNotary.Proof.csproj",
+      "projectPath": "src/Incursa.Integrations.ElectronicNotary.Proof/Incursa.Integrations.ElectronicNotary.Proof.csproj",
       "packageId": "Incursa.Integrations.ElectronicNotary.Proof",
-      "zone": "incubating",
-      "category": "incubating",
-      "classification": "incubating",
-      "packable": false,
-      "publishable": false,
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
       "origin": {
         "kind": "imported-repo",
         "sourcePath": "C:/src/incursa/integrations-electronicnotary"
       },
-      "notes": "Electronic notary provider code retained in incubating because the current surface mixes provider APIs with workflow/healing behavior."
+      "notes": "Capability-specific provider adapter package."
     },
     {
-      "projectPath": "incubating/electronicnotary/src/Incursa.Integrations.ElectronicNotary/Incursa.Integrations.ElectronicNotary.csproj",
+      "projectPath": "src/Incursa.Integrations.ElectronicNotary/Incursa.Integrations.ElectronicNotary.csproj",
       "packageId": "Incursa.Integrations.ElectronicNotary",
-      "zone": "incubating",
-      "category": "incubating",
-      "classification": "incubating",
-      "packable": false,
-      "publishable": false,
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
       "origin": {
         "kind": "imported-repo",
         "sourcePath": "C:/src/incursa/integrations-electronicnotary"
       },
-      "notes": "Electronic notary provider code retained in incubating because the current surface mixes provider APIs with workflow/healing behavior."
-    },
-    {
-      "projectPath": "incubating/electronicnotary/tests/Incursa.Integrations.ElectronicNotary.Tests/Incursa.Integrations.ElectronicNotary.Tests.csproj",
-      "packageId": "Incursa.Integrations.ElectronicNotary.Tests",
-      "zone": "incubating",
-      "category": "tests",
-      "classification": "test-only",
-      "packable": false,
-      "publishable": false,
-      "origin": {
-        "kind": "imported-repo",
-        "sourcePath": "C:/src/incursa/integrations-electronicnotary"
-      },
-      "notes": "Tests preserved with the incubating import."
-    },
-    {
-      "projectPath": "incubating/workos/src/Incursa.Integrations.WorkOS.Abstractions/Incursa.Integrations.WorkOS.Abstractions.csproj",
-      "packageId": "Incursa.Integrations.WorkOS.Abstractions",
-      "zone": "incubating",
-      "category": "incubating",
-      "classification": "incubating",
-      "packable": false,
-      "publishable": false,
-      "origin": {
-        "kind": "imported-repo",
-        "sourcePath": "C:/src/incursa/integrations-workos"
-      },
-      "notes": "Broad WorkOS auth, webhook, management, and widget surface retained in incubating until it is split into capability-specific packages."
-    },
-    {
-      "projectPath": "incubating/workos/src/Incursa.Integrations.WorkOS.AspNetCore/Incursa.Integrations.WorkOS.AspNetCore.csproj",
-      "packageId": "Incursa.Integrations.WorkOS.AspNetCore",
-      "zone": "incubating",
-      "category": "incubating",
-      "classification": "incubating",
-      "packable": false,
-      "publishable": false,
-      "origin": {
-        "kind": "imported-repo",
-        "sourcePath": "C:/src/incursa/integrations-workos"
-      },
-      "notes": "Broad WorkOS auth, webhook, management, and widget surface retained in incubating until it is split into capability-specific packages."
-    },
-    {
-      "projectPath": "incubating/workos/src/Incursa.Integrations.WorkOS/Incursa.Integrations.WorkOS.csproj",
-      "packageId": "Incursa.Integrations.WorkOS",
-      "zone": "incubating",
-      "category": "incubating",
-      "classification": "incubating",
-      "packable": false,
-      "publishable": false,
-      "origin": {
-        "kind": "imported-repo",
-        "sourcePath": "C:/src/incursa/integrations-workos"
-      },
-      "notes": "Broad WorkOS auth, webhook, management, and widget surface retained in incubating until it is split into capability-specific packages."
-    },
-    {
-      "projectPath": "incubating/workos/tests/Incursa.Integrations.WorkOS.Tests/Incursa.Integrations.WorkOS.Tests.csproj",
-      "packageId": "Incursa.Integrations.WorkOS.Tests",
-      "zone": "incubating",
-      "category": "tests",
-      "classification": "test-only",
-      "packable": false,
-      "publishable": false,
-      "origin": {
-        "kind": "imported-repo",
-        "sourcePath": "C:/src/incursa/integrations-workos"
-      },
-      "notes": "Tests preserved with the incubating import."
+      "notes": "Capability-specific provider adapter package."
     },
     {
       "projectPath": "src/Incursa.Integrations.Storage.Azure/Incursa.Integrations.Storage.Azure.csproj",
@@ -199,6 +129,90 @@
       "notes": "Public Azure storage provider adapter for Incursa.Platform.Storage."
     },
     {
+      "projectPath": "src/Incursa.Integrations.WorkOS.Abstractions/Incursa.Integrations.WorkOS.Abstractions.csproj",
+      "packageId": "Incursa.Integrations.WorkOS.Abstractions",
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-workos"
+      },
+      "notes": "Capability-specific provider adapter package."
+    },
+    {
+      "projectPath": "src/Incursa.Integrations.WorkOS.Access/Incursa.Integrations.WorkOS.Access.csproj",
+      "packageId": "Incursa.Integrations.WorkOS.Access",
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-workos"
+      },
+      "notes": "Capability-specific provider adapter package."
+    },
+    {
+      "projectPath": "src/Incursa.Integrations.WorkOS.AspNetCore/Incursa.Integrations.WorkOS.AspNetCore.csproj",
+      "packageId": "Incursa.Integrations.WorkOS.AspNetCore",
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-workos"
+      },
+      "notes": "Capability-specific provider adapter package."
+    },
+    {
+      "projectPath": "src/Incursa.Integrations.WorkOS.Audit/Incursa.Integrations.WorkOS.Audit.csproj",
+      "packageId": "Incursa.Integrations.WorkOS.Audit",
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-workos"
+      },
+      "notes": "Capability-specific WorkOS audit sink package retained in the public source surface."
+    },
+    {
+      "projectPath": "src/Incursa.Integrations.WorkOS.Webhooks/Incursa.Integrations.WorkOS.Webhooks.csproj",
+      "packageId": "Incursa.Integrations.WorkOS.Webhooks",
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-workos"
+      },
+      "notes": "Capability-specific provider adapter package."
+    },
+    {
+      "projectPath": "src/Incursa.Integrations.WorkOS/Incursa.Integrations.WorkOS.csproj",
+      "packageId": "Incursa.Integrations.WorkOS",
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-workos"
+      },
+      "notes": "Capability-specific provider adapter package."
+    },
+    {
       "projectPath": "src/Incursa.Platform.Access.AspNetCore/Incursa.Platform.Access.AspNetCore.csproj",
       "packageId": "Incursa.Platform.Access.AspNetCore",
       "zone": "src",
@@ -213,20 +227,6 @@
       "notes": "Hosting adapter or ASP.NET Core integration package."
     },
     {
-      "projectPath": "src/Incursa.Platform.Access.WorkOS/Incursa.Platform.Access.WorkOS.csproj",
-      "packageId": "Incursa.Platform.Access.WorkOS",
-      "zone": "src",
-      "category": "integrations",
-      "classification": "public-packable",
-      "packable": true,
-      "publishable": true,
-      "origin": {
-        "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
-      },
-      "notes": "Capability-specific provider adapter package."
-    },
-    {
       "projectPath": "src/Incursa.Platform.Access/Incursa.Platform.Access.csproj",
       "packageId": "Incursa.Platform.Access",
       "zone": "src",
@@ -239,20 +239,6 @@
         "sourcePath": "C:/src/incursa/platform"
       },
       "notes": "Public capability package."
-    },
-    {
-      "projectPath": "src/Incursa.Platform.Audit.WorkOS/Incursa.Platform.Audit.WorkOS.csproj",
-      "packageId": "Incursa.Platform.Audit.WorkOS",
-      "zone": "src",
-      "category": "integrations",
-      "classification": "public-packable",
-      "packable": true,
-      "publishable": true,
-      "origin": {
-        "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
-      },
-      "notes": "Capability-specific WorkOS audit sink package retained in the public source surface."
     },
     {
       "projectPath": "src/Incursa.Platform.Audit/Incursa.Platform.Audit.csproj",
@@ -283,20 +269,6 @@
       "notes": "Public capability package."
     },
     {
-      "projectPath": "src/Incursa.Platform.CustomDomains.Cloudflare/Incursa.Platform.CustomDomains.Cloudflare.csproj",
-      "packageId": "Incursa.Platform.CustomDomains.Cloudflare",
-      "zone": "src",
-      "category": "integrations",
-      "classification": "public-packable",
-      "packable": true,
-      "publishable": true,
-      "origin": {
-        "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
-      },
-      "notes": "Capability-specific provider adapter package."
-    },
-    {
       "projectPath": "src/Incursa.Platform.CustomDomains/Incursa.Platform.CustomDomains.csproj",
       "packageId": "Incursa.Platform.CustomDomains",
       "zone": "src",
@@ -309,20 +281,6 @@
         "sourcePath": "C:/src/incursa/platform"
       },
       "notes": "Public capability package."
-    },
-    {
-      "projectPath": "src/Incursa.Platform.Dns.Cloudflare/Incursa.Platform.Dns.Cloudflare.csproj",
-      "packageId": "Incursa.Platform.Dns.Cloudflare",
-      "zone": "src",
-      "category": "integrations",
-      "classification": "public-packable",
-      "packable": true,
-      "publishable": true,
-      "origin": {
-        "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
-      },
-      "notes": "Capability-specific provider adapter package."
     },
     {
       "projectPath": "src/Incursa.Platform.Dns/Incursa.Platform.Dns.csproj",
@@ -647,20 +605,6 @@
       "notes": "Hosting adapter or ASP.NET Core integration package."
     },
     {
-      "projectPath": "src/Incursa.Platform.Webhooks.WorkOS/Incursa.Platform.Webhooks.WorkOS.csproj",
-      "packageId": "Incursa.Platform.Webhooks.WorkOS",
-      "zone": "src",
-      "category": "capabilities",
-      "classification": "public-packable",
-      "packable": true,
-      "publishable": true,
-      "origin": {
-        "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
-      },
-      "notes": "Public capability package."
-    },
-    {
       "projectPath": "src/Incursa.Platform.Webhooks/Incursa.Platform.Webhooks.csproj",
       "packageId": "Incursa.Platform.Webhooks",
       "zone": "src",
@@ -689,6 +633,48 @@
       "notes": "Core durable processing abstractions and orchestration."
     },
     {
+      "projectPath": "tests/Incursa.Integrations.Cloudflare.IntegrationTests/Incursa.Integrations.Cloudflare.IntegrationTests.csproj",
+      "packageId": "Incursa.Integrations.Cloudflare.IntegrationTests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-cloudflare"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Integrations.Cloudflare.Tests/Incursa.Integrations.Cloudflare.Tests.csproj",
+      "packageId": "Incursa.Integrations.Cloudflare.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-cloudflare"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Integrations.ElectronicNotary.Tests/Incursa.Integrations.ElectronicNotary.Tests.csproj",
+      "packageId": "Incursa.Integrations.ElectronicNotary.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-electronicnotary"
+      },
+      "notes": "Automated test project."
+    },
+    {
       "projectPath": "tests/Incursa.Integrations.Storage.Azure.Tests/Incursa.Integrations.Storage.Azure.Tests.csproj",
       "packageId": "Incursa.Integrations.Storage.Azure.Tests",
       "zone": "tests",
@@ -699,6 +685,34 @@
       "origin": {
         "kind": "existing-repo",
         "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Integrations.WorkOS.Tests/Incursa.Integrations.WorkOS.Tests.csproj",
+      "packageId": "Incursa.Integrations.WorkOS.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-workos"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Integrations.WorkOS.Webhooks.Tests/Incursa.Integrations.WorkOS.Webhooks.Tests.csproj",
+      "packageId": "Incursa.Integrations.WorkOS.Webhooks.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "imported-repo",
+        "sourcePath": "C:/src/incursa/integrations-workos"
       },
       "notes": "Automated test project."
     },
@@ -985,20 +999,6 @@
     {
       "projectPath": "tests/Incursa.Platform.Webhooks.Tests/Incursa.Platform.Webhooks.Tests.csproj",
       "packageId": "Incursa.Platform.Webhooks.Tests",
-      "zone": "tests",
-      "category": "tests",
-      "classification": "test-only",
-      "packable": false,
-      "publishable": false,
-      "origin": {
-        "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
-      },
-      "notes": "Automated test project."
-    },
-    {
-      "projectPath": "tests/Incursa.Platform.Webhooks.WorkOS.Tests/Incursa.Platform.Webhooks.WorkOS.Tests.csproj",
-      "packageId": "Incursa.Platform.Webhooks.WorkOS.Tests",
       "zone": "tests",
       "category": "tests",
       "classification": "test-only",

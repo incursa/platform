@@ -1,74 +1,28 @@
 # Incursa.Platform.Observability
 
-Shared observability primitives for platform subsystems.
+`Incursa.Platform.Observability` provides the shared observability vocabulary used across the platform package families.
 
-## Purpose
+## What It Owns
 
-`Incursa.Platform.Observability` supplies conventions and lightweight helpers that connect:
+- shared event names and tag-key conventions
+- lightweight helpers that bridge correlation, operations, audit, and messaging metadata
+- a common vocabulary for platform telemetry without forcing a single telemetry backend
 
-- correlation contexts
-- operation tracking
-- audit events
-- inbox/outbox metadata
+## What It Does Not Own
 
-It keeps the surface area small while making observability data consistent across apps.
+- a full tracing or logging stack
+- exporter-specific configuration
+- database-backed metric persistence on its own
+
+## Related Packages
+
+- `Incursa.Platform.Correlation` for correlation context propagation
+- `Incursa.Platform.Operations` for workflow lifecycle tracking
+- `Incursa.Platform.Audit` for immutable event history
+- `Incursa.Platform.Metrics.AspNetCore` and `Incursa.Platform.Metrics.HttpServer` for metrics exposure
 
 ## Conventions
 
-Standard event names are defined in `PlatformEventNames`:
+Standard event names are defined in `PlatformEventNames`.
 
-- `outbox.message.processed`
-- `webhook.received`
-- `email.sent`
-- `operation.started`
-- `operation.completed`
-- `operation.failed`
-
-Standard tag keys are defined in `PlatformTagKeys`:
-
-- `tenant`
-- `partition`
-- `provider`
-- `messageKey`
-- `operationId`
-- `outboxMessageId`
-- `inboxMessageId`
-- `webhookEventId`
-
-## Usage
-
-Emit coordinated operation + audit events:
-
-```csharp
-var emitter = new PlatformEventEmitter(auditWriter, operationTracker, correlationAccessor);
-
-var operationId = await emitter.EmitOperationStartedAsync(
-    "NightlyImport",
-    correlationContext: null,
-    parentOperationId: null,
-    tags: new Dictionary<string, string>
-    {
-        [PlatformTagKeys.Tenant] = "tenant-1",
-    },
-    cancellationToken);
-
-await emitter.EmitOperationCompletedAsync(
-    operationId,
-    OperationStatus.Succeeded,
-    "Completed",
-    correlationContext: null,
-    tags: null,
-    cancellationToken);
-```
-
-For webhooks and email, use `PlatformTagKeys` to capture provider, message keys, and webhook IDs
-and emit audit events with `PlatformEventNames`.
-
-## Metrics Integration
-
-For Prometheus scraping and OpenTelemetry-based exports, use:
-
-- `Incursa.Platform.Metrics.AspNetCore` for ASP.NET Core apps
-- `Incursa.Platform.Metrics.HttpServer` for self-hosted scrapers
-
-These packages complement the database-backed metrics exporter and reuse the same `Meter` sources.
+Standard tag keys are defined in `PlatformTagKeys`.

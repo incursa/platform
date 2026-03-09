@@ -3,7 +3,7 @@ namespace Incursa.Platform.Access.Tests;
 
 using Incursa.Platform.Access;
 using Incursa.Platform.Access.Internal;
-using Incursa.Platform.Access.WorkOS;
+using Incursa.Integrations.WorkOS.Access;
 using Incursa.Platform.Storage;
 using Microsoft.Extensions.DependencyInjection;
 

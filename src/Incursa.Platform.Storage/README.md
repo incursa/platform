@@ -1,51 +1,34 @@
 # Incursa.Platform.Storage
 
-Strongly opinionated, provider-agnostic storage contracts for partition-aware records, projections, payloads, work queues, and coordination.
+`Incursa.Platform.Storage` provides the shared storage substrate used by the platform capability packages and many vendor adapters. It is intentionally opinionated about partitions, consistency, work queues, and coordination so higher-level packages can build on stable primitives instead of inventing their own store abstractions.
 
-## Install
+## When To Start Here
 
-```bash
-dotnet add package Incursa.Platform.Storage
-```
+Start here when you are building either:
 
-## What belongs here
+- a layer 2 capability that needs provider-neutral record, lookup, payload, work, or coordination storage
+- a layer 1 integration package that needs to plug a concrete storage provider into the shared platform substrate
 
-- Small consumer-facing abstractions for storage keys, optimistic concurrency, and consistency intent.
-- Provider-neutral contracts for record stores, lookup stores, payload stores, work stores, and coordination stores.
-- Shared result types and storage-specific exceptions.
+## What Belongs Here
 
-## What does not belong here
+- small consumer-facing abstractions for storage keys, optimistic concurrency, and consistency intent
+- provider-neutral contracts for record stores, lookup stores, payload stores, work stores, and coordination stores
+- shared result types and storage-specific exceptions
 
-- Azure, SQL, or any other provider SDK types.
-- Ad hoc querying, `IQueryable`, or ORM-style mapping layers.
-- Domain-specific account, tenant, billing, or integration-specific models.
+## What Does Not Belong Here
 
-## Intended usage
-
-Use this package from application code and from provider packages. Consumers depend on the interfaces here; provider packages supply the actual implementation and DI registration.
-
-```csharp
-StorageRecordKey customerKey = new(new StoragePartitionKey("customer"), new StorageRowKey("123"));
-StorageWriteCondition createOnly = StorageWriteCondition.IfNotExists();
-
-StorageItem<CustomerProjection>? projection = await lookupStore.GetAsync(customerKey, cancellationToken);
-StorageItem<CustomerRecord> updated = await recordStore.WriteAsync(
-    customerKey,
-    customerRecord,
-    StorageWriteMode.Put,
-    createOnly,
-    cancellationToken);
-```
+- Azure, SQL, or other provider SDK types
+- ad hoc querying, `IQueryable`, or ORM-style mapping layers
+- domain-specific account, tenant, billing, or integration-specific models
 
 ## Guarantees
 
-- Optimistic concurrency is expressed through opaque provider-managed ETags.
-- Partition-bounded scans are explicit and intentionally narrow: full partition, row-key prefix, or bounded row-key range.
-- Same-partition atomic intent is modeled separately from cross-partition eventual consistency intent.
-- Work queue semantics are claim, complete, and abandon; they do not promise strict FIFO processing.
+- optimistic concurrency is expressed through opaque provider-managed ETags
+- partition-bounded scans are explicit and intentionally narrow
+- same-partition atomic intent is modeled separately from cross-partition eventual consistency intent
+- work queue semantics are claim, complete, and abandon rather than strict FIFO processing
 
-## Non-goals
+## Related Packages
 
-- No fake ORM or generic repository over arbitrary backends.
-- No cross-partition transaction abstraction.
-- No provider-specific SDK leakage on the public API surface.
+- `Incursa.Integrations.Storage.Azure` for the Azure-backed implementation
+- `Incursa.Platform.Access`, `Incursa.Platform.Dns`, and `Incursa.Platform.CustomDomains` as examples of capabilities built on this substrate

@@ -1,6 +1,10 @@
 # Incursa.Platform.Access
 
-`Incursa.Platform.Access` provides a provider-neutral access capability for users, scope roots, tenants, memberships, assignments, explicit grants, and effective-access evaluation.
+`Incursa.Platform.Access` is the layer 2 access and authorization capability for the monorepo. It provides the provider-neutral source of truth for users, scope roots, tenants, memberships, assignments, explicit grants, and effective-access evaluation.
+
+## When To Start Here
+
+Start here when you need to model application access state in a way that is independent of any one provider. This is the package that owns the access domain model. Vendor adapters such as WorkOS should map into this model rather than replace it.
 
 ## What It Owns
 
@@ -15,6 +19,12 @@
 - auth middleware or session handling
 - crypto, secrets, or password flows
 - provider-specific APIs
+
+## Related Packages
+
+- `Incursa.Platform.Access.AspNetCore` for request-time access-context resolution in ASP.NET Core
+- `Incursa.Integrations.WorkOS.Access` for mapping WorkOS concepts into the local access model
+- `Incursa.Platform.Audit` when access changes need immutable audit records
 
 ## Registration
 
@@ -36,4 +46,4 @@ services.AddAccess(registry =>
 - canonical records are the source of truth
 - lookup projections are updated with eventual consistency semantics
 - cross-partition writes are not transactional
-- provider synchronization should hang off explicit work/reconciliation flows rather than bypassing the local model
+- provider synchronization should hang off explicit work and reconciliation flows rather than bypassing the local model

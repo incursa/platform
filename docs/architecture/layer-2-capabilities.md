@@ -4,7 +4,9 @@
 
 - layer 2 capability packages in `src/` that define the public, provider-neutral domain and service surface
 - layer 1 provider materializations that hang under those capabilities as focused adapters
-- incubating vendor buckets that remain preserved until their public boundary is clean
+- vendor-specific public integration packages that may sit beside the layer 2 families when they are not provider-neutral capabilities
+
+When a package is a public layer 1 vendor adapter rather than a provider-neutral capability, prefer the `Incursa.Integrations.*` naming family. Vendor-specific does not imply incubating.
 
 This document records the current layer 2 extraction for access/authorization, DNS, and custom domains.
 
@@ -27,7 +29,7 @@ Does not own:
 - a second provider-specific role/permission registry
 - SQL-specific storage assumptions
 
-### `src/Incursa.Platform.Access.WorkOS/`
+### `src/Incursa.Integrations.WorkOS.Access/`
 
 Owns:
 
@@ -56,9 +58,9 @@ Does not own:
 - cookie/session onboarding workflows or app-auth redirect behavior
 - WorkOS management/profile hydration or broader middleware sprawl
 
-### What remains in `incubating/workos/`
+### Related public WorkOS packages
 
-Still incubating because it is broader than the clean access adapter boundary:
+Outside the focused access adapter boundary, WorkOS also ships public layer 1 packages for:
 
 - app-auth and ASP.NET Core middleware
 - cookie/session selection, onboarding enforcement, and broader app-auth behavior
@@ -79,7 +81,7 @@ Does not own:
 - provider-specific signature algorithms or payload parsing rules
 - vendor-owned endpoint pipelines or dedupe stores
 
-### `src/Incursa.Platform.Webhooks.WorkOS/`
+### `src/Incursa.Integrations.WorkOS.Webhooks/`
 
 Owns:
 
@@ -110,7 +112,7 @@ Does not own:
 - certificate onboarding, domain verification, or vendor-specific hostname orchestration
 - non-DNS Cloudflare features
 
-### `src/Incursa.Platform.Dns.Cloudflare/`
+### `src/Incursa.Integrations.Cloudflare.Dns/`
 
 Owns:
 
@@ -124,9 +126,9 @@ Does not own:
 - KV, R2, or storage adapters
 - load-balancing, probe, or non-DNS Cloudflare capabilities
 
-### What remains in `incubating/cloudflare/`
+### Related public Cloudflare packages
 
-Still incubating because it is not yet a clean DNS adapter boundary:
+Outside the focused DNS adapter boundary, Cloudflare also ships public layer 1 packages for:
 
 - KV, R2, storage, load-balancing, and probe utilities
 - broader vendor-bucket abstractions that should be split by capability before promotion
@@ -148,7 +150,7 @@ Does not own:
 - provider HTTP or SDK types
 - product-specific onboarding workflows or certificate issuance orchestration beyond provider-neutral state
 
-### `src/Incursa.Platform.CustomDomains.Cloudflare/`
+### `src/Incursa.Integrations.Cloudflare.CustomDomains/`
 
 Owns:
 
@@ -162,22 +164,22 @@ Does not own:
 - load-balancing, probes, or broader Cloudflare umbrella registration
 - a second parallel custom-domain model
 
-### What remains in `incubating/cloudflare/`
+### Related public Cloudflare packages
 
-Still incubating because it is outside the clean public DNS/custom-domain boundary:
+Outside the focused DNS/custom-domain boundaries, Cloudflare also ships public layer 1 packages for:
 
 - KV, R2, and storage-oriented adapters
 - load-balancing and probe utilities
 - broader Cloudflare umbrella registration and any workflow-heavy vendor code that is not cleanly DNS or custom-domain scoped
 
-## Remaining WorkOS deferrals
+## Remaining layer 2 deferrals
 
-The remaining WorkOS material is still not being promoted into a standalone identity layer 2 package in this pass. The promoted slices are intentionally small:
+The remaining WorkOS material is intentionally not being promoted into a standalone identity layer 2 package. The promoted slices are intentionally small:
 
 - `Incursa.Platform.Access.AspNetCore` for request-time access context integration
-- `Incursa.Platform.Webhooks.WorkOS` for thin webhook authentication/classification
+- `Incursa.Integrations.WorkOS.Webhooks` for thin webhook authentication/classification
 
-The following still remain incubating until their public API is smaller and more clearly capability-oriented:
+The following stay as public vendor-specific WorkOS packages rather than becoming a new layer 2 capability:
 
 - cookie/session organization selection and onboarding middleware
 - widgets, profile enrichment, and broader app-auth workflows

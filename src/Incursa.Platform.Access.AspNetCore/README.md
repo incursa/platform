@@ -1,12 +1,6 @@
 # Incursa.Platform.Access.AspNetCore
 
-`Incursa.Platform.Access.AspNetCore` resolves the current authenticated access context for ASP.NET Core requests by reusing the canonical `Incursa.Platform.Access` model.
-
-## Install
-
-```bash
-dotnet add package Incursa.Platform.Access.AspNetCore
-```
+`Incursa.Platform.Access.AspNetCore` is the ASP.NET Core hosting adapter for the `Incursa.Platform.Access` capability. It resolves the current request’s access context without introducing a second identity or permission model.
 
 ## What It Owns
 
@@ -14,7 +8,17 @@ dotnet add package Incursa.Platform.Access.AspNetCore
 - claim, route, and query mapping into the existing access capability
 - personal-scope and organization-scope resolution against `IAccessQueryService`
 
-It does not introduce a second identity or permission model. The canonical source of truth remains `Incursa.Platform.Access`.
+## What It Does Not Own
+
+- the canonical access registry or access state model
+- generic ASP.NET authorization policy plumbing
+- provider-specific session or management APIs
+
+## Related Packages
+
+- `Incursa.Platform.Access` for the source-of-truth access model
+- `Incursa.Integrations.WorkOS.AspNetCore` when request context originates from WorkOS session or claim material
+- `Incursa.Integrations.WorkOS.Access` when WorkOS organizations and roles need to synchronize into the local access model
 
 ## Typical Use
 

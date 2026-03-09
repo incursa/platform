@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Incursa.Platform.Access\Incursa.Platform.Access.csproj" />
-    <ProjectReference Include="..\..\src\Incursa.Platform.Access.WorkOS\Incursa.Platform.Access.WorkOS.csproj" />
+    <ProjectReference Include="..\..\src\Incursa.Integrations.WorkOS.Access\Incursa.Integrations.WorkOS.Access.csproj" />
   </ItemGroup>
 
   <ItemGroup>

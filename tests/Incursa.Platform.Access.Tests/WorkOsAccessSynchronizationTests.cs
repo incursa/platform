@@ -1,7 +1,7 @@
 namespace Incursa.Platform.Access.Tests;
 
 using Incursa.Platform.Access;
-using Incursa.Platform.Access.WorkOS;
+using Incursa.Integrations.WorkOS.Access;
 
 [Trait("Category", "Unit")]
 public sealed class WorkOsAccessSynchronizationTests

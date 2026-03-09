@@ -56,19 +56,37 @@ function Get-ProjectOrigin {
     )
 
     switch -Wildcard ($ProjectPath) {
-        "incubating/cloudflare/*" {
+        "src/Incursa.Integrations.Cloudflare*" {
             return [ordered]@{
                 kind = "imported-repo"
                 sourcePath = "C:/src/incursa/integrations-cloudflare"
             }
         }
-        "incubating/workos/*" {
+        "tests/Incursa.Integrations.Cloudflare*" {
+            return [ordered]@{
+                kind = "imported-repo"
+                sourcePath = "C:/src/incursa/integrations-cloudflare"
+            }
+        }
+        "src/Incursa.Integrations.WorkOS*" {
             return [ordered]@{
                 kind = "imported-repo"
                 sourcePath = "C:/src/incursa/integrations-workos"
             }
         }
-        "incubating/electronicnotary/*" {
+        "tests/Incursa.Integrations.WorkOS*" {
+            return [ordered]@{
+                kind = "imported-repo"
+                sourcePath = "C:/src/incursa/integrations-workos"
+            }
+        }
+        "src/Incursa.Integrations.ElectronicNotary*" {
+            return [ordered]@{
+                kind = "imported-repo"
+                sourcePath = "C:/src/incursa/integrations-electronicnotary"
+            }
+        }
+        "tests/Incursa.Integrations.ElectronicNotary*" {
             return [ordered]@{
                 kind = "imported-repo"
                 sourcePath = "C:/src/incursa/integrations-electronicnotary"
@@ -136,57 +154,6 @@ function Get-CatalogMetadata {
         }
     }
 
-    if ($ProjectPath -like "incubating/*") {
-        if ($ProjectPath -like "incubating/*/tests/*") {
-            return [ordered]@{
-                zone = "incubating"
-                category = "tests"
-                classification = "test-only"
-                packable = $false
-                publishable = $false
-                notes = "Tests preserved with the incubating import."
-            }
-        }
-
-        if ($ProjectName -like "*.KvProbe") {
-            return [ordered]@{
-                zone = "incubating"
-                category = "smoke"
-                classification = "smoke/sample"
-                packable = $false
-                publishable = $false
-                notes = "Provider-specific probe/sample kept with the incubating Cloudflare import."
-            }
-        }
-
-        $note = switch -Wildcard ($ProjectPath) {
-            "incubating/cloudflare/src/Incursa.Integrations.Cloudflare/*" {
-                "Mixed Cloudflare vendor surface spanning storage, load-balancing, probes, and broader edge/domain workflows; retained in incubating until split by capability."
-                break
-            }
-            "incubating/workos/src/*" {
-                "Broad WorkOS auth, webhook, management, and widget surface retained in incubating until it is split into capability-specific packages."
-                break
-            }
-            "incubating/electronicnotary/src/*" {
-                "Electronic notary provider code retained in incubating because the current surface mixes provider APIs with workflow/healing behavior."
-                break
-            }
-            default {
-                "Preserved in incubating pending further boundary cleanup."
-            }
-        }
-
-        return [ordered]@{
-            zone = "incubating"
-            category = "incubating"
-            classification = "incubating"
-            packable = $false
-            publishable = $false
-            notes = $note
-        }
-    }
-
     if ($ProjectPath -like "src/*") {
         if ($ProjectPath -eq "src/Incursa.Platform/Incursa.Platform.csproj") {
             return [ordered]@{
@@ -246,7 +213,7 @@ function Get-CatalogMetadata {
             }
         }
 
-        if ($ProjectName -eq "Incursa.Platform.Audit.WorkOS") {
+        if ($ProjectName -eq "Incursa.Integrations.WorkOS.Audit") {
             return [ordered]@{
                 zone = "src"
                 category = "integrations"
@@ -257,7 +224,19 @@ function Get-CatalogMetadata {
             }
         }
 
-        if ($ProjectName -in @("Incursa.Platform.Access.WorkOS", "Incursa.Platform.CustomDomains.Cloudflare", "Incursa.Platform.Dns.Cloudflare")) {
+        if ($ProjectName -in @(
+                "Incursa.Integrations.WorkOS",
+                "Incursa.Integrations.WorkOS.Abstractions",
+                "Incursa.Integrations.WorkOS.Access",
+                "Incursa.Integrations.WorkOS.AspNetCore",
+                "Incursa.Integrations.WorkOS.Webhooks",
+                "Incursa.Integrations.Cloudflare",
+                "Incursa.Integrations.Cloudflare.Dns",
+                "Incursa.Integrations.Cloudflare.CustomDomains",
+                "Incursa.Integrations.ElectronicNotary",
+                "Incursa.Integrations.ElectronicNotary.Abstractions",
+                "Incursa.Integrations.ElectronicNotary.Proof",
+                "Incursa.Integrations.ElectronicNotary.Proof.AspNetCore")) {
             return [ordered]@{
                 zone = "src"
                 category = "integrations"
@@ -265,6 +244,17 @@ function Get-CatalogMetadata {
                 packable = $true
                 publishable = $true
                 notes = "Capability-specific provider adapter package."
+            }
+        }
+
+        if ($ProjectName -eq "Incursa.Integrations.Cloudflare.KvProbe") {
+            return [ordered]@{
+                zone = "src"
+                category = "tools"
+                classification = "tool-only"
+                packable = $false
+                publishable = $false
+                notes = "Provider-specific Cloudflare probe executable kept in the public source tree."
             }
         }
 

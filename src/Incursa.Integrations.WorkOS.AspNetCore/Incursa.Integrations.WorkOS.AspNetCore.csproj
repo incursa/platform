@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>true</IsPackable>
+    <PackageId>Incursa.Integrations.WorkOS.AspNetCore</PackageId>
+    <Description>ASP.NET Core hosting glue for Incursa WorkOS integrations, including middleware, endpoints, and app-auth HTTP wiring.</Description>
+    <PackageTags>incursa;workos;aspnetcore;middleware;webhooks;authentication;authorization;dotnet</PackageTags>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Incursa.Integrations.WorkOS.Abstractions\Incursa.Integrations.WorkOS.Abstractions.csproj" />
+    <ProjectReference Include="..\Incursa.Integrations.WorkOS\Incursa.Integrations.WorkOS.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Incursa.Integrations.WorkOS.AppAuth.AspNetCore\**\*.cs" Exclude="..\Incursa.Integrations.WorkOS.AppAuth.AspNetCore\bin\**\*;..\Incursa.Integrations.WorkOS.AppAuth.AspNetCore\obj\**\*" LinkBase="AppAuth.AspNetCore" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PACKAGE_README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+</Project>

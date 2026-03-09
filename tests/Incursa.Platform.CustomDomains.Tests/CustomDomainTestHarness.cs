@@ -1,7 +1,7 @@
 #pragma warning disable MA0048
 namespace Incursa.Platform.CustomDomains.Tests;
 
-using Incursa.Platform.CustomDomains.Cloudflare;
+using Incursa.Integrations.Cloudflare.CustomDomains;
 using Incursa.Platform.CustomDomains.Internal;
 using Incursa.Platform.Storage;
 using Microsoft.Extensions.DependencyInjection;

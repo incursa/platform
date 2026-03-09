@@ -1,24 +1,24 @@
 # Incursa.Platform.Webhooks
 
-`Incursa.Platform.Webhooks` provides provider-agnostic webhook ingestion and processing primitives.
+`Incursa.Platform.Webhooks` provides provider-agnostic webhook ingestion and processing primitives. It is the layer 2 home for receiving, authenticating, classifying, deduplicating, and processing external provider events without baking provider-specific assumptions into the core workflow.
 
-## Install
+## What It Owns
 
-```bash
-dotnet add package Incursa.Platform.Webhooks
-```
+- contracts for webhook classification, authentication, and parsing
+- ingestion and processing pipeline abstractions
+- retry-friendly primitives for durable webhook handling
 
-## What You Get
+## What It Does Not Own
 
-- Contracts for webhook classification, authentication, and parsing
-- Ingestion and processing pipeline abstractions
-- Retry-friendly primitives for durable webhook handling
+- ASP.NET Core endpoint plumbing
+- provider-specific signature formats or event schemas
+- application-specific event handlers
+
+## Related Packages
+
+- `Incursa.Platform.Webhooks.AspNetCore` for HTTP hosting integration
+- `Incursa.Integrations.WorkOS.Webhooks` for WorkOS-specific signature and payload translation
 
 ## Typical Use
 
 Use this package to define provider-independent webhook workflows, then add host-specific integration via `Incursa.Platform.Webhooks.AspNetCore`.
-
-## Documentation
-
-- https://github.com/incursa/platform/blob/main/docs/webhooks/README.md
-- https://github.com/incursa/platform/blob/main/docs/INDEX.md

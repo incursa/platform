@@ -4,7 +4,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using Incursa.Platform.Dns;
-using Incursa.Platform.Dns.Cloudflare;
+using Incursa.Integrations.Cloudflare.Dns;
 using Microsoft.Extensions.DependencyInjection;
 
 [Trait("Category", "Unit")]

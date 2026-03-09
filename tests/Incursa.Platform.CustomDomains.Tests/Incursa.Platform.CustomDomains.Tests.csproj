@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Incursa.Platform.CustomDomains\Incursa.Platform.CustomDomains.csproj" />
-    <ProjectReference Include="..\..\src\Incursa.Platform.CustomDomains.Cloudflare\Incursa.Platform.CustomDomains.Cloudflare.csproj" />
+    <ProjectReference Include="..\..\src\Incursa.Integrations.Cloudflare.CustomDomains\Incursa.Integrations.Cloudflare.CustomDomains.csproj" />
   </ItemGroup>
 
   <ItemGroup>
