@@ -18,6 +18,7 @@ using Shouldly;
 namespace Incursa.Platform.Tests;
 
 [Trait("Category", "Unit")]
+[Trait("Category", "Smoke")]
 public sealed class InMemoryPublicApiContractTests
 {
     /// <summary>When add In Memory Platform Multi Database With List With Null Databases Throws Argument Null Exception, then it behaves as expected.</summary>

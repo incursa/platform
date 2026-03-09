@@ -2,7 +2,7 @@
 
 ## Scripts
 - `scripts/quality/run-smoke-tests.ps1`
-  - Runs the curated fast smoke suite.
+  - Runs the curated fast smoke suite from the explicit `Category=Smoke` test set in the maintained smoke projects.
   - Default output: `artifacts/codex/test-results/smoke/`
 - `scripts/quality/run-blocking-tests.ps1`
   - Runs the required CI-safe non-Docker lane against `Incursa.Platform.CI.slnx`.

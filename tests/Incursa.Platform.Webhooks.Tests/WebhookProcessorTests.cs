@@ -19,6 +19,8 @@ using Incursa.Platform.Webhooks;
 
 namespace Incursa.Platform.Webhooks.Tests;
 
+[Trait("Category", "Unit")]
+[Trait("Category", "Smoke")]
 public sealed class WebhookProcessorTests
 {
     private static readonly DateTimeOffset FixedNow = new(2024, 01, 01, 0, 0, 0, TimeSpan.Zero);
@@ -467,4 +469,3 @@ public sealed class WebhookProcessorTests
         }
     }
 }
-

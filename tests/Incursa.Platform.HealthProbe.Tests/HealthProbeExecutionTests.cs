@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Incursa.Platform.HealthProbe.Tests;
 
+[Trait("Category", "Unit")]
+[Trait("Category", "Smoke")]
 public sealed class HealthProbeExecutionTests
 {
     [Fact]

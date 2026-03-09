@@ -39,7 +39,7 @@ lanes:
   smoke:
     entrypoint: scripts/quality/run-smoke-tests.ps1
     policy: required
-    intent: curated fast precheck across core primitives, storage contracts, InMemory provider coverage, health probe, and webhook processing
+    intent: curated fast precheck across explicit Category=Smoke tests covering core primitives, storage contracts, InMemory provider coverage, health probe, and webhook processing
   blocking:
     entrypoint: scripts/quality/run-blocking-tests.ps1
     policy: required

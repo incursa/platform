@@ -17,6 +17,7 @@ using Incursa.Platform.Storage;
 namespace Incursa.Platform.Storage.Tests;
 
 [Trait("Category", "Unit")]
+[Trait("Category", "Smoke")]
 public sealed class StorageKeyPrimitiveTests
 {
     [Fact]

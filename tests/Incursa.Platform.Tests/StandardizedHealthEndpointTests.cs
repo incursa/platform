@@ -9,6 +9,8 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Incursa.Platform.Tests;
 
+[Trait("Category", "Unit")]
+[Trait("Category", "Smoke")]
 public sealed class StandardizedHealthEndpointTests
 {
     [Fact]

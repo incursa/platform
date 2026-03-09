@@ -19,6 +19,8 @@ using Xunit;
 
 namespace Incursa.Platform.Tests;
 
+[Trait("Category", "Unit")]
+[Trait("Category", "Smoke")]
 public sealed class ExactlyOnceExecutorTests
 {
     /// <summary>When execute Async Suppresses Duplicate Without Executing, then it behaves as expected.</summary>

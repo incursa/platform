@@ -1,6 +1,6 @@
 # Testing Operating Model
 
-Date: 2026-03-08
+Date: 2026-03-09
 
 ## Purpose
 
@@ -31,6 +31,14 @@ Current curated project set:
 - `tests/Incursa.Platform.InMemory.Tests`
 - `tests/Incursa.Platform.HealthProbe.Tests`
 - `tests/Incursa.Platform.Webhooks.Tests`
+
+Current explicit smoke coverage:
+- `Incursa.Platform.Tests.ExactlyOnceExecutorTests`
+- `Incursa.Platform.Tests.StandardizedHealthEndpointTests`
+- `Incursa.Platform.Storage.Tests.StorageKeyPrimitiveTests`
+- `Incursa.Platform.Tests.InMemoryPublicApiContractTests`
+- `Incursa.Platform.HealthProbe.Tests.HealthProbeExecutionTests`
+- `Incursa.Platform.Webhooks.Tests.WebhookProcessorTests`
 
 Artifacts:
 - `artifacts/codex/test-results/smoke/`
@@ -132,8 +140,9 @@ Existing repo categories remain the base contract:
 New lane guidance:
 
 - use `Category=KnownIssue` only for runnable tests that expose a real product or architecture gap
+- use `Category=Smoke` for fast critical-path checks that should stay in the smallest deterministic precheck
 - do not use `KnownIssue` for flaky tests, broken harnesses, or secret-dependent/manual-only checks
-- a dedicated `Smoke` trait is not required for this first pass; smoke is currently defined by a curated project list plus `runsettings/smoke.runsettings`
+- smoke remains intentionally curated by project list, but membership inside that lane is now explicit test metadata rather than an implicit side effect of project scope
 
 Known issues currently tracked for automation are listed in `docs/testing-known-issues.md`.
 
@@ -177,7 +186,7 @@ dotnet tool run workbench quality show
 
 This pass intentionally does not:
 
-- retag the entire suite with new smoke metadata
+- retag the broader suite beyond the current curated smoke set
 - add mutation or fuzzing lanes
 - require Docker-backed evidence in the default path
 - fail merges because of the Workbench report

@@ -86,6 +86,7 @@ Provider quality automation and baselines:
 - Coverage/mutation/traceability scripts: `scripts/quality/`
 - Lane runsettings: `runsettings/smoke.runsettings`, `runsettings/blocking.runsettings`, `runsettings/observational.runsettings`
 - Smoke lane runner: `scripts/quality/run-smoke-tests.ps1`
+- Smoke lane membership is explicit via `Category=Smoke` on the curated fast-lane tests.
 - Blocking lane runner: `scripts/quality/run-blocking-tests.ps1`
 - Observational lane runner: `scripts/quality/run-observational-tests.ps1`
 - Advisory evidence runner: `scripts/quality/run-advisory-quality-tests.ps1`
