@@ -1,6 +1,8 @@
 param(
     [int]$LineThreshold = 20,
     [int]$BranchThreshold = 0,
+    [string]$CoverageRoot = "",
+    [string]$SummaryPath = "",
     [string[]]$Targets = @("Core", "InMemory", "Audit", "Correlation", "Email", "HealthProbe", "Observability", "Operations", "Webhooks", "WebhooksAspNetCore")
 )
 
@@ -13,8 +15,8 @@ if (-not (Get-Command dotnet -ErrorAction SilentlyContinue)) {
 }
 
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$coverageRoot = Join-Path $repoRoot "artifacts\codex\coverage\libraries"
-$summaryPath = Join-Path $repoRoot "artifacts\codex\library-coverage-summary.md"
+$coverageRoot = if ([string]::IsNullOrWhiteSpace($CoverageRoot)) { Join-Path $repoRoot "artifacts\codex\coverage\libraries" } else { $CoverageRoot }
+$summaryPath = if ([string]::IsNullOrWhiteSpace($SummaryPath)) { Join-Path $repoRoot "artifacts\codex\library-coverage-summary.md" } else { $SummaryPath }
 New-Item -Path $coverageRoot -ItemType Directory -Force | Out-Null
 
 $configuredTargets = @(

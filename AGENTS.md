@@ -22,6 +22,9 @@ Expected artifacts:
 - `artifacts/codex/build.binlog` and `artifacts/codex/build-summary.txt`
 - `artifacts/codex/test-failures.md` and `artifacts/codex/test-filter.txt`
 - `artifacts/codex/format-report.txt` (if applicable)
+- `artifacts/codex/test-results/smoke/`, `blocking/`, `observational/`, and `advisory/` for lane-specific test evidence
+- `artifacts/codex/coverage/advisory/` for advisory Workbench-observed coverage evidence
+- `artifacts/quality/testing/` for normalized Workbench quality outputs
 
 ## Project Structure & Module Organization
 The core libraries live under `src/`, with `Incursa.Platform` as the main package and `Incursa.Platform.Modularity.*` for modularity layers. SQL Server artifacts and schemas are under `src/Incursa.Platform.SqlServer/Database/`. Tests live in `tests/Incursa.Platform.Tests/`. Supporting docs are in `docs/` and `specs/`, scripts in `scripts/`, and assets in `assets/`. The primary solution files are `Incursa.Platform.slnx` and `Incursa.Platform.CI.slnx` (used by CI).
@@ -29,11 +32,18 @@ The core libraries live under `src/`, with `Incursa.Platform` as the main packag
 ## Build, Test, and Development Commands
 - Before running build or test commands, complete the "Early Repo Orientation (run first)" section.
 - `dotnet restore Incursa.Platform.CI.slnx` restores dependencies.
-- `dotnet tool restore` installs local tools (for example, `sqlpackage`).
+- `dotnet tool restore` installs local tools (for example, `sqlpackage` and the repo-pinned `workbench` CLI).
 - `dotnet build Incursa.Platform.CI.slnx -c Release` builds all projects.
 - `dotnet test Incursa.Platform.CI.slnx -c Release` runs the full test suite.
 - `dotnet test --filter "Category!=Integration"` runs fast unit tests only.
 - `dotnet test --filter "Category=Integration"` runs Docker-backed integration tests.
+- `pwsh -File scripts/quality/run-smoke-tests.ps1` runs the curated smoke lane.
+- `pwsh -File scripts/quality/run-blocking-tests.ps1` runs the required CI-safe blocking lane.
+- `pwsh -File scripts/quality/run-observational-tests.ps1` runs the non-blocking `KnownIssue` lane.
+- `pwsh -File scripts/quality/run-advisory-quality-tests.ps1` produces advisory TRX and Cobertura evidence.
+- `pwsh -File scripts/quality/run-quality-evidence.ps1` runs the advisory lane and Workbench sync/show together.
+- `dotnet tool run workbench quality sync --contract docs/30-contracts/test-gate.contract.yaml --results artifacts/codex/test-results/advisory --coverage artifacts/codex/coverage/advisory --out-dir artifacts/quality/testing` normalizes the latest advisory evidence into `artifacts/quality/testing/`.
+- `dotnet tool run workbench quality show` prints the latest normalized Workbench quality summary.
 - `dotnet format --verify-no-changes Incursa.Platform.CI.slnx` enforces formatting in CI.
 - `dotnet pack Incursa.Platform.CI.slnx -c Release -o ./nupkgs` produces NuGet packages.
 
@@ -43,8 +53,16 @@ Formatting is driven by `.editorconfig`: 4-space indentation for C#, CRLF line e
 ## Testing Guidelines
 Tests use xUnit v3 with Shouldly and NSubstitute. Integration tests use Docker SQL Server via Testcontainers; tag them with `[Trait("Category", "Integration")]` and `[Trait("RequiresDocker", "true")]`, and place them in the shared `SqlServerCollection` for container reuse. Unit tests should be tagged `[Trait("Category", "Unit")]`. See `tests/Incursa.Platform.Tests/README.md` for test patterns.
 
+## Workbench Quality Workflow
+- Authored testing intent is canonical at `docs/30-contracts/test-gate.contract.yaml`.
+- Smoke, blocking, observational, and advisory test results should be written to their lane-specific roots under `artifacts/codex/test-results/`.
+- Workbench ingestion in this repo reads the advisory lane from `artifacts/codex/test-results/advisory/` and `artifacts/codex/coverage/advisory/`.
+- Generated Workbench outputs under `artifacts/quality/testing/` are derived artifacts and must not be hand-edited.
+- The local agent skill for this flow is `.codex/skills/workbench-quality-evidence/SKILL.md`.
+- The Workbench quality report is advisory only; do not turn it into a merge gate in this pass.
+
 ## Commit & Pull Request Guidelines
 Commit messages follow an imperative, sentence-case style (for example, "Add ...") and often include a PR reference in parentheses like `(#123)`. For PRs, include a concise description of changes, relevant testing notes (commands and filters used), and doc updates or screenshots when behavior or APIs change. Link related issues where applicable.
 
 ## Configuration & Tooling Notes
-The repo pins the .NET SDK in `global.json` (currently 10.0.100). If builds fail locally, verify the SDK version and run `dotnet tool restore` before building or testing.
+The repo pins the .NET SDK in `global.json` (currently 10.0.103). If builds fail locally, verify the SDK version and run `dotnet tool restore` before building or testing.

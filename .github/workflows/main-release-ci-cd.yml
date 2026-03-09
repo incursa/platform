@@ -2,97 +2,231 @@ name: 'Main/Release CI/CD'
 on:
   push:
     branches:
-      - 'main'
+      - main
       - 'release/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 jobs:
-  build:
-    name: Main/Release - Build, Test, and Scan
+  smoke:
+    name: Smoke lane
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Set-up dotnet
-      uses: actions/setup-dotnet@v4
-      with:
-        global-json-file: global.json
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
 
-    - name: Cache NuGet
-      uses: actions/cache@v4
-      with:
-        path: ~/.nuget/packages
-        key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
-        restore-keys: |
-          nuget-${{ runner.os }}-
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
 
-    - name: Install PowerShell
-      uses: PSModule/install-powershell@v1
+      - name: Restore dependencies
+        run: dotnet restore Incursa.Platform.CI.slnx
 
-    - name: Determine Version
-      id: git_version
-      shell: pwsh
-      run: |
-        $now = [System.DateTime]::UtcNow
-        $revision = $now.Hour * 60 + $now.Minute
-        $baseVersion = "$($now.Year).$($now.Month).$($now.Day).$revision"
-        $version = $baseVersion
+      - name: Restore tools
+        run: dotnet tool restore
 
-        try {
-          $branchName = (git rev-parse --abbrev-ref HEAD).Trim()
-          Write-Host "Branch name: $branchName"
-          $mainBranches = @("main", "master")
+      - name: Build solution
+        run: dotnet build Incursa.Platform.CI.slnx --no-restore --configuration Release
 
-          if ($branchName -and ($mainBranches -notcontains $branchName.ToLowerInvariant())) {
-            # Sanitize branch name for pre-release tag
-            $safeBranch = $branchName -replace '[^A-Za-z0-9-]', '-'
-            $version = "$baseVersion-$safeBranch"
+      - name: Run smoke lane
+        shell: pwsh
+        run: pwsh -File scripts/quality/run-smoke-tests.ps1 -NoRestore -NoBuild
+
+      - name: Upload smoke artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: smoke-lane-artifacts
+          path: artifacts/codex/test-results/smoke/
+
+  blocking:
+    name: Blocking lane
+    runs-on: ubuntu-latest
+    needs: smoke
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Determine Version
+        id: git_version
+        shell: pwsh
+        run: |
+          $now = [System.DateTime]::UtcNow
+          $revision = $now.Hour * 60 + $now.Minute
+          $baseVersion = "$($now.Year).$($now.Month).$($now.Day).$revision"
+          $version = $baseVersion
+
+          try {
+            $branchName = (git rev-parse --abbrev-ref HEAD).Trim()
+            $mainBranches = @("main", "master")
+
+            if ($branchName -and ($mainBranches -notcontains $branchName.ToLowerInvariant())) {
+              $safeBranch = $branchName -replace '[^A-Za-z0-9-]', '-'
+              $version = "$baseVersion-$safeBranch"
+            }
+          } catch {
+            Write-Warning "Could not determine git branch. Using base version."
           }
-        } catch {
-          Write-Warning "Could not determine git branch. Using base version."
-        }
 
-        Write-Host "Calculated Version: $version"
-        echo "semVer=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          echo "semVer=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
 
-    - name: Restore dependencies
-      run: dotnet restore Incursa.Platform.CI.slnx
+      - name: Restore dependencies
+        run: dotnet restore Incursa.Platform.CI.slnx
 
-    - name: Restore tools
-      run: dotnet tool restore
+      - name: Restore tools
+        run: dotnet tool restore
 
-    - name: Build solution
-      run: dotnet build Incursa.Platform.CI.slnx --no-restore --configuration Release -p:Version=${{ steps.git_version.outputs.semVer }}
+      - name: Build solution
+        run: dotnet build Incursa.Platform.CI.slnx --no-restore --configuration Release -p:Version=${{ steps.git_version.outputs.semVer }}
 
-    - name: Run Tests
-      run: dotnet test Incursa.Platform.CI.slnx --no-build --configuration Release --filter "Category!=Integration&RequiresDocker!=true"
+      - name: Run blocking lane
+        shell: pwsh
+        run: pwsh -File scripts/quality/run-blocking-tests.ps1 -NoRestore -NoBuild
 
-    - name: Pack NuGet packages
-      run: dotnet pack Incursa.Platform.CI.slnx --configuration Release --output ./nupkgs -p:PackageVersion=${{ steps.git_version.outputs.semVer }}
+      - name: Pack NuGet packages
+        run: dotnet pack Incursa.Platform.CI.slnx --configuration Release --output ./nupkgs -p:PackageVersion=${{ steps.git_version.outputs.semVer }}
 
-    - name: Pack TestDocs tool and analyzer
-      run: dotnet pack ./tools/testdocs/TestDocs.slnx --configuration Release --output ./nupkgs -p:PackageVersion=${{ steps.git_version.outputs.semVer }}
+      - name: Pack TestDocs tool and analyzer
+        run: dotnet pack ./tools/testdocs/TestDocs.slnx --configuration Release --output ./nupkgs -p:PackageVersion=${{ steps.git_version.outputs.semVer }}
 
-    - name: Upload package artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: nupkgs
-        path: ./nupkgs/*.nupkg
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nupkgs
+          path: ./nupkgs/*.nupkg
+
+      - name: Upload blocking artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: blocking-lane-artifacts
+          path: artifacts/codex/test-results/blocking/
+
+  observational:
+    name: Observational lane
+    runs-on: ubuntu-latest
+    needs: smoke
+    continue-on-error: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore dependencies
+        run: dotnet restore Incursa.Platform.CI.slnx
+
+      - name: Build solution
+        run: dotnet build Incursa.Platform.CI.slnx --no-restore --configuration Release
+
+      - name: Run observational lane
+        shell: pwsh
+        run: pwsh -File scripts/quality/run-observational-tests.ps1 -NoRestore -NoBuild
+
+      - name: Upload observational artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: observational-lane-artifacts
+          path: artifacts/codex/test-results/observational/
+
+  advisory:
+    name: Advisory quality lane
+    runs-on: ubuntu-latest
+    needs: smoke
+    continue-on-error: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore dependencies
+        run: dotnet restore Incursa.Platform.CI.slnx
+
+      - name: Restore tools
+        run: dotnet tool restore
+
+      - name: Build solution
+        run: dotnet build Incursa.Platform.CI.slnx --no-restore --configuration Release
+
+      - name: Run advisory quality evidence
+        shell: pwsh
+        run: pwsh -File scripts/quality/run-quality-evidence.ps1 -NoRestore -NoBuild
+
+      - name: Upload advisory artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: advisory-quality-artifacts
+          path: |
+            artifacts/codex/test-results/advisory/
+            artifacts/codex/coverage/advisory/
+            artifacts/quality/testing/
 
   publish-nuget-org:
-    needs: build
+    needs: blocking
     runs-on: ubuntu-latest
-    # Stable = no hyphen in version (e.g., 1.2.3)
     if: ${{ !contains(github.ref_name, '-') }}
     steps:
       - uses: actions/download-artifact@v4
         with:
           name: nupkgs
           path: out
+
       - name: Push to nuget.org
         run: dotnet nuget push "out/*.nupkg" --api-key "${{ secrets.NUGET_API_KEY }}" --source "https://api.nuget.org/v3/index.json" --skip-duplicate

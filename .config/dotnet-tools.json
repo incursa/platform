@@ -15,6 +15,13 @@
         "sqlpackage"
       ],
       "rollForward": false
+    },
+    "incursa.workbench": {
+      "version": "2026.3.8.452",
+      "commands": [
+        "workbench"
+      ],
+      "rollForward": false
     }
   }
 }

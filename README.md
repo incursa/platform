@@ -100,6 +100,12 @@ Package-specific READMEs live under `src/Incursa.Platform.*`.
 - Tests live in `tests/Incursa.Platform.Tests/` and related projects.
 - `tests/Incursa.Platform.SmokeWeb/` is a minimal ASP.NET Core UI for exercising outbox/inbox/scheduler/fanout/leases.
 - `tests/Incursa.Platform.Smoke.AppHost/` is an Aspire app host that can spin up SQL Server and Postgres containers.
+- The repo now uses four test lanes:
+  - smoke: `pwsh -File scripts/quality/run-smoke-tests.ps1`
+  - blocking: `pwsh -File scripts/quality/run-blocking-tests.ps1`
+  - observational: `pwsh -File scripts/quality/run-observational-tests.ps1`
+  - advisory quality evidence: `pwsh -File scripts/quality/run-quality-evidence.ps1`
+- Workbench quality evidence uses `docs/30-contracts/test-gate.contract.yaml` as the authored contract, `artifacts/codex/test-results/advisory` and `artifacts/codex/coverage/advisory` as the advisory evidence roots, and `artifacts/quality/testing` for normalized derived outputs. See `docs/testing-operating-model.md`.
 
 ## Contributing
 

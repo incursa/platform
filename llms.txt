@@ -79,8 +79,21 @@ Provider quality automation and baselines:
 - Docker-backed integration lane: `.github/workflows/provider-integration.yml`
 - Scoped mutation lane: `.github/workflows/provider-mutation.yml`
 - Cross-library fast lane: `.github/workflows/library-fast-quality.yml`
+- Commit CI lane topology: `.github/workflows/commit-ci.yml`
+- Main/release lane topology: `.github/workflows/main-release-ci-cd.yml`
+- Workbench quality workflow: `.github/workflows/workbench-quality.yml`
 - Docker image pre-pull script: `scripts/testing/prepull-test-images.ps1`
 - Coverage/mutation/traceability scripts: `scripts/quality/`
+- Lane runsettings: `runsettings/smoke.runsettings`, `runsettings/blocking.runsettings`, `runsettings/observational.runsettings`
+- Smoke lane runner: `scripts/quality/run-smoke-tests.ps1`
+- Blocking lane runner: `scripts/quality/run-blocking-tests.ps1`
+- Observational lane runner: `scripts/quality/run-observational-tests.ps1`
+- Advisory evidence runner: `scripts/quality/run-advisory-quality-tests.ps1`
+- Full Workbench evidence workflow: `scripts/quality/run-quality-evidence.ps1`
+- Workbench authored testing-intent contract: `docs/30-contracts/test-gate.contract.yaml`
+- Workbench operating model: `docs/testing-operating-model.md`
+- Known-issue register: `docs/testing-known-issues.md`
+- Workbench agent skill: `.codex/skills/workbench-quality-evidence/SKILL.md`
 - Baseline report: `docs/quality/provider-quality-baseline.md`
 - Cross-library baseline report: `docs/quality/library-hardening-baseline.md`
 - In-memory portability checklist: `docs/quality/inmemory-portability-checklist.md`

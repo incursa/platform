@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <IsTestProject>true</IsTestProject>
     <NoWarn>$(NoWarn);MA0048;xUnit1030</NoWarn>
   </PropertyGroup>
 

@@ -2,6 +2,18 @@
 
 This folder describes the XML doc schema for MSTest, xUnit, and NUnit tests and hosts generated documentation.
 
+Workbench quality integration uses:
+
+- Authored intent contract: `docs/30-contracts/test-gate.contract.yaml`
+- Smoke lane: `scripts/quality/run-smoke-tests.ps1`
+- Blocking lane: `scripts/quality/run-blocking-tests.ps1`
+- Observational lane: `scripts/quality/run-observational-tests.ps1`
+- Advisory evidence runner: `scripts/quality/run-advisory-quality-tests.ps1`
+- Full quality workflow: `scripts/quality/run-quality-evidence.ps1`
+- Normalized Workbench outputs: `artifacts/quality/testing/`
+- Operating model and happy path: `docs/testing-operating-model.md`
+- Known-issue register: `docs/testing-known-issues.md`
+
 - Schema: `docs/testing/test-doc-schema.md`
 - Generated docs: `docs/testing/generated/README.md`
 

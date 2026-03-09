@@ -1,6 +1,8 @@
 param(
     [int]$LineThreshold = 30,
     [int]$BranchThreshold = 0,
+    [string]$CoverageRoot = "",
+    [string]$SummaryPath = "",
     [string[]]$Targets = @("InMemory")
 )
 
@@ -13,8 +15,8 @@ if (-not (Get-Command dotnet -ErrorAction SilentlyContinue)) {
 }
 
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$coverageRoot = Join-Path $repoRoot "artifacts\codex\coverage"
-$summaryPath = Join-Path $repoRoot "artifacts\codex\provider-coverage-summary.md"
+$coverageRoot = if ([string]::IsNullOrWhiteSpace($CoverageRoot)) { Join-Path $repoRoot "artifacts\codex\coverage" } else { $CoverageRoot }
+$summaryPath = if ([string]::IsNullOrWhiteSpace($SummaryPath)) { Join-Path $repoRoot "artifacts\codex\provider-coverage-summary.md" } else { $SummaryPath }
 New-Item -Path $coverageRoot -ItemType Directory -Force | Out-Null
 
 $configuredTargets = @(
@@ -104,7 +106,9 @@ foreach ($target in $selectedTargets) {
             throw "No matching tests found for $name coverage filter '$filter'."
         }
 
-        $coverageFiles = Get-ChildItem -Path $coverageRoot -Filter "$name*.cobertura.xml" -ErrorAction SilentlyContinue
+        $coverageFiles = @(
+            Get-ChildItem -Path $coverageRoot -Filter "$name*.cobertura.xml" -ErrorAction SilentlyContinue
+        )
         if (-not $coverageFiles -or $coverageFiles.Count -eq 0) {
             throw "Coverage output file was not generated for ${name} under $coverageRoot"
         }

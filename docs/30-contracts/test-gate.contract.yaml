@@ -1,0 +1,87 @@
+version: 1
+domain: Incursa Platform testing evidence
+scope:
+  solutionPath: Incursa.Platform.CI.slnx
+  includes:
+    - src/**
+    - tests/**
+    - runsettings/**
+    - scripts/quality/**
+    - docs/**
+    - .github/workflows/commit-ci.yml
+    - .github/workflows/main-release-ci-cd.yml
+    - .github/workflows/workbench-quality.yml
+    - .codex/skills/workbench-quality-evidence/**
+  excludes:
+    - src/**/bin/**
+    - src/**/obj/**
+    - tests/**/bin/**
+    - tests/**/obj/**
+    - tests/Incursa.Platform.TestUtilities/**
+    - artifacts/**
+coverage:
+  lineMin: 0.00
+  branchMin: 0.00
+expectations:
+  confidenceTarget: advisory confidence based on a required smoke precheck, the required non-Docker blocking lane, and advisory Workbench evidence from the curated advisory lane
+  evidence:
+    - inventory
+    - results
+    - coverage
+artifacts:
+  smokeResults: artifacts/codex/test-results/smoke
+  blockingResults: artifacts/codex/test-results/blocking
+  observationalResults: artifacts/codex/test-results/observational
+  advisoryResults: artifacts/codex/test-results/advisory
+  advisoryCoverage: artifacts/codex/coverage/advisory
+  normalizedQuality: artifacts/quality/testing
+lanes:
+  smoke:
+    entrypoint: scripts/quality/run-smoke-tests.ps1
+    policy: required
+    intent: curated fast precheck across core primitives, storage contracts, InMemory provider coverage, health probe, and webhook processing
+  blocking:
+    entrypoint: scripts/quality/run-blocking-tests.ps1
+    policy: required
+    intent: main CI-safe validation lane for Incursa.Platform.CI.slnx using non-Docker tests
+  observational:
+    entrypoint: scripts/quality/run-observational-tests.ps1
+    policy: advisory
+    intent: visible non-blocking KnownIssue tests
+    currentState: no KnownIssue tests are currently authored in this repository
+  advisory:
+    entrypoint: scripts/quality/run-quality-evidence.ps1
+    policy: advisory
+    intent: broader confidence and Workbench evidence lane using advisory TRX plus curated coverage artifacts
+related:
+  docs:
+    - docs/testing-operating-model.md
+    - docs/testing-known-issues.md
+    - docs/testing/README.md
+    - docs/quality/provider-quality-baseline.md
+    - docs/quality/library-hardening-baseline.md
+  files:
+    - runsettings/smoke.runsettings
+    - runsettings/blocking.runsettings
+    - runsettings/observational.runsettings
+    - scripts/quality/run-smoke-tests.ps1
+    - scripts/quality/run-blocking-tests.ps1
+    - scripts/quality/run-observational-tests.ps1
+    - scripts/quality/run-advisory-quality-tests.ps1
+    - scripts/quality/run-quality-evidence.ps1
+    - scripts/quality/run-workbench-evidence.ps1
+    - scripts/quality/run-library-coverage.ps1
+    - scripts/quality/run-provider-coverage.ps1
+    - .github/workflows/commit-ci.yml
+    - .github/workflows/main-release-ci-cd.yml
+    - .github/workflows/workbench-quality.yml
+    - .codex/skills/workbench-quality-evidence/SKILL.md
+intentionalGaps:
+  - subject: Docker-backed SQL Server and Postgres evidence in the default lane
+    rationale: Provider integration tests remain valuable and maintained, but the first four-lane consumer integration keeps required and advisory defaults non-Docker so the happy path stays low-friction on developer machines and CI.
+  - subject: Azure storage evidence that depends on Azurite or environment-provided credentials
+    rationale: Azure provider coverage remains intentionally outside the default Workbench lane because it requires additional setup beyond the baseline repo workflow.
+  - subject: Empty observational lane in the first pass
+    rationale: The KnownIssue taxonomy and artifact path are now standardized, but no current tests were retagged until a real runnable product gap is ready to stay visible in automation.
+  - subject: Historical test assets outside the maintained CI solution
+    rationale: This integration follows Incursa.Platform.CI.slnx and the supported lane scripts rather than trying to normalize every detached or legacy test asset in one pass.

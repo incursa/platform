@@ -69,6 +69,8 @@ Welcome to the comprehensive documentation for the Incursa Platform. This guide 
 - [Implementation Summary](IMPLEMENTATION_SUMMARY.md) - High-level implementation overview
 - [API Reference](api-reference.md) - Complete public interfaces and signatures
 - [Operational Troubleshooting](operational-troubleshooting.md) - Runbook for common production issues
+- [Testing Operating Model](testing-operating-model.md) - Workbench quality contract, artifact paths, and advisory workflow
+- [Testing Known Issues](testing-known-issues.md) - Current `KnownIssue` lane status and guidance
 
 ## 🔍 Quick Links by Task
 
@@ -94,5 +96,5 @@ Found an issue or want to improve the documentation? See our [contribution guide
 
 ---
 
-**Last Updated:** 2025-12-21
+**Last Updated:** 2026-03-08
 **Platform Version:** 1.0.0+
