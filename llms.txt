@@ -25,8 +25,11 @@ Core:
 
 Capabilities:
 
+- `src/Incursa.Platform.Access/`
 - `src/Incursa.Platform.Audit/`
 - `src/Incursa.Platform.Correlation/`
+- `src/Incursa.Platform.CustomDomains/`
+- `src/Incursa.Platform.Dns/`
 - `src/Incursa.Platform.Email/`
 - `src/Incursa.Platform.ExactlyOnce/`
 - `src/Incursa.Platform.Health/`
@@ -49,7 +52,10 @@ Providers:
 
 Public integrations:
 
+- `src/Incursa.Platform.Access.WorkOS/`
 - `src/Incursa.Platform.Audit.WorkOS/`
+- `src/Incursa.Platform.CustomDomains.Cloudflare/`
+- `src/Incursa.Platform.Dns.Cloudflare/`
 - `src/Incursa.Platform.Email.Postmark/`
 
 Hosting adapters:
@@ -78,8 +84,21 @@ Tools:
   - `src/Incursa.Platform.Email.SqlServer/`
   - `src/Incursa.Platform.Email.Postgres/`
   - `tests/Incursa.Platform.Email.Tests/`
-- `C:\src\incursa\integrations-workos` is preserved under `incubating/workos/`; the public WorkOS slice remains `src/Incursa.Platform.Audit.WorkOS/`
-- `C:\src\incursa\integrations-cloudflare` is preserved under `incubating/cloudflare/`
+- `C:\src\incursa\integrations-workos` now feeds the public access adapter slice plus the existing audit sink:
+  - `src/Incursa.Platform.Access/`
+  - `src/Incursa.Platform.Access.WorkOS/`
+  - `src/Incursa.Platform.Audit.WorkOS/`
+  - `tests/Incursa.Platform.Access.Tests/`
+  - broader WorkOS auth/widget/webhook material remains under `incubating/workos/`
+  - a standalone provider-neutral identity package was deferred; the cleaner future candidates are access-focused ASP.NET Core and webhook adapter slices
+- `C:\src\incursa\integrations-cloudflare` now feeds the public DNS and custom-domain slices:
+  - `src/Incursa.Platform.CustomDomains/`
+  - `src/Incursa.Platform.CustomDomains.Cloudflare/`
+  - `tests/Incursa.Platform.CustomDomains.Tests/`
+  - `src/Incursa.Platform.Dns/`
+  - `src/Incursa.Platform.Dns.Cloudflare/`
+  - `tests/Incursa.Platform.Dns.Tests/`
+  - broader Cloudflare load-balancing, probe, storage, and non-promoted vendor-bucket code remains under `incubating/cloudflare/`
 - `C:\src\incursa\integrations-electronicnotary` is preserved under `incubating/electronicnotary/`
 
 See `docs/architecture/imported-integrations.md` for the boundary decisions and resulting landing zones.
@@ -90,6 +109,7 @@ See `docs/architecture/imported-integrations.md` for the boundary decisions and 
 - `eng/Generate-PackageCatalog.ps1`: regenerates the catalog from the repo tree
 - `eng/Resolve-AffectedProjects.ps1`: calculates changed projects and reverse dependencies
 - `eng/Pack-PublicPackages.ps1`: packs only catalog-allowlisted projects
+- `docs/architecture/layer-2-capabilities.md`: layer 2 capability ownership, adapter boundaries, and incubating leftovers for access, DNS, and custom domains
 - `docs/architecture/monorepo.md`: package families, zones, and pack/release policy
 - `docs/quality/repo-scope-boundary.md`: what belongs in `src/` vs `incubating/`
 - `scripts/quality/platform-scope.rules.json`: scope guardrails for provider-token validation

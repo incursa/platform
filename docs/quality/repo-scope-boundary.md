@@ -11,7 +11,7 @@ This repository is the public monorepo for the `Incursa.Platform` family. It is 
 ## In scope for `src/`
 
 - Core durable-processing primitives and abstractions.
-- Reusable cross-cutting capabilities such as audit, operations, observability, idempotency, exactly-once, correlation, webhooks, modularity, storage, and email.
+- Reusable cross-cutting capabilities such as access, audit, DNS, operations, observability, idempotency, exactly-once, correlation, webhooks, modularity, storage, and email.
 - Storage/database providers and provider adapters for those capabilities.
 - Capability-specific integrations for widely used public services when the boundary is clear.
 - Hosting adapters and ASP.NET Core integration packages.
@@ -28,14 +28,17 @@ This repository is the public monorepo for the `Incursa.Platform` family. It is 
 
 Public provider/service adapters allowed in `src/`:
 
+- `Incursa.Platform.Access.WorkOS`
 - `Incursa.Platform.Audit.WorkOS`
+- `Incursa.Platform.CustomDomains.Cloudflare`
+- `Incursa.Platform.Dns.Cloudflare`
 - `Incursa.Platform.Email.Postmark`
 - `Incursa.Integrations.Storage.Azure`
 
 Preserved in `incubating/` until further split/cleanup:
 
-- `incubating/cloudflare/`
-- `incubating/workos/` outside the existing audit sink slice
+- `incubating/cloudflare/` outside the DNS zone/record and custom-domain slices
+- `incubating/workos/` outside the access and audit slices
 - `incubating/electronicnotary/`
 
 ## Release guardrails

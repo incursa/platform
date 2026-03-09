@@ -47,8 +47,11 @@ Core:
 
 Capabilities:
 
+- `Incursa.Platform.Access`
 - `Incursa.Platform.Audit`
 - `Incursa.Platform.Correlation`
+- `Incursa.Platform.CustomDomains`
+- `Incursa.Platform.Dns`
 - `Incursa.Platform.Email`
 - `Incursa.Platform.ExactlyOnce`
 - `Incursa.Platform.Health`
@@ -71,7 +74,10 @@ Providers:
 
 Integrations:
 
+- `Incursa.Platform.Access.WorkOS`
 - `Incursa.Platform.Audit.WorkOS`
+- `Incursa.Platform.CustomDomains.Cloudflare`
+- `Incursa.Platform.Dns.Cloudflare`
 - `Incursa.Platform.Email.Postmark`
 
 Hosting:
@@ -89,6 +95,16 @@ Hosting:
 - `Incursa.Platform.slnx` groups the public monorepo by package family and includes docs/governance files.
 - `Incursa.Platform.CI.slnx` is the build/test solution for public packages, tests, smoke apps, and shipped tools.
 - `Incursa.Platform.Incubating.slnx` preserves imported staging code outside the default public CI path.
+
+## Layer 2 capability families
+
+The repository now includes explicit layer 2 capability packages that separate provider-neutral domain surfaces from provider-specific adapters:
+
+- access: `Incursa.Platform.Access` with `Incursa.Platform.Access.WorkOS`
+- custom domains: `Incursa.Platform.CustomDomains` with `Incursa.Platform.CustomDomains.Cloudflare`
+- DNS: `Incursa.Platform.Dns` with `Incursa.Platform.Dns.Cloudflare`
+
+These packages keep local source-of-truth models in the capability library and isolate provider materialization in focused adapters. Broader vendor buckets remain preserved in `incubating/` until they can be split on clean public boundaries. The remaining WorkOS code is intentionally deferred until it can be expressed as smaller access- or webhook-oriented adapters instead of a second identity core. See `docs/architecture/layer-2-capabilities.md`.
 
 ## Pack and publish policy
 

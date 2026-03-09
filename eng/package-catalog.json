@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-08T20:56:33.5051739-06:00",
+  "generatedAt": "2026-03-09T00:18:33.1546352-06:00",
   "generatedBy": "eng/Generate-PackageCatalog.ps1",
   "projects": [
     {
@@ -28,7 +28,7 @@
         "kind": "imported-repo",
         "sourcePath": "C:/src/incursa/integrations-cloudflare"
       },
-      "notes": "Mixed Cloudflare vendor surface spanning storage, custom hostnames, and load-balancing; retained in incubating until split by capability."
+      "notes": "Mixed Cloudflare vendor surface spanning storage, load-balancing, probes, and broader edge/domain workflows; retained in incubating until split by capability."
     },
     {
       "projectPath": "incubating/cloudflare/tests/Incursa.Integrations.Cloudflare.IntegrationTests/Incursa.Integrations.Cloudflare.IntegrationTests.csproj",
@@ -199,6 +199,34 @@
       "notes": "Public Azure storage provider adapter for Incursa.Platform.Storage."
     },
     {
+      "projectPath": "src/Incursa.Platform.Access.WorkOS/Incursa.Platform.Access.WorkOS.csproj",
+      "packageId": "Incursa.Platform.Access.WorkOS",
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Capability-specific provider adapter package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Access/Incursa.Platform.Access.csproj",
+      "packageId": "Incursa.Platform.Access",
+      "zone": "src",
+      "category": "capabilities",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Public capability package."
+    },
+    {
       "projectPath": "src/Incursa.Platform.Audit.WorkOS/Incursa.Platform.Audit.WorkOS.csproj",
       "packageId": "Incursa.Platform.Audit.WorkOS",
       "zone": "src",
@@ -229,6 +257,62 @@
     {
       "projectPath": "src/Incursa.Platform.Correlation/Incursa.Platform.Correlation.csproj",
       "packageId": "Incursa.Platform.Correlation",
+      "zone": "src",
+      "category": "capabilities",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Public capability package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.CustomDomains.Cloudflare/Incursa.Platform.CustomDomains.Cloudflare.csproj",
+      "packageId": "Incursa.Platform.CustomDomains.Cloudflare",
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Capability-specific provider adapter package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.CustomDomains/Incursa.Platform.CustomDomains.csproj",
+      "packageId": "Incursa.Platform.CustomDomains",
+      "zone": "src",
+      "category": "capabilities",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Public capability package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Dns.Cloudflare/Incursa.Platform.Dns.Cloudflare.csproj",
+      "packageId": "Incursa.Platform.Dns.Cloudflare",
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Capability-specific provider adapter package."
+    },
+    {
+      "projectPath": "src/Incursa.Platform.Dns/Incursa.Platform.Dns.csproj",
+      "packageId": "Incursa.Platform.Dns",
       "zone": "src",
       "category": "capabilities",
       "classification": "public-packable",
@@ -591,6 +675,20 @@
       "notes": "Automated test project."
     },
     {
+      "projectPath": "tests/Incursa.Platform.Access.Tests/Incursa.Platform.Access.Tests.csproj",
+      "packageId": "Incursa.Platform.Access.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
       "projectPath": "tests/Incursa.Platform.Audit.Tests/Incursa.Platform.Audit.Tests.csproj",
       "packageId": "Incursa.Platform.Audit.Tests",
       "zone": "tests",
@@ -607,6 +705,34 @@
     {
       "projectPath": "tests/Incursa.Platform.Correlation.Tests/Incursa.Platform.Correlation.Tests.csproj",
       "packageId": "Incursa.Platform.Correlation.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.CustomDomains.Tests/Incursa.Platform.CustomDomains.Tests.csproj",
+      "packageId": "Incursa.Platform.CustomDomains.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
+      "projectPath": "tests/Incursa.Platform.Dns.Tests/Incursa.Platform.Dns.Tests.csproj",
+      "packageId": "Incursa.Platform.Dns.Tests",
       "zone": "tests",
       "category": "tests",
       "classification": "test-only",

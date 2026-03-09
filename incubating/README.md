@@ -8,6 +8,15 @@ Use this area for:
 - integrations that mix reusable infrastructure with product or workflow assumptions
 - staging imports from sibling repos during consolidation
 
+Current promoted slices:
+
+- `incubating/workos/` contributed the public `Incursa.Platform.Access` / `Incursa.Platform.Access.WorkOS` capability family and the existing `Incursa.Platform.Audit.WorkOS` package, but broader auth/widget/webhook/vendor surfaces remain incubating
+- `incubating/cloudflare/` contributed the public `Incursa.Platform.Dns` / `Incursa.Platform.Dns.Cloudflare` and `Incursa.Platform.CustomDomains` / `Incursa.Platform.CustomDomains.Cloudflare` capability families, but broader storage, probe, load-balancing, and non-promoted vendor surfaces remain incubating
+
+Current deferrals:
+
+- the remaining WorkOS code is not being promoted as a standalone identity layer 2 library in this pass; the cleaner future slices are likely access-focused ASP.NET Core and webhook adapters
+
 Rules:
 
 - keep the code buildable when practical

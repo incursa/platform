@@ -8,8 +8,11 @@
     <Project Path="src/Incursa.Platform/Incursa.Platform.csproj" />
   </Folder>
   <Folder Name="/src/capabilities/">
+    <Project Path="src/Incursa.Platform.Access/Incursa.Platform.Access.csproj" />
     <Project Path="src/Incursa.Platform.Audit/Incursa.Platform.Audit.csproj" />
     <Project Path="src/Incursa.Platform.Correlation/Incursa.Platform.Correlation.csproj" />
+    <Project Path="src/Incursa.Platform.CustomDomains/Incursa.Platform.CustomDomains.csproj" />
+    <Project Path="src/Incursa.Platform.Dns/Incursa.Platform.Dns.csproj" />
     <Project Path="src/Incursa.Platform.Email/Incursa.Platform.Email.csproj" />
     <Project Path="src/Incursa.Platform.ExactlyOnce/Incursa.Platform.ExactlyOnce.csproj" />
     <Project Path="src/Incursa.Platform.Health/Incursa.Platform.Health.csproj" />
@@ -30,7 +33,10 @@
     <Project Path="src/Incursa.Platform.SqlServer/Incursa.Platform.SqlServer.csproj" />
   </Folder>
   <Folder Name="/src/integrations/">
+    <Project Path="src/Incursa.Platform.Access.WorkOS/Incursa.Platform.Access.WorkOS.csproj" />
     <Project Path="src/Incursa.Platform.Audit.WorkOS/Incursa.Platform.Audit.WorkOS.csproj" />
+    <Project Path="src/Incursa.Platform.CustomDomains.Cloudflare/Incursa.Platform.CustomDomains.Cloudflare.csproj" />
+    <Project Path="src/Incursa.Platform.Dns.Cloudflare/Incursa.Platform.Dns.Cloudflare.csproj" />
     <Project Path="src/Incursa.Platform.Email.Postmark/Incursa.Platform.Email.Postmark.csproj" />
   </Folder>
   <Folder Name="/src/hosting/">
@@ -44,8 +50,11 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Incursa.Integrations.Storage.Azure.Tests/Incursa.Integrations.Storage.Azure.Tests.csproj" />
+    <Project Path="tests/Incursa.Platform.Access.Tests/Incursa.Platform.Access.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Audit.Tests/Incursa.Platform.Audit.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Correlation.Tests/Incursa.Platform.Correlation.Tests.csproj" />
+    <Project Path="tests/Incursa.Platform.CustomDomains.Tests/Incursa.Platform.CustomDomains.Tests.csproj" />
+    <Project Path="tests/Incursa.Platform.Dns.Tests/Incursa.Platform.Dns.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Email.Tests/Incursa.Platform.Email.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.HealthProbe.Tests/Incursa.Platform.HealthProbe.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.InMemory.Tests/Incursa.Platform.InMemory.Tests.csproj" />
@@ -70,4 +79,6 @@
     <Project Path="tools/testdocs/src/Incursa.TestDocs.Analyzers/Incursa.TestDocs.Analyzers.csproj" />
     <Project Path="tools/testdocs/src/TestDocs.Cli/TestDocs.Cli.csproj" />
   </Folder>
+  <Folder Name="/tools/observability/" />
+  <Folder Name="/tools/observability/src/" />
 </Solution>

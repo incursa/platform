@@ -161,7 +161,7 @@ function Get-CatalogMetadata {
 
         $note = switch -Wildcard ($ProjectPath) {
             "incubating/cloudflare/src/Incursa.Integrations.Cloudflare/*" {
-                "Mixed Cloudflare vendor surface spanning storage, custom hostnames, and load-balancing; retained in incubating until split by capability."
+                "Mixed Cloudflare vendor surface spanning storage, load-balancing, probes, and broader edge/domain workflows; retained in incubating until split by capability."
                 break
             }
             "incubating/workos/src/*" {
@@ -254,6 +254,17 @@ function Get-CatalogMetadata {
                 packable = $true
                 publishable = $true
                 notes = "Capability-specific WorkOS audit sink package retained in the public source surface."
+            }
+        }
+
+        if ($ProjectName -in @("Incursa.Platform.Access.WorkOS", "Incursa.Platform.CustomDomains.Cloudflare", "Incursa.Platform.Dns.Cloudflare")) {
+            return [ordered]@{
+                zone = "src"
+                category = "integrations"
+                classification = "public-packable"
+                packable = $true
+                publishable = $true
+                notes = "Capability-specific provider adapter package."
             }
         }
 
