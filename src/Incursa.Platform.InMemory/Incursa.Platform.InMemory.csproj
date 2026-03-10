@@ -7,7 +7,7 @@
     <!-- Package metadata -->
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <PackageId>Incursa.Platform.InMemory</PackageId>
-    <Version>6.0.1</Version>
+    <Version>6.0.3</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>In-memory provider for Incursa Platform primitives for testing and local development.</Description>

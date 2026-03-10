@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
     <PackageId>Incursa.Integrations.Cloudflare.Dns</PackageId>
-    <Version>6.0.1</Version>
+    <Version>6.0.3</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>Cloudflare DNS adapter for Incursa.Platform.Dns.</Description>

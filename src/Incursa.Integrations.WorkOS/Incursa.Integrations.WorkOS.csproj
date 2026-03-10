@@ -7,7 +7,7 @@
     <PackageId>Incursa.Integrations.WorkOS</PackageId>
     <Description>WorkOS provider package containing runtime services, durable handlers, persistence adapters, and host-agnostic app auth contracts for Incursa integrations.</Description>
     <PackageTags>incursa;workos;provider;runtime;apikey;webhooks;integration;dotnet</PackageTags>
-    <Version>6.0.1</Version>
+    <Version>6.0.3</Version>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Incursa.Integrations.WorkOS.Abstractions\Incursa.Integrations.WorkOS.Abstractions.csproj" />

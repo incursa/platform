@@ -8,7 +8,7 @@
     <Description>ASP.NET Core hosting glue for Incursa WorkOS integrations, including middleware, endpoints, and app-auth HTTP wiring.</Description>
     <PackageTags>incursa;workos;aspnetcore;middleware;webhooks;authentication;authorization;dotnet</PackageTags>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <Version>6.0.1</Version>
+    <Version>6.0.3</Version>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Incursa.Integrations.WorkOS.Abstractions\Incursa.Integrations.WorkOS.Abstractions.csproj" />

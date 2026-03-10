@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
     <PackageId>Incursa.Platform.CustomDomains</PackageId>
-    <Version>6.0.1</Version>
+    <Version>6.0.3</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>Provider-neutral managed custom domain lifecycle services for Incursa Platform.</Description>

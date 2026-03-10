@@ -21,6 +21,6 @@
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
     <PackageId>Incursa.Integrations.ElectronicNotary.Proof.AspNetCore</PackageId>
-    <Version>6.0.1</Version>
+    <Version>6.0.3</Version>
   </PropertyGroup>
 </Project>

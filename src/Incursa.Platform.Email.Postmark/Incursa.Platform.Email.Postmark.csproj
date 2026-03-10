@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
     <PackageId>Incursa.Platform.Email.Postmark</PackageId>
-    <Version>6.0.1</Version>
+    <Version>6.0.3</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>Postmark sender and webhook adapters for Incursa Platform Email.</Description>

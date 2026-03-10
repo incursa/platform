@@ -7,7 +7,7 @@
     <PackageId>Incursa.Integrations.ElectronicNotary</PackageId>
     <Description>Core domain contracts and service components for Incursa Electronic Notary integrations.</Description>
     <PackageTags>incursa;electronic-notary;proof;webhooks;dotnet</PackageTags>
-    <Version>6.0.1</Version>
+    <Version>6.0.3</Version>
   </PropertyGroup>
   <ItemGroup>
     <None Include="PACKAGE_README.md" Pack="true" PackagePath="\" />

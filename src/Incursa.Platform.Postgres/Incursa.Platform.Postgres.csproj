@@ -7,7 +7,7 @@
     <!-- Package metadata -->
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <PackageId>Incursa.Platform.Postgres</PackageId>
-    <Version>6.0.1</Version>
+    <Version>6.0.3</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>PostgreSQL provider for Incursa Platform outbox, inbox, scheduler, fanout, metrics, and leases.</Description>
