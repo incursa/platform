@@ -99,7 +99,7 @@ jobs:
 
       - name: Validate package version bumps
         shell: pwsh
-        run: pwsh -File eng/Test-PackageVersionChanges.ps1 -Base ${{ steps.diff_base.outputs.mergeBase }} -Head HEAD
+        run: pwsh -File eng/Test-PackageVersionChanges.ps1 -Base "${{ steps.diff_base.outputs.mergeBase }}" -Head HEAD
 
       - name: Build solution
         run: dotnet build Incursa.Platform.CI.slnx --no-restore --configuration Release
@@ -114,7 +114,7 @@ jobs:
 
       - name: Pack affected public packages
         shell: pwsh
-        run: pwsh -File eng/Pack-PublicPackages.ps1 -Configuration Release -OutputPath ./nupkgs -AffectedOnly -Base ${{ steps.diff_base.outputs.mergeBase }} -Head HEAD
+        run: pwsh -File eng/Pack-PublicPackages.ps1 -Configuration Release -OutputPath ./nupkgs -AffectedOnly -Base "${{ steps.diff_base.outputs.mergeBase }}" -Head HEAD
 
       - name: Upload package artifact
         uses: actions/upload-artifact@v4

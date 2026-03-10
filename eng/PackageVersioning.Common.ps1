@@ -190,8 +190,6 @@ function Get-GlobalImpactPatterns {
         "^stylecop\.json$",
         "^\.editorconfig$",
         "^Incursa\.Platform(\.CI)?\.slnx$",
-        "^eng/",
-        "^\.github/workflows/",
         "^assets/nuget_logo\.png$"
     )
 }

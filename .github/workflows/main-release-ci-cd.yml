@@ -88,9 +88,29 @@ jobs:
       - name: Restore tools
         run: dotnet tool restore
 
+      - name: Fetch main for affected package diff
+        run: git fetch origin main --depth=1
+
+      - name: Determine diff base
+        id: diff_base
+        shell: pwsh
+        run: |
+          $baseRef = "${{ github.event.before }}".Trim()
+          $zeroSha = "0000000000000000000000000000000000000000"
+
+          if ([string]::IsNullOrWhiteSpace($baseRef) -or $baseRef -eq $zeroSha) {
+            $baseRef = (git merge-base origin/main HEAD).Trim()
+          }
+
+          if ([string]::IsNullOrWhiteSpace($baseRef)) {
+            throw "Could not resolve a diff base for package version validation."
+          }
+
+          echo "mergeBase=$baseRef" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
       - name: Validate package version bumps
         shell: pwsh
-        run: pwsh -File eng/Test-PackageVersionChanges.ps1 -Base ${{ github.event.before }} -Head HEAD
+        run: pwsh -File eng/Test-PackageVersionChanges.ps1 -Base "${{ steps.diff_base.outputs.mergeBase }}" -Head HEAD
 
       - name: Build solution
         run: dotnet build Incursa.Platform.CI.slnx --no-restore --configuration Release
