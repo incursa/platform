@@ -200,9 +200,16 @@ function Get-PublishImpact {
         [string]$RepoRoot,
         [Parameter(Mandatory = $true)]
         [object[]]$Projects,
-        [Parameter(Mandatory = $true)]
         [string[]]$ChangedFiles
     )
+
+    if ($null -eq $ChangedFiles -or $ChangedFiles.Count -eq 0) {
+        return [ordered]@{
+            hasGlobalImpact = $false
+            directlyChangedProjectPaths = @()
+            publishProjectPaths = @()
+        }
+    }
 
     $projectPaths = @($Projects | ForEach-Object { [string]$_.projectPath })
     $graph = Get-ProjectDependencyGraph -RepoRoot $RepoRoot -Projects $Projects

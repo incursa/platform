@@ -17,7 +17,17 @@ $ErrorActionPreference = "Stop"
 $projects = @(Get-PackageCatalogProjects -CatalogPath $CatalogPath -PackableOnly)
 $manifest = Get-PackageVersionManifest -ManifestPath $ManifestPath
 $currentVersions = Get-PackageVersionMap -Manifest $manifest
-$changed = @(Get-ChangedFilesFromGit -Base $Base -Head $Head -ChangedFiles $ChangedFiles -Staged:$Staged)
+$changedFilesArguments = @{
+    Base = $Base
+    Head = $Head
+    Staged = $Staged
+}
+
+if ($ChangedFiles.Count -gt 0) {
+    $changedFilesArguments.ChangedFiles = $ChangedFiles
+}
+
+$changed = @(Get-ChangedFilesFromGit @changedFilesArguments)
 $impact = Get-PublishImpact -RepoRoot $RepoRoot -Projects $projects -ChangedFiles $changed
 
 if (@($impact.publishProjectPaths).Count -eq 0) {
