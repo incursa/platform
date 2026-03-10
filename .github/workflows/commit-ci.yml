@@ -77,41 +77,11 @@ jobs:
           restore-keys: |
             nuget-${{ runner.os }}-
 
-      - name: Determine Version
-        id: git_version
-        shell: pwsh
-        run: |
-          $now = [System.DateTime]::UtcNow
-          $revision = $now.Hour * 60 + $now.Minute
-          $baseVersion = "$($now.Year).$($now.Month).$($now.Day).$revision"
-          $version = $baseVersion
-
-          try {
-            $branchName = (git rev-parse --abbrev-ref HEAD).Trim()
-            $mainBranches = @("main", "master")
-
-            if ($branchName -and ($mainBranches -notcontains $branchName.ToLowerInvariant())) {
-              $safeBranch = $branchName -replace '[^A-Za-z0-9-]', '-'
-              $version = "$baseVersion-$safeBranch"
-            }
-          } catch {
-            Write-Warning "Could not determine git branch. Using base version."
-          }
-
-          echo "semVer=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-
       - name: Restore dependencies
         run: dotnet restore Incursa.Platform.CI.slnx
 
       - name: Restore tools
         run: dotnet tool restore
-
-      - name: Build solution
-        run: dotnet build Incursa.Platform.CI.slnx --no-restore --configuration Release -p:Version=${{ steps.git_version.outputs.semVer }}
-
-      - name: Run blocking lane
-        shell: pwsh
-        run: pwsh -File scripts/quality/run-blocking-tests.ps1 -NoRestore -NoBuild
 
       - name: Fetch main for affected package diff
         run: git fetch origin main --depth=1
@@ -127,13 +97,24 @@ jobs:
 
           echo "mergeBase=$mergeBase" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
 
+      - name: Validate package version bumps
+        shell: pwsh
+        run: pwsh -File eng/Test-PackageVersionChanges.ps1 -Base ${{ steps.diff_base.outputs.mergeBase }} -Head HEAD
+
+      - name: Build solution
+        run: dotnet build Incursa.Platform.CI.slnx --no-restore --configuration Release
+
+      - name: Run blocking lane
+        shell: pwsh
+        run: pwsh -File scripts/quality/run-blocking-tests.ps1 -NoRestore -NoBuild
+
       - name: Regenerate package catalog
         shell: pwsh
         run: pwsh -File eng/Generate-PackageCatalog.ps1
 
       - name: Pack affected public packages
         shell: pwsh
-        run: pwsh -File eng/Pack-PublicPackages.ps1 -Configuration Release -OutputPath ./nupkgs -PackageVersion ${{ steps.git_version.outputs.semVer }} -AffectedOnly -Base ${{ steps.diff_base.outputs.mergeBase }} -Head HEAD
+        run: pwsh -File eng/Pack-PublicPackages.ps1 -Configuration Release -OutputPath ./nupkgs -AffectedOnly -Base ${{ steps.diff_base.outputs.mergeBase }} -Head HEAD
 
       - name: Upload package artifact
         uses: actions/upload-artifact@v4

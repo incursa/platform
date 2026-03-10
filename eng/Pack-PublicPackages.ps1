@@ -42,6 +42,10 @@ if ($selectedProjects.Count -eq 0) {
     return
 }
 
+if (-not [string]::IsNullOrWhiteSpace($PackageVersion) -and ($AffectedOnly -or $PublishableOnly)) {
+    Write-Warning "Applying one shared PackageVersion to a selective pack can rewrite internal project-reference dependencies to versions that do not exist on the feed. Prefer eng/package-versions.json plus eng/Apply-VersionPlan.ps1 for selective publishing."
+}
+
 New-Item -ItemType Directory -Force -Path $OutputPath | Out-Null
 
 foreach ($project in $selectedProjects | Sort-Object projectPath) {

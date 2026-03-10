@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
     <PackageId>Incursa.Integrations.Cloudflare.CustomDomains</PackageId>
-    <Version>1.0.0</Version>
+    <Version>6.0.0</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>Cloudflare custom-domain adapter for Incursa.Platform.CustomDomains.</Description>
@@ -20,16 +20,13 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Incursa.Platform.CustomDomains\Incursa.Platform.CustomDomains.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.2" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.2" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="..\..\assets\nuget_logo.png">
       <Pack>True</Pack>
@@ -40,7 +37,6 @@
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>Incursa.Platform.CustomDomains.Tests</_Parameter1>

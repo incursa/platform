@@ -1,16 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="..\Incursa.Integrations.ElectronicNotary.Abstractions\Incursa.Integrations.ElectronicNotary.Abstractions.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.4.0" />
     <PackageReference Include="Incursa.Generators" Version="2026.2.19.38" PrivateAssets="all" IncludeAssets="analyzers;build;buildtransitive" />
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.2" />
   </ItemGroup>
-
   <ItemGroup>
     <AdditionalFiles Remove="$(MSBuildProjectDirectory)\**\_generate.xml" />
     <AdditionalFiles Remove="$(MSBuildProjectDirectory)\**\*.enum.json" />
@@ -20,7 +17,6 @@
     <AdditionalFiles Remove="$(MSBuildProjectDirectory)\**\*.fastid.json" />
     <AdditionalFiles Remove="$(MSBuildProjectDirectory)\**\*.dto.json" />
   </ItemGroup>
-
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildProjectDirectory)\Definitions\**\_generate.xml" />
     <AdditionalFiles Include="$(MSBuildProjectDirectory)\Definitions\**\*.enum.json" />
@@ -30,13 +26,12 @@
     <AdditionalFiles Include="$(MSBuildProjectDirectory)\Definitions\**\*.fastid.json" />
     <AdditionalFiles Include="$(MSBuildProjectDirectory)\Definitions\**\*.dto.json" />
   </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
     <PackageId>Incursa.Integrations.ElectronicNotary.Proof</PackageId>
+    <Version>6.0.0</Version>
   </PropertyGroup>
-
 </Project>

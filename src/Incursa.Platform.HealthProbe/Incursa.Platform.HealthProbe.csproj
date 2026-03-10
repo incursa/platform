@@ -1,5 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -7,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
     <PackageId>Incursa.Platform.HealthProbe</PackageId>
-    <Version>1.0.0</Version>
+    <Version>6.0.0</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>Health probe CLI for validating host and endpoint readiness in deployments.</Description>
@@ -21,7 +20,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>$(NoWarn);NU5123</NoWarn>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Incursa.Platform.Health\Incursa.Platform.Health.csproj" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.2" />
@@ -31,7 +29,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.2" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.2" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="..\..\assets\nuget_logo.png">
       <Pack>True</Pack>
@@ -42,13 +39,11 @@
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>Incursa.Platform.HealthProbe.Tests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Update="Meziantou.Analyzer" Version="2.0.284" />
     <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.102" />
@@ -56,5 +51,4 @@
     <PackageReference Update="Roslynator.CodeAnalysis.Analyzers" Version="4.15.0" />
     <PackageReference Update="Roslynator.Formatting.Analyzers" Version="4.15.0" />
   </ItemGroup>
-
 </Project>

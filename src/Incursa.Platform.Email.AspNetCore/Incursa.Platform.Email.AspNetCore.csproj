@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
     <PackageId>Incursa.Platform.Email.AspNetCore</PackageId>
-    <Version>1.0.0</Version>
+    <Version>6.0.0</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>ASP.NET Core DI and hosted processing helpers for Incursa Platform Email.</Description>
@@ -20,15 +20,12 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>$(NoWarn);NU5123;SA1000;SA1101;SA1200;SA1204;SA1210;SA1313;SA1518;S6667;VSTHRD003</NoWarn>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Incursa.Platform.Email\Incursa.Platform.Email.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="..\..\assets\nuget_logo.png">
       <Pack>True</Pack>
@@ -39,7 +36,6 @@
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Update="Meziantou.Analyzer" Version="2.0.284" />
     <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.102" />

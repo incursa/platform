@@ -1,12 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="..\Incursa.Integrations.ElectronicNotary.Proof\Incursa.Integrations.ElectronicNotary.Proof.csproj" />
     <ProjectReference Include="..\Incursa.Integrations.ElectronicNotary.Abstractions\Incursa.Integrations.ElectronicNotary.Abstractions.csproj" />
     <ProjectReference Include="..\Incursa.Platform.Webhooks\Incursa.Platform.Webhooks.csproj" />
     <ProjectReference Include="..\Incursa.Platform.Webhooks.AspNetCore\Incursa.Platform.Webhooks.AspNetCore.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="dbup-core" Version="6.0.15" />
     <PackageReference Include="dbup-postgresql" Version="6.1.5" />
@@ -14,17 +12,15 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.4" />
     <PackageReference Include="Npgsql" Version="10.0.1" />
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="Migrations\**\*.sql" />
   </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
     <PackageId>Incursa.Integrations.ElectronicNotary.Proof.AspNetCore</PackageId>
+    <Version>6.0.0</Version>
   </PropertyGroup>
-
 </Project>

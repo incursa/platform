@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
     <PackageId>Incursa.Platform.Webhooks.AspNetCore</PackageId>
-    <Version>1.0.0</Version>
+    <Version>6.0.0</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>ASP.NET Core endpoint and hosted processing integration for Incursa Platform Webhooks.</Description>
@@ -20,15 +20,12 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>$(NoWarn);NU5123</NoWarn>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Incursa.Platform.Webhooks\Incursa.Platform.Webhooks.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="..\..\assets\nuget_logo.png">
       <Pack>True</Pack>
@@ -39,13 +36,11 @@
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>Incursa.Platform.Webhooks.AspNetCore.Tests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Update="Meziantou.Analyzer" Version="2.0.284" />
     <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.102" />

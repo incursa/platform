@@ -31,8 +31,12 @@ Shipped analyzers and helper CLIs that support the package family.
 Monorepo governance and release automation:
 
 - `eng/package-catalog.json`
+- `eng/package-versions.json`
 - `eng/Generate-PackageCatalog.ps1`
+- `eng/Initialize-PackageVersions.ps1`
 - `eng/Resolve-AffectedProjects.ps1`
+- `eng/Resolve-VersionPlan.ps1`
+- `eng/Apply-VersionPlan.ps1`
 - `eng/Pack-PublicPackages.ps1`
 
 ### `incubating/`
@@ -126,6 +130,9 @@ The repository defaults to a safe, explicit packaging model:
 - `Directory.Build.targets` defaults all builds to `GeneratePackageOnBuild=false`
 - public packages and shipped tools opt back in with `IsPackable=true`
 - `eng/package-catalog.json` is the authoritative pack/publish allowlist
+- `eng/package-versions.json` is the authoritative per-package semantic version manifest
+- `eng/Apply-VersionPlan.ps1` computes default patch bumps for changed public packages plus packable reverse dependents and writes the updated versions back to the manifest and `.csproj` files
+- `eng/Test-PackageVersionChanges.ps1` guards CI and local hooks against code changes that skipped a required package version bump
 - `eng/Pack-PublicPackages.ps1` is the supported packing entrypoint
 - commit CI packs affected public packages only
 - main/release CI packs publishable packages, but public publishing is manual

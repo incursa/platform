@@ -130,12 +130,19 @@ See `docs/architecture/imported-integrations.md` for the boundary decisions and 
 ## Authoritative governance files
 
 - `eng/package-catalog.json`: authoritative project classification and pack/publish allowlist
+- `eng/package-versions.json`: authoritative per-package semantic version manifest for packable projects
 - `eng/Generate-PackageCatalog.ps1`: regenerates the catalog from the repo tree
 - `eng/Resolve-AffectedProjects.ps1`: calculates changed projects and reverse dependencies
+- `eng/Initialize-PackageVersions.ps1`: bootstraps the version manifest and normalizes explicit project versions
+- `eng/Resolve-VersionPlan.ps1`: calculates default semantic version bumps for changed packable projects and reverse dependents
+- `eng/Apply-VersionPlan.ps1`: applies the resolved version bump plan to the manifest and `.csproj` files
+- `eng/Test-PackageVersionChanges.ps1`: validates that affected packable projects have committed version bumps
+- `eng/Set-PackageVersionBaseline.ps1`: sets a one-time semantic baseline across all packable packages when migrating from an older scheme
 - `eng/Pack-PublicPackages.ps1`: packs only catalog-allowlisted projects
 - `docs/architecture/layer-2-capabilities.md`: layer 2 capability ownership, adapter boundaries, and incubating leftovers for access, DNS, and custom domains
 - `docs/architecture/layer-2-capabilities.md`: layer 2 capability ownership, adapter boundaries, and incubating leftovers for access, webhooks, DNS, and custom domains
 - `docs/architecture/monorepo.md`: package families, zones, and pack/release policy
+- `docs/architecture/package-versioning-reset.md`: rationale for abandoning timestamp-based NuGet versions and the chosen SemVer reset baseline
 - `docs/quality/repo-scope-boundary.md`: what belongs in `src/` vs `incubating/`
 - `scripts/quality/platform-scope.rules.json`: scope guardrails for provider-token validation
 - `incubating/README.md`: staging rules for non-public code
@@ -148,6 +155,7 @@ See `docs/architecture/imported-integrations.md` for the boundary decisions and 
 - Keep `incubating/` non-packable and non-publishable when used
 - Use `eng/package-catalog.json` as the allowlist
 - Commit CI packs affected public packages only
+- Commit and main/release CI validate that packable changes include explicit version bumps from `eng/package-versions.json`
 - Main/release CI packs publishable packages, but nuget.org publication is manual
 
 ## Orientation commands
@@ -158,6 +166,7 @@ Run these first when you need a current repo map or diagnostics:
 pwsh -File .codex/skills/dotnet-repo-discovery/scripts/discover-dotnet-repo.ps1
 pwsh -File .codex/skills/dotnet-build-diagnostics/scripts/run-build-diagnostics.ps1
 pwsh -File .codex/skills/dotnet-format-analyzers/scripts/run-format-analyzers.ps1
+pwsh -File eng/Resolve-VersionPlan.ps1 -Base origin/main -Head HEAD -AsJson
 ```
 
 When tests are involved:
@@ -174,5 +183,7 @@ dotnet tool restore
 dotnet build Incursa.Platform.CI.slnx -c Release
 dotnet test Incursa.Platform.CI.slnx -c Release
 pwsh -File eng/Generate-PackageCatalog.ps1
+pwsh -File eng/Apply-VersionPlan.ps1 -Base origin/main -Head HEAD
+pwsh -File eng/Test-PackageVersionChanges.ps1 -Base origin/main -Head HEAD
 pwsh -File eng/Pack-PublicPackages.ps1 -Configuration Release -OutputPath ./nupkgs
 ```

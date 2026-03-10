@@ -1,5 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -7,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
     <PackageId>Incursa.Platform.Observability</PackageId>
-    <Version>1.0.0</Version>
+    <Version>6.0.0</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>Shared observability primitives for platform events, tags, and recovery snapshots.</Description>
@@ -21,7 +20,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>$(NoWarn);NU5123</NoWarn>
   </PropertyGroup>
-
   <ItemGroup>
     <None Include="..\..\assets\nuget_logo.png">
       <Pack>True</Pack>
@@ -32,14 +30,12 @@
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Incursa.Platform.Audit\Incursa.Platform.Audit.csproj" />
     <ProjectReference Include="..\Incursa.Platform.Correlation\Incursa.Platform.Correlation.csproj" />
     <ProjectReference Include="..\Incursa.Platform.Operations\Incursa.Platform.Operations.csproj" />
     <ProjectReference Include="..\Incursa.Platform\Incursa.Platform.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Update="Meziantou.Analyzer" Version="2.0.284" />
     <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.102" />
@@ -47,5 +43,4 @@
     <PackageReference Update="Roslynator.CodeAnalysis.Analyzers" Version="4.15.0" />
     <PackageReference Update="Roslynator.Formatting.Analyzers" Version="4.15.0" />
   </ItemGroup>
-
 </Project>

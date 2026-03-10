@@ -47,6 +47,18 @@ The core libraries live under `src/`, with `Incursa.Platform` as the main packag
 - `dotnet format --verify-no-changes Incursa.Platform.CI.slnx` enforces formatting in CI.
 - `dotnet pack Incursa.Platform.CI.slnx -c Release -o ./nupkgs` produces NuGet packages.
 
+## Package Versioning Workflow
+- Packable projects are versioned independently through `eng/package-versions.json`.
+- Do not use a repo-wide `-p:Version=` or `-p:PackageVersion=` override when selectively packing publishable packages; it can rewrite internal `ProjectReference` dependencies to versions that do not exist on the feed.
+- Before committing packable code changes, run `pwsh -File eng/Apply-VersionPlan.ps1 -Base origin/main -Head HEAD`.
+- Review the resulting changes to `eng/package-versions.json` and the affected packable `.csproj` files, then commit them alongside the code changes.
+- To inspect the computed bump set without editing files, run `pwsh -File eng/Resolve-VersionPlan.ps1 -Base origin/main -Head HEAD -AsJson`.
+- For a one-time scheme migration or feed reset above prior published versions, run `pwsh -File eng/Set-PackageVersionBaseline.ps1 -Version <semver>`.
+- The default bump is `patch` for changed packable projects plus packable reverse dependents. If a package needs a stronger bump, supply overrides to `eng/Resolve-VersionPlan.ps1` / `eng/Apply-VersionPlan.ps1`.
+- CI and the local pre-commit hook use `pwsh -File eng/Test-PackageVersionChanges.ps1 ...` to flag packable changes that skipped a required version bump.
+- If `eng/package-versions.json` does not exist yet in the comparison base, the guard warns and skips. After the bootstrap commit lands, it enforces normally.
+- If the hook is not active in a local clone, run `pwsh -File scripts/setup-git-hooks.ps1`.
+
 ## Coding Style & Naming Conventions
 Formatting is driven by `.editorconfig`: 4-space indentation for C#, CRLF line endings, and trimmed trailing whitespace. JSON and Markdown use 2-space indentation. StyleCop settings live in `stylecop.json`; analyzers include Roslynator, Meziantou, and BannedApiAnalyzers. Prefer PascalCase for public types/members and camelCase for locals/parameters/fields. Use explicit `StringComparison` values as required by analyzer rules.
 
