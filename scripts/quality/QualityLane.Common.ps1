@@ -112,6 +112,56 @@ function Get-RelativeArtifactPath {
     return $Path
 }
 
+function Get-LaneOutcomeDisplay {
+    param(
+        [string]$Outcome
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Outcome)) {
+        return "[?] unknown"
+    }
+
+    $display = switch ($Outcome.Trim().ToLowerInvariant()) {
+        "passed" { "[ok] passed" }
+        "completed" { "[ok] completed" }
+        "failed" { "[fail] failed" }
+        "error" { "[fail] error" }
+        "timeout" { "[time] timeout" }
+        "aborted" { "[stop] aborted" }
+        "partial" { "[warn] partial" }
+        "warning" { "[warn] warning" }
+        "notexecuted" { "[hold] not executed" }
+        default { "[info] $Outcome" }
+    }
+
+    return $display
+}
+
+function Format-LaneCountSummary {
+    param(
+        [int]$Total,
+        [int]$Passed,
+        [int]$Failed,
+        [int]$Skipped,
+        [int]$NotExecuted
+    )
+
+    $segments = New-Object System.Collections.Generic.List[string]
+    $segments.Add(("[total] {0}" -f $Total))
+    $segments.Add(("[ok] {0}" -f $Passed))
+    $segments.Add(("[fail] {0}" -f $Failed))
+
+    if ($Skipped -gt 0) {
+        $segments.Add(("[skip] {0}" -f $Skipped))
+    }
+
+    if ($NotExecuted -gt 0) {
+        $segments.Add(("[hold] {0}" -f $NotExecuted))
+    }
+
+    return [string]::Join("  ", $segments)
+}
+
 function Write-TrxSummaryMarkdown {
     param(
         [Parameter(Mandatory)]
@@ -139,7 +189,7 @@ function Write-TrxSummaryMarkdown {
     $trxFiles = Get-TrxFiles -ResultsDirectory $ResultsDirectory
 
     if ($trxFiles.Count -eq 0) {
-        $summaryLines.Add("- Outcome: $EmptyMessage")
+        $summaryLines.Add("- Outcome: [info] $EmptyMessage")
         $summaryLines | Set-Content -Path $SummaryPath -Encoding UTF8
 
         return [pscustomobject]@{
@@ -175,20 +225,23 @@ function Write-TrxSummaryMarkdown {
             $fileTotal = [int]$counters.total
             $filePassed = [int]$counters.passed
             $fileFailed = [int]$counters.failed
+            $skippedAttribute = $counters.PSObject.Properties["skipped"]
+            $fileSkipped = if ($null -ne $skippedAttribute -and -not [string]::IsNullOrWhiteSpace([string]$skippedAttribute.Value)) { [int]$skippedAttribute.Value } else { 0 }
             $fileNotExecuted = [int]$counters.notExecuted
 
             $total += $fileTotal
             $passed += $filePassed
             $failed += $fileFailed
+            $skipped += $fileSkipped
             $notExecuted += $fileNotExecuted
 
-            $summaryLines.Add(('| `{0}` | {1} | total={2}, passed={3}, failed={4}, notExecuted={5} |' -f $relativePath, $outcome, $fileTotal, $filePassed, $fileFailed, $fileNotExecuted))
+            $summaryLines.Add(('| `{0}` | {1} | {2} |' -f $relativePath, (Get-LaneOutcomeDisplay -Outcome $outcome), (Format-LaneCountSummary -Total $fileTotal -Passed $filePassed -Failed $fileFailed -Skipped $fileSkipped -NotExecuted $fileNotExecuted)))
         } catch {
             $summaryLines.Add(('| `{0}` | unreadable | unable to parse .trx |' -f $relativePath))
         }
     }
 
-    $summaryLines.Insert(3, "- Totals: total=$total, passed=$passed, failed=$failed, notExecuted=$notExecuted")
+    $summaryLines.Insert(3, ("- Totals: {0}" -f (Format-LaneCountSummary -Total $total -Passed $passed -Failed $failed -Skipped $skipped -NotExecuted $notExecuted)))
     $summaryLines | Set-Content -Path $SummaryPath -Encoding UTF8
 
     return [pscustomobject]@{

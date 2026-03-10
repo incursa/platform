@@ -38,6 +38,8 @@ if ($LASTEXITCODE -ne 0) {
     throw "dotnet tool restore failed with exit code $LASTEXITCODE."
 }
 
+Initialize-ArtifactDirectory -Path $outDirPath -Clean | Out-Null
+
 $syncArgs = @(
     "tool"
     "run"
@@ -54,9 +56,22 @@ $syncArgs = @(
     $outDirPath
 )
 
-& dotnet @syncArgs
+$syncOutput = (& dotnet @syncArgs 2>&1) | Out-String
+if (-not [string]::IsNullOrWhiteSpace($syncOutput)) {
+    Write-Host $syncOutput.TrimEnd()
+}
+
 if ($LASTEXITCODE -ne 0) {
-    throw "Workbench quality sync failed with exit code $LASTEXITCODE."
+    $isSchemaResolutionIssue =
+        $syncOutput -match 'schema not found' -and
+        $syncOutput -match 'coverage-summary\.json'
+
+    if ($isSchemaResolutionIssue) {
+        Write-Warning "Workbench quality sync hit a schema resolution issue while writing advisory coverage output. The advisory lane remains non-blocking, so continuing without normalized Workbench artifacts."
+        $SkipShow = $true
+    } else {
+        throw "Workbench quality sync failed with exit code $LASTEXITCODE."
+    }
 }
 
 if (-not $SkipShow) {
