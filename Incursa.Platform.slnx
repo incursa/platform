@@ -90,12 +90,20 @@
     <Project Path="tests/Incursa.Platform.Smoke.ServiceDefaults/Incursa.Platform.Smoke.ServiceDefaults.csproj" />
     <Project Path="tests/Incursa.Platform.SmokeWeb/Incursa.Platform.SmokeWeb.csproj" />
   </Folder>
-  <Folder Name="/tools/">
+  <Folder Name="/tools/" />
+  <Folder Name="/tools/migrations/">
     <Project Path="tools/migrations/src/Incursa.Platform.SchemaMigrations.Cli/Incursa.Platform.SchemaMigrations.Cli.csproj" />
-    <Project Path="tools/observability/src/Incursa.Platform.Observability.Analyzers/Incursa.Platform.Observability.Analyzers.csproj" />
-    <Project Path="tools/testdocs/src/Incursa.TestDocs.Analyzers/Incursa.TestDocs.Analyzers.csproj" />
-    <Project Path="tools/testdocs/src/TestDocs.Cli/TestDocs.Cli.csproj" />
   </Folder>
+  <Folder Name="/tools/migrations/src/" />
+  <Folder Name="/tools/observability/">
+    <Project Path="tools/observability/src/Incursa.Platform.Observability.Analyzers/Incursa.Platform.Observability.Analyzers.csproj" />
+  </Folder>
+  <Folder Name="/tools/observability/src/" />
+  <Folder Name="/tools/testdocs/">
+    <Project Path="tools/testdocs/src/Incursa.TestDocs.Analyzers/Incursa.TestDocs.Analyzers.csproj" />
+    <Project Path="tools/testdocs/src/Incursa.TestDocs.Cli/Incursa.TestDocs.Cli.csproj" />
+  </Folder>
+  <Folder Name="/tools/testdocs/src/" />
   <Folder Name="/repo/">
     <File Path="Directory.Build.props" />
     <File Path="Directory.Build.targets" />
@@ -118,8 +126,4 @@
   <Folder Name="/incubating/">
     <File Path="incubating/README.md" />
   </Folder>
-  <Folder Name="/tools/observability/" />
-  <Folder Name="/tools/observability/src/" />
-  <Folder Name="/tools/testdocs/" />
-  <Folder Name="/tools/testdocs/src/" />
 </Solution>

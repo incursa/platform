@@ -11,6 +11,64 @@ public sealed class AccessAspNetCoreOptions
         "workos:user_id",
     ];
 
+    public IReadOnlyList<string> SessionIdClaimTypes { get; set; } =
+    [
+        AccessClaimTypes.SessionId,
+        "sid",
+        "session_id",
+        "workos_session_id",
+    ];
+
+    public IReadOnlyList<string> OrganizationIdClaimTypes { get; set; } =
+    [
+        AccessClaimTypes.OrganizationId,
+        "org_id",
+        "organization_id",
+        "workos:org_id",
+        "workos:organization_id",
+        "organization",
+        "org_ids",
+        "workos:organization_ids",
+    ];
+
+    public IReadOnlyList<string> RoleClaimTypes { get; set; } =
+    [
+        AccessClaimTypes.Role,
+        ClaimTypes.Role,
+        "role",
+        "roles",
+        "workos:role",
+        "workos:roles",
+    ];
+
+    public IReadOnlyList<string> PermissionClaimTypes { get; set; } =
+    [
+        AccessClaimTypes.Permission,
+        "permission",
+        "permissions",
+        "workos:permission",
+        "workos:permissions",
+    ];
+
+    public IReadOnlyList<string> FeatureFlagClaimTypes { get; set; } =
+    [
+        AccessClaimTypes.FeatureFlag,
+        "feature_flag",
+        "feature_flags",
+        "featureFlags",
+        "workos:feature_flag",
+        "workos:feature_flags",
+    ];
+
+    public IReadOnlyList<string> EntitlementClaimTypes { get; set; } =
+    [
+        AccessClaimTypes.Entitlement,
+        "entitlement",
+        "entitlements",
+        "workos:entitlement",
+        "workos:entitlements",
+    ];
+
     public IReadOnlyList<string> ScopeRootIdClaimTypes { get; set; } =
     [
         "scope_root_id",
@@ -19,6 +77,7 @@ public sealed class AccessAspNetCoreOptions
 
     public IReadOnlyList<string> ScopeRootExternalIdClaimTypes { get; set; } =
     [
+        AccessClaimTypes.OrganizationId,
         "org_id",
         "organization_id",
         "workos:org_id",

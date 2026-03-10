@@ -1,12 +1,15 @@
 namespace Incursa.Integrations.WorkOS.AspNetCore.Auth;
 
 using System.Security.Claims;
+using Incursa.Platform.Access;
 
 internal static class WorkOsAccessTokenClaims
 {
     private static readonly string[] OrgClaimCandidates = ["org_id", "organization_id", "workos:org"];
     private static readonly string[] RoleClaimCandidates = ["workos:role", "roles", "role"];
     private static readonly string[] PermissionClaimCandidates = ["workos:permission", "permissions", "permission"];
+    private static readonly string[] FeatureFlagClaimCandidates = ["workos:feature_flag", "feature_flags", "featureFlags"];
+    private static readonly string[] EntitlementClaimCandidates = ["workos:entitlement", "entitlements", "entitlement"];
     private static readonly string[] SessionClaimCandidates = ["sid", "session_id", "workos_session_id"];
     private static readonly string[] SessionClaimTargets = ["sid", "session_id", "workos_session_id"];
 
@@ -28,11 +31,14 @@ internal static class WorkOsAccessTokenClaims
             if (payload.TryGetProperty(candidate, out var orgValue) && orgValue.ValueKind == JsonValueKind.String)
             {
                 AddIfMissing(identity, "org_id", orgValue.GetString());
+                AddIfMissing(identity, AccessClaimTypes.OrganizationId, orgValue.GetString());
             }
         }
 
-        AddArrayOrStringClaims(identity, payload, RoleClaimCandidates, "workos:role");
-        AddArrayOrStringClaims(identity, payload, PermissionClaimCandidates, "workos:permission");
+        AddArrayOrStringClaims(identity, payload, RoleClaimCandidates, "workos:role", AccessClaimTypes.Role, ClaimTypes.Role, "role");
+        AddArrayOrStringClaims(identity, payload, PermissionClaimCandidates, "workos:permission", AccessClaimTypes.Permission, "permission");
+        AddArrayOrStringClaims(identity, payload, FeatureFlagClaimCandidates, AccessClaimTypes.FeatureFlag, "feature_flag");
+        AddArrayOrStringClaims(identity, payload, EntitlementClaimCandidates, AccessClaimTypes.Entitlement, "entitlement");
         AddSessionClaims(identity, payload);
     }
 
@@ -51,11 +57,17 @@ internal static class WorkOsAccessTokenClaims
                 AddIfMissing(identity, target, value);
             }
 
+            AddIfMissing(identity, AccessClaimTypes.SessionId, value);
+
             return;
         }
     }
 
-    private static void AddArrayOrStringClaims(ClaimsIdentity identity, JsonElement payload, IEnumerable<string> claimCandidates, string targetClaimType)
+    private static void AddArrayOrStringClaims(
+        ClaimsIdentity identity,
+        JsonElement payload,
+        IEnumerable<string> claimCandidates,
+        params string[] targetClaimTypes)
     {
         foreach (var candidate in claimCandidates)
         {
@@ -70,13 +82,19 @@ internal static class WorkOsAccessTokenClaims
                 {
                     if (item.ValueKind == JsonValueKind.String)
                     {
-                        AddIfMissing(identity, targetClaimType, item.GetString());
+                        foreach (var targetClaimType in targetClaimTypes)
+                        {
+                            AddIfMissing(identity, targetClaimType, item.GetString());
+                        }
                     }
                 }
             }
             else if (value.ValueKind == JsonValueKind.String)
             {
-                AddIfMissing(identity, targetClaimType, value.GetString());
+                foreach (var targetClaimType in targetClaimTypes)
+                {
+                    AddIfMissing(identity, targetClaimType, value.GetString());
+                }
             }
         }
     }

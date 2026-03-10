@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-09T09:36:55.1661412-06:00",
+  "generatedAt": "2026-03-10T09:04:56.2527264-06:00",
   "generatedBy": "eng/Generate-PackageCatalog.ps1",
   "projects": [
     {
@@ -1053,7 +1053,7 @@
       "notes": "Tooling/analyzer package intentionally shipped from this monorepo."
     },
     {
-      "projectPath": "tools/testdocs/src/TestDocs.Cli/TestDocs.Cli.csproj",
+      "projectPath": "tools/testdocs/src/Incursa.TestDocs.Cli/Incursa.TestDocs.Cli.csproj",
       "packageId": "Incursa.TestDocs.Cli",
       "zone": "tools",
       "category": "tools",

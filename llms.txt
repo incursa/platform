@@ -82,7 +82,7 @@ Tools:
 
 - `tools/observability/src/Incursa.Platform.Observability.Analyzers/`
 - `tools/testdocs/src/Incursa.TestDocs.Analyzers/`
-- `tools/testdocs/src/TestDocs.Cli/`
+- `tools/testdocs/src/Incursa.TestDocs.Cli/`
 - `tools/migrations/src/Incursa.Platform.SchemaMigrations.Cli/`
 
 ## Imported integration provenance

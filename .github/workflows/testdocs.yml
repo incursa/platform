@@ -41,7 +41,7 @@ jobs:
           $args = @(
             "run",
             "--project",
-            "./tools/testdocs/src/TestDocs.Cli",
+            "./tools/testdocs/src/Incursa.TestDocs.Cli",
             "--configuration",
             "Release",
             "--no-build",

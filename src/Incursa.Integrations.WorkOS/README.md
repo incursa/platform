@@ -26,3 +26,32 @@ The WorkOS packages are public layer 1 vendor adapters. They do not define the c
 - `PACKAGE_README.md` for the NuGet package overview
 - `../Incursa.Platform.Access/README.md`
 - `../Incursa.Platform.Webhooks/README.md`
+
+## Custom UI Entry Point
+
+For an ASP.NET Core app that owns its own login, signup, verification, MFA, and organization-selection UI, use the convenience registration:
+
+```csharp
+services.AddWorkOsCustomUiAuthentication(
+    configureAuth: options =>
+    {
+        options.ClientId = builder.Configuration["WorkOs:ClientId"]!;
+        options.ClientSecret = builder.Configuration["WorkOs:ClientSecret"]!;
+        options.ApiKey = builder.Configuration["WorkOs:ApiKey"]!;
+        options.AuthApiBaseUrl = builder.Configuration["WorkOs:AuthApiBaseUrl"];
+        options.Issuer = builder.Configuration["WorkOs:Issuer"];
+        options.ExpectedAudiences = [options.ClientId];
+    },
+    configureAccess: options =>
+    {
+        options.ScopeRootExternalLinkProvider = "workos";
+        options.ScopeRootExternalLinkResourceType = "organization";
+    });
+```
+
+This wires:
+
+- WorkOS authentication/session clients
+- provider-neutral `IAccessAuthenticationService`
+- ASP.NET Core cookie/session persistence
+- WorkOS-aware claims principal creation for the local app session

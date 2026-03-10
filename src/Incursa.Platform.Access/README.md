@@ -13,6 +13,7 @@ Start here when you need to model application access state in a way that is inde
 - deny-by-default effective access evaluation
 - storage-backed administration and query services
 - an append-only access audit journal
+- provider-neutral authentication/session contracts for custom UI applications
 
 ## What It Does Not Own
 
@@ -40,6 +41,28 @@ services.AddAccess(registry =>
     registry.AddRole("tenant-admin", "Tenant administrator", "tenant.read", "tenant.write");
 });
 ```
+
+## Authentication Surface
+
+Apps that own their own login UI can depend on the provider-neutral authentication contracts in this package:
+
+- `IAccessAuthenticationService` for redirect/code exchange, password sign-in, magic auth, email verification, TOTP completion, organization selection, refresh, and sign-out
+- `AccessAuthenticationOutcome` for expected auth results:
+  - `AccessAuthenticationSucceeded`
+  - `AccessAuthenticationChallengeRequired`
+  - `AccessAuthenticationFailed`
+- `IAccessSessionStore` as the persistence seam for authenticated sessions
+
+Expected challenges are returned as typed payloads rather than exceptions. A consuming app should branch on `AccessChallenge.Kind` and render the next UI step:
+
+- `EmailVerificationRequired`
+- `MfaEnrollmentRequired`
+- `MfaChallengeRequired`
+- `OrganizationSelectionRequired`
+- `IdentityLinkingRequired`
+- `ProviderChallengeRequired`
+
+The provider-neutral surface does not expose WorkOS SDK types or vendor-specific exceptions.
 
 ## Consistency Model
 

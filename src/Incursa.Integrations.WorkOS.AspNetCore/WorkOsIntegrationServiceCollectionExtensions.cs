@@ -3,11 +3,13 @@ namespace Incursa.Integrations.WorkOS;
 using Incursa.Integrations.WorkOS.AppAuth.Abstractions;
 using Incursa.Integrations.WorkOS.AppAuth.AspNetCore.DependencyInjection;
 using Incursa.Integrations.WorkOS.Abstractions.Configuration;
+using Incursa.Integrations.WorkOS.Access;
 using Incursa.Integrations.WorkOS.Abstractions.Widgets;
 using Incursa.Integrations.WorkOS.AspNetCore.DependencyInjection;
 using Incursa.Integrations.WorkOS.Core.DependencyInjection;
 using Incursa.Integrations.WorkOS.Core.Emulation;
 using Incursa.Integrations.WorkOS.Persistence.DependencyInjection;
+using Incursa.Platform.Access.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 
 public static class WorkOsIntegrationServiceCollectionExtensions
@@ -70,6 +72,20 @@ public static class WorkOsIntegrationServiceCollectionExtensions
         ArgumentNullException.ThrowIfNull(services);
         return Incursa.Integrations.WorkOS.AppAuth.AspNetCore.DependencyInjection.ServiceCollectionExtensions
             .AddWorkOsAppAuth(services, configureOptions, cookieScheme);
+    }
+
+    public static IServiceCollection AddWorkOsCustomUiAuthentication(
+        this IServiceCollection services,
+        Action<WorkOsAuthOptions> configureAuth,
+        Action<AccessAspNetCoreOptions>? configureAccess = null,
+        Action<AccessSessionCookieOptions>? configureCookie = null)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(configureAuth);
+
+        services.AddWorkOsAuthentication(configureAuth);
+        services.AddWorkOsAccessAspNetCore(configureAccess, configureCookie);
+        return services;
     }
 
     public static IServiceCollection AddWorkOsInMemoryIntegration(

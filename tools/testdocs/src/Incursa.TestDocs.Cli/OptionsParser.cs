@@ -96,7 +96,7 @@ internal static class OptionsParser
 
     public static void PrintUsage()
     {
-        Console.WriteLine("Usage: dotnet run --project tools/testdocs/src/TestDocs.Cli -- generate [options]");
+        Console.WriteLine("Usage: dotnet run --project tools/testdocs/src/Incursa.TestDocs.Cli -- generate [options]");
         Console.WriteLine("Options:");
         Console.WriteLine("  --repoRoot <path>       Repository root (default: current directory)");
         Console.WriteLine("  --outDir <path>         Output directory (default: docs/testing/generated)");

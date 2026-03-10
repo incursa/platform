@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
     <PackageId>Incursa.Integrations.WorkOS.Access</PackageId>
-    <Version>6.0.0</Version>
+    <Version>6.0.1</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>WorkOS organization membership adapter for Incursa.Platform.Access.</Description>
@@ -21,11 +21,15 @@
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Incursa.Integrations.WorkOS.Abstractions\Incursa.Integrations.WorkOS.Abstractions.csproj" />
     <ProjectReference Include="..\Incursa.Platform.Access\Incursa.Platform.Access.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.2" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.2" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\assets\nuget_logo.png">
@@ -36,5 +40,13 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>Incursa.Platform.Access.Tests</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>Incursa.Integrations.WorkOS.Tests</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 </Project>

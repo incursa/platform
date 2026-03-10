@@ -221,6 +221,43 @@ public sealed class CurrentAccessContextAccessorTests
             Arg.Any<CancellationToken>());
     }
 
+    [Fact]
+    public async Task GetCurrentAsync_CachesResolvedContextWithinSingleRequestAsync()
+    {
+        var query = Substitute.For<IAccessQueryService>();
+        var userId = new AccessUserId("user-7");
+        var user = new AccessUser(userId, "Katherine Johnson");
+        var scopeRoot = new ScopeRoot(new ScopeRootId("scope-org-7"), ScopeRootKind.Organization, "Contoso");
+
+        query.GetUserAsync(userId, Arg.Any<CancellationToken>()).Returns(user);
+        query.GetMembershipsForUserAsync(userId, Arg.Any<CancellationToken>())
+            .Returns(ToAsyncEnumerable(
+            [
+                new ScopeMembership(new ScopeMembershipId("membership-8"), userId, scopeRoot.Id, DateTimeOffset.UtcNow),
+            ]));
+        query.GetScopeRootByExternalLinkAsync("workos", "org_7", "organization", Arg.Any<CancellationToken>())
+            .Returns(scopeRoot);
+        query.GetAccessibleTenantsAsync(userId, Arg.Any<CancellationToken>())
+            .Returns(ToAsyncEnumerable(Array.Empty<Tenant>()));
+
+        var httpContext = CreateHttpContext(
+            [
+                new Claim("sub", userId.Value),
+                new Claim("org_id", "org_7"),
+            ]);
+
+        await using var services = CreateServices(query, httpContext);
+        var accessor = services.GetRequiredService<ICurrentAccessContextAccessor>();
+
+        var first = await accessor.GetCurrentAsync(TestContext.Current.CancellationToken);
+        var second = await accessor.GetCurrentAsync(TestContext.Current.CancellationToken);
+
+        first.ShouldBeSameAs(second);
+        await query.Received(1).GetUserAsync(userId, Arg.Any<CancellationToken>());
+        query.Received(1).GetMembershipsForUserAsync(userId, Arg.Any<CancellationToken>());
+        query.Received(1).GetAccessibleTenantsAsync(userId, Arg.Any<CancellationToken>());
+    }
+
     private static ServiceProvider CreateServices(IAccessQueryService queryService, HttpContext httpContext)
     {
         var services = new ServiceCollection();

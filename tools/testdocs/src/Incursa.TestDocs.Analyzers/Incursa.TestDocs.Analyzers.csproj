@@ -18,7 +18,7 @@
     <IncludeBuildOutput>true</IncludeBuildOutput>
     <OutputItemType>Analyzer</OutputItemType>
     <PackageType>Analyzer</PackageType>
-    <Version>6.0.0</Version>
+    <Version>6.0.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <!-- Required for Roslyn analyzer and code fix APIs. -->

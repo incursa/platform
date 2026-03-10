@@ -16,36 +16,36 @@ $ErrorActionPreference = "Stop"
 
 . (Join-Path $PSScriptRoot "PackageVersioning.Common.ps1")
 
-$resolveArguments = @(
-    "-RepoRoot", $RepoRoot,
-    "-CatalogPath", $CatalogPath,
-    "-ManifestPath", $ManifestPath,
-    "-DefaultBump", $DefaultBump,
-    "-AsJson"
-)
+$resolveArguments = @{
+    RepoRoot = $RepoRoot
+    CatalogPath = $CatalogPath
+    ManifestPath = $ManifestPath
+    DefaultBump = $DefaultBump
+    AsJson = $true
+}
 
 if (-not [string]::IsNullOrWhiteSpace($Base)) {
-    $resolveArguments += @("-Base", $Base)
+    $resolveArguments.Base = $Base
 }
 
 if (-not [string]::IsNullOrWhiteSpace($Head)) {
-    $resolveArguments += @("-Head", $Head)
+    $resolveArguments.Head = $Head
 }
 
 if (-not [string]::IsNullOrWhiteSpace($OverridesPath)) {
-    $resolveArguments += @("-OverridesPath", $OverridesPath)
+    $resolveArguments.OverridesPath = $OverridesPath
 }
 
 if ($Staged) {
-    $resolveArguments += "-Staged"
+    $resolveArguments.Staged = $true
 }
 
-foreach ($changedFile in $ChangedFiles) {
-    $resolveArguments += @("-ChangedFiles", $changedFile)
+if ($ChangedFiles.Count -gt 0) {
+    $resolveArguments.ChangedFiles = $ChangedFiles
 }
 
 $planJson = & (Join-Path $PSScriptRoot "Resolve-VersionPlan.ps1") @resolveArguments
-if ($LASTEXITCODE -ne 0) {
+if ($null -ne $LASTEXITCODE -and $LASTEXITCODE -ne 0) {
     throw "Failed to resolve version plan."
 }
 

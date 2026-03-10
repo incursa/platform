@@ -7,7 +7,8 @@ public sealed record CurrentAccessContext(
     AccessUserId? UserId,
     AccessUser? User,
     ScopeRoot? ScopeRoot,
-    Tenant? Tenant)
+    Tenant? Tenant,
+    AccessContext? AccessContext = null)
 {
     public bool IsAuthenticated => Principal.Identity?.IsAuthenticated == true;
 }

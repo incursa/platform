@@ -1,8 +1,9 @@
 # Incursa.Integrations.WorkOS.Access
 
-`Incursa.Integrations.WorkOS.Access` adapts WorkOS organization memberships onto the provider-neutral `Incursa.Platform.Access` model.
+`Incursa.Integrations.WorkOS.Access` is the WorkOS-facing adapter for `Incursa.Platform.Access`. It now covers both:
 
-It is the WorkOS-facing access adapter for the monorepo. The package exists so WorkOS concepts can be reconciled into the local access source of truth without turning WorkOS into the primary access model.
+- synchronization of WorkOS organization/membership data into the provider-neutral access model
+- server-side authentication/session integration for custom UI login flows backed by WorkOS User Management
 
 ## What It Owns
 
@@ -10,6 +11,9 @@ It is the WorkOS-facing access adapter for the monorepo. The package exists so W
 - WorkOS-specific alias defaults for organization external links and role lookup
 - deterministic provider-managed identifiers for membership and assignment reconciliation
 - optional reconciliation work-item hooks when provider snapshots should be revisited
+- WorkOS auth API calls for password, magic auth, email verification, TOTP, organization selection, code exchange, refresh, and sign-out
+- issuer-aware JWT validation with cached JWKS lookup
+- WorkOS-specific options and error/challenge mapping
 
 ## What It Does Not Own
 
@@ -44,6 +48,52 @@ services.AddAccess(registry =>
 
 services.AddWorkOsAccess();
 ```
+
+For custom UI login/signup/verification/MFA flows, register the WorkOS authentication integration separately:
+
+```csharp
+services.AddWorkOsAuthentication(options =>
+{
+    options.ClientId = builder.Configuration["WorkOs:ClientId"]!;
+    options.ClientSecret = builder.Configuration["WorkOs:ClientSecret"]!;
+    options.ApiKey = builder.Configuration["WorkOs:ApiKey"]!;
+    options.AuthApiBaseUrl = builder.Configuration["WorkOs:AuthApiBaseUrl"];
+    options.Issuer = builder.Configuration["WorkOs:Issuer"];
+    options.ExpectedAudiences = [options.ClientId];
+});
+```
+
+Then consume the provider-neutral app-facing service:
+
+```csharp
+var outcome = await authenticationService.SignInWithPasswordAsync(
+    new AccessPasswordSignInRequest(email, password),
+    cancellationToken);
+```
+
+Handle `AccessAuthenticationOutcome` explicitly:
+
+- success: issue the local app cookie/session
+- challenge: render the next custom UI step using the challenge payload
+- failure: return a validation/authentication error to the caller
+
+`SignOutAsync` clears the local app session in the ASP.NET Core adapter and, when a WorkOS session id is available, this package revokes the remote WorkOS session and can return a WorkOS logout URL.
+
+## Configuration
+
+Required:
+
+- `ClientId`
+- at least one of `ClientSecret` or `ApiKey`
+
+Optional:
+
+- `ApiBaseUrl` defaults to `https://api.workos.com`
+- `AuthApiBaseUrl` for a custom WorkOS auth domain
+- `Issuer` to override token issuer validation
+- `ExpectedAudiences` to validate access token audiences
+- `RequestTimeout`
+- `JwksCacheDuration`
 
 WorkOS roles are resolved through provider aliases on the local registry definitions; the adapter does not maintain a second role registry.
 

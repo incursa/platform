@@ -6,6 +6,6 @@
   </Configurations>
   <Folder Name="/src/">
     <Project Path="src/Incursa.TestDocs.Analyzers/Incursa.TestDocs.Analyzers.csproj" />
-    <Project Path="src/TestDocs.Cli/TestDocs.Cli.csproj" />
+    <Project Path="src/Incursa.TestDocs.Cli/Incursa.TestDocs.Cli.csproj" />
   </Folder>
 </Solution>

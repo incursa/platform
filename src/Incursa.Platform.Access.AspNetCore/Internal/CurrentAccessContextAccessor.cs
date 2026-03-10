@@ -48,15 +48,17 @@ internal sealed class CurrentAccessContextAccessor : ICurrentAccessContextAccess
         ClaimsPrincipal principal,
         CancellationToken cancellationToken)
     {
+        var accessContext = principal.GetAccessContext(options);
+
         if (principal.Identity?.IsAuthenticated != true)
         {
-            return new CurrentAccessContext(principal, null, null, null, null);
+            return new CurrentAccessContext(principal, null, null, null, null, accessContext);
         }
 
         var subject = AccessClaimValueReader.ReadFirst(principal, options.SubjectClaimTypes);
         if (string.IsNullOrWhiteSpace(subject))
         {
-            return new CurrentAccessContext(principal, null, null, null, null);
+            return new CurrentAccessContext(principal, null, null, null, null, accessContext);
         }
 
         var userId = new AccessUserId(subject);
@@ -88,7 +90,7 @@ internal sealed class CurrentAccessContextAccessor : ICurrentAccessContextAccess
             scopeRoot = await queryService.GetScopeRootAsync(tenant.ScopeRootId, cancellationToken).ConfigureAwait(false);
         }
 
-        return new CurrentAccessContext(principal, userId, user, scopeRoot, tenant);
+        return new CurrentAccessContext(principal, userId, user, scopeRoot, tenant, accessContext);
     }
 
     private async Task<ScopeRoot?> ResolveScopeRootAsync(

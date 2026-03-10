@@ -8,7 +8,7 @@
     <Description>Shared Cloudflare integration primitives for Incursa applications.</Description>
     <PackageTags>incursa;cloudflare;r2;kv;custom-hostname;load-balancer</PackageTags>
     <NoWarn>$(NoWarn);AD0001;SA1000;SA1011;SA1101;SA1116;SA1200;SA1201;SA1204;SA1210;SA1309;SA1313;MA0006;MA0048;RCS1194;S1075;S3267</NoWarn>
-    <Version>6.0.0</Version>
+    <Version>6.0.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AWSSDK.S3" Version="4.0.18.6" />
