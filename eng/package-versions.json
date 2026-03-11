@@ -86,6 +86,11 @@
       "version": "6.0.3"
     },
     {
+      "packageId": "Incursa.Platform.Access.Razor",
+      "projectPath": "src/Incursa.Platform.Access.Razor/Incursa.Platform.Access.Razor.csproj",
+      "version": "6.0.3"
+    },
+    {
       "packageId": "Incursa.Platform.Audit",
       "projectPath": "src/Incursa.Platform.Audit/Incursa.Platform.Audit.csproj",
       "version": "6.0.3"

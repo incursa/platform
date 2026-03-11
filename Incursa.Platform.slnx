@@ -7,6 +7,9 @@
   <Folder Name="/src/core/">
     <Project Path="src/Incursa.Platform/Incursa.Platform.csproj" />
   </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Incursa.Platform.Access.Razor/Incursa.Platform.Access.Razor.csproj" />
+  </Folder>
   <Folder Name="/src/capabilities/">
     <Project Path="src/Incursa.Platform.Access/Incursa.Platform.Access.csproj" />
     <Project Path="src/Incursa.Platform.Audit/Incursa.Platform.Audit.csproj" />

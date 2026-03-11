@@ -227,6 +227,20 @@
       "notes": "Hosting adapter or ASP.NET Core integration package."
     },
     {
+      "projectPath": "src/Incursa.Platform.Access.Razor/Incursa.Platform.Access.Razor.csproj",
+      "packageId": "Incursa.Platform.Access.Razor",
+      "zone": "src",
+      "category": "hosting",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Reusable Razor Pages authentication UI infrastructure over Incursa.Platform.Access."
+    },
+    {
       "projectPath": "src/Incursa.Platform.Access/Incursa.Platform.Access.csproj",
       "packageId": "Incursa.Platform.Access",
       "zone": "src",
