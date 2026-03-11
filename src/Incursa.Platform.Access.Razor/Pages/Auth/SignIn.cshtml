@@ -1,0 +1,118 @@
+@page "/auth/sign-in"
+@model Incursa.Platform.Access.Razor.Pages.Auth.SignInModel
+@{
+    ViewData["Title"] = "Sign In";
+}
+
+@if (!Model.IsConfigured)
+{
+    <span class="inc-badge inc-badge--warning">@Model.Setup.BadgeText</span>
+    <h1>@Model.Setup.Title</h1>
+    <p>@Model.Setup.Description</p>
+
+    @if (Model.Setup.RequiredConfigurationEntries.Count > 0)
+    {
+        <div class="rr-auth-callout">
+            <strong>Required configuration</strong>
+            <ul class="rr-auth-list">
+                @foreach (var entry in Model.Setup.RequiredConfigurationEntries)
+                {
+                    <li><code>@entry</code></li>
+                }
+            </ul>
+        </div>
+    }
+
+    <div class="rr-auth-actions">
+        <a class="inc-btn inc-btn--secondary" href="@Model.Setup.ActionHref">@Model.Setup.ActionLabel</a>
+    </div>
+}
+else
+{
+    <span class="inc-badge">@Model.Branding.Eyebrow</span>
+    <h1>@Model.Branding.Headline</h1>
+    <p>@Model.Branding.SupportingText</p>
+
+    @if (!string.IsNullOrWhiteSpace(Model.StatusMessage))
+    {
+        <div class="rr-auth-callout">
+            <strong>@Model.StatusMessage</strong>
+        </div>
+    }
+
+    @if (!ViewContext.ModelState.IsValid)
+    {
+        <div asp-validation-summary="ModelOnly" class="rr-auth-errors"></div>
+    }
+
+    @if (Model.PasswordEnabled)
+    {
+        <form method="post" asp-page-handler="Password" class="rr-auth-form rr-auth-form--elevated">
+            <input type="hidden" asp-for="ReturnUrl" />
+            <div class="rr-auth-field">
+                <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" class="inc-form__control" autocomplete="username email" autofocus placeholder="you@company.com" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="rr-auth-field">
+                <div class="rr-auth-field__label-row">
+                    <label asp-for="Input.Password"></label>
+                    @if (Model.PasswordRecoveryEnabled)
+                    {
+                        <a class="rr-auth-text-link" href="@Model.ForgotPasswordPath">Forgot password?</a>
+                    }
+                </div>
+                <div class="rr-auth-input-row">
+                    <input asp-for="Input.Password" class="inc-form__control rr-auth-password-input" autocomplete="current-password" placeholder="Password" />
+                    <button type="button" class="rr-auth-toggle" data-rr-password-toggle>Show</button>
+                </div>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            @if (Model.MagicAuthEnabled)
+            {
+                <div class="rr-auth-inline-note">
+                    <span>Prefer passwordless sign-in?</span>
+                    <a class="rr-auth-text-link" href="@Model.MagicPath">Email me a magic code instead</a>
+                </div>
+            }
+            <div class="rr-auth-actions">
+                <button type="submit" class="inc-btn inc-btn--primary">Sign in</button>
+            </div>
+        </form>
+    }
+
+    @if (Model.Providers.Count > 0)
+    {
+        <div class="rr-auth-divider"><span>Or continue with</span></div>
+        <div class="rr-auth-provider-list">
+            @foreach (var provider in Model.Providers)
+            {
+                <form method="post" asp-page-handler="Provider">
+                    <input type="hidden" asp-for="ReturnUrl" />
+                    <button type="submit" class="inc-btn inc-btn--secondary rr-auth-provider rr-auth-provider--@provider.ThemeClass" name="index" value="@provider.Index">
+                        <span class="rr-auth-provider__icon">@Html.Raw(provider.IconSvg)</span>
+                        <span class="rr-auth-provider__copy">
+                            <span class="rr-auth-provider__label">@provider.DisplayLabel</span>
+                            <span class="rr-auth-provider__meta">@provider.Description</span>
+                        </span>
+                        <span class="rr-auth-provider__chevron" aria-hidden="true">→</span>
+                    </button>
+                </form>
+            }
+        </div>
+    }
+
+    @if (!Model.PasswordEnabled)
+    {
+        <div class="rr-auth-callout rr-auth-callout--muted">
+            <strong>Password sign-in is disabled for this deployment.</strong>
+            @if (Model.MagicAuthEnabled)
+            {
+                <p>Use a magic code or one of the configured identity providers to continue.</p>
+                <div class="rr-auth-actions">
+                    <a class="inc-btn inc-btn--secondary" href="@Model.MagicPath">Use magic code</a>
+                </div>
+            }
+        </div>
+    }
+}

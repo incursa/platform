@@ -1,0 +1,26 @@
+@page "/auth/verify-email"
+@model Incursa.Platform.Access.Razor.Pages.Auth.VerifyEmailModel
+@{
+    ViewData["Title"] = "Verify Email";
+}
+
+<span class="inc-badge">Verify email</span>
+<h1>Confirm your email address.</h1>
+<p>Enter the verification code sent to <strong>@Model.Email</strong> to finish signing in.</p>
+
+@if (!ViewContext.ModelState.IsValid)
+{
+    <div asp-validation-summary="ModelOnly" class="rr-auth-errors"></div>
+}
+
+<form method="post" class="rr-auth-form">
+    <div class="rr-auth-field">
+        <label asp-for="Input.Code"></label>
+        <input asp-for="Input.Code" class="inc-form__control" autocomplete="one-time-code" inputmode="numeric" />
+        <span asp-validation-for="Input.Code" class="text-danger"></span>
+    </div>
+    <div class="rr-auth-actions">
+        <button type="submit" class="inc-btn inc-btn--primary">Verify email</button>
+        <a class="inc-btn inc-btn--secondary" href="@Model.SignInPath">Start over</a>
+    </div>
+</form>

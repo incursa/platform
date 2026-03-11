@@ -1,0 +1,44 @@
+@page "/auth/organizations/select"
+@model Incursa.Platform.Access.Razor.Pages.Auth.Organizations.SelectModel
+@{
+    ViewData["Title"] = "Select Organization";
+}
+
+<span class="inc-badge">Select organization</span>
+<h1>Choose your organization.</h1>
+<p>This session can continue only after you pick the organization context to sign into. Each card below signs you into that organization immediately.</p>
+
+@if (!string.IsNullOrWhiteSpace(Model.Email))
+{
+    <p class="rr-auth-inline-note rr-auth-inline-note--compact">
+        <span>Signed in as <strong>@Model.Email</strong>.</span>
+        <a class="rr-auth-text-link" href="@Model.SignInPath">Not you? Go back.</a>
+    </p>
+}
+
+@if (!ViewContext.ModelState.IsValid)
+{
+    <div asp-validation-summary="ModelOnly" class="rr-auth-errors"></div>
+}
+
+<form method="post" class="rr-auth-form">
+    <div class="rr-auth-choice-list rr-auth-choice-list--organizations">
+        @foreach (var organization in Model.Organizations)
+        {
+            <button type="submit" class="rr-auth-choice rr-auth-choice--submit" name="SelectedOrganizationId" value="@organization.Id">
+                <span class="rr-auth-choice__copy">
+                    <span class="rr-auth-choice__headline">
+                        <strong>@organization.Name</strong>
+                        <span class="rr-auth-choice__info" title="Organization ID: @organization.Id" aria-label="Organization ID: @organization.Id">
+                            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                                <path fill="currentColor" d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Zm0 1.25a5.25 5.25 0 1 1 0 10.5 5.25 5.25 0 0 1 0-10.5Zm0 2.1a.85.85 0 1 0 0 1.7.85.85 0 0 0 0-1.7Zm-.9 3.05v.9h.55v2.35H7.1v.95h1.95v-.95H8.6V7.9H7.1Z" />
+                            </svg>
+                        </span>
+                    </span>
+                </span>
+                <span class="rr-auth-choice__arrow" aria-hidden="true">→</span>
+            </button>
+        }
+    </div>
+    <span asp-validation-for="SelectedOrganizationId" class="text-danger"></span>
+</form>

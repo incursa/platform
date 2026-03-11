@@ -1,0 +1,13 @@
+@page "/auth/error"
+@model Incursa.Platform.Access.Razor.Pages.Auth.ErrorModel
+@{
+    ViewData["Title"] = "Authentication Error";
+}
+
+<span class="inc-badge inc-badge--warning">Authentication error</span>
+<h1>@Model.Title</h1>
+<p>@Model.Message</p>
+
+<div class="rr-auth-actions">
+    <a class="inc-btn inc-btn--primary" href="@Model.SignInPath">Return to sign in</a>
+</div>

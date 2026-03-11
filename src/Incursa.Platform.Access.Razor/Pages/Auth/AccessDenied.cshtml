@@ -1,0 +1,15 @@
+@page "/auth/access-denied"
+@using Microsoft.Extensions.Options
+@inject IOptions<AccessAuthenticationUiOptions> UiOptionsAccessor
+@{
+    ViewData["Title"] = "Access Denied";
+    var ui = UiOptionsAccessor.Value;
+}
+
+<span class="inc-badge inc-badge--warning">Access denied</span>
+<h1>Signed in, but not allowed here.</h1>
+<p>Your account authenticated successfully, but this browser session does not currently have permission to open this surface.</p>
+<div class="rr-auth-actions">
+    <a class="inc-btn inc-btn--primary" href="@ui.DefaultReturnUrl">Return to the app</a>
+    <a class="inc-btn inc-btn--secondary" href="@ui.Routes.SignInPath">Sign in as a different user</a>
+</div>

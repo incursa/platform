@@ -1,4 +1,6 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Options;
 
 namespace Incursa.Platform.Access.Razor;
 
@@ -18,6 +20,8 @@ public static class AccessAuthenticationUiServiceCollectionExtensions
 
         services.TryAddScoped<AccessAuthenticationStateStore>();
         services.TryAddScoped<AccessAuthenticationFlowRouter>();
+        services.TryAddEnumerable(
+            ServiceDescriptor.Transient<IConfigureOptions<RazorPagesOptions>, AccessAuthenticationUiRazorPagesOptionsSetup>());
 
         return services;
     }

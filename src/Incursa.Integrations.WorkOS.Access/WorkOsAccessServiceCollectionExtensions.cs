@@ -58,6 +58,7 @@ public static class WorkOsAccessServiceCollectionExtensions
         services.TryAddTransient<IWorkOsAuthenticationClient>(static sp => sp.GetRequiredService<WorkOsAuthenticationClient>());
         services.TryAddTransient<IWorkOsMagicAuthClient>(static sp => sp.GetRequiredService<WorkOsAuthenticationClient>());
         services.TryAddTransient<IWorkOsSessionClient>(static sp => sp.GetRequiredService<WorkOsAuthenticationClient>());
+        services.TryAddTransient<IWorkOsPasswordResetClient>(static sp => sp.GetRequiredService<WorkOsAuthenticationClient>());
         services.TryAddScoped<IAccessAuthenticationService, WorkOsAccessAuthenticationService>();
         return services;
     }

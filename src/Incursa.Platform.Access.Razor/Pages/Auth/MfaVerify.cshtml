@@ -1,0 +1,26 @@
+@page "/auth/mfa/verify"
+@model Incursa.Platform.Access.Razor.Pages.Auth.MfaVerifyModel
+@{
+    ViewData["Title"] = "Verify MFA";
+}
+
+<span class="inc-badge">Verify MFA</span>
+<h1>Enter your authenticator code.</h1>
+<p>Finish signing in with the current TOTP code from your authenticator app.</p>
+
+@if (!ViewContext.ModelState.IsValid)
+{
+    <div asp-validation-summary="ModelOnly" class="rr-auth-errors"></div>
+}
+
+<form method="post" class="rr-auth-form">
+    <div class="rr-auth-field">
+        <label asp-for="Input.Code"></label>
+        <input asp-for="Input.Code" class="inc-form__control" autocomplete="one-time-code" inputmode="numeric" />
+        <span asp-validation-for="Input.Code" class="text-danger"></span>
+    </div>
+    <div class="rr-auth-actions">
+        <button type="submit" class="inc-btn inc-btn--primary">Verify MFA</button>
+        <a class="inc-btn inc-btn--secondary" href="@Model.SignInPath">Start over</a>
+    </div>
+</form>

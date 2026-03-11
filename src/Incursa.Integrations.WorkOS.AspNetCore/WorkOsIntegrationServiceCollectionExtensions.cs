@@ -10,7 +10,9 @@ using Incursa.Integrations.WorkOS.Core.DependencyInjection;
 using Incursa.Integrations.WorkOS.Core.Emulation;
 using Incursa.Integrations.WorkOS.Persistence.DependencyInjection;
 using Incursa.Platform.Access.AspNetCore;
+using Incursa.Platform.Access.Razor;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 public static class WorkOsIntegrationServiceCollectionExtensions
 {
@@ -85,6 +87,7 @@ public static class WorkOsIntegrationServiceCollectionExtensions
 
         services.AddWorkOsAuthentication(configureAuth);
         services.AddWorkOsAccessAspNetCore(configureAccess, configureCookie);
+        services.TryAddScoped<IAccessPasswordRecoveryService, AspNetCore.Auth.WorkOsAccessPasswordRecoveryService>();
         return services;
     }
 

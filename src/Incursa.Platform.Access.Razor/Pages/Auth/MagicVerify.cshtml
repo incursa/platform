@@ -1,0 +1,43 @@
+@page "/auth/magic/verify"
+@model Incursa.Platform.Access.Razor.Pages.Auth.MagicVerifyModel
+@{
+    ViewData["Title"] = "Verify Magic Code";
+}
+
+<span class="inc-badge">Verify code</span>
+<h1>Complete your sign-in code.</h1>
+<p>Enter the code sent to <strong>@Model.Email</strong>. Codes expire quickly, so request a new one if this one is stale.</p>
+
+@if (Model.CodeWasSent)
+{
+    <div class="rr-auth-callout">
+        <strong>Check your email.</strong>
+        <p>A fresh code was sent to <strong>@Model.Email</strong>.</p>
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.StatusMessage))
+{
+    <div class="rr-auth-callout">
+        <strong>@Model.StatusMessage</strong>
+    </div>
+}
+
+@if (!ViewContext.ModelState.IsValid)
+{
+    <div asp-validation-summary="ModelOnly" class="rr-auth-errors"></div>
+}
+
+<form method="post" class="rr-auth-form">
+    <input type="hidden" asp-for="Email" />
+    <input type="hidden" asp-for="ReturnUrl" />
+    <div class="rr-auth-field">
+        <label asp-for="Input.Code"></label>
+        <input asp-for="Input.Code" class="inc-form__control" autocomplete="one-time-code" inputmode="numeric" />
+        <span asp-validation-for="Input.Code" class="text-danger"></span>
+    </div>
+    <div class="rr-auth-actions">
+        <button type="submit" class="inc-btn inc-btn--primary">Verify code</button>
+        <button type="submit" class="inc-btn inc-btn--secondary" asp-page-handler="Resend">Resend code</button>
+    </div>
+</form>

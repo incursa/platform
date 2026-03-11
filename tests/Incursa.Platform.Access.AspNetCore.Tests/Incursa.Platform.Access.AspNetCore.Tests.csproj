@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Incursa.Platform.Access\Incursa.Platform.Access.csproj" />
     <ProjectReference Include="..\..\src\Incursa.Platform.Access.AspNetCore\Incursa.Platform.Access.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\src\Incursa.Platform.Access.Razor\Incursa.Platform.Access.Razor.csproj" />
   </ItemGroup>
 
   <ItemGroup>

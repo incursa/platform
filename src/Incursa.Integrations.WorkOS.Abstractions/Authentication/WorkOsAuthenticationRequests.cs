@@ -160,6 +160,31 @@ public sealed record WorkOsRefreshRequest(
 
 public sealed record WorkOsTotpEnrollmentRequest(string User, string? Issuer = null);
 
+public sealed record WorkOsPasswordResetCreateRequest(string Email)
+{
+    public string Email { get; } = string.IsNullOrWhiteSpace(Email)
+        ? throw new ArgumentException("Email is required.", nameof(Email))
+        : Email.Trim();
+}
+
+public sealed record WorkOsPasswordResetConfirmRequest(string Token, string NewPassword)
+{
+    public string Token { get; } = string.IsNullOrWhiteSpace(Token)
+        ? throw new ArgumentException("Token is required.", nameof(Token))
+        : Token.Trim();
+
+    public string NewPassword { get; } = string.IsNullOrWhiteSpace(NewPassword)
+        ? throw new ArgumentException("A new password is required.", nameof(NewPassword))
+        : NewPassword;
+}
+
+public sealed record WorkOsPasswordReset(
+    string Id,
+    string Email,
+    string Token,
+    Uri? PasswordResetUrl,
+    DateTimeOffset? ExpiresAtUtc);
+
 public sealed record WorkOsSignOutRequest(
     string? SessionId = null,
     string? ReturnToUri = null)

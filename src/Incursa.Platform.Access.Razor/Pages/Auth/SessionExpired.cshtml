@@ -1,0 +1,15 @@
+@page "/auth/session-expired"
+@using Microsoft.Extensions.Options
+@inject IOptions<AccessAuthenticationUiOptions> UiOptionsAccessor
+@{
+    ViewData["Title"] = "Session Expired";
+    var ui = UiOptionsAccessor.Value;
+}
+
+<span class="inc-badge inc-badge--warning">Session expired</span>
+<h1>This sign-in step expired.</h1>
+<p>The browser no longer has the pending authentication state required to complete this step. Start the sign-in flow again.</p>
+
+<div class="rr-auth-actions">
+    <a class="inc-btn inc-btn--primary" href="@ui.Routes.SignInPath">Start again</a>
+</div>

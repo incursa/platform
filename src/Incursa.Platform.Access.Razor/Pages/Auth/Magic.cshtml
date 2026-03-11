@@ -1,0 +1,27 @@
+@page "/auth/magic"
+@model Incursa.Platform.Access.Razor.Pages.Auth.MagicModel
+@{
+    ViewData["Title"] = "Magic Code";
+}
+
+<span class="inc-badge">Magic code</span>
+<h1>Send a one-time sign-in code.</h1>
+<p>Enter the email for your existing account and the configured provider will send a short-lived code you can finish in the next step.</p>
+
+@if (!ViewContext.ModelState.IsValid)
+{
+    <div asp-validation-summary="ModelOnly" class="rr-auth-errors"></div>
+}
+
+<form method="post" class="rr-auth-form">
+    <input type="hidden" asp-for="ReturnUrl" />
+    <div class="rr-auth-field">
+        <label asp-for="Input.Email"></label>
+        <input asp-for="Input.Email" class="inc-form__control" autocomplete="username email" />
+        <span asp-validation-for="Input.Email" class="text-danger"></span>
+    </div>
+    <div class="rr-auth-actions">
+        <button type="submit" class="inc-btn inc-btn--primary">Send code</button>
+        <a class="inc-btn inc-btn--secondary" href="@Model.SignInPath">Back to sign in</a>
+    </div>
+</form>

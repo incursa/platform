@@ -3,22 +3,22 @@
     {
       "packageId": "Incursa.Integrations.Cloudflare",
       "projectPath": "src/Incursa.Integrations.Cloudflare/Incursa.Integrations.Cloudflare.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Integrations.Cloudflare.CustomDomains",
       "projectPath": "src/Incursa.Integrations.Cloudflare.CustomDomains/Incursa.Integrations.Cloudflare.CustomDomains.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Integrations.Cloudflare.Dns",
       "projectPath": "src/Incursa.Integrations.Cloudflare.Dns/Incursa.Integrations.Cloudflare.Dns.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Integrations.ElectronicNotary",
       "projectPath": "src/Incursa.Integrations.ElectronicNotary/Incursa.Integrations.ElectronicNotary.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Integrations.ElectronicNotary.Abstractions",
@@ -43,22 +43,22 @@
     {
       "packageId": "Incursa.Integrations.WorkOS",
       "projectPath": "src/Incursa.Integrations.WorkOS/Incursa.Integrations.WorkOS.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Integrations.WorkOS.Abstractions",
       "projectPath": "src/Incursa.Integrations.WorkOS.Abstractions/Incursa.Integrations.WorkOS.Abstractions.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Integrations.WorkOS.Access",
       "projectPath": "src/Incursa.Integrations.WorkOS.Access/Incursa.Integrations.WorkOS.Access.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Integrations.WorkOS.AspNetCore",
       "projectPath": "src/Incursa.Integrations.WorkOS.AspNetCore/Incursa.Integrations.WorkOS.AspNetCore.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Integrations.WorkOS.Audit",
@@ -88,7 +88,7 @@
     {
       "packageId": "Incursa.Platform.Access.Razor",
       "projectPath": "src/Incursa.Platform.Access.Razor/Incursa.Platform.Access.Razor.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Platform.Audit",

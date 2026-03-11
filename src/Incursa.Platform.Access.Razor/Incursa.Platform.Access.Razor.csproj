@@ -6,7 +6,7 @@
     <IsPackable>true</IsPackable>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <PackageId>Incursa.Platform.Access.Razor</PackageId>
-    <Version>6.0.3</Version>
+    <Version>6.0.4</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>Reusable Razor Pages authentication UI infrastructure for Incursa.Platform.Access.</Description>

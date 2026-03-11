@@ -1,0 +1,14 @@
+@page "/auth/logged-out"
+@using Microsoft.Extensions.Options
+@inject IOptions<AccessAuthenticationUiOptions> UiOptionsAccessor
+@{
+    ViewData["Title"] = "Signed Out";
+    var ui = UiOptionsAccessor.Value;
+}
+
+<span class="inc-badge">Signed out</span>
+<h1>Session closed.</h1>
+<p>The local session cookie has been cleared. If the provider exposed a remote logout URL, that provider-side session was revoked as part of sign-out too.</p>
+<div class="rr-auth-actions">
+    <a class="inc-btn inc-btn--primary" href="@ui.Routes.SignInPath">Sign in again</a>
+</div>

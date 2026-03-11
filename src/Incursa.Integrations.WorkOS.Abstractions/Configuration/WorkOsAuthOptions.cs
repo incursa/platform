@@ -26,6 +26,10 @@ public sealed class WorkOsAuthOptions
 
     public string MagicAuthPath { get; set; } = "/user_management/magic_auth";
 
+    public string PasswordResetPath { get; set; } = "/user_management/password_reset";
+
+    public string PasswordResetConfirmPath { get; set; } = "/user_management/password_reset/confirm";
+
     public string TotpEnrollPath { get; set; } = "/auth/factors/enroll";
 
     public string SessionRevokePathTemplate { get; set; } = "/user_management/sessions/{sessionId}/revoke";

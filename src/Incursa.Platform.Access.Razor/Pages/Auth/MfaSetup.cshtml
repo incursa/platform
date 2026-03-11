@@ -1,0 +1,38 @@
+@page "/auth/mfa/setup"
+@model Incursa.Platform.Access.Razor.Pages.Auth.MfaSetupModel
+@{
+    ViewData["Title"] = "Set Up MFA";
+}
+
+<span class="inc-badge">Set up MFA</span>
+<h1>Connect your authenticator app.</h1>
+<p>Scan the QR code or enter the secret manually, then submit the current TOTP code to finish enrollment.</p>
+
+@if (!ViewContext.ModelState.IsValid)
+{
+    <div asp-validation-summary="ModelOnly" class="rr-auth-errors"></div>
+}
+
+<div class="rr-auth-callout rr-auth-callout--stacked">
+    @if (!string.IsNullOrWhiteSpace(Model.QrCode))
+    {
+        <img class="rr-auth-qr" src="@Model.QrCode" alt="Authenticator QR code" />
+    }
+    <div class="rr-auth-secret-block">
+        <div><span>Issuer</span><strong>@Model.Issuer</strong></div>
+        <div><span>User</span><strong>@Model.UserLabel</strong></div>
+        <div><span>Secret</span><strong>@Model.Secret</strong></div>
+    </div>
+</div>
+
+<form method="post" class="rr-auth-form">
+    <div class="rr-auth-field">
+        <label asp-for="Input.Code"></label>
+        <input asp-for="Input.Code" class="inc-form__control" autocomplete="one-time-code" inputmode="numeric" />
+        <span asp-validation-for="Input.Code" class="text-danger"></span>
+    </div>
+    <div class="rr-auth-actions">
+        <button type="submit" class="inc-btn inc-btn--primary">Complete setup</button>
+        <a class="inc-btn inc-btn--secondary" href="@Model.SignInPath">Start over</a>
+    </div>
+</form>

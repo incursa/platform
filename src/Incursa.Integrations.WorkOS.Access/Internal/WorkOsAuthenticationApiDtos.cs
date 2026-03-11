@@ -194,4 +194,37 @@ internal sealed class ChallengeDto
     [JsonPropertyName("code")]
     public string? Code { get; set; }
 }
+
+internal sealed class PasswordResetDto
+{
+    [JsonPropertyName("id")]
+    public string? Id { get; set; }
+
+    [JsonPropertyName("email")]
+    public string? Email { get; set; }
+
+    [JsonPropertyName("password_reset_token")]
+    public string? PasswordResetToken { get; set; }
+
+    [JsonPropertyName("password_reset_url")]
+    public string? PasswordResetUrl { get; set; }
+
+    [JsonPropertyName("expires_at")]
+    public string? ExpiresAt { get; set; }
+}
+
+internal sealed class PasswordResetCreateDto
+{
+    [JsonPropertyName("email")]
+    public string? Email { get; set; }
+}
+
+internal sealed class PasswordResetConfirmDto
+{
+    [JsonPropertyName("token")]
+    public string? Token { get; set; }
+
+    [JsonPropertyName("new_password")]
+    public string? NewPassword { get; set; }
+}
 #pragma warning restore MA0048

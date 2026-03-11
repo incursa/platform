@@ -12,7 +12,8 @@ using Microsoft.Extensions.Options;
 internal sealed class WorkOsAuthenticationClient :
     IWorkOsAuthenticationClient,
     IWorkOsMagicAuthClient,
-    IWorkOsSessionClient
+    IWorkOsSessionClient,
+    IWorkOsPasswordResetClient
 {
     private readonly HttpClient httpClient;
     private readonly WorkOsAuthOptions options;
@@ -566,6 +567,52 @@ internal sealed class WorkOsAuthenticationClient :
                 factor.Totp.QrCode,
                 factor.Totp.Secret,
                 factor.Totp.Uri);
+    }
+
+    public async Task<WorkOsPasswordReset> CreatePasswordResetAsync(
+        WorkOsPasswordResetCreateRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+
+        using var message = CreateJsonRequest(
+            HttpMethod.Post,
+            new Uri(options.GetApiBaseUri(), options.PasswordResetPath),
+            new PasswordResetCreateDto { Email = request.Email },
+            includeApiKey: true);
+
+        using var response = await httpClient.SendAsync(message, cancellationToken).ConfigureAwait(false);
+        var payload = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+        response.EnsureSuccessStatusCode();
+
+        var reset = Deserialize<PasswordResetDto>(payload);
+        return new WorkOsPasswordReset(
+            reset.Id ?? string.Empty,
+            reset.Email ?? request.Email,
+            reset.PasswordResetToken ?? string.Empty,
+            Uri.TryCreate(reset.PasswordResetUrl, UriKind.Absolute, out var resetUrl) ? resetUrl : null,
+            ParseDateTime(reset.ExpiresAt));
+    }
+
+    public async Task ResetPasswordAsync(
+        WorkOsPasswordResetConfirmRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+
+        using var message = CreateJsonRequest(
+            HttpMethod.Post,
+            new Uri(options.GetApiBaseUri(), options.PasswordResetConfirmPath),
+            new PasswordResetConfirmDto
+            {
+                Token = request.Token,
+                NewPassword = request.NewPassword,
+            },
+            includeApiKey: true);
+
+        using var response = await httpClient.SendAsync(message, cancellationToken).ConfigureAwait(false);
+        _ = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+        response.EnsureSuccessStatusCode();
     }
 
     private static DateTimeOffset? ParseDateTime(string? value) =>

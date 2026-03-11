@@ -1,0 +1,43 @@
+@using Microsoft.Extensions.Options
+@inject IOptions<AccessAuthenticationUiOptions> UiOptionsAccessor
+@{
+    var title = ViewData["Title"]?.ToString() ?? "Authentication";
+    var ui = UiOptionsAccessor.Value;
+    var branding = ui.Branding;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@title | @branding.ApplicationName</title>
+    <link rel="stylesheet" href="~/_content/Incursa.Platform.Access.Razor/css/access-auth.css" asp-append-version="true" />
+</head>
+<body class="rr-auth-page">
+    <div class="rr-auth-shell">
+        <aside class="rr-auth-aside" aria-label="@($"{branding.ApplicationName} sign-in context")">
+            <span class="rr-auth-aside__label">@branding.SidebarLabel</span>
+            <h2 class="rr-auth-aside__headline">@branding.SidebarHeadline</h2>
+            <p class="rr-auth-aside__note">@branding.SidebarNote</p>
+            @if (branding.Highlights.Count > 0)
+            {
+                <div class="rr-auth-highlights">
+                    @foreach (var highlight in branding.Highlights)
+                    {
+                        <div class="rr-auth-highlight">
+                            <strong class="rr-auth-highlight__title">@highlight.Title</strong>
+                            <span>@highlight.Description</span>
+                        </div>
+                    }
+                </div>
+            }
+        </aside>
+        <main class="rr-auth-panel">
+            <div class="rr-auth-panel__body">
+                @RenderBody()
+            </div>
+        </main>
+    </div>
+    <script src="~/_content/Incursa.Platform.Access.Razor/js/access-auth.js" asp-append-version="true"></script>
+</body>
+</html>
