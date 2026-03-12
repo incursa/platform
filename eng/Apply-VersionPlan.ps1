@@ -59,7 +59,15 @@ foreach ($package in @($manifest.packages)) {
 foreach ($planPackage in @($plan.publishPackages)) {
     $packageId = [string]$planPackage.packageId
     if (-not $packagesById.ContainsKey($packageId)) {
-        throw "Package '$packageId' was not found in '$ManifestPath'."
+        $newPackage = [pscustomobject][ordered]@{
+            packageId = $packageId
+            projectPath = [string]$planPackage.projectPath
+            version = [string]$planPackage.nextVersion
+        }
+
+        $manifest.packages = @($manifest.packages) + $newPackage
+        $packagesById[$packageId] = $newPackage
+        continue
     }
 
     $packagesById[$packageId].version = [string]$planPackage.nextVersion

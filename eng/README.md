@@ -18,6 +18,8 @@ This directory holds monorepo governance and release helpers for `Incursa.Platfo
   Resolves the package version bump plan for changed packable projects and their packable dependents.
 - `Apply-VersionPlan.ps1`
   Applies the resolved version bump plan to the manifest and packable project files.
+- `Commit-VersionedChanges.ps1`
+  Stages a local snapshot, applies the version plan, validates staged bumps, creates a commit, and can optionally push.
 - `Set-PackageVersionBaseline.ps1`
   Sets a one-time baseline semantic version across all packable projects and the version manifest.
 - `Pack-PublicPackages.ps1`
@@ -32,6 +34,7 @@ pwsh -File eng/Generate-PackageCatalog.ps1
 pwsh -File eng/Resolve-AffectedProjects.ps1 -Base origin/main -Head HEAD
 pwsh -File eng/Resolve-VersionPlan.ps1 -Base origin/main -Head HEAD -AsJson
 pwsh -File eng/Apply-VersionPlan.ps1 -Base origin/main -Head HEAD
+pwsh -File eng/Commit-VersionedChanges.ps1 -Message "Add Stripe billing integration"
 pwsh -File eng/Test-PackageVersionChanges.ps1 -Base origin/main -Head HEAD
 pwsh -File eng/Set-PackageVersionBaseline.ps1 -Version 6.0.0
 pwsh -File eng/Pack-PublicPackages.ps1 -Configuration Release -OutputPath ./nupkgs
@@ -45,3 +48,16 @@ pwsh -File eng/Pack-PublicPackages.ps1 -Configuration Release -OutputPath ./nupk
 2. Review the package/version changes written to `eng/package-versions.json` and the affected `.csproj` files.
 3. Commit those version changes alongside the code changes.
 4. Enable the local pre-commit hook with `pwsh -File scripts/setup-git-hooks.ps1`.
+
+## One-command local workflow
+
+Use `pwsh -File eng/Commit-VersionedChanges.ps1 -Message "..."` when you want the repo to:
+
+1. stage the current worktree (`-Source worktree`, the default) or use the existing index (`-Source staged`)
+2. resolve and apply the package version plan for the staged snapshot
+3. stage the generated manifest and project version updates
+4. validate the staged version bumps with `eng/Test-PackageVersionChanges.ps1 -Staged`
+5. create the commit
+6. optionally push with `-Push`
+
+For a dry run that stops before creating the commit, add `-SkipCommit`.

@@ -93,7 +93,7 @@ if ($missingBumps.Count -eq 0) {
     return
 }
 
-Write-Error "Detected affected packable projects without a committed version bump. Run 'pwsh -File eng/Apply-VersionPlan.ps1' and commit the resulting manifest/project version updates."
+Write-Error "Detected affected packable projects without a committed version bump. Run 'pwsh -File eng/Apply-VersionPlan.ps1' (or 'pwsh -File eng/Commit-VersionedChanges.ps1 -Message ""...""') and commit the resulting manifest/project version updates."
 foreach ($item in $missingBumps) {
     Write-Host ("- {0} ({1}): current '{2}', base '{3}'" -f $item.packageId, $item.projectPath, $item.currentVersion, $item.baseVersion)
 }

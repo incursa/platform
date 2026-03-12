@@ -137,6 +137,7 @@ See `docs/architecture/imported-integrations.md` for the boundary decisions and 
 - `eng/Initialize-PackageVersions.ps1`: bootstraps the version manifest and normalizes explicit project versions
 - `eng/Resolve-VersionPlan.ps1`: calculates default semantic version bumps for changed packable projects and reverse dependents
 - `eng/Apply-VersionPlan.ps1`: applies the resolved version bump plan to the manifest and `.csproj` files
+- `eng/Commit-VersionedChanges.ps1`: stages a local snapshot, applies the version plan, validates staged bumps, creates a commit, and can optionally push
 - `eng/Test-PackageVersionChanges.ps1`: validates that affected packable projects have committed version bumps
 - `eng/Set-PackageVersionBaseline.ps1`: sets a one-time semantic baseline across all packable packages when migrating from an older scheme
 - `eng/Pack-PublicPackages.ps1`: packs only catalog-allowlisted projects
@@ -168,6 +169,7 @@ pwsh -File .codex/skills/dotnet-repo-discovery/scripts/discover-dotnet-repo.ps1
 pwsh -File .codex/skills/dotnet-build-diagnostics/scripts/run-build-diagnostics.ps1
 pwsh -File .codex/skills/dotnet-format-analyzers/scripts/run-format-analyzers.ps1
 pwsh -File eng/Resolve-VersionPlan.ps1 -Base origin/main -Head HEAD -AsJson
+pwsh -File eng/Commit-VersionedChanges.ps1 -Message "Add Stripe billing integration"
 ```
 
 When tests are involved:
