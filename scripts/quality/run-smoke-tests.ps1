@@ -23,7 +23,6 @@ $summaryPath = Join-Path $resultsPath "summary.md"
 $projects = @(
     "tests/Incursa.Platform.Tests/Incursa.Platform.Tests.csproj",
     "tests/Incursa.Platform.Storage.Tests/Incursa.Platform.Storage.Tests.csproj",
-    "tests/Incursa.Platform.InMemory.Tests/Incursa.Platform.InMemory.Tests.csproj",
     "tests/Incursa.Platform.HealthProbe.Tests/Incursa.Platform.HealthProbe.Tests.csproj",
     "tests/Incursa.Platform.Webhooks.Tests/Incursa.Platform.Webhooks.Tests.csproj"
 )

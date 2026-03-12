@@ -1,4 +1,5 @@
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -6,6 +7,8 @@ namespace TestDocs.Cli;
 
 internal static class XmlDocParser
 {
+    private static readonly string[] LineSeparators = ["\r\n", "\n"];
+
     public static XDocument? TryParse(MethodDeclarationSyntax method)
     {
         var trivia = method.GetLeadingTrivia()
@@ -19,7 +22,7 @@ internal static class XmlDocParser
         }
 
         var text = trivia.ToFullString();
-        var lines = text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+        var lines = text.Split(LineSeparators, StringSplitOptions.None);
         var builder = new StringBuilder();
         foreach (var line in lines)
         {
@@ -36,12 +39,12 @@ internal static class XmlDocParser
             {
                 trimmed = trimmed[2..];
             }
-            else if (trimmed.StartsWith("*", StringComparison.Ordinal))
+            else if (trimmed.StartsWith('*'))
             {
                 trimmed = trimmed[1..];
             }
 
-            if (trimmed.StartsWith(" ", StringComparison.Ordinal))
+            if (trimmed.StartsWith(' '))
             {
                 trimmed = trimmed[1..];
             }
@@ -59,7 +62,7 @@ internal static class XmlDocParser
         {
             return XDocument.Parse($"<root>{body}</root>", LoadOptions.PreserveWhitespace);
         }
-        catch
+        catch (XmlException)
         {
             return null;
         }

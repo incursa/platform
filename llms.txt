@@ -1,30 +1,35 @@
-# Incursa Platform Monorepo
+# Incursa Platform
 
-`Incursa.Platform` is the public monorepo for reusable infrastructure/platform libraries. Keep public packages generic, capability-oriented, and explainable without private business or product context. If imported code is useful but not clearly ready for the public package surface, keep it in `incubating/` and mark it non-packable.
+`platform` is the provider-neutral base repository in the Incursa split. Keep this repo focused on shared abstractions, capability surfaces, hosting adapters, orchestration, and tooling that can be consumed by both public and private integration repositories.
+
+Public provider implementations now live in [C:\src\incursa\integrations-public](C:/src/incursa/integrations-public).
 
 ## Repository map
 
-- `src/`: public source packages
-- `tests/`: unit/integration tests and smoke/sample apps
-- `tools/`: shipped analyzers and helper CLIs
-- `eng/`: package catalog and release helpers
-- `docs/`: architecture, quality policy, and package guidance
-- `incubating/`: reserved staging area for future non-public imports and experiments
+- `src/`: provider-neutral packages and hosting adapters
+- `tests/`: provider-neutral tests and shared test utilities
+- `tools/`: analyzers and helper CLIs that remain repo-agnostic
+- `eng/`: package catalog and versioning helpers
+- `docs/`: architecture, scope boundary, and repository split records
+- `incubating/`: preserved staging area for code not ready for the public package surface
 
 ## Primary solutions
 
-- `Incursa.Platform.slnx`: day-to-day solution for public packages, tests, tools, and monorepo docs
-- `Incursa.Platform.CI.slnx`: build/test/pack solution for the public surface
-- `Incursa.Platform.Incubating.slnx`: preserved solution for imported code that is intentionally outside default CI/release paths
+- `Incursa.Platform.slnx`: day-to-day solution for the retained platform surface
+- `Incursa.Platform.CI.slnx`: build/test/pack solution for this repo
+- `Incursa.Platform.Incubating.slnx`: optional staging solution for preserved incubating code
 
-## Public package families
+## Dependency boundary
 
-Core:
+- `platform` must not depend on `integrations-public`
+- `integrations-public` and future `integrations-private` repos may depend on `platform`
+- provider-specific implementations should be kept out of this repo unless they are being deliberately staged for later extraction
+
+## Package families retained here
+
+Core and capabilities:
 
 - `src/Incursa.Platform/`
-
-Capabilities:
-
 - `src/Incursa.Platform.Access/`
 - `src/Incursa.Platform.Audit/`
 - `src/Incursa.Platform.Correlation/`
@@ -41,36 +46,10 @@ Capabilities:
 - `src/Incursa.Platform.Storage/`
 - `src/Incursa.Platform.Webhooks/`
 
-Providers:
-
-- `src/Incursa.Platform.SqlServer/`
-- `src/Incursa.Platform.Postgres/`
-- `src/Incursa.Platform.InMemory/`
-- `src/Incursa.Platform.Email.SqlServer/`
-- `src/Incursa.Platform.Email.Postgres/`
-- `src/Incursa.Integrations.Storage.Azure/`
-
-Public integrations:
-
-- `src/Incursa.Integrations.WorkOS/`
-- `src/Incursa.Integrations.WorkOS.Abstractions/`
-- `src/Incursa.Integrations.WorkOS.Access/`
-- `src/Incursa.Integrations.WorkOS.AspNetCore/`
-- `src/Incursa.Integrations.WorkOS.Audit/`
-- `src/Incursa.Integrations.WorkOS.Webhooks/`
-- `src/Incursa.Integrations.Cloudflare/`
-- `src/Incursa.Integrations.Cloudflare.CustomDomains/`
-- `src/Incursa.Integrations.Cloudflare.Dns/`
-- `src/Incursa.Integrations.ElectronicNotary/`
-- `src/Incursa.Integrations.ElectronicNotary.Abstractions/`
-- `src/Incursa.Integrations.ElectronicNotary.Proof/`
-- `src/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore/`
-- `src/Incursa.Integrations.Stripe/`
-- `src/Incursa.Platform.Email.Postmark/`
-
 Hosting adapters:
 
 - `src/Incursa.Platform.Access.AspNetCore/`
+- `src/Incursa.Platform.Access.Razor/`
 - `src/Incursa.Platform.Email.AspNetCore/`
 - `src/Incursa.Platform.Health.AspNetCore/`
 - `src/Incursa.Platform.Metrics.AspNetCore/`
@@ -79,97 +58,50 @@ Hosting adapters:
 - `src/Incursa.Platform.Modularity.Razor/`
 - `src/Incursa.Platform.Webhooks.AspNetCore/`
 
-Tools:
+Shared tooling retained here:
 
 - `tools/observability/src/Incursa.Platform.Observability.Analyzers/`
 - `tools/testdocs/src/Incursa.TestDocs.Analyzers/`
 - `tools/testdocs/src/Incursa.TestDocs.Cli/`
-- `tools/migrations/src/Incursa.Platform.SchemaMigrations.Cli/`
 
-## Imported integration provenance
+Published test support retained here:
 
-- `C:\src\incursa\integrations-postmark` was merged into the public email family:
-  - `src/Incursa.Platform.Email/`
-  - `src/Incursa.Platform.Email.AspNetCore/`
-  - `src/Incursa.Platform.Email.Postmark/`
-  - `src/Incursa.Platform.Email.SqlServer/`
-  - `src/Incursa.Platform.Email.Postgres/`
-  - `tests/Incursa.Platform.Email.Tests/`
-- `C:\src\incursa\integrations-workos` now feeds the public access capability plus WorkOS layer 1 packages:
-  - `src/Incursa.Platform.Access/`
-  - `src/Incursa.Platform.Access.AspNetCore/`
-  - `src/Incursa.Integrations.WorkOS/`
-  - `src/Incursa.Integrations.WorkOS.Abstractions/`
-  - `src/Incursa.Integrations.WorkOS.Access/`
-  - `src/Incursa.Integrations.WorkOS.Audit/`
-  - `src/Incursa.Integrations.WorkOS.AspNetCore/`
-  - `src/Incursa.Integrations.WorkOS.Webhooks/`
-  - `tests/Incursa.Platform.Access.Tests/`
-  - `tests/Incursa.Platform.Access.AspNetCore.Tests/`
-  - `tests/Incursa.Integrations.WorkOS.Tests/`
-  - `tests/Incursa.Integrations.WorkOS.Webhooks.Tests/`
-  - public vendor-specific WorkOS packages use the `Incursa.Integrations.WorkOS.*` family
-- `C:\src\incursa\integrations-cloudflare` now feeds the public capability families plus Cloudflare layer 1 packages:
-  - `src/Incursa.Integrations.Cloudflare/`
-  - `src/Incursa.Integrations.Cloudflare.CustomDomains/`
-  - `src/Incursa.Integrations.Cloudflare.Dns/`
-  - `src/Incursa.Platform.CustomDomains/`
-  - `tests/Incursa.Platform.CustomDomains.Tests/`
-  - `src/Incursa.Platform.Dns/`
-  - `tests/Incursa.Platform.Dns.Tests/`
-  - `tests/Incursa.Integrations.Cloudflare.Tests/`
-  - `tests/Incursa.Integrations.Cloudflare.IntegrationTests/`
-- `C:\src\incursa\integrations-electronicnotary` now feeds:
-  - `src/Incursa.Integrations.ElectronicNotary/`
-  - `src/Incursa.Integrations.ElectronicNotary.Abstractions/`
-  - `src/Incursa.Integrations.ElectronicNotary.Proof/`
-  - `src/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore/`
-  - `tests/Incursa.Integrations.ElectronicNotary.Tests/`
+- `tests/Incursa.Platform.TestUtilities/`
 
-See `docs/architecture/imported-integrations.md` for the boundary decisions and resulting landing zones.
+Moved to `integrations-public`:
+
+- `Incursa.Integrations.Cloudflare*`
+- `Incursa.Integrations.ElectronicNotary*`
+- `Incursa.Integrations.Storage.Azure`
+- `Incursa.Integrations.Stripe`
+- `Incursa.Integrations.WorkOS*`
+- `Incursa.Platform.Email.Postmark`
+- `Incursa.Platform.Email.Postgres`
+- `Incursa.Platform.Email.SqlServer`
+- `Incursa.Platform.InMemory`
+- `Incursa.Platform.Postgres`
+- `Incursa.Platform.SqlServer`
 
 ## Authoritative governance files
 
-- `eng/package-catalog.json`: authoritative project classification and pack/publish allowlist
+- `eng/package-catalog.json`: authoritative project classification and pack/publish allowlist for this repo
 - `eng/package-versions.json`: authoritative per-package semantic version manifest for packable projects
-- `eng/Generate-PackageCatalog.ps1`: regenerates the catalog from the repo tree
+- `eng/Generate-PackageCatalog.ps1`: regenerates the catalog from the current repo tree
+- `eng/Initialize-PackageVersions.ps1`: rewrites the version manifest from the current catalog
 - `eng/Resolve-AffectedProjects.ps1`: calculates changed projects and reverse dependencies
-- `eng/Initialize-PackageVersions.ps1`: bootstraps the version manifest and normalizes explicit project versions
-- `eng/Resolve-VersionPlan.ps1`: calculates default semantic version bumps for changed packable projects and reverse dependents
-- `eng/Apply-VersionPlan.ps1`: applies the resolved version bump plan to the manifest and `.csproj` files
-- `eng/Commit-VersionedChanges.ps1`: stages a local snapshot, applies the version plan, validates staged bumps, creates a commit, and can optionally push
-- `eng/Test-PackageVersionChanges.ps1`: validates that affected packable projects have committed version bumps
-- `eng/Set-PackageVersionBaseline.ps1`: sets a one-time semantic baseline across all packable packages when migrating from an older scheme
+- `eng/Resolve-VersionPlan.ps1`: calculates semantic version bumps for changed packable projects and reverse dependents
+- `eng/Apply-VersionPlan.ps1`: applies the resolved version plan to the manifest and `.csproj` files
+- `eng/Test-PackageVersionChanges.ps1`: validates that affected packable projects include version bumps
 - `eng/Pack-PublicPackages.ps1`: packs only catalog-allowlisted projects
-- `docs/architecture/layer-2-capabilities.md`: layer 2 capability ownership, adapter boundaries, and incubating leftovers for access, DNS, and custom domains
-- `docs/architecture/layer-2-capabilities.md`: layer 2 capability ownership, adapter boundaries, and incubating leftovers for access, webhooks, DNS, and custom domains
-- `docs/architecture/monorepo.md`: package families, zones, and pack/release policy
-- `docs/architecture/package-versioning-reset.md`: rationale for abandoning timestamp-based NuGet versions and the chosen SemVer reset baseline
-- `docs/quality/repo-scope-boundary.md`: what belongs in `src/` vs `incubating/`
-- `scripts/quality/platform-scope.rules.json`: scope guardrails for provider-token validation
-- `incubating/README.md`: staging rules for non-public code
-
-## Pack and release model
-
-- Default all projects to `IsPackable=false`
-- Default all builds to `GeneratePackageOnBuild=false`
-- Opt public packages and shipped tools in explicitly with `IsPackable=true`
-- Keep `incubating/` non-packable and non-publishable when used
-- Use `eng/package-catalog.json` as the allowlist
-- Commit CI packs affected public packages only
-- Commit and main/release CI validate that packable changes include explicit version bumps from `eng/package-versions.json`
-- Main/release CI packs publishable packages, but nuget.org publication is manual
+- `docs/repo-split-plan.md`: classification and split plan used for the extraction
+- `docs/repository-split-summary.md`: what stayed here versus what moved out
 
 ## Orientation commands
-
-Run these first when you need a current repo map or diagnostics:
 
 ```powershell
 pwsh -File .codex/skills/dotnet-repo-discovery/scripts/discover-dotnet-repo.ps1
 pwsh -File .codex/skills/dotnet-build-diagnostics/scripts/run-build-diagnostics.ps1
-pwsh -File .codex/skills/dotnet-format-analyzers/scripts/run-format-analyzers.ps1
 pwsh -File eng/Resolve-VersionPlan.ps1 -Base origin/main -Head HEAD -AsJson
-pwsh -File eng/Commit-VersionedChanges.ps1 -Message "Add Stripe billing integration"
 ```
 
 When tests are involved:
@@ -186,7 +118,8 @@ dotnet tool restore
 dotnet build Incursa.Platform.CI.slnx -c Release
 dotnet test Incursa.Platform.CI.slnx -c Release
 pwsh -File eng/Generate-PackageCatalog.ps1
-pwsh -File eng/Apply-VersionPlan.ps1 -Base origin/main -Head HEAD
-pwsh -File eng/Test-PackageVersionChanges.ps1 -Base origin/main -Head HEAD
+pwsh -File eng/Initialize-PackageVersions.ps1
 pwsh -File eng/Pack-PublicPackages.ps1 -Configuration Release -OutputPath ./nupkgs
 ```
+
+`Incursa.Platform.TestUtilities` is published for downstream automated test projects. Consume it via NuGet rather than a sibling-repository `ProjectReference`.

@@ -1,6 +1,0 @@
-{
-  "name": "ProofTransactionId",
-  "namespace": "Incursa.Integrations.ElectronicNotary.Proof.Types",
-  "documentation": "Represents a Proof transaction identifier (for example, ot_wd3y67d).",
-  "regex": "^ot_[A-Za-z0-9]+$"
-}

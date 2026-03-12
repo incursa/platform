@@ -1,19 +1,48 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <IsPackable>false</IsPackable>
+    <IsPackable>true</IsPackable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Deterministic>true</Deterministic>
+    <PackageId>Incursa.Platform.TestUtilities</PackageId>
+    <Version>6.0.4</Version>
+    <Authors>Incursa</Authors>
+    <Owners>Incursa</Owners>
+    <Description>Shared test harnesses, fakes, and behavior-test base classes for Incursa Platform provider and integration tests.</Description>
+    <PackageProjectUrl>https://github.com/incursa/platform</PackageProjectUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/incursa/platform</RepositoryUrl>
+    <PackageIcon>nuget_logo.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>incursa;testing;test-utilities;xunit</PackageTags>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\src\Incursa.Platform\Incursa.Platform.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.2" />
     <PackageReference Include="Shouldly" Version="4.3.0" />
     <PackageReference Include="xunit.v3.extensibility.core" Version="3.2.2" />
   </ItemGroup>
-
+  <ItemGroup>
+    <None Include="..\..\assets\nuget_logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Meziantou.Analyzer" Version="2.0.284" />
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.102" />
+    <PackageReference Update="Roslynator.Analyzers" Version="4.15.0" />
+    <PackageReference Update="Roslynator.CodeAnalysis.Analyzers" Version="4.15.0" />
+    <PackageReference Update="Roslynator.Formatting.Analyzers" Version="4.15.0" />
+  </ItemGroup>
 </Project>

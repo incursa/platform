@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
     <PackageId>Incursa.Platform.Dns</PackageId>
-    <Version>6.0.3</Version>
+    <Version>6.0.4</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>Provider-neutral DNS zones, records, and reconciliation services for Incursa Platform.</Description>

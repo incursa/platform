@@ -39,7 +39,7 @@ lanes:
   smoke:
     entrypoint: scripts/quality/run-smoke-tests.ps1
     policy: required
-    intent: curated fast precheck across explicit Category=Smoke tests covering core primitives, storage contracts, InMemory provider coverage, health probe, and webhook processing
+    intent: curated fast precheck across explicit Category=Smoke tests covering core primitives, storage contracts, health probe, and webhook processing
   blocking:
     entrypoint: scripts/quality/run-blocking-tests.ps1
     policy: required
@@ -58,7 +58,6 @@ related:
     - docs/testing-operating-model.md
     - docs/testing-known-issues.md
     - docs/testing/README.md
-    - docs/quality/provider-quality-baseline.md
     - docs/quality/library-hardening-baseline.md
   files:
     - runsettings/smoke.runsettings
@@ -71,16 +70,13 @@ related:
     - scripts/quality/run-quality-evidence.ps1
     - scripts/quality/run-workbench-evidence.ps1
     - scripts/quality/run-library-coverage.ps1
-    - scripts/quality/run-provider-coverage.ps1
     - .github/workflows/commit-ci.yml
     - .github/workflows/main-release-ci-cd.yml
     - .github/workflows/workbench-quality.yml
     - .codex/skills/workbench-quality-evidence/SKILL.md
 intentionalGaps:
-  - subject: Docker-backed SQL Server and Postgres evidence in the default lane
-    rationale: Provider integration tests remain valuable and maintained, but the first four-lane consumer integration keeps required and advisory defaults non-Docker so the happy path stays low-friction on developer machines and CI.
-  - subject: Azure storage evidence that depends on Azurite or environment-provided credentials
-    rationale: Azure provider coverage remains intentionally outside the default Workbench lane because it requires additional setup beyond the baseline repo workflow.
+  - subject: Provider implementation evidence after the repository split
+    rationale: Concrete SQL, Postgres, in-memory provider, email-provider, and vendor-adapter evidence now lives in integrations-public rather than the provider-neutral platform repo.
   - subject: Empty observational lane in the first pass
     rationale: The KnownIssue taxonomy and artifact path are now standardized, but no current tests were retagged until a real runnable product gap is ready to stay visible in automation.
   - subject: Historical test assets outside the maintained CI solution

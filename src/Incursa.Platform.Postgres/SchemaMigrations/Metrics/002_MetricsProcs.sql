@@ -1,1 +1,0 @@
--- No-op for PostgreSQL. Metrics operations are implemented in application SQL.

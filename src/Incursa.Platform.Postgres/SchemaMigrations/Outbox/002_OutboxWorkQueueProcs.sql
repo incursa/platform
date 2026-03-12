@@ -1,1 +1,0 @@
--- No-op for PostgreSQL. Work queue operations are implemented in application SQL.

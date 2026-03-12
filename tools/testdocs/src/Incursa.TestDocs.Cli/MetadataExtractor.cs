@@ -34,14 +34,15 @@ internal static class MetadataExtractor
         {
             metadata.Tags = tagsValue
                 .Split(';', StringSplitOptions.RemoveEmptyEntries)
-                .Select(tag => tag.Trim().ToLowerInvariant())
+                .Select(tag => tag.Trim().ToUpperInvariant())
                 .Where(tag => tag.Length > 0)
                 .Distinct(StringComparer.Ordinal)
                 .OrderBy(tag => tag, StringComparer.Ordinal)
                 .ToArray();
         }
 
-        var originElement = doc.Root.Elements().FirstOrDefault(element => element.Name.LocalName == "origin");
+        var originElement = doc.Root.Elements()
+            .FirstOrDefault(element => string.Equals(element.Name.LocalName, "origin", StringComparison.Ordinal));
         if (originElement != null)
         {
             metadata.Origin = new OriginInfo
@@ -141,7 +142,8 @@ internal static class MetadataExtractor
 
     private static string? GetElementValue(XDocument doc, string elementName, bool preserveWhitespace)
     {
-        var element = doc.Root?.Elements().FirstOrDefault(node => node.Name.LocalName == elementName);
+        var element = doc.Root?.Elements()
+            .FirstOrDefault(node => string.Equals(node.Name.LocalName, elementName, StringComparison.Ordinal));
         if (element == null)
         {
             return null;

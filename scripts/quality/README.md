@@ -5,7 +5,7 @@
   - Runs the curated fast smoke suite from the explicit `Category=Smoke` test set in the maintained smoke projects.
   - Default output: `artifacts/codex/test-results/smoke/`
 - `scripts/quality/run-blocking-tests.ps1`
-  - Runs the required CI-safe non-Docker lane against `Incursa.Platform.CI.slnx`.
+- Runs the required CI-safe non-Docker lane against the platform-only `Incursa.Platform.CI.slnx`.
   - Default output: `artifacts/codex/test-results/blocking/`
 - `scripts/quality/run-observational-tests.ps1`
   - Runs `Category=KnownIssue` tests without blocking the overall process.
@@ -19,15 +19,6 @@
 - `scripts/quality/run-workbench-evidence.ps1`
   - Compatibility entrypoint that forwards to the advisory evidence runner.
   - Default outputs: `artifacts/codex/test-results/advisory/` and `artifacts/codex/coverage/advisory/`
-- `scripts/quality/run-provider-coverage.ps1`
-  - Runs provider-oriented coverage gates for selected targets.
-  - Supports `-Targets` (`InMemory`, `SqlServer`, `Postgres`), line threshold, optional branch threshold (`-BranchThreshold`), and custom output roots.
-- `scripts/quality/run-provider-mutation.ps1`
-  - Runs scoped Stryker mutation tests using provider configs.
-  - Requires local tool `dotnet-stryker`.
-- `scripts/quality/validate-provider-traceability.ps1`
-  - Verifies that provider `PRIM-*` scenario IDs in specs are fully represented in the conformance matrix.
-  - Validates matrix mapped test file paths for `Covered` rows.
 - `scripts/quality/run-library-coverage.ps1`
   - Runs cross-library unit coverage gates for configurable targets.
   - Supports line threshold, optional branch threshold, and custom output roots.
@@ -37,17 +28,7 @@
   - Verifies that cross-library `LIB-*` scenario IDs in specs are fully represented in the library conformance matrix.
   - Validates matrix mapped file paths for `Covered` rows.
 
-## Stryker Configs
-- `scripts/quality/stryker/sqlserver.stryker-config.json`
-- `scripts/quality/stryker/postgres.stryker-config.json`
-- `scripts/quality/stryker/inmemory.stryker-config.json`
-
 ## Related Workflows
-- `.github/workflows/provider-fast-quality.yml`
-- PR/manual fast provider validation for traceability, coverage, and non-Docker tests
-- `.github/workflows/provider-integration.yml`
-- nightly/manual provider integration lane for Docker-backed SQL Server and Postgres validation
-- `.github/workflows/provider-mutation.yml`
 - `.github/workflows/library-fast-quality.yml`
 - PR/manual fast library validation for traceability, coverage, and non-Docker tests
 - `.github/workflows/workbench-quality.yml`

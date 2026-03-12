@@ -50,7 +50,7 @@ public static class PlatformHealthReportFormatter
         };
     }
 
-    private static IReadOnlyDictionary<string, object?>? ExtractData(
+    private static Dictionary<string, object?>? ExtractData(
         IReadOnlyDictionary<string, object> data,
         PlatformHealthDataOptions options)
     {

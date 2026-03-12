@@ -28,9 +28,9 @@ $libraryCoverageTargets = @(
     "Audit",
     "Correlation",
     "HealthProbe",
-    "InMemory",
     "Observability",
     "Operations",
+    "Storage",
     "Webhooks",
     "WebhooksAspNetCore"
 )
@@ -69,11 +69,6 @@ if (-not $SkipCoverage) {
     & (Join-Path $repoRoot "scripts/quality/run-library-coverage.ps1") -LineThreshold 0 -Targets $libraryCoverageTargets -CoverageRoot $libraryCoveragePath -SummaryPath (Join-Path $coveragePath "library-coverage-summary.md")
     if ($LASTEXITCODE -ne 0) {
         throw "Library coverage collection failed with exit code $LASTEXITCODE."
-    }
-
-    & (Join-Path $repoRoot "scripts/quality/run-provider-coverage.ps1") -Targets InMemory -LineThreshold 0 -CoverageRoot $coveragePath -SummaryPath (Join-Path $coveragePath "provider-coverage-summary.md")
-    if ($LASTEXITCODE -ne 0) {
-        throw "Provider coverage collection failed with exit code $LASTEXITCODE."
     }
 }
 

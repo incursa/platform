@@ -21,6 +21,8 @@ function Normalize-RelativePath {
     return $normalized
 }
 
+$ExistingRepoSourcePath = Normalize-RelativePath $RepoRoot
+
 function Get-RelativePath {
     param(
         [Parameter(Mandatory = $true)]
@@ -107,7 +109,7 @@ function Get-ProjectOrigin {
         default {
             return [ordered]@{
                 kind = "existing-repo"
-                sourcePath = "C:/src/incursa/platform"
+                sourcePath = $ExistingRepoSourcePath
             }
         }
     }
@@ -122,6 +124,17 @@ function Get-CatalogMetadata {
     )
 
     if ($ProjectPath -like "tests/*") {
+        if ($ProjectPath -eq "tests/Incursa.Platform.TestUtilities/Incursa.Platform.TestUtilities.csproj") {
+            return [ordered]@{
+                zone = "tests"
+                category = "testing"
+                classification = "public-packable"
+                packable = $true
+                publishable = $true
+                notes = "Reusable test harness package consumed by downstream provider and integration test projects."
+            }
+        }
+
         if ($ProjectPath -match "/Incursa\.Platform\.Smoke\." -or $ProjectName -like "*Smoke*") {
             return [ordered]@{
                 zone = "tests"
@@ -150,7 +163,7 @@ function Get-CatalogMetadata {
             classification = "tool-only"
             packable = $true
             publishable = $true
-            notes = "Tooling/analyzer package intentionally shipped from this monorepo."
+            notes = "Tooling/analyzer package intentionally shipped from this repository."
         }
     }
 
@@ -198,7 +211,7 @@ function Get-CatalogMetadata {
 
             $notes = switch -Regex ($ProjectName) {
                 "\.AspNetCore$" { "Hosting adapter for the public email capability family imported from the Postmark/email integration repo."; break }
-                "\.Postmark$" { "Postmark provider adapter imported from the Postmark/email integration repo and normalized into the platform monorepo."; break }
+                "\.Postmark$" { "Postmark provider adapter imported from the Postmark/email integration repo and normalized into the public repository."; break }
                 "\.(SqlServer|Postgres)$" { "Database provider adapter for the public email capability family imported from the Postmark/email integration repo."; break }
                 default { "Provider-agnostic email capability package imported from the Postmark/email integration repo." }
             }
@@ -220,7 +233,7 @@ function Get-CatalogMetadata {
                 classification = "public-packable"
                 packable = $true
                 publishable = $true
-                notes = "Capability-specific WorkOS audit sink package retained in the public source surface."
+                notes = "Capability-specific WorkOS audit sink package retained in the public repository surface."
             }
         }
 
@@ -236,7 +249,8 @@ function Get-CatalogMetadata {
                 "Incursa.Integrations.ElectronicNotary",
                 "Incursa.Integrations.ElectronicNotary.Abstractions",
                 "Incursa.Integrations.ElectronicNotary.Proof",
-                "Incursa.Integrations.ElectronicNotary.Proof.AspNetCore")) {
+                "Incursa.Integrations.ElectronicNotary.Proof.AspNetCore",
+                "Incursa.Integrations.Stripe")) {
             return [ordered]@{
                 zone = "src"
                 category = "integrations"

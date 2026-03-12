@@ -28,7 +28,6 @@ Entrypoint:
 Current curated project set:
 - `tests/Incursa.Platform.Tests`
 - `tests/Incursa.Platform.Storage.Tests`
-- `tests/Incursa.Platform.InMemory.Tests`
 - `tests/Incursa.Platform.HealthProbe.Tests`
 - `tests/Incursa.Platform.Webhooks.Tests`
 
@@ -36,7 +35,6 @@ Current explicit smoke coverage:
 - `Incursa.Platform.Tests.ExactlyOnceExecutorTests`
 - `Incursa.Platform.Tests.StandardizedHealthEndpointTests`
 - `Incursa.Platform.Storage.Tests.StorageKeyPrimitiveTests`
-- `Incursa.Platform.Tests.InMemoryPublicApiContractTests`
 - `Incursa.Platform.HealthProbe.Tests.HealthProbeExecutionTests`
 - `Incursa.Platform.Webhooks.Tests.WebhookProcessorTests`
 
@@ -98,7 +96,6 @@ Entrypoints:
 Inputs:
 - blocking-style TRX results from the advisory lane
 - curated advisory coverage from `run-library-coverage.ps1`
-- curated advisory provider coverage from `run-provider-coverage.ps1`
 
 Artifacts:
 - `artifacts/codex/test-results/advisory/`

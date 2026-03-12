@@ -7,7 +7,7 @@
     <NoWarn>$(NoWarn);MA0048;MA0008</NoWarn>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <PackageId>Incursa.Platform.Storage</PackageId>
-    <Version>6.0.3</Version>
+    <Version>6.0.4</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>Provider-agnostic storage contracts for records, payloads, work queues, and coordination.</Description>

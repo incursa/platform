@@ -75,7 +75,7 @@ internal static class MarkdownWriter
         {
             var slug = Slugify(category.Category);
             var path = Path.Combine(outDir, "by-category", $"{slug}.md");
-            var tests = report.Tests.Where(test => test.Category == category.Category)
+            var tests = report.Tests.Where(test => string.Equals(test.Category, category.Category, StringComparison.Ordinal))
                 .OrderBy(test => test.TestId, StringComparer.Ordinal)
                 .ToList();
 
@@ -311,13 +311,14 @@ internal static class MarkdownWriter
     private static string Slugify(string value)
     {
         var builder = new StringBuilder();
-        foreach (var ch in value.ToLowerInvariant())
+        foreach (var ch in value)
         {
-            if (char.IsLetterOrDigit(ch))
+            var normalized = char.ToUpperInvariant(ch);
+            if (char.IsLetterOrDigit(normalized))
             {
-                builder.Append(ch);
+                builder.Append(normalized);
             }
-            else if (ch == '.' || ch == ' ' || ch == '_' || ch == '-')
+            else if (normalized == '.' || normalized == ' ' || normalized == '_' || normalized == '-')
             {
                 builder.Append('-');
             }

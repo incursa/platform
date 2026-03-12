@@ -1,81 +1,6 @@
 {
   "packages": [
     {
-      "packageId": "Incursa.Integrations.Cloudflare",
-      "projectPath": "src/Incursa.Integrations.Cloudflare/Incursa.Integrations.Cloudflare.csproj",
-      "version": "6.0.4"
-    },
-    {
-      "packageId": "Incursa.Integrations.Cloudflare.CustomDomains",
-      "projectPath": "src/Incursa.Integrations.Cloudflare.CustomDomains/Incursa.Integrations.Cloudflare.CustomDomains.csproj",
-      "version": "6.0.4"
-    },
-    {
-      "packageId": "Incursa.Integrations.Cloudflare.Dns",
-      "projectPath": "src/Incursa.Integrations.Cloudflare.Dns/Incursa.Integrations.Cloudflare.Dns.csproj",
-      "version": "6.0.4"
-    },
-    {
-      "packageId": "Incursa.Integrations.ElectronicNotary",
-      "projectPath": "src/Incursa.Integrations.ElectronicNotary/Incursa.Integrations.ElectronicNotary.csproj",
-      "version": "6.0.4"
-    },
-    {
-      "packageId": "Incursa.Integrations.ElectronicNotary.Abstractions",
-      "projectPath": "src/Incursa.Integrations.ElectronicNotary.Abstractions/Incursa.Integrations.ElectronicNotary.Abstractions.csproj",
-      "version": "6.0.3"
-    },
-    {
-      "packageId": "Incursa.Integrations.ElectronicNotary.Proof",
-      "projectPath": "src/Incursa.Integrations.ElectronicNotary.Proof/Incursa.Integrations.ElectronicNotary.Proof.csproj",
-      "version": "6.0.3"
-    },
-    {
-      "packageId": "Incursa.Integrations.ElectronicNotary.Proof.AspNetCore",
-      "projectPath": "src/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore.csproj",
-      "version": "6.0.3"
-    },
-    {
-      "packageId": "Incursa.Integrations.Storage.Azure",
-      "projectPath": "src/Incursa.Integrations.Storage.Azure/Incursa.Integrations.Storage.Azure.csproj",
-      "version": "6.0.3"
-    },
-    {
-      "packageId": "Incursa.Integrations.Stripe",
-      "projectPath": "src/Incursa.Integrations.Stripe/Incursa.Integrations.Stripe.csproj",
-      "version": "6.0.2"
-    },
-    {
-      "packageId": "Incursa.Integrations.WorkOS",
-      "projectPath": "src/Incursa.Integrations.WorkOS/Incursa.Integrations.WorkOS.csproj",
-      "version": "6.0.4"
-    },
-    {
-      "packageId": "Incursa.Integrations.WorkOS.Abstractions",
-      "projectPath": "src/Incursa.Integrations.WorkOS.Abstractions/Incursa.Integrations.WorkOS.Abstractions.csproj",
-      "version": "6.0.4"
-    },
-    {
-      "packageId": "Incursa.Integrations.WorkOS.Access",
-      "projectPath": "src/Incursa.Integrations.WorkOS.Access/Incursa.Integrations.WorkOS.Access.csproj",
-      "version": "6.0.4"
-    },
-    {
-      "packageId": "Incursa.Integrations.WorkOS.AspNetCore",
-      "projectPath": "src/Incursa.Integrations.WorkOS.AspNetCore/Incursa.Integrations.WorkOS.AspNetCore.csproj",
-      "version": "6.0.4"
-    },
-    {
-      "packageId": "Incursa.Integrations.WorkOS.Audit",
-      "projectPath": "src/Incursa.Integrations.WorkOS.Audit/Incursa.Integrations.WorkOS.Audit.csproj",
-      "version": "6.0.3"
-    },
-    {
-      "packageId": "Incursa.Integrations.WorkOS.Webhooks",
-      "projectPath": "src/Incursa.Integrations.WorkOS.Webhooks/Incursa.Integrations.WorkOS.Webhooks.csproj",
-      "version": "6.0.3"
-    },
-    {
       "packageId": "Incursa.Platform",
       "projectPath": "src/Incursa.Platform/Incursa.Platform.csproj",
       "version": "6.0.3"
@@ -83,17 +8,17 @@
     {
       "packageId": "Incursa.Platform.Access",
       "projectPath": "src/Incursa.Platform.Access/Incursa.Platform.Access.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Platform.Access.AspNetCore",
       "projectPath": "src/Incursa.Platform.Access.AspNetCore/Incursa.Platform.Access.AspNetCore.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Platform.Access.Razor",
       "projectPath": "src/Incursa.Platform.Access.Razor/Incursa.Platform.Access.Razor.csproj",
-      "version": "6.0.4"
+      "version": "6.0.5"
     },
     {
       "packageId": "Incursa.Platform.Audit",
@@ -108,12 +33,12 @@
     {
       "packageId": "Incursa.Platform.CustomDomains",
       "projectPath": "src/Incursa.Platform.CustomDomains/Incursa.Platform.CustomDomains.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Platform.Dns",
       "projectPath": "src/Incursa.Platform.Dns/Incursa.Platform.Dns.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Platform.Email",
@@ -126,21 +51,6 @@
       "version": "6.0.3"
     },
     {
-      "packageId": "Incursa.Platform.Email.Postgres",
-      "projectPath": "src/Incursa.Platform.Email.Postgres/Incursa.Platform.Email.Postgres.csproj",
-      "version": "6.0.3"
-    },
-    {
-      "packageId": "Incursa.Platform.Email.Postmark",
-      "projectPath": "src/Incursa.Platform.Email.Postmark/Incursa.Platform.Email.Postmark.csproj",
-      "version": "6.0.3"
-    },
-    {
-      "packageId": "Incursa.Platform.Email.SqlServer",
-      "projectPath": "src/Incursa.Platform.Email.SqlServer/Incursa.Platform.Email.SqlServer.csproj",
-      "version": "6.0.3"
-    },
-    {
       "packageId": "Incursa.Platform.ExactlyOnce",
       "projectPath": "src/Incursa.Platform.ExactlyOnce/Incursa.Platform.ExactlyOnce.csproj",
       "version": "6.0.3"
@@ -148,26 +58,21 @@
     {
       "packageId": "Incursa.Platform.Health",
       "projectPath": "src/Incursa.Platform.Health/Incursa.Platform.Health.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Platform.Health.AspNetCore",
       "projectPath": "src/Incursa.Platform.Health.AspNetCore/Incursa.Platform.Health.AspNetCore.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Platform.HealthProbe",
       "projectPath": "src/Incursa.Platform.HealthProbe/Incursa.Platform.HealthProbe.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Platform.Idempotency",
       "projectPath": "src/Incursa.Platform.Idempotency/Incursa.Platform.Idempotency.csproj",
-      "version": "6.0.3"
-    },
-    {
-      "packageId": "Incursa.Platform.InMemory",
-      "projectPath": "src/Incursa.Platform.InMemory/Incursa.Platform.InMemory.csproj",
       "version": "6.0.3"
     },
     {
@@ -211,24 +116,14 @@
       "version": "6.0.3"
     },
     {
-      "packageId": "Incursa.Platform.Postgres",
-      "projectPath": "src/Incursa.Platform.Postgres/Incursa.Platform.Postgres.csproj",
-      "version": "6.0.3"
-    },
-    {
-      "packageId": "Incursa.Platform.SchemaMigrations.Cli",
-      "projectPath": "tools/migrations/src/Incursa.Platform.SchemaMigrations.Cli/Incursa.Platform.SchemaMigrations.Cli.csproj",
-      "version": "6.0.3"
-    },
-    {
-      "packageId": "Incursa.Platform.SqlServer",
-      "projectPath": "src/Incursa.Platform.SqlServer/Incursa.Platform.SqlServer.csproj",
-      "version": "6.0.3"
-    },
-    {
       "packageId": "Incursa.Platform.Storage",
       "projectPath": "src/Incursa.Platform.Storage/Incursa.Platform.Storage.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
+    },
+    {
+      "packageId": "Incursa.Platform.TestUtilities",
+      "projectPath": "tests/Incursa.Platform.TestUtilities/Incursa.Platform.TestUtilities.csproj",
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Platform.Webhooks",
@@ -248,7 +143,7 @@
     {
       "packageId": "Incursa.TestDocs.Cli",
       "projectPath": "tools/testdocs/src/Incursa.TestDocs.Cli/Incursa.TestDocs.Cli.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     }
   ]
 }

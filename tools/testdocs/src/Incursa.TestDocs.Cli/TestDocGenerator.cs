@@ -5,6 +5,7 @@ namespace TestDocs.Cli;
 
 internal sealed class TestDocGenerator
 {
+    private static readonly JsonSerializerOptions JsonOptions = CreateJsonOptions();
     private readonly Options options;
 
     public TestDocGenerator(Options options)
@@ -62,7 +63,7 @@ internal sealed class TestDocGenerator
         return result;
     }
 
-    private static SummaryStats BuildSummary(IReadOnlyCollection<TestRecord> tests)
+    private static SummaryStats BuildSummary(List<TestRecord> tests)
     {
         var compliant = tests.Count(test => test.Status == TestStatus.Compliant);
         var missing = tests.Count(test => test.Status == TestStatus.MissingRequired);
@@ -77,7 +78,7 @@ internal sealed class TestDocGenerator
         };
     }
 
-    private static List<CategoryStats> BuildByCategory(IReadOnlyCollection<TestRecord> tests)
+    private static List<CategoryStats> BuildByCategory(List<TestRecord> tests)
     {
         return tests
             .GroupBy(test => test.Category, StringComparer.Ordinal)
@@ -91,7 +92,7 @@ internal sealed class TestDocGenerator
             .ToList();
     }
 
-    private static List<TagStats> BuildByTag(IReadOnlyCollection<TestRecord> tests)
+    private static List<TagStats> BuildByTag(List<TestRecord> tests)
     {
         return tests
             .SelectMany(test => test.Tags.Select(tag => (Tag: tag, Test: test)))
@@ -105,7 +106,7 @@ internal sealed class TestDocGenerator
             .ToList();
     }
 
-    private static List<ProjectStats> BuildByProject(IReadOnlyCollection<TestRecord> tests)
+    private static List<ProjectStats> BuildByProject(List<TestRecord> tests)
     {
         return tests
             .GroupBy(test => test.Project, StringComparer.Ordinal)
@@ -121,6 +122,12 @@ internal sealed class TestDocGenerator
 
     private static void WriteJson(StatsReport report, string path)
     {
+        var json = JsonSerializer.Serialize(report, JsonOptions);
+        File.WriteAllText(path, json + "\n");
+    }
+
+    private static JsonSerializerOptions CreateJsonOptions()
+    {
         var jsonOptions = new JsonSerializerOptions
         {
             WriteIndented = true,
@@ -128,8 +135,6 @@ internal sealed class TestDocGenerator
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         };
         jsonOptions.Converters.Add(new TestStatusJsonConverter());
-
-        var json = JsonSerializer.Serialize(report, jsonOptions);
-        File.WriteAllText(path, json + "\n");
+        return jsonOptions;
     }
 }

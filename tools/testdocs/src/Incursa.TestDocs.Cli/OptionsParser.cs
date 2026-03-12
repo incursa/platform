@@ -1,4 +1,6 @@
 using System.Globalization;
+using System.Security;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TestDocs.Cli;
 
@@ -59,12 +61,12 @@ internal static class OptionsParser
                         break;
                     case "--format":
                         var formatValue = GetValue(args, ref i, "--format");
-                        format = formatValue.ToLowerInvariant() switch
+                        format = formatValue.ToUpperInvariant() switch
                         {
-                            "markdown" => OutputFormat.Markdown,
-                            "json" => OutputFormat.Json,
-                            "both" => OutputFormat.Both,
-                            _ => throw new ArgumentException("Invalid format. Use markdown, json, or both."),
+                            "MARKDOWN" => OutputFormat.Markdown,
+                            "JSON" => OutputFormat.Json,
+                            "BOTH" => OutputFormat.Both,
+                            _ => throw new ArgumentException("Invalid format. Use markdown, json, or both.", nameof(args)),
                         };
                         break;
                     default:
@@ -87,13 +89,29 @@ internal static class OptionsParser
 
             return true;
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
+        {
+            error = ex.ToString();
+            return false;
+        }
+        catch (IOException ex)
+        {
+            error = ex.ToString();
+            return false;
+        }
+        catch (NotSupportedException ex)
+        {
+            error = ex.ToString();
+            return false;
+        }
+        catch (SecurityException ex)
         {
             error = ex.ToString();
             return false;
         }
     }
 
+    [SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "CLI usage text is intentionally invariant and not localized.")]
     public static void PrintUsage()
     {
         Console.WriteLine("Usage: dotnet run --project tools/testdocs/src/Incursa.TestDocs.Cli -- generate [options]");
@@ -109,7 +127,7 @@ internal static class OptionsParser
     {
         if (index + 1 >= args.Length)
         {
-            throw new ArgumentException($"Missing value for {option}.");
+            throw new ArgumentException($"Missing value for {option}.", nameof(args));
         }
 
         index++;

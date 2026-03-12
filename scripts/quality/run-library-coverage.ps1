@@ -3,7 +3,7 @@ param(
     [int]$BranchThreshold = 0,
     [string]$CoverageRoot = "",
     [string]$SummaryPath = "",
-    [string[]]$Targets = @("Core", "InMemory", "Audit", "Correlation", "Email", "HealthProbe", "Observability", "Operations", "Webhooks", "WebhooksAspNetCore")
+    [string[]]$Targets = @("Core", "Audit", "Correlation", "HealthProbe", "Observability", "Operations", "Storage", "Webhooks", "WebhooksAspNetCore")
 )
 
 Set-StrictMode -Version Latest
@@ -23,13 +23,10 @@ $configuredTargets = @(
     @{ Name = "Core"; Project = "tests/Incursa.Platform.Tests/Incursa.Platform.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform]*" },
     @{ Name = "Audit"; Project = "tests/Incursa.Platform.Audit.Tests/Incursa.Platform.Audit.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform.Audit]*" },
     @{ Name = "Correlation"; Project = "tests/Incursa.Platform.Correlation.Tests/Incursa.Platform.Correlation.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform.Correlation]*" },
-    @{ Name = "Email"; Project = "tests/Incursa.Platform.Email.Tests/Incursa.Platform.Email.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform.Email]*" },
     @{ Name = "HealthProbe"; Project = "tests/Incursa.Platform.HealthProbe.Tests/Incursa.Platform.HealthProbe.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform.HealthProbe]*" },
-    @{ Name = "InMemory"; Project = "tests/Incursa.Platform.InMemory.Tests/Incursa.Platform.InMemory.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform.InMemory]*" },
     @{ Name = "Observability"; Project = "tests/Incursa.Platform.Observability.Tests/Incursa.Platform.Observability.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform.Observability]*" },
     @{ Name = "Operations"; Project = "tests/Incursa.Platform.Operations.Tests/Incursa.Platform.Operations.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform.Operations]*" },
-    @{ Name = "Postgres"; Project = "tests/Incursa.Platform.Postgres.Tests/Incursa.Platform.Postgres.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform.Postgres]*" },
-    @{ Name = "SqlServer"; Project = "tests/Incursa.Platform.SqlServer.Tests/Incursa.Platform.SqlServer.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform.SqlServer]*" },
+    @{ Name = "Storage"; Project = "tests/Incursa.Platform.Storage.Tests/Incursa.Platform.Storage.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform.Storage]*" },
     @{ Name = "Webhooks"; Project = "tests/Incursa.Platform.Webhooks.Tests/Incursa.Platform.Webhooks.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform.Webhooks]*" },
     @{ Name = "WebhooksAspNetCore"; Project = "tests/Incursa.Platform.Webhooks.AspNetCore.Tests/Incursa.Platform.Webhooks.AspNetCore.Tests.csproj"; Filter = 'Category!=Integration&RequiresDocker!=true'; Include = "[Incursa.Platform.Webhooks.AspNetCore]*" }
 )

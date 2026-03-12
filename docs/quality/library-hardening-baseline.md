@@ -7,9 +7,9 @@
 Extend the provider hardening model to every public package with explicit, traceable quality requirements and incremental ratcheting.
 
 ## Scope and Priority
-- Priority 1: `src/Incursa.Platform.InMemory`, `src/Incursa.Platform.SqlServer`, `src/Incursa.Platform.Postgres`
-- Priority 2: `src/Incursa.Platform`, `src/Incursa.Platform.Email`, `src/Incursa.Platform.Webhooks`, `src/Incursa.Platform.Operations`, `src/Incursa.Platform.Observability`
-- Priority 3: remaining extension/adapter libraries
+- Priority 1: `src/Incursa.Platform`, `src/Incursa.Platform.Email`, `src/Incursa.Platform.Webhooks`, `src/Incursa.Platform.Operations`, `src/Incursa.Platform.Observability`
+- Priority 2: remaining retained capability and hosting packages
+- Priority 3: staged follow-up work in `incubating/`
 
 ## Current Guardrails
 - Library spec: `specs/libraries/library-interface-quality-spec.md`
@@ -25,7 +25,6 @@ Extend the provider hardening model to every public package with explicit, trace
 
 ## Incremental Ratchet Plan
 1. Stabilize `library-fast-quality` on PRs for two consecutive cycles.
-2. Expand provider fuzz depth (inbox/scheduler state-machine invariants) for SQL Server and Postgres.
-3. Add dedicated Idempotency and Metrics tests and convert matrix `Missing` entries to `Covered`.
-4. Add mutation configs for Operations and Webhooks, then mark them required in `run-library-mutation.ps1`.
-5. Raise line coverage threshold from 20 to 30 after sustained green runs.
+2. Add dedicated Idempotency and Metrics tests and convert matrix `Missing` entries to `Covered`.
+3. Add mutation configs for Operations and Webhooks, then mark them required in `run-library-mutation.ps1`.
+4. Raise line coverage threshold from 20 to 30 after sustained green runs.

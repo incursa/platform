@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Incursa.Platform.Storage;
 
 /// <summary>
@@ -62,6 +64,7 @@ public sealed record StorageBatch<TRecord>
     public IReadOnlyList<StorageBatchOperation<TRecord>> Operations { get; }
 }
 
+[SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "Factory methods are part of the public batch operation API.")]
 /// <summary>
 /// Represents an individual operation inside a record batch.
 /// </summary>
