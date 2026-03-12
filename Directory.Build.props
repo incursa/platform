@@ -1,5 +1,5 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Sdk Name="DotNet.ReproducibleBuilds.Isolated" />
+  <Sdk Name="DotNet.ReproducibleBuilds.Isolated" Version="2.0.2" />
 
   <PropertyGroup>
     <NoWarn>$(NoWarn);MA0051;CA1848;CA1873;NU5104</NoWarn>

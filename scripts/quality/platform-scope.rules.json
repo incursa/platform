@@ -3,7 +3,8 @@
     "Postmark",
     "WorkOS",
     "Cloudflare",
-    "ElectronicNotary"
+    "ElectronicNotary",
+    "Stripe"
   ],
   "disallowedProviderCandidates": [
     "Postmark",

@@ -65,6 +65,7 @@ Public integrations:
 - `src/Incursa.Integrations.ElectronicNotary.Abstractions/`
 - `src/Incursa.Integrations.ElectronicNotary.Proof/`
 - `src/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore/`
+- `src/Incursa.Integrations.Stripe/`
 - `src/Incursa.Platform.Email.Postmark/`
 
 Hosting adapters:

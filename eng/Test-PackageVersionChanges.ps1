@@ -64,13 +64,17 @@ foreach ($projectPath in @($impact.publishProjectPaths | Sort-Object)) {
     $currentVersion = $currentVersions[$packageId]
     $baseVersion = $baseVersions[$packageId]
 
-    if ([string]::IsNullOrWhiteSpace($currentVersion) -or [string]::IsNullOrWhiteSpace($baseVersion)) {
+    if ([string]::IsNullOrWhiteSpace($currentVersion)) {
         $missingBumps.Add([pscustomobject]@{
                 packageId = $packageId
                 projectPath = $projectPath
                 currentVersion = $currentVersion
                 baseVersion = $baseVersion
             }) | Out-Null
+        continue
+    }
+
+    if ([string]::IsNullOrWhiteSpace($baseVersion)) {
         continue
     }
 

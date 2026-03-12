@@ -36,14 +36,14 @@
       "version": "6.0.3"
     },
     {
-      "packageId": "Incursa.Integrations.Stripe",
-      "projectPath": "src/Incursa.Integrations.Stripe/Incursa.Integrations.Stripe.csproj",
-      "version": "6.0.0"
-    },
-    {
       "packageId": "Incursa.Integrations.Storage.Azure",
       "projectPath": "src/Incursa.Integrations.Storage.Azure/Incursa.Integrations.Storage.Azure.csproj",
       "version": "6.0.3"
+    },
+    {
+      "packageId": "Incursa.Integrations.Stripe",
+      "projectPath": "src/Incursa.Integrations.Stripe/Incursa.Integrations.Stripe.csproj",
+      "version": "6.0.1"
     },
     {
       "packageId": "Incursa.Integrations.WorkOS",
