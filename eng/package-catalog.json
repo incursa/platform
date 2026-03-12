@@ -115,6 +115,20 @@
       "notes": "Capability-specific provider adapter package."
     },
     {
+      "projectPath": "src/Incursa.Integrations.Stripe/Incursa.Integrations.Stripe.csproj",
+      "packageId": "Incursa.Integrations.Stripe",
+      "zone": "src",
+      "category": "integrations",
+      "classification": "public-packable",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Reusable Stripe billing provider adapter for checkout, customer portal, webhook, and subscription access flows."
+    },
+    {
       "projectPath": "src/Incursa.Integrations.Storage.Azure/Incursa.Integrations.Storage.Azure.csproj",
       "packageId": "Incursa.Integrations.Storage.Azure",
       "zone": "src",
