@@ -44,6 +44,7 @@
     <Project Path="src/Incursa.Integrations.ElectronicNotary.Abstractions/Incursa.Integrations.ElectronicNotary.Abstractions.csproj" />
     <Project Path="src/Incursa.Integrations.ElectronicNotary.Proof/Incursa.Integrations.ElectronicNotary.Proof.csproj" />
     <Project Path="src/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore.csproj" />
+    <Project Path="src/Incursa.Integrations.Stripe/Incursa.Integrations.Stripe.csproj" />
     <Project Path="src/Incursa.Integrations.WorkOS/Incursa.Integrations.WorkOS.csproj" />
     <Project Path="src/Incursa.Integrations.WorkOS.Abstractions/Incursa.Integrations.WorkOS.Abstractions.csproj" />
     <Project Path="src/Incursa.Integrations.WorkOS.Access/Incursa.Integrations.WorkOS.Access.csproj" />

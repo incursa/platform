@@ -50,6 +50,17 @@ New-Item -ItemType Directory -Force -Path $OutputPath | Out-Null
 
 foreach ($project in $selectedProjects | Sort-Object projectPath) {
     $projectPath = Join-Path $RepoRoot $project.projectPath
+    $projectDirectory = Split-Path -Parent $projectPath
+    $assetsPath = Join-Path $projectDirectory "obj/project.assets.json"
+
+    if (-not (Test-Path -LiteralPath $assetsPath)) {
+        Write-Host "Restoring $($project.projectPath)"
+        & dotnet restore $projectPath --nologo
+        if ($LASTEXITCODE -ne 0) {
+            throw "dotnet restore failed for '$($project.projectPath)' with exit code $LASTEXITCODE."
+        }
+    }
+
     $arguments = @(
         "pack",
         $projectPath,
