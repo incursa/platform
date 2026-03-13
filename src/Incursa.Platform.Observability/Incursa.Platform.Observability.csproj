@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
     <PackageId>Incursa.Platform.Observability</PackageId>
-    <Version>6.0.3</Version>
+    <Version>6.0.4</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>Shared observability primitives for platform events, tags, and recovery snapshots.</Description>

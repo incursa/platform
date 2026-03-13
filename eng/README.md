@@ -18,6 +18,8 @@ This directory holds monorepo governance and release helpers for `Incursa.Platfo
   Resolves the package version bump plan for changed packable projects and their packable dependents.
 - `Apply-VersionPlan.ps1`
   Applies the resolved version bump plan to the manifest and packable project files.
+- `Invoke-PreCommitVersionPlan.ps1`
+  Resolves the staged package version plan, applies any required bumps, stages the generated manifest/project updates, and re-validates the staged snapshot.
 - `Commit-VersionedChanges.ps1`
   Stages a local snapshot, applies the version plan, validates staged bumps, creates a commit, and can optionally push.
 - `Set-PackageVersionBaseline.ps1`
@@ -34,6 +36,7 @@ pwsh -File eng/Generate-PackageCatalog.ps1
 pwsh -File eng/Resolve-AffectedProjects.ps1 -Base origin/main -Head HEAD
 pwsh -File eng/Resolve-VersionPlan.ps1 -Base origin/main -Head HEAD -AsJson
 pwsh -File eng/Apply-VersionPlan.ps1 -Base origin/main -Head HEAD
+pwsh -File eng/Invoke-PreCommitVersionPlan.ps1
 pwsh -File eng/Commit-VersionedChanges.ps1 -Message "Add Stripe billing integration"
 pwsh -File eng/Test-PackageVersionChanges.ps1 -Base origin/main -Head HEAD
 pwsh -File eng/Set-PackageVersionBaseline.ps1 -Version 6.0.0
@@ -44,10 +47,10 @@ pwsh -File eng/Pack-PublicPackages.ps1 -Configuration Release -OutputPath ./nupk
 
 ## Recommended workflow
 
-1. Run `pwsh -File eng/Apply-VersionPlan.ps1 -Base origin/main -Head HEAD` before packaging or opening a PR.
-2. Review the package/version changes written to `eng/package-versions.json` and the affected `.csproj` files.
-3. Commit those version changes alongside the code changes.
-4. Enable the local pre-commit hook with `pwsh -File scripts/setup-git-hooks.ps1`.
+1. Enable the local pre-commit hook with `pwsh -File scripts/setup-git-hooks.ps1`.
+2. Either run `pwsh -File eng/Apply-VersionPlan.ps1 -Base origin/main -Head HEAD` yourself before review, or let the pre-commit hook run `pwsh -File eng/Invoke-PreCommitVersionPlan.ps1` against the staged snapshot.
+3. Review the package/version changes written to `eng/package-versions.json` and the affected `.csproj` files.
+4. Commit those version changes alongside the code changes.
 
 ## One-command local workflow
 

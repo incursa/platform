@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 set -eu
 
-pwsh -File eng/Test-PackageVersionChanges.ps1 -Staged
+pwsh -NoProfile -File eng/Invoke-PreCommitVersionPlan.ps1

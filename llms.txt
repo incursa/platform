@@ -91,6 +91,7 @@ Moved to `integrations-public`:
 - `eng/Resolve-AffectedProjects.ps1`: calculates changed projects and reverse dependencies
 - `eng/Resolve-VersionPlan.ps1`: calculates semantic version bumps for changed packable projects and reverse dependents
 - `eng/Apply-VersionPlan.ps1`: applies the resolved version plan to the manifest and `.csproj` files
+- `eng/Invoke-PreCommitVersionPlan.ps1`: pre-commit helper that resolves staged impact, auto-applies required version bumps, stages the generated manifest/project updates, and re-validates the result
 - `eng/Test-PackageVersionChanges.ps1`: validates that affected packable projects include version bumps
 - `eng/Pack-PublicPackages.ps1`: packs only catalog-allowlisted projects
 - `docs/repo-split-plan.md`: classification and split plan used for the extraction
@@ -102,6 +103,7 @@ Moved to `integrations-public`:
 pwsh -File .codex/skills/dotnet-repo-discovery/scripts/discover-dotnet-repo.ps1
 pwsh -File .codex/skills/dotnet-build-diagnostics/scripts/run-build-diagnostics.ps1
 pwsh -File eng/Resolve-VersionPlan.ps1 -Base origin/main -Head HEAD -AsJson
+pwsh -File eng/Invoke-PreCommitVersionPlan.ps1
 ```
 
 When tests are involved:

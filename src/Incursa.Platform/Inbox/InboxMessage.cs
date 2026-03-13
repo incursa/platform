@@ -22,51 +22,51 @@ public sealed record InboxMessage
     /// <summary>
     /// Gets the message identifier.
     /// </summary>
-    public string MessageId { get; internal init; } = string.Empty;
+    public string MessageId { get; init; } = string.Empty;
 
     /// <summary>
     /// Gets the source system for the message.
     /// </summary>
-    public string Source { get; internal init; } = string.Empty;
+    public string Source { get; init; } = string.Empty;
 
     /// <summary>
     /// Gets the message topic.
     /// </summary>
-    public string Topic { get; internal init; } = string.Empty;
+    public string Topic { get; init; } = string.Empty;
 
     /// <summary>
     /// Gets the message payload.
     /// </summary>
-    public string Payload { get; internal init; } = string.Empty;
+    public string Payload { get; init; } = string.Empty;
 
     /// <summary>
     /// Gets the payload hash when available.
     /// </summary>
     [SuppressMessage("Design", "CA1819:Properties should not return arrays", Justification = "Hash is stored as raw bytes.")]
-    public byte[]? Hash { get; internal init; }
+    public byte[]? Hash { get; init; }
 
     /// <summary>
     /// Gets the processing attempt count.
     /// </summary>
-    public int Attempt { get; internal init; }
+    public int Attempt { get; init; }
 
     /// <summary>
     /// Gets the first seen timestamp in UTC.
     /// </summary>
-    public DateTimeOffset FirstSeenUtc { get; internal init; }
+    public DateTimeOffset FirstSeenUtc { get; init; }
 
     /// <summary>
     /// Gets the last seen timestamp in UTC.
     /// </summary>
-    public DateTimeOffset LastSeenUtc { get; internal init; }
+    public DateTimeOffset LastSeenUtc { get; init; }
 
     /// <summary>
     /// Gets the due time in UTC, when scheduled.
     /// </summary>
-    public DateTimeOffset? DueTimeUtc { get; internal init; }
+    public DateTimeOffset? DueTimeUtc { get; init; }
 
     /// <summary>
     /// Gets the last error message, if any.
     /// </summary>
-    public string? LastError { get; internal init; }
+    public string? LastError { get; init; }
 }

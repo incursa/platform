@@ -24,7 +24,7 @@ public sealed record OutboxMessage
     /// <summary>
     /// Gets the outbox work item identifier.
     /// </summary>
-    public OutboxWorkItemIdentifier Id { get; internal init; }
+    public OutboxWorkItemIdentifier Id { get; init; }
 
     /// <summary>
     /// Gets the message payload.
@@ -39,45 +39,45 @@ public sealed record OutboxMessage
     /// <summary>
     /// Gets the creation timestamp.
     /// </summary>
-    public DateTimeOffset CreatedAt { get; internal init; }
+    public DateTimeOffset CreatedAt { get; init; }
 
     /// <summary>
     /// Gets a value indicating whether the message has been processed.
     /// </summary>
-    public bool IsProcessed { get; internal init; }
+    public bool IsProcessed { get; init; }
 
     /// <summary>
     /// Gets the processed timestamp, if any.
     /// </summary>
-    public DateTimeOffset? ProcessedAt { get; internal init; }
+    public DateTimeOffset? ProcessedAt { get; init; }
 
     /// <summary>
     /// Gets the processor identifier, if any.
     /// </summary>
-    public string? ProcessedBy { get; internal init; }
+    public string? ProcessedBy { get; init; }
 
     /// <summary>
     /// Gets the retry count.
     /// </summary>
-    public int RetryCount { get; internal init; }
+    public int RetryCount { get; init; }
 
     /// <summary>
     /// Gets the last error message, if any.
     /// </summary>
-    public string? LastError { get; internal init; }
+    public string? LastError { get; init; }
 
     /// <summary>
     /// Gets the message identifier.
     /// </summary>
-    public OutboxMessageIdentifier MessageId { get; internal init; }
+    public OutboxMessageIdentifier MessageId { get; init; }
 
     /// <summary>
     /// Gets the correlation identifier.
     /// </summary>
-    public string? CorrelationId { get; internal init; }
+    public string? CorrelationId { get; init; }
 
     /// <summary>
     /// Gets the due time in UTC, when scheduled.
     /// </summary>
-    public DateTimeOffset? DueTimeUtc { get; internal init; }
+    public DateTimeOffset? DueTimeUtc { get; init; }
 }

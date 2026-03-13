@@ -27,25 +27,25 @@ public sealed record OutboxJoinMember
     /// <summary>
     /// Gets the join identifier.
     /// </summary>
-    public JoinIdentifier JoinId { get; internal init; }
+    public JoinIdentifier JoinId { get; init; }
 
     /// <summary>
     /// Gets the outbox message identifier.
     /// </summary>
-    public OutboxMessageIdentifier OutboxMessageId { get; internal init; }
+    public OutboxMessageIdentifier OutboxMessageId { get; init; }
 
     /// <summary>
     /// Gets the timestamp when this association was created.
     /// </summary>
-    public DateTimeOffset CreatedUtc { get; internal init; }
+    public DateTimeOffset CreatedUtc { get; init; }
 
     /// <summary>
     /// Gets the timestamp when this member was marked as completed, or null if not completed.
     /// </summary>
-    public DateTimeOffset? CompletedAt { get; internal init; }
+    public DateTimeOffset? CompletedAt { get; init; }
 
     /// <summary>
     /// Gets the timestamp when this member was marked as failed, or null if not failed.
     /// </summary>
-    public DateTimeOffset? FailedAt { get; internal init; }
+    public DateTimeOffset? FailedAt { get; init; }
 }
