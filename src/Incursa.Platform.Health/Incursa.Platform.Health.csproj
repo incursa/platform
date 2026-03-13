@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
     <PackageId>Incursa.Platform.Health</PackageId>
-    <Version>6.0.5</Version>
+    <Version>6.0.6</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>Standardized health check buckets, registration helpers, and health report execution for Incursa Platform.</Description>
@@ -21,10 +21,10 @@
     <NoWarn>$(NoWarn);CS1591;NU5123</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="10.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="10.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.5" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Incursa.Platform\Incursa.Platform.csproj" />
@@ -48,8 +48,9 @@
     </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Update="Meziantou.Analyzer" Version="2.0.284" />
-    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.102" />
+    <PackageReference Update="DotNet.ReproducibleBuilds" Version="2.0.2" />
+    <PackageReference Update="Meziantou.Analyzer" Version="3.0.23" />
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.201" />
     <PackageReference Update="Roslynator.Analyzers" Version="4.15.0" />
     <PackageReference Update="Roslynator.CodeAnalysis.Analyzers" Version="4.15.0" />
     <PackageReference Update="Roslynator.Formatting.Analyzers" Version="4.15.0" />

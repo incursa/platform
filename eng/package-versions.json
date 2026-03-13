@@ -3,147 +3,147 @@
     {
       "packageId": "Incursa.Platform",
       "projectPath": "src/Incursa.Platform/Incursa.Platform.csproj",
-      "version": "6.0.4"
+      "version": "6.0.5"
     },
     {
       "packageId": "Incursa.Platform.Access",
       "projectPath": "src/Incursa.Platform.Access/Incursa.Platform.Access.csproj",
-      "version": "6.0.4"
+      "version": "6.0.5"
     },
     {
       "packageId": "Incursa.Platform.Access.AspNetCore",
       "projectPath": "src/Incursa.Platform.Access.AspNetCore/Incursa.Platform.Access.AspNetCore.csproj",
-      "version": "6.0.4"
+      "version": "6.0.5"
     },
     {
       "packageId": "Incursa.Platform.Access.Razor",
       "projectPath": "src/Incursa.Platform.Access.Razor/Incursa.Platform.Access.Razor.csproj",
-      "version": "6.0.5"
+      "version": "6.0.6"
     },
     {
       "packageId": "Incursa.Platform.Audit",
       "projectPath": "src/Incursa.Platform.Audit/Incursa.Platform.Audit.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Platform.Correlation",
       "projectPath": "src/Incursa.Platform.Correlation/Incursa.Platform.Correlation.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Platform.CustomDomains",
       "projectPath": "src/Incursa.Platform.CustomDomains/Incursa.Platform.CustomDomains.csproj",
-      "version": "6.0.4"
+      "version": "6.0.5"
     },
     {
       "packageId": "Incursa.Platform.Dns",
       "projectPath": "src/Incursa.Platform.Dns/Incursa.Platform.Dns.csproj",
-      "version": "6.0.4"
+      "version": "6.0.5"
     },
     {
       "packageId": "Incursa.Platform.Email",
       "projectPath": "src/Incursa.Platform.Email/Incursa.Platform.Email.csproj",
-      "version": "6.0.4"
+      "version": "6.0.5"
     },
     {
       "packageId": "Incursa.Platform.Email.AspNetCore",
       "projectPath": "src/Incursa.Platform.Email.AspNetCore/Incursa.Platform.Email.AspNetCore.csproj",
-      "version": "6.0.4"
+      "version": "6.0.5"
     },
     {
       "packageId": "Incursa.Platform.ExactlyOnce",
       "projectPath": "src/Incursa.Platform.ExactlyOnce/Incursa.Platform.ExactlyOnce.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Platform.Health",
       "projectPath": "src/Incursa.Platform.Health/Incursa.Platform.Health.csproj",
-      "version": "6.0.5"
+      "version": "6.0.6"
     },
     {
       "packageId": "Incursa.Platform.Health.AspNetCore",
       "projectPath": "src/Incursa.Platform.Health.AspNetCore/Incursa.Platform.Health.AspNetCore.csproj",
-      "version": "6.0.5"
+      "version": "6.0.6"
     },
     {
       "packageId": "Incursa.Platform.HealthProbe",
       "projectPath": "src/Incursa.Platform.HealthProbe/Incursa.Platform.HealthProbe.csproj",
-      "version": "6.0.5"
+      "version": "6.0.6"
     },
     {
       "packageId": "Incursa.Platform.Idempotency",
       "projectPath": "src/Incursa.Platform.Idempotency/Incursa.Platform.Idempotency.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Platform.Metrics.AspNetCore",
       "projectPath": "src/Incursa.Platform.Metrics.AspNetCore/Incursa.Platform.Metrics.AspNetCore.csproj",
-      "version": "6.0.4"
+      "version": "6.0.5"
     },
     {
       "packageId": "Incursa.Platform.Metrics.HttpServer",
       "projectPath": "src/Incursa.Platform.Metrics.HttpServer/Incursa.Platform.Metrics.HttpServer.csproj",
-      "version": "6.0.4"
+      "version": "6.0.5"
     },
     {
       "packageId": "Incursa.Platform.Modularity",
       "projectPath": "src/Incursa.Platform.Modularity/Incursa.Platform.Modularity.csproj",
-      "version": "6.0.4"
+      "version": "6.0.5"
     },
     {
       "packageId": "Incursa.Platform.Modularity.AspNetCore",
       "projectPath": "src/Incursa.Platform.Modularity.AspNetCore/Incursa.Platform.Modularity.AspNetCore.csproj",
-      "version": "6.0.4"
+      "version": "6.0.5"
     },
     {
       "packageId": "Incursa.Platform.Modularity.Razor",
       "projectPath": "src/Incursa.Platform.Modularity.Razor/Incursa.Platform.Modularity.Razor.csproj",
-      "version": "6.0.4"
+      "version": "6.0.5"
     },
     {
       "packageId": "Incursa.Platform.Observability",
       "projectPath": "src/Incursa.Platform.Observability/Incursa.Platform.Observability.csproj",
-      "version": "6.0.4"
+      "version": "6.0.5"
     },
     {
       "packageId": "Incursa.Platform.Observability.Analyzers",
       "projectPath": "tools/observability/src/Incursa.Platform.Observability.Analyzers/Incursa.Platform.Observability.Analyzers.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Platform.Operations",
       "projectPath": "src/Incursa.Platform.Operations/Incursa.Platform.Operations.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.Platform.Storage",
       "projectPath": "src/Incursa.Platform.Storage/Incursa.Platform.Storage.csproj",
-      "version": "6.0.4"
+      "version": "6.0.5"
     },
     {
       "packageId": "Incursa.Platform.TestUtilities",
       "projectPath": "tests/Incursa.Platform.TestUtilities/Incursa.Platform.TestUtilities.csproj",
-      "version": "6.0.5"
+      "version": "6.0.6"
     },
     {
       "packageId": "Incursa.Platform.Webhooks",
       "projectPath": "src/Incursa.Platform.Webhooks/Incursa.Platform.Webhooks.csproj",
-      "version": "6.0.4"
+      "version": "6.0.5"
     },
     {
       "packageId": "Incursa.Platform.Webhooks.AspNetCore",
       "projectPath": "src/Incursa.Platform.Webhooks.AspNetCore/Incursa.Platform.Webhooks.AspNetCore.csproj",
-      "version": "6.0.4"
+      "version": "6.0.5"
     },
     {
       "packageId": "Incursa.TestDocs.Analyzers",
       "projectPath": "tools/testdocs/src/Incursa.TestDocs.Analyzers/Incursa.TestDocs.Analyzers.csproj",
-      "version": "6.0.3"
+      "version": "6.0.4"
     },
     {
       "packageId": "Incursa.TestDocs.Cli",
       "projectPath": "tools/testdocs/src/Incursa.TestDocs.Cli/Incursa.TestDocs.Cli.csproj",
-      "version": "6.0.4"
+      "version": "6.0.5"
     }
   ]
 }

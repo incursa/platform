@@ -7,7 +7,7 @@
     <NoWarn>$(NoWarn);MA0048;MA0008</NoWarn>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <PackageId>Incursa.Platform.Storage</PackageId>
-    <Version>6.0.4</Version>
+    <Version>6.0.5</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>Provider-agnostic storage contracts for records, payloads, work queues, and coordination.</Description>
@@ -32,12 +32,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Incursa.Generators" Version="2026.2.19.38" PrivateAssets="all" />
+    <PackageReference Include="Incursa.Generators" Version="2026.3.9.47" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Update="DotNet.ReproducibleBuilds" Version="2.0.2" />
     <PackageReference Update="DotNet.ReproducibleBuilds.Isolated" Version="1.2.39" />
-    <PackageReference Update="Meziantou.Analyzer" Version="2.0.284" />
-    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.102" />
+    <PackageReference Update="Meziantou.Analyzer" Version="3.0.23" />
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.201" />
     <PackageReference Update="Roslynator.Analyzers" Version="4.15.0" />
     <PackageReference Update="Roslynator.CodeAnalysis.Analyzers" Version="4.15.0" />
     <PackageReference Update="Roslynator.Formatting.Analyzers" Version="4.15.0" />

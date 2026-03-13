@@ -69,11 +69,11 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(MSBuildProjectExtension)' == '.csproj' AND '$(MSBuildProjectName)' != 'Incursa.Platform.Observability.Analyzers' AND '$(MSBuildProjectName)' != 'Incursa.Platform.Smoke.AppHost'">
+  <!-- <ItemGroup Condition="'$(MSBuildProjectExtension)' == '.csproj' AND '$(MSBuildProjectName)' != 'Incursa.Platform.Observability.Analyzers' AND '$(MSBuildProjectName)' != 'Incursa.Platform.Smoke.AppHost'">
     <ProjectReference Include="$(MSBuildThisFileDirectory)tools/observability/src/Incursa.Platform.Observability.Analyzers/Incursa.Platform.Observability.Analyzers.csproj"
                       OutputItemType="Analyzer"
                       ReferenceOutputAssembly="false" />
-  </ItemGroup>
+  </ItemGroup> -->
 
   <!-- Keep Test Project settings -->
   <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('Tests')) OR $(MSBuildProjectName.EndsWith('Test'))">

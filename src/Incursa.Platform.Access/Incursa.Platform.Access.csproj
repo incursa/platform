@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
     <PackageId>Incursa.Platform.Access</PackageId>
-    <Version>6.0.4</Version>
+    <Version>6.0.5</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>Provider-neutral access registry, evaluation, and storage-backed administration for Incursa Platform.</Description>
@@ -24,7 +24,7 @@
     <ProjectReference Include="..\Incursa.Platform.Storage\Incursa.Platform.Storage.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.5" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\assets\nuget_logo.png">
@@ -40,5 +40,10 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>Incursa.Platform.Access.Tests</_Parameter1>
     </AssemblyAttribute>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="DotNet.ReproducibleBuilds" Version="2.0.2" />
+    <PackageReference Update="Meziantou.Analyzer" Version="3.0.23" />
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.201" />
   </ItemGroup>
 </Project>

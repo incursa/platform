@@ -19,16 +19,21 @@
     <OutputItemType>Analyzer</OutputItemType>
     <PackageType>Analyzer</PackageType>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-    <Version>6.0.3</Version>
+    <Version>6.0.4</Version>
   </PropertyGroup>
   <ItemGroup>
     <!-- Required for Roslyn analyzer APIs. -->
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.3.0" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
     <None Include="..\..\..\..\assets\nuget_logo.png" Pack="true" PackagePath="\" />
     <AdditionalFiles Include="AnalyzerReleases.Shipped.md" />
     <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="DotNet.ReproducibleBuilds" Version="2.0.2" />
+    <PackageReference Update="Meziantou.Analyzer" Version="3.0.23" />
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.201" />
   </ItemGroup>
 </Project>

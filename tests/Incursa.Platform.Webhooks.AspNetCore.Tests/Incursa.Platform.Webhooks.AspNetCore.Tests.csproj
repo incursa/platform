@@ -21,12 +21,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="10.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="10.0.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="Meziantou.Analyzer" Version="2.0.284" />
-    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.102" />
+    <PackageReference Update="coverlet.collector" Version="8.0.0" />
+    <PackageReference Update="coverlet.msbuild" Version="8.0.0" />
+    <PackageReference Update="DotNet.ReproducibleBuilds" Version="2.0.2" />
+    <PackageReference Update="Meziantou.Analyzer" Version="3.0.23" />
+    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.201" />
     <PackageReference Update="Roslynator.Analyzers" Version="4.15.0" />
     <PackageReference Update="Roslynator.CodeAnalysis.Analyzers" Version="4.15.0" />
     <PackageReference Update="Roslynator.Formatting.Analyzers" Version="4.15.0" />

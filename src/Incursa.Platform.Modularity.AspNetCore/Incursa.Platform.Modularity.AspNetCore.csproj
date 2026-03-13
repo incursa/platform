@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
     <PackageId>Incursa.Platform.Modularity.AspNetCore</PackageId>
-    <Version>6.0.4</Version>
+    <Version>6.0.5</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>ASP.NET Core endpoint integrations for Incursa Platform Modularity engines.</Description>
@@ -40,8 +40,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Update="Meziantou.Analyzer" Version="2.0.284" />
-    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.102" />
+    <PackageReference Update="DotNet.ReproducibleBuilds" Version="2.0.2" />
+    <PackageReference Update="Meziantou.Analyzer" Version="3.0.23" />
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.201" />
     <PackageReference Update="Roslynator.Analyzers" Version="4.15.0" />
     <PackageReference Update="Roslynator.CodeAnalysis.Analyzers" Version="4.15.0" />
     <PackageReference Update="Roslynator.Formatting.Analyzers" Version="4.15.0" />

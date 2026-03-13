@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
     <PackageId>Incursa.Platform.Metrics.AspNetCore</PackageId>
-    <Version>6.0.4</Version>
+    <Version>6.0.5</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>ASP.NET Core OpenTelemetry and Prometheus export helpers for Incursa Platform metrics.</Description>
@@ -28,10 +28,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="1.9.0-alpha.1" />
-    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.14.0" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.14.0" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.15.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.15.1" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Process" Version="0.5.0-beta.1" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.14.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.15.0" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\assets\nuget_logo.png">
@@ -44,8 +44,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Update="Meziantou.Analyzer" Version="2.0.284" />
-    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.102" />
+    <PackageReference Update="DotNet.ReproducibleBuilds" Version="2.0.2" />
+    <PackageReference Update="Meziantou.Analyzer" Version="3.0.23" />
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.201" />
     <PackageReference Update="Roslynator.Analyzers" Version="4.15.0" />
     <PackageReference Update="Roslynator.CodeAnalysis.Analyzers" Version="4.15.0" />
     <PackageReference Update="Roslynator.Formatting.Analyzers" Version="4.15.0" />
