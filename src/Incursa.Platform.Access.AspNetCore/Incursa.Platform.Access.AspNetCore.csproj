@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
     <PackageId>Incursa.Platform.Access.AspNetCore</PackageId>
-    <Version>6.0.5</Version>
+    <Version>6.0.6</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>ASP.NET Core request-time access context integration for Incursa.Platform.Access.</Description>

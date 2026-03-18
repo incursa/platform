@@ -18,7 +18,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>testdocs;documentation;mstest;xunit;nunit</PackageTags>
     <RepositoryType>git</RepositoryType>
-    <Version>6.0.5</Version>
+    <Version>6.0.6</Version>
   </PropertyGroup>
   <ItemGroup>
     <!-- Required for Roslyn syntax parsing of XML docs. -->

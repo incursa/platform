@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
     <PackageId>Incursa.Platform.Email</PackageId>
-    <Version>6.0.5</Version>
+    <Version>6.0.6</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>Outbox-driven email delivery primitives, policies, and provider abstractions for Incursa Platform.</Description>

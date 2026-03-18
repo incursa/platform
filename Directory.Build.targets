@@ -3,4 +3,16 @@
     <!-- Never emit NuGet packages as a side effect of normal builds. -->
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(MSBuildProjectExtension)' == '.csproj' and '$(IsPackable)' == 'true'">
+    <!-- Public package metadata defaults for NuGet publication. -->
+    <Authors>Samuel McAravey</Authors>
+    <Company>Incursa</Company>
+    <PackageProjectUrl>https://github.com/incursa/platform</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/incursa/platform</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIcon>nuget_logo.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+  </PropertyGroup>
 </Project>

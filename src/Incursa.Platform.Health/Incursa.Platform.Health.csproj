@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
     <PackageId>Incursa.Platform.Health</PackageId>
-    <Version>6.0.6</Version>
+    <Version>6.0.7</Version>
     <Authors>Incursa</Authors>
     <Owners>Incursa</Owners>
     <Description>Standardized health check buckets, registration helpers, and health report execution for Incursa Platform.</Description>

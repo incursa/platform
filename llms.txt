@@ -94,6 +94,7 @@ Moved to `integrations-public`:
 - `eng/Invoke-PreCommitVersionPlan.ps1`: pre-commit helper that resolves staged impact, auto-applies required version bumps, stages the generated manifest/project updates, and re-validates the result
 - `eng/Test-PackageVersionChanges.ps1`: validates that affected packable projects include version bumps
 - `eng/Pack-PublicPackages.ps1`: packs only catalog-allowlisted projects
+- `.github/workflows/main-release-ci-cd.yml`: runs CI and publishes packable release artifacts to NuGet (manual dispatch, or automatic on `v*` tags)
 - `docs/repo-split-plan.md`: classification and split plan used for the extraction
 - `docs/repository-split-summary.md`: what stayed here versus what moved out
 

@@ -19,7 +19,7 @@
     <OutputItemType>Analyzer</OutputItemType>
     <PackageType>Analyzer</PackageType>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-    <Version>6.0.4</Version>
+    <Version>6.0.5</Version>
   </PropertyGroup>
   <ItemGroup>
     <!-- Required for Roslyn analyzer APIs. -->
