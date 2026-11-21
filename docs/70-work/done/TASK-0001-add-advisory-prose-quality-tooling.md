@@ -1,7 +1,7 @@
 ---
 id: TASK-0001
 type: task
-status: in-progress
+status: done
 priority: high
 owner: platform
 created: 2026-11-21
