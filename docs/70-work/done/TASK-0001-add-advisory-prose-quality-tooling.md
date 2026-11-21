@@ -1,11 +1,11 @@
 ---
 id: TASK-0001
 type: task
-status: in-progress
+status: done
 priority: high
 owner: platform
 created: 2026-11-21
-updated: null
+updated: 2026-11-21
 tags:
   - tooling
   - documentation
@@ -17,7 +17,8 @@ related:
     - /docs/40-decisions/ADR-2026-11-21-prose-quality-tooling.md
   files:
     - /tools/prose/README.md
-  prs: []
+  prs:
+    - "https://github.com/incursa/platform/pull/136"
   issues: []
   branches:
     - codex/task-0001-advisory-prose-quality
