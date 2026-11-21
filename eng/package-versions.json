@@ -136,6 +136,11 @@
       "version": "6.0.6"
     },
     {
+      "packageId": "Incursa.Prose.Cli",
+      "projectPath": "tools/prose/src/Incursa.Prose.Cli/Incursa.Prose.Cli.csproj",
+      "version": "6.0.0"
+    },
+    {
       "packageId": "Incursa.TestDocs.Analyzers",
       "projectPath": "tools/testdocs/src/Incursa.TestDocs.Analyzers/Incursa.TestDocs.Analyzers.csproj",
       "version": "6.0.5"

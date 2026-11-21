@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "generatedOn": "2026-11-21",
+  "sources": [
+    {
+      "repository": "https://github.com/words/fillers",
+      "version": "2.0.1",
+      "commit": "d1924b589e6b76d7cd8c4ee3c6d4859aadae8fc7",
+      "license": "MIT",
+      "usage": "83 lexical entries",
+      "transformation": "Removed comments and blank lines from data.txt; preserved entry order and spelling."
+    },
+    {
+      "repository": "https://github.com/words/hedges",
+      "version": "2.0.1",
+      "commit": "0e972f034671bc9fde086abd701a8a55adfd4e0c",
+      "license": "MIT",
+      "usage": "162 lexical entries",
+      "transformation": "Removed comments and blank lines from data.txt; preserved entry order and spelling."
+    },
+    {
+      "repository": "https://github.com/words/weasels",
+      "version": "2.0.1",
+      "commit": "cf8212ec0df90730571b6891e511e0d19f6fc738",
+      "license": "MIT",
+      "usage": "116 lexical entries",
+      "transformation": "Removed comments and blank lines from data.txt; preserved entry order and spelling."
+    },
+    {
+      "repository": "https://github.com/words/buzzwords",
+      "version": "2.1.0",
+      "commit": "1cca149c45b048fb4ba8f6b145aa7552b39b1c9c",
+      "license": "MIT",
+      "usage": "322 lexical entries",
+      "transformation": "Extracted string values from the exported JavaScript array into newline-delimited UTF-8 text; preserved entry order and spelling."
+    },
+    {
+      "repository": "https://github.com/words/syllable",
+      "version": "5.0.1",
+      "commit": "5650099b8138e5de7d9bf0dae317507eb98f1896",
+      "license": "MIT",
+      "usage": "English syllable estimation",
+      "transformation": "Ported deterministic regular expressions and the problematic-word table to C#. Replaced normalize-strings with .NET Unicode Form D normalization and replaced the pluralize dependency with limited singular candidates used only for problematic-word lookup."
+    },
+    {
+      "repository": "https://github.com/words/flesch",
+      "version": "2.0.1",
+      "commit": "f1d04fb0adb5805fda86a62d2768388e73c1219c",
+      "license": "MIT",
+      "usage": "Flesch Reading Ease formula",
+      "transformation": "Direct C# port of the formula constants and arithmetic."
+    },
+    {
+      "repository": "https://github.com/words/flesch-kincaid",
+      "version": "2.0.1",
+      "commit": "4befc917340590bd43adcf3d41f3fdf847357128",
+      "license": "MIT",
+      "usage": "Flesch-Kincaid Grade Level formula",
+      "transformation": "Direct C# port of the formula constants and arithmetic."
+    }
+  ]
+}

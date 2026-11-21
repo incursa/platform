@@ -507,8 +507,36 @@
       "notes": "Automated test project."
     },
     {
+      "projectPath": "tests/Incursa.Prose.Cli.Tests/Incursa.Prose.Cli.Tests.csproj",
+      "packageId": "Incursa.Prose.Cli.Tests",
+      "zone": "tests",
+      "category": "tests",
+      "classification": "test-only",
+      "packable": false,
+      "publishable": false,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Automated test project."
+    },
+    {
       "projectPath": "tools/observability/src/Incursa.Platform.Observability.Analyzers/Incursa.Platform.Observability.Analyzers.csproj",
       "packageId": "Incursa.Platform.Observability.Analyzers",
+      "zone": "tools",
+      "category": "tools",
+      "classification": "tool-only",
+      "packable": true,
+      "publishable": true,
+      "origin": {
+        "kind": "existing-repo",
+        "sourcePath": "C:/src/incursa/platform"
+      },
+      "notes": "Tooling/analyzer package intentionally shipped from this repository."
+    },
+    {
+      "projectPath": "tools/prose/src/Incursa.Prose.Cli/Incursa.Prose.Cli.csproj",
+      "packageId": "Incursa.Prose.Cli",
       "zone": "tools",
       "category": "tools",
       "classification": "tool-only",

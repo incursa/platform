@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>Incursa.Prose.Cli</AssemblyName>
+    <RootNamespace>Incursa.Prose.Cli</RootNamespace>
+    <IsPackable>true</IsPackable>
+    <PackageId>Incursa.Prose.Cli</PackageId>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>incursa-prose</ToolCommandName>
+    <PackageType>DotnetTool</PackageType>
+    <Description>Advisory prose linting and readability metrics for Markdown and plain text.</Description>
+    <Authors>Incursa</Authors>
+    <Company>Incursa</Company>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageIcon>nuget_logo.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>prose;lint;readability;markdown;documentation</PackageTags>
+    <RepositoryType>git</RepositoryType>
+    <Version>6.0.0</Version>
+    <NoWarn>$(NoWarn);MA0023;MA0048</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data/*.txt" LogicalName="Incursa.Prose.Cli.Data.%(Filename)%(Extension)" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\THIRD-PARTY-NOTICES.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\provenance.json" Pack="true" PackagePath="\" />
+    <None Include="..\..\..\..\assets\nuget_logo.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.303" />
+  </ItemGroup>
+</Project>
