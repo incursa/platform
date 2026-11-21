@@ -49,6 +49,6 @@ internal static class TestAttributeHelper
             _ => name.ToString(),
         };
 
-        return text.EndsWith("Attribute", StringComparison.Ordinal) ? text[..^9] : text;
+        return text.EndsWith("Attribute", StringComparison.Ordinal) ? text.Substring(0, text.Length - 9) : text;
     }
 }

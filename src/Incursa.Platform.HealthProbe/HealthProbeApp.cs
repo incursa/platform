@@ -66,6 +66,7 @@ public static class HealthProbeApp
     /// <param name="services">Service provider for resolving dependencies.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>The exit code for the health check.</returns>
+    [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "CLI entry point maps unexpected probe exceptions to exit codes.")]
     public static async Task<int> RunHealthCheckAsync(
         string[] args,
         IServiceProvider services,
@@ -144,18 +145,20 @@ public static class HealthProbeApp
 
     private static void WriteListOutput(HealthProbeCommandLine commandLine)
     {
+        var buckets = new[] { PlatformHealthTags.Live, PlatformHealthTags.Ready, PlatformHealthTags.Dep };
         if (commandLine.JsonOutput)
         {
             Console.WriteLine(JsonSerializer.Serialize(new
             {
-                buckets = new[] { PlatformHealthTags.Live, PlatformHealthTags.Ready, PlatformHealthTags.Dep },
+                buckets,
             }));
             return;
         }
 
-        Console.WriteLine(PlatformHealthTags.Live);
-        Console.WriteLine(PlatformHealthTags.Ready);
-        Console.WriteLine(PlatformHealthTags.Dep);
+        foreach (var bucket in buckets)
+        {
+            Console.WriteLine(bucket);
+        }
     }
 
     private static IHealthProbeRunner ResolveRunner(IServiceProvider services, HealthProbeMode mode)

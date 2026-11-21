@@ -1,7 +1,7 @@
 ---
 id: TASK-0001
 type: task
-status: done
+status: in-progress
 priority: high
 owner: platform
 created: 2026-11-21
@@ -47,5 +47,7 @@ Ship a dependency-free .NET tool that reports explainable, advisory prose findin
 - The new tool and its tests build with warnings treated as errors, and all focused tests pass.
 - The packed tool installs and runs from a local NuGet source; its package includes the README, provenance manifest, and third-party notice and declares no runtime dependencies.
 - NuGet vulnerability checks report no vulnerable packages for the new tool or its test project after pinning SourceLink 10.0.303.
-- The full solution build is currently blocked on pre-existing analyzer/XML-documentation failures in TestDocs, Observability.Analyzers, Storage, and HealthProbe. With normal auditing enabled, existing projects also fail restore on repository-wide vulnerable package pins. The feature project is not among either failure set.
+- The repository-wide SourceLink, OpenTelemetry, SSH.NET, and PKCS vulnerability pins were upgraded to patched releases; an audited full-solution restore now passes.
+- The pre-existing TestDocs, Observability.Analyzers, Storage, and HealthProbe compiler/analyzer failures were repaired; the full Release build passes with zero warnings and errors.
+- All 244 solution tests, the smoke lane, library traceability, coverage, and whole-solution format/analyzer verification pass.
 - Workbench strict validation reaches the legacy documentation corpus but reports pre-existing broken links. The generated validation artifact is retained under `artifacts/codex/` and is not committed.

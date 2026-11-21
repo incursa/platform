@@ -1,4 +1,4 @@
-﻿#pragma warning disable MA0048
+#pragma warning disable MA0048
 namespace Incursa.Platform.Access;
 
 public enum AccessChallengeKind

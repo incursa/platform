@@ -1,6 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Security;
-using System.Diagnostics.CodeAnalysis;
 
 namespace TestDocs.Cli;
 

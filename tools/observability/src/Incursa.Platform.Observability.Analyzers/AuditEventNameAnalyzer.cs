@@ -24,7 +24,10 @@ public sealed class AuditEventNameAnalyzer : DiagnosticAnalyzer
     /// <param name="context">Analysis context.</param>
     public override void Initialize(AnalysisContext context)
     {
-        ArgumentNullException.ThrowIfNull(context);
+        if (context is null)
+        {
+            throw new ArgumentNullException(nameof(context));
+        }
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
 
