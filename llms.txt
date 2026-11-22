@@ -26,6 +26,12 @@ Public provider implementations now live in [C:\src\incursa\integrations-public]
 - `integrations-public` and future `integrations-private` repos may depend on `platform`
 - provider-specific implementations should be kept out of this repo unless they are being deliberately staged for later extraction
 
+## Schema activation boundary
+
+Provider-neutral application database configurations default schema deployment
+off. Applications activate provider schemas through a dedicated migration path
+and identity; runtime identities must not receive implicit DDL capability.
+
 ## Package families retained here
 
 Core and capabilities:
