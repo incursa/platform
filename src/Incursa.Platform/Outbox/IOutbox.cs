@@ -175,7 +175,7 @@ public interface IOutbox
     /// <summary>
     /// Starts a new join to track a group of related outbox messages.
     /// </summary>
-    /// <param name="tenantId">The PayeWaive tenant identifier.</param>
+    /// <param name="tenantId">The tenant identifier.</param>
     /// <param name="expectedSteps">The total number of steps expected to complete.</param>
     /// <param name="metadata">Optional metadata (JSON string) for the join.</param>
     /// <param name="cancellationToken">Token to cancel the operation.</param>

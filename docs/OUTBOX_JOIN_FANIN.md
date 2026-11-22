@@ -18,7 +18,7 @@ This is useful for scenarios like:
 A **join** represents a group of related outbox messages. It tracks:
 
 - `JoinId`: Unique identifier for the join
-- `PayeWaiveTenantId`: Tenant scoping
+- `TenantId`: Tenant scoping
 - `ExpectedSteps`: Total number of steps expected to complete
 - `CompletedSteps`: Count of steps that completed successfully
 - `FailedSteps`: Count of steps that failed
@@ -174,7 +174,7 @@ The join functionality uses two tables:
 ```sql
 CREATE TABLE [infra].[OutboxJoin] (
     JoinId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    PayeWaiveTenantId BIGINT NOT NULL,
+    TenantId BIGINT NOT NULL,
     ExpectedSteps INT NOT NULL,
     CompletedSteps INT NOT NULL DEFAULT 0,
     FailedSteps INT NOT NULL DEFAULT 0,
@@ -222,7 +222,7 @@ This registers:
 
 ## Limitations
 
-1. **No cross-tenant joins**: Joins are scoped to a single PayeWaive tenant
+1. **No cross-tenant joins**: Joins are scoped to a single tenant
 2. **No timeout mechanism**: Joins don't automatically fail after a timeout (implement separately if needed)
 3. **Single-database join store**: The current implementation uses a singleton `SqlOutboxJoinStore` that connects to one database. In multi-database scenarios, joins only work within the configured database. This is a known limitation that will be addressed in a future update with a provider pattern similar to the outbox store provider.
 
