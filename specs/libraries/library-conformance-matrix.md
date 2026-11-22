@@ -16,28 +16,28 @@ Status values:
 | LIB-GOV-COV-001 | All | Governance | Covered | `scripts/quality/run-library-coverage.ps1` |
 | LIB-GOV-MUT-001 | All | Governance | Covered | `scripts/quality/run-library-mutation.ps1` |
 | LIB-GOV-FUZZ-001 | All | Governance | Covered | `specs/libraries/library-conformance-matrix.md` |
-| LIB-INMEMORY-API-001 | InMemory | PublicApi | Covered | `tests/Incursa.Platform.InMemory.Tests/InMemoryPublicApiContractTests.cs` |
-| LIB-INMEMORY-TEST-001 | InMemory | Behavior | Covered | `tests/Incursa.Platform.InMemory.Tests/Incursa.Platform.InMemory.Tests.csproj` |
-| LIB-INMEMORY-FUZZ-001 | InMemory | Fuzz | Covered | `tests/Incursa.Platform.InMemory.Tests/InMemoryOutboxFuzzTests.cs` |
-| LIB-INMEMORY-MUT-001 | InMemory | Mutation | Covered | `scripts/quality/stryker/inmemory.stryker-config.json` |
-| LIB-SQLSERVER-API-001 | SqlServer | PublicApi | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlPlatformRegistrationTests.cs` |
-| LIB-SQLSERVER-TEST-001 | SqlServer | Behavior | Covered | `tests/Incursa.Platform.SqlServer.Tests/Incursa.Platform.SqlServer.Tests.csproj` |
-| LIB-SQLSERVER-FUZZ-001 | SqlServer | Fuzz | Covered | `tests/Incursa.Platform.SqlServer.Tests/SqlServerOutboxFuzzTests.cs` |
-| LIB-SQLSERVER-MUT-001 | SqlServer | Mutation | Covered | `scripts/quality/stryker/sqlserver.stryker-config.json` |
-| LIB-POSTGRES-API-001 | Postgres | PublicApi | Covered | `tests/Incursa.Platform.Postgres.Tests/PostgresPublicApiContractTests.cs` |
-| LIB-POSTGRES-TEST-001 | Postgres | Behavior | Covered | `tests/Incursa.Platform.Postgres.Tests/Incursa.Platform.Postgres.Tests.csproj` |
-| LIB-POSTGRES-FUZZ-001 | Postgres | Fuzz | Covered | `tests/Incursa.Platform.Postgres.Tests/PostgresOutboxFuzzTests.cs` |
-| LIB-POSTGRES-MUT-001 | Postgres | Mutation | Covered | `scripts/quality/stryker/postgres.stryker-config.json` |
+| LIB-INMEMORY-API-001 | InMemory | PublicApi | Deferred | Moved to integrations-public; coverage is owned there |
+| LIB-INMEMORY-TEST-001 | InMemory | Behavior | Deferred | Moved to integrations-public; coverage is owned there |
+| LIB-INMEMORY-FUZZ-001 | InMemory | Fuzz | Deferred | Moved to integrations-public; coverage is owned there |
+| LIB-INMEMORY-MUT-001 | InMemory | Mutation | Deferred | Moved to integrations-public; coverage is owned there |
+| LIB-SQLSERVER-API-001 | SqlServer | PublicApi | Deferred | Moved to integrations-public; coverage is owned there |
+| LIB-SQLSERVER-TEST-001 | SqlServer | Behavior | Deferred | Moved to integrations-public; coverage is owned there |
+| LIB-SQLSERVER-FUZZ-001 | SqlServer | Fuzz | Deferred | Moved to integrations-public; coverage is owned there |
+| LIB-SQLSERVER-MUT-001 | SqlServer | Mutation | Deferred | Moved to integrations-public; coverage is owned there |
+| LIB-POSTGRES-API-001 | Postgres | PublicApi | Deferred | Moved to integrations-public; coverage is owned there |
+| LIB-POSTGRES-TEST-001 | Postgres | Behavior | Deferred | Moved to integrations-public; coverage is owned there |
+| LIB-POSTGRES-FUZZ-001 | Postgres | Fuzz | Deferred | Moved to integrations-public; coverage is owned there |
+| LIB-POSTGRES-MUT-001 | Postgres | Mutation | Deferred | Moved to integrations-public; coverage is owned there |
 | LIB-CORE-API-001 | Core | PublicApi | Covered | `tests/Incursa.Platform.Tests/OutboxMessageTests.cs` |
 | LIB-CORE-TEST-001 | Core | Behavior | Covered | `tests/Incursa.Platform.Tests/Incursa.Platform.Tests.csproj` |
 | LIB-AUDIT-API-001 | Audit | PublicApi | Covered | `tests/Incursa.Platform.Audit.Tests/AuditModelTests.cs` |
 | LIB-AUDIT-TEST-001 | Audit | Behavior | Covered | `tests/Incursa.Platform.Audit.Tests/Incursa.Platform.Audit.Tests.csproj` |
 | LIB-CORRELATION-API-001 | Correlation | PublicApi | Covered | `tests/Incursa.Platform.Correlation.Tests/CorrelationModelTests.cs` |
 | LIB-CORRELATION-TEST-001 | Correlation | Behavior | Covered | `tests/Incursa.Platform.Correlation.Tests/Incursa.Platform.Correlation.Tests.csproj` |
-| LIB-EMAIL-API-001 | Email | PublicApi | Covered | `tests/Incursa.Platform.Email.Tests/EmailMessageValidatorTests.cs` |
-| LIB-EMAIL-TEST-001 | Email | Behavior | Covered | `tests/Incursa.Platform.Email.Tests/Incursa.Platform.Email.Tests.csproj` |
-| LIB-EMAILASPNETCORE-API-001 | Email.AspNetCore | PublicApi | Covered | `tests/Incursa.Platform.Email.Tests/EmailAspNetCoreExtensionsTests.cs` |
-| LIB-EMAILASPNETCORE-TEST-001 | Email.AspNetCore | Behavior | Covered | `tests/Incursa.Platform.Email.Tests/Incursa.Platform.Email.Tests.csproj` |
+| LIB-EMAIL-API-001 | Email | PublicApi | Missing | No direct Email public API tests yet |
+| LIB-EMAIL-TEST-001 | Email | Behavior | Missing | No direct Email behavior suite yet |
+| LIB-EMAILASPNETCORE-API-001 | Email.AspNetCore | PublicApi | Missing | No direct Email.AspNetCore public API tests yet |
+| LIB-EMAILASPNETCORE-TEST-001 | Email.AspNetCore | Behavior | Missing | No direct Email.AspNetCore behavior suite yet |
 | LIB-EXACTLYONCE-API-001 | ExactlyOnce | PublicApi | Covered | `tests/Incursa.Platform.Tests/ExactlyOnceExecutorTests.cs` |
 | LIB-EXACTLYONCE-TEST-001 | ExactlyOnce | Behavior | Covered | `tests/Incursa.Platform.Tests/ExactlyOnceHandlerTests.cs` |
 | LIB-HEALTHPROBE-API-001 | HealthProbe | PublicApi | Covered | `tests/Incursa.Platform.HealthProbe.Tests/HealthProbeCommandLineTests.cs` |

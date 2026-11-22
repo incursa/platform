@@ -35,24 +35,24 @@ internal static class XmlDocHelper
             var trimmed = line.TrimStart();
             if (trimmed.StartsWith("///", StringComparison.Ordinal))
             {
-                trimmed = trimmed[3..];
+                trimmed = trimmed.Substring(3);
             }
             else if (trimmed.StartsWith("/**", StringComparison.Ordinal))
             {
-                trimmed = trimmed[3..];
+                trimmed = trimmed.Substring(3);
             }
             else if (trimmed.StartsWith("*/", StringComparison.Ordinal))
             {
-                trimmed = trimmed[2..];
+                trimmed = trimmed.Substring(2);
             }
-            else if (trimmed.StartsWith('*'))
+            else if (trimmed.Length > 0 && trimmed[0] == '*')
             {
-                trimmed = trimmed[1..];
+                trimmed = trimmed.Substring(1);
             }
 
-            if (trimmed.StartsWith(' '))
+            if (trimmed.Length > 0 && trimmed[0] == ' ')
             {
-                trimmed = trimmed[1..];
+                trimmed = trimmed.Substring(1);
             }
 
             builder.AppendLine(trimmed);
@@ -85,7 +85,7 @@ internal static class XmlDocHelper
             return null;
         }
 
-        var trimmed = value.Trim();
+        var trimmed = value!.Trim();
         return WhitespaceRegex.Replace(trimmed, " ");
     }
 

@@ -140,7 +140,7 @@ public sealed class HttpHealthProbeRunner : IHealthProbeRunner
             throw new HealthProbeArgumentException("HTTP probe base URL is required for relative endpoint paths.");
         }
 
-        var normalizedPath = rawPath.StartsWith("/", StringComparison.Ordinal) ? rawPath : $"/{rawPath}";
+        var normalizedPath = rawPath.StartsWith('/') ? rawPath : $"/{rawPath}";
         return new Uri(options.BaseUrl, normalizedPath);
     }
 
@@ -175,6 +175,8 @@ public sealed class HttpHealthProbeRunner : IHealthProbeRunner
     }
 
     [SuppressMessage("Security", "CA5359:Do not disable certificate validation", Justification = "Explicit operator opt-in for deployment diagnostics.")]
+    [SuppressMessage("Security", "CA5400:Ensure HttpClient certificate revocation list check is enabled", Justification = "This explicitly insecure diagnostic client disables all certificate validation by operator opt-in.")]
+    [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "HttpClient takes ownership of the handler through disposeHandler: true.")]
     private static HttpClient CreateInsecureClient()
     {
         var handler = new HttpClientHandler

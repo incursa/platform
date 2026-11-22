@@ -7,6 +7,9 @@ on:
       - main
       - 'release/**'
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -217,3 +220,34 @@ jobs:
             artifacts/codex/test-results/advisory/
             artifacts/codex/coverage/advisory/
             artifacts/quality/testing/
+
+  standard:
+    name: Standard Commit - Build, Test, and Scan
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - smoke
+      - blocking
+      - observational
+      - advisory
+    steps:
+      - name: Verify required lanes
+        env:
+          SMOKE_RESULT: ${{ needs.smoke.result }}
+          BLOCKING_RESULT: ${{ needs.blocking.result }}
+          OBSERVATIONAL_RESULT: ${{ needs.observational.result }}
+          ADVISORY_RESULT: ${{ needs.advisory.result }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          for result in \
+            "$SMOKE_RESULT" \
+            "$BLOCKING_RESULT" \
+            "$OBSERVATIONAL_RESULT" \
+            "$ADVISORY_RESULT"; do
+            if [[ "$result" != "success" ]]; then
+              echo "A required CI lane did not succeed: $result"
+              exit 1
+            fi
+          done

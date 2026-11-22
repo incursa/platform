@@ -279,9 +279,9 @@ internal static class MarkdownWriter
         return builder.ToString();
     }
 
-    private static string FormatTags(IReadOnlyCollection<string> tags)
+    private static string FormatTags(string[] tags)
     {
-        return tags.Count == 0 ? "(none)" : string.Join(", ", tags);
+        return tags.Length == 0 ? "(none)" : string.Join(", ", tags);
     }
 
     private static string FormatOrigin(OriginInfo origin)

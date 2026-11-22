@@ -64,11 +64,11 @@ public sealed record StorageBatch<TRecord>
     public IReadOnlyList<StorageBatchOperation<TRecord>> Operations { get; }
 }
 
-[SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "Factory methods are part of the public batch operation API.")]
 /// <summary>
 /// Represents an individual operation inside a record batch.
 /// </summary>
 /// <typeparam name="TRecord">The record type.</typeparam>
+[SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "Factory methods are part of the public batch operation API.")]
 public sealed record StorageBatchOperation<TRecord>
 {
     private StorageBatchOperation(

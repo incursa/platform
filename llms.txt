@@ -11,6 +11,7 @@ Public provider implementations now live in [C:\src\incursa\integrations-public]
 - `tools/`: analyzers and helper CLIs that remain repo-agnostic
 - `eng/`: package catalog and versioning helpers
 - `docs/`: architecture, scope boundary, and repository split records
+- `docs/70-work/`: Workbench-managed active and completed work items; supporting specs and ADRs live under `docs/10-product/` and `docs/40-decisions/`
 - `incubating/`: preserved staging area for code not ready for the public package surface
 
 ## Primary solutions
@@ -60,6 +61,7 @@ Hosting adapters:
 
 Shared tooling retained here:
 
+- `tools/prose/src/Incursa.Prose.Cli/`: advisory Markdown/plain-text lexical findings and readability metrics, shipped as the `incursa-prose` .NET tool
 - `tools/observability/src/Incursa.Platform.Observability.Analyzers/`
 - `tools/testdocs/src/Incursa.TestDocs.Analyzers/`
 - `tools/testdocs/src/Incursa.TestDocs.Cli/`

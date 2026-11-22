@@ -38,6 +38,7 @@
     <Project Path="src/Incursa.Platform.Webhooks.AspNetCore/Incursa.Platform.Webhooks.AspNetCore.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Incursa.Prose.Cli.Tests/Incursa.Prose.Cli.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Access.AspNetCore.Tests/Incursa.Platform.Access.AspNetCore.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Audit.Tests/Incursa.Platform.Audit.Tests.csproj" />
     <Project Path="tests/Incursa.Platform.Correlation.Tests/Incursa.Platform.Correlation.Tests.csproj" />
@@ -51,6 +52,9 @@
     <Project Path="tests/Incursa.Platform.Webhooks.Tests/Incursa.Platform.Webhooks.Tests.csproj" />
   </Folder>
   <Folder Name="/tools/" />
+  <Folder Name="/tools/prose/">
+    <Project Path="tools/prose/src/Incursa.Prose.Cli/Incursa.Prose.Cli.csproj" />
+  </Folder>
   <Folder Name="/tools/observability/">
     <Project Path="tools/observability/src/Incursa.Platform.Observability.Analyzers/Incursa.Platform.Observability.Analyzers.csproj" />
   </Folder>
