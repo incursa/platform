@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-12T00:13:58.8258168-06:00",
+  "generatedAt": "2026-11-23T08:10:05.1166480-07:00",
   "generatedBy": "eng/Generate-PackageCatalog.ps1",
   "projects": [
     {
@@ -10,9 +10,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Hosting adapter or ASP.NET Core integration package."
     },
@@ -24,9 +25,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Hosting adapter or ASP.NET Core integration package."
     },
@@ -38,9 +40,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Public capability package."
     },
@@ -52,9 +55,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Public capability package."
     },
@@ -66,9 +70,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Public capability package."
     },
@@ -80,9 +85,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Public capability package."
     },
@@ -94,9 +100,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Public capability package."
     },
@@ -108,6 +115,7 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "imported-repo",
         "sourcePath": "C:/src/incursa/integrations-postmark"
@@ -122,6 +130,7 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "imported-repo",
         "sourcePath": "C:/src/incursa/integrations-postmark"
@@ -136,9 +145,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Public capability package."
     },
@@ -150,9 +160,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Hosting adapter or ASP.NET Core integration package."
     },
@@ -164,9 +175,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Public capability package."
     },
@@ -178,9 +190,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Public capability package."
     },
@@ -192,9 +205,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Public capability package."
     },
@@ -206,9 +220,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Hosting adapter or ASP.NET Core integration package."
     },
@@ -220,9 +235,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Hosting adapter or ASP.NET Core integration package."
     },
@@ -234,9 +250,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Hosting adapter or ASP.NET Core integration package."
     },
@@ -248,9 +265,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Hosting adapter or ASP.NET Core integration package."
     },
@@ -262,9 +280,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Public capability package."
     },
@@ -276,9 +295,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Public capability package."
     },
@@ -290,9 +310,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Public capability package."
     },
@@ -304,9 +325,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Public capability package."
     },
@@ -318,9 +340,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Hosting adapter or ASP.NET Core integration package."
     },
@@ -332,9 +355,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Public capability package."
     },
@@ -346,9 +370,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "platform",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Core durable processing abstractions and orchestration."
     },
@@ -360,9 +385,10 @@
       "classification": "test-only",
       "packable": false,
       "publishable": false,
+      "releaseGroup": null,
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Automated test project."
     },
@@ -374,9 +400,10 @@
       "classification": "test-only",
       "packable": false,
       "publishable": false,
+      "releaseGroup": null,
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Automated test project."
     },
@@ -388,9 +415,10 @@
       "classification": "test-only",
       "packable": false,
       "publishable": false,
+      "releaseGroup": null,
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Automated test project."
     },
@@ -402,9 +430,10 @@
       "classification": "test-only",
       "packable": false,
       "publishable": false,
+      "releaseGroup": null,
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Automated test project."
     },
@@ -416,9 +445,10 @@
       "classification": "test-only",
       "packable": false,
       "publishable": false,
+      "releaseGroup": null,
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Automated test project."
     },
@@ -430,9 +460,10 @@
       "classification": "test-only",
       "packable": false,
       "publishable": false,
+      "releaseGroup": null,
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Automated test project."
     },
@@ -444,9 +475,10 @@
       "classification": "test-only",
       "packable": false,
       "publishable": false,
+      "releaseGroup": null,
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Automated test project."
     },
@@ -458,9 +490,10 @@
       "classification": "test-only",
       "packable": false,
       "publishable": false,
+      "releaseGroup": null,
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Automated test project."
     },
@@ -472,9 +505,10 @@
       "classification": "public-packable",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "test-support",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Reusable test harness package consumed by downstream provider and integration test projects."
     },
@@ -486,9 +520,10 @@
       "classification": "test-only",
       "packable": false,
       "publishable": false,
+      "releaseGroup": null,
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Automated test project."
     },
@@ -500,9 +535,10 @@
       "classification": "test-only",
       "packable": false,
       "publishable": false,
+      "releaseGroup": null,
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Automated test project."
     },
@@ -514,9 +550,10 @@
       "classification": "test-only",
       "packable": false,
       "publishable": false,
+      "releaseGroup": null,
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Automated test project."
     },
@@ -528,9 +565,10 @@
       "classification": "tool-only",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "observability-tools",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Tooling/analyzer package intentionally shipped from this repository."
     },
@@ -542,9 +580,10 @@
       "classification": "tool-only",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "prose-tools",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Tooling/analyzer package intentionally shipped from this repository."
     },
@@ -556,9 +595,10 @@
       "classification": "tool-only",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "testdocs-tools",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Tooling/analyzer package intentionally shipped from this repository."
     },
@@ -570,9 +610,10 @@
       "classification": "tool-only",
       "packable": true,
       "publishable": true,
+      "releaseGroup": "testdocs-tools",
       "origin": {
         "kind": "existing-repo",
-        "sourcePath": "C:/src/incursa/platform"
+        "sourcePath": "."
       },
       "notes": "Tooling/analyzer package intentionally shipped from this repository."
     }

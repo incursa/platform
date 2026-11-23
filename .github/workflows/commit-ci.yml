@@ -121,6 +121,10 @@ jobs:
         shell: pwsh
         run: pwsh -File eng/Pack-PublicPackages.ps1 -Configuration Release -OutputPath ./nupkgs -AffectedOnly -Base "${{ steps.diff_base.outputs.mergeBase }}" -Head HEAD
 
+      - name: Validate affected package metadata and assets
+        shell: pwsh
+        run: pwsh -File eng/Test-PackageArtifacts.ps1 -PackagePath ./nupkgs
+
       - name: Upload package artifact
         uses: actions/upload-artifact@v4
         with:

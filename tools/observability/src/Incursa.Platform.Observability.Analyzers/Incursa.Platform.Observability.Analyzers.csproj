@@ -14,13 +14,13 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageIcon>nuget_logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>analyzers;observability;audit;operations</PackageTags>
+    <PackageTags>incursa;analyzers;observability;audit;operations</PackageTags>
     <RepositoryType>git</RepositoryType>
     <IncludeBuildOutput>true</IncludeBuildOutput>
     <OutputItemType>Analyzer</OutputItemType>
     <PackageType>Analyzer</PackageType>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-    <Version>6.0.6</Version>
+    <Version>6.0.7</Version>
   </PropertyGroup>
   <ItemGroup>
     <!-- Required for Roslyn analyzer APIs. -->

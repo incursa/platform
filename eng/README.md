@@ -25,7 +25,9 @@ This directory holds monorepo governance and release helpers for `Incursa.Platfo
 - `Set-PackageVersionBaseline.ps1`
   Sets a one-time baseline semantic version across all packable projects and the version manifest.
 - `Pack-PublicPackages.ps1`
-  Packs only the allowlisted projects from the catalog, optionally limited to affected projects.
+  Packs only the allowlisted projects from the catalog, optionally limited to affected projects or one named release group.
+- `Test-PackageArtifacts.ps1`
+  Validates the metadata and embedded icon/README assets in the actual `.nupkg` artifacts.
 - `Test-PackageVersionChanges.ps1`
   Fails when packable project changes are present without corresponding package version bumps.
 
@@ -43,7 +45,19 @@ pwsh -File eng/Set-PackageVersionBaseline.ps1 -Version 6.0.0
 pwsh -File eng/Pack-PublicPackages.ps1 -Configuration Release -OutputPath ./nupkgs
 pwsh -File eng/Pack-PublicPackages.ps1 -Configuration Release -OutputPath ./nupkgs -AffectedOnly -Base origin/main -Head HEAD
 pwsh -File eng/Pack-PublicPackages.ps1 -Configuration Release -OutputPath ./nupkgs -PublishableOnly
+pwsh -File eng/Pack-PublicPackages.ps1 -Configuration Release -OutputPath ./nupkgs -PublishableOnly -ReleaseGroup platform
+pwsh -File eng/Test-PackageArtifacts.ps1 -PackagePath ./nupkgs -RequireAllPublishable
 ```
+
+## Release groups
+
+- `platform`: the production libraries and hosting adapters under `src/`
+- `test-support`: `Incursa.Platform.TestUtilities`, published for downstream provider test suites
+- `observability-tools`: the observability analyzer package
+- `prose-tools`: the prose CLI package
+- `testdocs-tools`: the TestDocs analyzer and CLI packages
+
+The release workflow publishes exactly one group at a time. A `v*` tag publishes the `platform` group; other groups require a manual workflow dispatch with the matching selection.
 
 ## Recommended workflow
 

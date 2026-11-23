@@ -7,6 +7,8 @@ param(
     [string]$PackageVersion = "",
     [string]$Base = "",
     [string]$Head = "",
+    [ValidateSet("platform", "test-support", "observability-tools", "prose-tools", "testdocs-tools")]
+    [string]$ReleaseGroup = "",
     [switch]$AffectedOnly,
     [switch]$PublishableOnly,
     [switch]$DryRun
@@ -26,6 +28,10 @@ if ($PublishableOnly) {
     $selectedProjects = @($selectedProjects | Where-Object { $_.publishable })
 }
 
+if (-not [string]::IsNullOrWhiteSpace($ReleaseGroup)) {
+    $selectedProjects = @($selectedProjects | Where-Object { $_.publishable -and $_.releaseGroup -eq $ReleaseGroup })
+}
+
 if ($AffectedOnly) {
     $resolveScript = Join-Path $PSScriptRoot "Resolve-AffectedProjects.ps1"
     $affectedJson = & $resolveScript -RepoRoot $RepoRoot -CatalogPath $CatalogPath -Base $Base -Head $Head -AsJson
@@ -38,8 +44,13 @@ if ($AffectedOnly) {
 }
 
 if ($selectedProjects.Count -eq 0) {
-    Write-Host "No public packages selected."
+    $selection = if ([string]::IsNullOrWhiteSpace($ReleaseGroup)) { "the requested filters" } else { "release group '$ReleaseGroup'" }
+    Write-Host "No public packages selected for $selection."
     return
+}
+
+if (-not [string]::IsNullOrWhiteSpace($ReleaseGroup)) {
+    Write-Host "Selected release group '$ReleaseGroup' with $($selectedProjects.Count) package(s)."
 }
 
 if (-not [string]::IsNullOrWhiteSpace($PackageVersion) -and ($AffectedOnly -or $PublishableOnly)) {
@@ -53,7 +64,7 @@ foreach ($project in $selectedProjects | Sort-Object projectPath) {
     $projectDirectory = Split-Path -Parent $projectPath
     $assetsPath = Join-Path $projectDirectory "obj/project.assets.json"
 
-    if (-not (Test-Path -LiteralPath $assetsPath)) {
+    if (-not $DryRun -and -not (Test-Path -LiteralPath $assetsPath)) {
         Write-Host "Restoring $($project.projectPath)"
         & dotnet restore $projectPath --nologo
         if ($LASTEXITCODE -ne 0) {
