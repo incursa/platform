@@ -17,9 +17,9 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageIcon>nuget_logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>prose;lint;readability;markdown;documentation</PackageTags>
+    <PackageTags>incursa;prose;lint;readability;markdown;documentation</PackageTags>
     <RepositoryType>git</RepositoryType>
-    <Version>6.0.1</Version>
+    <Version>6.0.2</Version>
     <NoWarn>$(NoWarn);MA0023;MA0048</NoWarn>
   </PropertyGroup>
   <ItemGroup>

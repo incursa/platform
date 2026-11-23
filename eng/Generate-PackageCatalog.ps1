@@ -21,7 +21,8 @@ function Normalize-RelativePath {
     return $normalized
 }
 
-$ExistingRepoSourcePath = Normalize-RelativePath $RepoRoot
+# Keep generated catalog output independent of the machine or worktree path.
+$ExistingRepoSourcePath = "."
 
 function Get-RelativePath {
     param(
@@ -112,6 +113,22 @@ function Get-ProjectOrigin {
                 sourcePath = $ExistingRepoSourcePath
             }
         }
+    }
+}
+
+function Get-ReleaseGroup {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$ProjectPath
+    )
+
+    switch -Wildcard ($ProjectPath) {
+        "src/*" { return "platform" }
+        "tests/Incursa.Platform.TestUtilities/*" { return "test-support" }
+        "tools/observability/*" { return "observability-tools" }
+        "tools/prose/*" { return "prose-tools" }
+        "tools/testdocs/*" { return "testdocs-tools" }
+        default { return $null }
     }
 }
 
@@ -315,6 +332,11 @@ $catalogEntries = foreach ($projectFile in $projectFiles) {
 
     $metadata = Get-CatalogMetadata -ProjectPath $projectPath -ProjectName $projectName
     $origin = Get-ProjectOrigin -ProjectPath $projectPath
+    $releaseGroup = if ($metadata.publishable) { Get-ReleaseGroup -ProjectPath $projectPath } else { $null }
+
+    if ($metadata.publishable -and [string]::IsNullOrWhiteSpace($releaseGroup)) {
+        throw "Publishable project '$projectPath' does not have a release group."
+    }
 
     [ordered]@{
         projectPath = $projectPath
@@ -324,6 +346,7 @@ $catalogEntries = foreach ($projectFile in $projectFiles) {
         classification = $metadata.classification
         packable = [bool]$metadata.packable
         publishable = [bool]$metadata.publishable
+        releaseGroup = $releaseGroup
         origin = $origin
         notes = $metadata.notes
     }

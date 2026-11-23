@@ -6,13 +6,19 @@
 
   <PropertyGroup Condition="'$(MSBuildProjectExtension)' == '.csproj' and '$(IsPackable)' == 'true'">
     <!-- Public package metadata defaults for NuGet publication. -->
-    <Authors>Samuel McAravey</Authors>
-    <Company>Incursa</Company>
-    <PackageProjectUrl>https://github.com/incursa/platform</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/incursa/platform</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageIcon>nuget_logo.png</PackageIcon>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <Title Condition="'$(Title)' == ''">$(PackageId)</Title>
+    <Authors Condition="'$(Authors)' == ''">Incursa</Authors>
+    <Owners Condition="'$(Owners)' == ''">Incursa</Owners>
+    <Company Condition="'$(Company)' == ''">Incursa</Company>
+    <Copyright Condition="'$(Copyright)' == ''">Copyright © Incursa</Copyright>
+    <PackageProjectUrl Condition="'$(PackageProjectUrl)' == ''">https://github.com/incursa/platform</PackageProjectUrl>
+    <RepositoryUrl Condition="'$(RepositoryUrl)' == ''">https://github.com/incursa/platform</RepositoryUrl>
+    <RepositoryType Condition="'$(RepositoryType)' == ''">git</RepositoryType>
+    <PackageIcon Condition="'$(PackageIcon)' == ''">nuget_logo.png</PackageIcon>
+    <PackageReadmeFile Condition="'$(PackageReadmeFile)' == ''">README.md</PackageReadmeFile>
+    <PackageLicenseExpression Condition="'$(PackageLicenseExpression)' == ''">Apache-2.0</PackageLicenseExpression>
+    <PackageTags Condition="'$(PackageTags)' == ''">incursa;platform;dotnet</PackageTags>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
 </Project>

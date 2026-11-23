@@ -16,9 +16,9 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageIcon>nuget_logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>testdocs;documentation;mstest;xunit;nunit</PackageTags>
+    <PackageTags>incursa;testdocs;documentation;mstest;xunit;nunit</PackageTags>
     <RepositoryType>git</RepositoryType>
-    <Version>6.0.7</Version>
+    <Version>6.0.8</Version>
   </PropertyGroup>
   <ItemGroup>
     <!-- Required for Roslyn syntax parsing of XML docs. -->

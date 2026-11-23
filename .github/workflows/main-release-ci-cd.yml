@@ -9,10 +9,21 @@ on:
   workflow_dispatch:
     inputs:
       publish_packages:
-        description: Publish the catalog allowlisted packages from this run to nuget.org
+        description: Publish the selected release group to nuget.org
         required: true
         default: false
         type: boolean
+      release_group:
+        description: Catalog release group to publish
+        required: true
+        default: platform
+        type: choice
+        options:
+          - platform
+          - test-support
+          - observability-tools
+          - prose-tools
+          - testdocs-tools
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -129,12 +140,50 @@ jobs:
         shell: pwsh
         run: pwsh -File eng/Pack-PublicPackages.ps1 -Configuration Release -OutputPath ./nupkgs -PublishableOnly
 
+      - name: Validate publishable package metadata and assets
+        shell: pwsh
+        run: pwsh -File eng/Test-PackageArtifacts.ps1 -PackagePath ./nupkgs -RequireAllPublishable
+
       - name: Upload package artifact
         uses: actions/upload-artifact@v4
         with:
           name: nupkgs
           if-no-files-found: warn
           path: ./nupkgs/*.nupkg
+
+      - name: Pack selected release group
+        if: >-
+          ${{
+            (github.event_name == 'workflow_dispatch' && inputs.publish_packages) ||
+            (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/'))
+          }}
+        shell: pwsh
+        env:
+          RELEASE_GROUP: ${{ github.event_name == 'workflow_dispatch' && inputs.release_group || 'platform' }}
+        run: pwsh -File eng/Pack-PublicPackages.ps1 -Configuration Release -OutputPath ./release-nupkgs -PublishableOnly -ReleaseGroup "$env:RELEASE_GROUP"
+
+      - name: Validate selected release group
+        if: >-
+          ${{
+            (github.event_name == 'workflow_dispatch' && inputs.publish_packages) ||
+            (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/'))
+          }}
+        shell: pwsh
+        env:
+          RELEASE_GROUP: ${{ github.event_name == 'workflow_dispatch' && inputs.release_group || 'platform' }}
+        run: pwsh -File eng/Test-PackageArtifacts.ps1 -PackagePath ./release-nupkgs -ReleaseGroup "$env:RELEASE_GROUP"
+
+      - name: Upload selected release group
+        if: >-
+          ${{
+            (github.event_name == 'workflow_dispatch' && inputs.publish_packages) ||
+            (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/'))
+          }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-nupkgs
+          if-no-files-found: error
+          path: ./release-nupkgs/*.nupkg
 
       - name: Upload blocking artifacts
         uses: actions/upload-artifact@v4
@@ -250,7 +299,7 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: nupkgs
+          name: release-nupkgs
           path: out
 
       - name: Push to nuget.org
