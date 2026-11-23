@@ -18,7 +18,8 @@ related:
     - /eng/Pack-PublicPackages.ps1
     - /eng/Test-PackageArtifacts.ps1
     - /.github/workflows/main-release-ci-cd.yml
-  prs: []
+  prs:
+    - "https://github.com/incursa/platform/pull/139"
   issues: []
   branches:
     - codex/package-release-cleanup
