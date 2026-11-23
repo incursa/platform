@@ -47,7 +47,7 @@ public sealed class FanoutDatabaseConfig
     /// <summary>
     /// Gets or sets a value indicating whether database schema deployment should be performed automatically.
     /// When true, the required database schema will be created/updated when the database is first discovered.
-    /// Defaults to true.
+    /// Defaults to false so runtime identities do not perform DDL implicitly.
     /// </summary>
-    public bool EnableSchemaDeployment { get; set; } = true;
+    public bool EnableSchemaDeployment { get; set; }
 }
