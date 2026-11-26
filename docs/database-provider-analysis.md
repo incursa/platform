@@ -1,102 +1,41 @@
-# Database Provider Split & Postgres Readiness Notes
+# Database provider architecture
 
-Last updated: 2025-02-14
+## Boundary
 
-## Goal
-Split the platform into a provider-agnostic core (`Incursa.Platform`) plus a SQL Server provider package (proposed: `Incursa.Platform.SqlServer`). This isolates SQL Server-only types, stored procedures, and SQL-specific DI wiring so future providers (e.g., Postgres) can be added without entangling the core.
+Provider-neutral contracts and orchestration belong in `platform`. Concrete database implementations, SQL dialects, driver dependencies, schema artifacts, and provider registration belong in provider packages.
 
-## Current SQL Server Surface Area (high-level)
-- SqlClient usage across outbox/inbox/scheduler/fanout/leases/semaphores/metrics.
-- Schema deployment and stored procedure generation in `DatabaseSchemaManager` and SQL scripts in `src/Incursa.Platform.SqlServer/Database/*.sql`.
-- DI entrypoints register SQL Server implementations directly (e.g., `AddSqlOutbox`, `AddPlatformMultiDatabaseWithList`).
-- Platform lifecycle validation uses `SqlConnection`.
-- Dapper type handlers are registered from core, but only used by SQL Server implementations.
+This direction keeps application contracts independent of SQL Server, PostgreSQL, SQLite, or a particular migration engine while allowing each provider to document and test its own guarantees.
 
-## SQL Server-specific features to extract
-These are SQL Server-only constructs that should live in the SQL Server provider:
-- T-SQL stored procedures, `MERGE`, `OUTPUT inserted`, `TOP`, `@@ROWCOUNT`, `SCOPE_IDENTITY`, `CREATE OR ALTER PROCEDURE`.
-- Locking hints: `READPAST`, `UPDLOCK`, `ROWLOCK`, `HOLDLOCK`.
-- `sp_getapplock` gate/lease behavior.
-- SQL Server types: `UNIQUEIDENTIFIER`, `NVARCHAR(MAX)`, `DATETIMEOFFSET`, `ROWVERSION`, `BIT`, `SYSNAME`, `IDENTITY`.
-- Table-valued parameters (`GuidIdList`, `StringIdList`).
-- Columnstore index usage for metrics.
+## Provider responsibilities
 
-## Proposed Project Split
-### Core (`Incursa.Platform`)
-Keep provider-agnostic abstractions and orchestration:
-- Interfaces: `IOutbox`, `IOutboxStore`, `IInbox`, `IScheduler*`, `IFanout*`, `ISystemLease`.
-- Routing/selection: `*Router`, `*SelectionStrategy`, round-robin strategies.
-- Background orchestration that is not tied to a DB provider (e.g., multi-outbox/inbox polling).
-- General utilities and identifiers.
-- `IDatabaseSchemaCompletion` + `DatabaseSchemaCompletion` (provider-agnostic coordination).
-- Provider-agnostic DI helpers (e.g., `AddTimeAbstractions`, handler registration).
+A database provider owns:
 
-### SQL Server Provider (`Incursa.Platform.SqlServer`)
-Move SQL Server-specific code and API surface here:
-- All `Sql*` implementations and options/validators.
-- Schema deployment (`DatabaseSchemaManager`, `DatabaseSchemaBackgroundService`) and SQL artifacts.
-- SQL Server DI entrypoints (`AddSqlOutbox`, `AddSqlInbox`, `AddSqlScheduler`, `AddPlatform*` that register SQL Server providers).
-- Dapper type handler registration/module initializer (SQL Server provider will own Dapper).
-- SQL Server lifecycle validation (`PlatformLifecycleService`).
+- connection and transaction integration;
+- SQL dialect, locking, leasing, and concurrency behavior;
+- schema and migration artifacts;
+- provider-specific dependency injection;
+- retry, timeout, and failure classification;
+- drift, integrity, backup, and recovery guidance; and
+- focused tests for the contracts it claims to implement.
 
-## Postgres Readiness (to revisit later)
-When provider split is stable, evaluate Postgres implementation details:
-- `MERGE` -> `INSERT ... ON CONFLICT DO UPDATE` with `RETURNING`.
-- `READPAST`/`UPDLOCK` -> `FOR UPDATE SKIP LOCKED`.
-- `sp_getapplock` -> `pg_try_advisory_lock` / `pg_try_advisory_xact_lock`.
-- Table-valued params -> `uuid[]`/`text[]` + `UNNEST` or temp tables.
-- Columnstore -> B-tree/BRIN/TimescaleDB alternatives.
-- `ROWVERSION` -> `xmin` or explicit `bigint` version column.
+The provider-neutral layer owns public interfaces, identifiers, routing, orchestration, lifecycle abstractions, and behavior that does not require a database dialect.
 
-## Open Questions / Follow-ups
-- Should `PlatformServiceCollectionExtensions` (AddPlatform* helpers) stay in core or move to the SQL Server provider?
-- Should SQL artifacts in `src/Incursa.Platform.SqlServer/Database` move under the SQL Server provider package?
-- Do we want core to expose any provider-agnostic schema deployment interface?
+## SQL Server mapping
 
-## DBUp Migration Analysis (schema management in-library)
-### Current state (baseline)
-- Schema deployment is done via `DatabaseSchemaManager` and ad-hoc SQL execution with batch splitting.
-- Schema integrity is checked in tests via `schema-versions.json` snapshot hashes (see `tests/Incursa.Platform.Tests/SchemaVersionSnapshot.cs`).
-- SQL artifacts live under `src/Incursa.Platform.SqlServer/Database/*.sql` and are executed in order in tests.
+The SQL Server provider owns T-SQL, stored procedures, SQL Server types, locking hints, application locks, table-valued parameters, identity and row-version behavior, and SQL Server schema deployment.
 
-### DBUp feasibility
-- DBUp supports SQL Server and Postgres via provider packages (`DbUp.SqlServer`, `DbUp.Postgresql`).
-- Embedding scripts as resources or loading from disk is supported; we can keep provider-specific script sets.
-- DBUp is “up” only and tracks applied scripts in a journal table; it does not do full drift detection.
-- DBUp can use a dedicated journal table per schema/module to avoid conflicts with other DBUp users.
+## PostgreSQL mapping
 
-### What changes are required
-- Replace `DatabaseSchemaManager` with DBUp-based migration runner per provider.
-- Move SQL artifacts into provider-specific migration folders:
-  - `src/Incursa.Platform.SqlServer/Migrations/*.sql`
-  - `src/Incursa.Platform.Postgres/Migrations/*.sql` (future)
-- Add script naming conventions for ordering (e.g., `001_Initial.sql`, `002_Add_Column.sql`).
-- Use provider-specific script batches (SQL Server uses `GO`; Postgres does not).
-- Update schema deployment flow (currently `DatabaseSchemaBackgroundService`) to run DBUp per database discovered.
-- Replace `schema-versions.json` snapshots with DBUp journal snapshots or keep snapshot mechanism as an additional drift check.
+A PostgreSQL provider must express equivalent public behavior with PostgreSQL-native primitives such as `ON CONFLICT`, `RETURNING`, `FOR UPDATE SKIP LOCKED`, advisory locks, arrays or temporary tables, and explicit version columns. Similar syntax is not sufficient; concurrency and failure behavior must satisfy the same public contract.
 
-### DBUp limitations / drift detection
-- DBUp only knows what scripts have run; it does not detect manual drift in schema objects.
-- Drift detection options:
-  - Keep `schema-versions.json` hashing to verify expected scripts vs. production.
-  - Add lightweight schema verification checks (e.g., required tables/columns) similar to current tests.
-  - Use an external schema compare tool in CI if deeper drift detection is needed.
+## Schema migration rules
 
-### SQL Server specifics to consider
-- `CREATE OR ALTER PROCEDURE` and statements with `GO` require SQL Server-specific batch splitting (DBUp supports this for SQL Server scripts).
-- Some statements are not allowed inside a transaction; DBUp supports `RunInTransaction(false)` per script if needed.
-- Current stored procedures can remain, but should be moved into ordered migration scripts.
+- Migration execution is provider-specific and must be explicit.
+- Application runtime identities must not receive implicit DDL permissions.
+- Applied-migration journals do not replace drift or integrity checks.
+- Ordered scripts, transaction boundaries, repeatability rules, and recovery steps must be documented by the provider.
+- Cross-provider numbering may align for operator clarity, but scripts and SQL remain provider-owned.
 
-### Postgres considerations (for parity later)
-- Need a parallel migration set with `CREATE FUNCTION`/`CREATE PROCEDURE` equivalents.
-- Replace SQL Server-only types and locking hints as noted earlier.
-- Ensure ordering is consistent so logical schema version numbers align across providers.
+## Portability review
 
-### Suggested migration plan
-1) Introduce DBUp in SQL Server provider: embed `*.sql` migrations and replace `DatabaseSchemaManager` usage.
-2) Keep schema snapshot tests, but drive hashes from DBUp migration list rather than `DatabaseSchemaManager`.
-3) Add a provider-agnostic migration runner interface in core to call the provider-specific DBUp runner.
-4) Later, add Postgres provider with a parallel migration set and comparable version numbering.
-
-### Recommendation note
-Given the platform’s concurrency primitives and heavy reliance on DB-specific behavior, a SQL-first migration approach (DBUp) is the least disruptive and most faithful. FluentMigrator or EF Core would still require raw SQL for the critical behaviors, which negates much of their advantage. DBUp also keeps the migration logic owned by the library without introducing an external toolchain.
+Before moving behavior into the provider-neutral layer, verify that it can be described without a vendor type, SQL construct, driver API, or provider-specific failure mode. Before adding a provider, map every claimed contract to native concurrency semantics and focused verification evidence. Unsupported capabilities must fail explicitly rather than silently approximating another provider.

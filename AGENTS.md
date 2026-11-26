@@ -58,7 +58,7 @@ The core libraries live under `src/`, with `Incursa.Platform` as the main packag
 - The default bump is `patch` for changed packable projects plus packable reverse dependents. If a package needs a stronger bump, supply overrides to `eng/Resolve-VersionPlan.ps1` / `eng/Apply-VersionPlan.ps1`.
 - Local pre-commit runs `pwsh -File eng/Invoke-PreCommitVersionPlan.ps1` to auto-apply and stage required version bumps, then re-validates with `pwsh -File eng/Test-PackageVersionChanges.ps1 -Staged`.
 - CI continues to use `pwsh -File eng/Test-PackageVersionChanges.ps1 ...` to flag packable changes that skipped a required version bump.
-- If `eng/package-versions.json` does not exist yet in the comparison base, the guard warns and skips. After the bootstrap commit lands, it enforces normally.
+- If `eng/package-versions.json` is absent from the comparison base, the guard warns and skips; otherwise it enforces the version plan.
 
 ## Coding Style & Naming Conventions
 Formatting is driven by `.editorconfig`: 4-space indentation for C#, CRLF line endings, and trimmed trailing whitespace. JSON and Markdown use 2-space indentation. StyleCop settings live in `stylecop.json`; analyzers include Roslynator, Meziantou, and BannedApiAnalyzers. Prefer PascalCase for public types/members and camelCase for locals/parameters/fields. Use explicit `StringComparison` values as required by analyzer rules.
@@ -72,10 +72,12 @@ Tests use xUnit v3 with Shouldly and NSubstitute. Integration tests use Docker S
 - Workbench ingestion in this repo reads the advisory lane from `artifacts/codex/test-results/advisory/` and `artifacts/codex/coverage/advisory/`.
 - Generated Workbench outputs under `artifacts/quality/testing/` are derived artifacts and must not be hand-edited.
 - The local agent skill for this flow is `.codex/skills/workbench-quality-evidence/SKILL.md`.
-- The Workbench quality report is advisory only; do not turn it into a merge gate in this pass.
+- The Workbench quality report is advisory; make any merge-gate change an explicit policy decision.
 
 ## Commit & Pull Request Guidelines
 Commit messages follow an imperative, sentence-case style (for example, "Add ...") and often include a PR reference in parentheses like `(#123)`. For PRs, include a concise description of changes, relevant testing notes (commands and filters used), and doc updates or screenshots when behavior or APIs change. Link related issues where applicable.
 
 ## Configuration & Tooling Notes
-The repo pins the .NET SDK in `global.json` (currently 10.0.103). If builds fail locally, verify the SDK version and run `dotnet tool restore` before building or testing.
+The repo pins the .NET SDK in `global.json`. If builds fail locally, verify that pinned SDK and run `dotnet tool restore` before building or testing.
+
+Keep public durable documentation free of private-repository details and branch, commit, deployment, point-in-time validation, test-count, package-count, exact-latest-version, or unfinished-work status. Put release history in changelogs and active delivery tracking in issues or pull requests.

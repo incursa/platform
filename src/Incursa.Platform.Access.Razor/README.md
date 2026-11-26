@@ -147,7 +147,7 @@ The host should not need to carry the shared auth pages, layout, or provider-spe
 
 ## RequestRelay Status
 
-`requestrelay` now consumes this package through a local project reference and no longer carries its own auth pages or vendored WorkOS browser auth client copy. The remaining `/signup` page in requestrelay is app-specific local organization selection, not shared provider auth UI.
+Consuming applications should keep product-specific onboarding and local organization selection outside this package. Shared provider authentication UI belongs here; application workflow and product data remain host-owned.
 
 ## Build And Pack
 

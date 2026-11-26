@@ -20,7 +20,7 @@
 ## Placement rules
 
 - if the code can be explained without naming a provider, it probably belongs here
-- if the code exists to translate to or from a specific provider or backing store, move it to `integrations-public` or `integrations-private`
+- if the code exists to translate to or from a specific provider or backing store, move it to the appropriate public or non-public integration repository
 - if classification is unclear, keep the shared abstraction here and document the unresolved boundary in the split notes
 
 ## Release guardrails

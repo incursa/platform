@@ -1,10 +1,10 @@
 # Outbox Specification Update Summary
 
+> Historical change record: this file explains a completed specification restructuring. It is not a current implementation, validation, or work-status page.
+
 **Date**: 2025-12-07
 **Files Modified**:
 - `specs/outbox-specification.md`
-- `specs/prompt-extract-join-spec.md` (new)
-- `specs/prompt-normalize-parameters.md` (new)
 
 ## Changes Applied
 
@@ -130,26 +130,6 @@ All public interfaces now have comprehensive, explicit parameter documentation.
 **Appendix C: Multi-Tenant Usage Example**:
 - Updated `EnqueueAsync` call to use canonical signature with named parameters
 - Shows: `topic:`, `payload:`, `transaction:`, `correlationId:`, `dueTimeUtc:`, `cancellationToken:`
-
-## Prompt Files Created
-
-Two comprehensive prompt files were created for future use or validation:
-
-### `prompt-extract-join-spec.md`
-Complete instructions for:
-- Extracting all join-related content from Outbox spec
-- Creating new `join-coordination-specification.md`
-- Migrating all join concepts, APIs, requirements, schema, and examples
-- Renaming requirement IDs from OBX-xxx to JOIN-xxx
-- Establishing proper dependencies and cross-references
-
-### `prompt-normalize-parameters.md`
-Complete instructions for:
-- Normalizing to canonical method signatures
-- Adding comprehensive parameter semantics to all interfaces
-- Creating testable behavioral requirements
-- Updating examples to match canonical signatures
-- Validation checklist for completeness
 
 ## Result
 

@@ -2,12 +2,7 @@
 workbench:
   type: runbook
   workItems: []
-  codeRefs:
-    - "C:/src/incursa/integrations-workos/src/Incursa.Integrations.WorkOS.AspNetCore/WorkOsIntegrationServiceCollectionExtensions.cs"
-    - "C:/src/incursa/integrations-workos/src/Incursa.Integrations.WorkOS.AspNetCore/DependencyInjection/WorkOsWidgetsServiceCollectionExtensions.cs"
-    - "C:/src/incursa/integrations-workos/src/Incursa.Integrations.WorkOS.AspNetCore/Widgets/TagHelpers"
-    - "C:/src/incursa/integrations-workos/src/Incursa.Integrations.WorkOS.Abstractions/Configuration/WorkOsWidgetsOptions.cs"
-    - "C:/src/incursa/integrations-workos/src/Incursa.Integrations.WorkOS.Abstractions/Widgets"
+  codeRefs: []
   pathHistory:
     - "C:/docs/50-runbooks/workos-widgets-integration-handoff.md"
   path: /docs/50-runbooks/workos-widgets-integration-handoff.md

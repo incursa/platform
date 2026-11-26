@@ -1,10 +1,8 @@
 # Testing Operating Model
 
-Date: 2026-03-09
-
 ## Purpose
 
-This document defines the first four-lane testing model for the Incursa Platform repository.
+This document defines the four-lane testing model for the repository.
 
 The goal is to keep required CI checks straightforward while also producing advisory Workbench quality evidence and preserving a place for future known-issue coverage without turning the report into a merge gate.
 
@@ -12,7 +10,7 @@ The goal is to keep required CI checks straightforward while also producing advi
 
 - Authored testing intent is canonical at `docs/30-contracts/test-gate.contract.yaml`.
 - Generated artifacts under `artifacts/quality/testing/` are derived outputs. Do not hand-edit them.
-- The Workbench quality report is advisory only in this pass.
+- The Workbench quality report is advisory and is not a merge gate.
 
 ## Lane model
 
@@ -25,13 +23,13 @@ Purpose:
 Entrypoint:
 - `pwsh -File scripts/quality/run-smoke-tests.ps1`
 
-Current curated project set:
+Curated project set:
 - `tests/Incursa.Platform.Tests`
 - `tests/Incursa.Platform.Storage.Tests`
 - `tests/Incursa.Platform.HealthProbe.Tests`
 - `tests/Incursa.Platform.Webhooks.Tests`
 
-Current explicit smoke coverage:
+Explicit smoke coverage:
 - `Incursa.Platform.Tests.ExactlyOnceExecutorTests`
 - `Incursa.Platform.Tests.StandardizedHealthEndpointTests`
 - `Incursa.Platform.Storage.Tests.StorageKeyPrimitiveTests`
@@ -79,9 +77,7 @@ Artifacts:
 Policy:
 - non-blocking in CI
 
-Current state:
-- no tests are currently tagged into the `KnownIssue` lane
-- that empty lane is intentional for this pass; the taxonomy and artifact path are now in place
+An empty `KnownIssue` lane is valid and still produces the documented artifact shape.
 
 ### Advisory lane
 
@@ -141,7 +137,7 @@ New lane guidance:
 - do not use `KnownIssue` for flaky tests, broken harnesses, or secret-dependent/manual-only checks
 - smoke remains intentionally curated by project list, but membership inside that lane is now explicit test metadata rather than an implicit side effect of project scope
 
-Known issues currently tracked for automation are listed in `docs/testing-known-issues.md`.
+Runnable known-issue definitions are listed in `docs/testing-known-issues.md`.
 
 ## Happy paths
 
@@ -179,12 +175,6 @@ dotnet tool run workbench quality show
 - observational and advisory are non-blocking
 - publish depends on blocking, not on observational or advisory
 
-## Intentional first-pass limits
+## Scope boundaries
 
-This pass intentionally does not:
-
-- retag the broader suite beyond the current curated smoke set
-- add mutation or fuzzing lanes
-- require Docker-backed evidence in the default path
-- fail merges because of the Workbench report
-- hand-normalize every historical or partially detached test asset
+The default lane model does not require Docker-backed evidence, mutation testing, or fuzzing, and it does not use the Workbench report as a merge gate. Add those controls only through an explicit testing-policy change with maintained entrypoints and artifact contracts.
