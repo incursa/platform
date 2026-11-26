@@ -2,7 +2,7 @@
 
 `platform` is the provider-neutral base repository in the Incursa split. Keep this repo focused on shared abstractions, capability surfaces, hosting adapters, orchestration, and tooling that can be consumed by both public and private integration repositories.
 
-Public provider implementations now live in [C:\src\incursa\integrations-public](C:/src/incursa/integrations-public).
+Public provider implementations live in [`incursa/integrations-public`](https://github.com/incursa/integrations-public).
 
 ## Repository map
 
@@ -23,7 +23,7 @@ Public provider implementations now live in [C:\src\incursa\integrations-public]
 ## Dependency boundary
 
 - `platform` must not depend on `integrations-public`
-- `integrations-public` and future `integrations-private` repos may depend on `platform`
+- public and non-public integration repositories may depend on `platform`
 - provider-specific implementations should be kept out of this repo unless they are being deliberately staged for later extraction
 
 ## Schema activation boundary

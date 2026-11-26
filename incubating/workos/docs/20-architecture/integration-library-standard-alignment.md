@@ -1,6 +1,6 @@
 # Integration Library Standard Alignment
 
-This repository aligns to `C:\src\incursa\llm\integration-library-standards.md` with the following mapping.
+This incubating integration design follows the platform's [integration ownership and layering rules](../../../../docs/architecture/imported-integrations.md).
 
 ## Package and Layer Mapping
 

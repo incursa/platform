@@ -67,7 +67,7 @@ Staging area for code that is not yet ready for the public package surface. It i
 ## Dependency boundary
 
 - `platform` must not depend on `integrations-public`
-- `integrations-public` and future `integrations-private` repos may depend on `platform`
+- public and non-public integration repositories may depend on `platform`
 - concrete provider implementations should be extracted out instead of being re-added here
 
 ## Packaging policy

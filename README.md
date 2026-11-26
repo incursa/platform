@@ -2,12 +2,12 @@
 
 `platform` contains the provider-neutral foundation for the Incursa package family: abstractions, shared models, orchestration, hosting adapters, and tooling that public or private integration repositories can build on.
 
-Public provider implementations have been split out to [integrations-public](C:/src/incursa/integrations-public). Future proprietary adapters are intended to live in [integrations-private](C:/src/incursa/integrations-private).
+Public provider implementations live in [`incursa/integrations-public`](https://github.com/incursa/integrations-public). Proprietary adapters belong in non-public integration repositories.
 
 Dependency direction:
 
 - `platform` must not depend on `integrations-public`
-- `integrations-public` and `integrations-private` can depend on `platform`
+- public and non-public integration repositories can depend on `platform`
 
 ## Start Here
 
@@ -25,9 +25,9 @@ Dependency direction:
 - [`docs/`](docs/) contains architecture notes, scope rules, and migration records.
 - [`eng/`](eng/) contains package catalog, versioning, and release helpers.
 - [`tools/`](tools/) contains shared analyzers and helper CLIs that remain provider-neutral.
-- [`incubating/`](incubating/) is still reserved for staged code that is not yet part of the public package surface.
+- [`incubating/`](incubating/) is a staging area excluded from the public package surface.
 
-## Current Package Families
+## Package families
 
 Core and capabilities:
 

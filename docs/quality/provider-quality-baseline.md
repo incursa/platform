@@ -9,4 +9,4 @@ This `platform` repository no longer carries:
 - `Incursa.Platform.InMemory`
 - provider-focused workflows and quality ratchets tied to those packages
 
-Use [C:\src\incursa\integrations-public](C:/src/incursa/integrations-public) for current provider quality baselines and follow-up ratcheting work.
+Use [`incursa/integrations-public`](https://github.com/incursa/integrations-public) for provider quality contracts and ratcheting guidance.

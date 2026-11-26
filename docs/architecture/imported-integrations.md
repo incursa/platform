@@ -1,70 +1,18 @@
-# Imported Integration Provenance
+# Integration ownership
 
-This document preserves the provenance of the integration repositories that were previously folded into `platform` and are now split back out to `integrations-public`.
+Public provider implementations are owned by [incursa/integrations-public](https://github.com/incursa/integrations-public). Local clone paths, source-worktree state, commits, and non-public implementation details are not part of the platform contract.
 
-## `C:\src\incursa\integrations-postmark`
+## Platform ownership
 
-Provider-neutral packages retained in `platform`:
+`platform` owns provider-neutral contracts and orchestration for access, custom domains, DNS, email, storage, observability, webhooks, hosting, and related shared capabilities.
 
-- `src/Incursa.Platform.Email/`
-- `src/Incursa.Platform.Email.AspNetCore/`
+## Integration ownership
 
-Public provider implementations moved to `integrations-public`:
+Public integration repositories own vendor protocol calls, provider-specific configuration, concrete storage behavior, provider schema artifacts, and focused provider tests. Proprietary implementations and customer workflow remain outside public repositories.
 
-- `src/Incursa.Platform.Email.Postmark/`
-- `src/Incursa.Platform.Email.SqlServer/`
-- `src/Incursa.Platform.Email.Postgres/`
-- `tests/Incursa.Platform.Email.Tests/`
+## Boundary rules
 
-## `C:\src\incursa\integrations-workos`
-
-Provider-neutral packages retained in `platform`:
-
-- `src/Incursa.Platform.Access/`
-- `src/Incursa.Platform.Access.AspNetCore/`
-- `src/Incursa.Platform.Access.Razor/`
-
-Public provider implementations moved to `integrations-public`:
-
-- `src/Incursa.Integrations.WorkOS/`
-- `src/Incursa.Integrations.WorkOS.Abstractions/`
-- `src/Incursa.Integrations.WorkOS.Access/`
-- `src/Incursa.Integrations.WorkOS.AspNetCore/`
-- `src/Incursa.Integrations.WorkOS.Audit/`
-- `src/Incursa.Integrations.WorkOS.Webhooks/`
-- `tests/Incursa.Integrations.WorkOS.Tests/`
-- `tests/Incursa.Integrations.WorkOS.Webhooks.Tests/`
-
-## `C:\src\incursa\integrations-cloudflare`
-
-Provider-neutral packages retained in `platform`:
-
-- `src/Incursa.Platform.CustomDomains/`
-- `src/Incursa.Platform.Dns/`
-
-Public provider implementations moved to `integrations-public`:
-
-- `src/Incursa.Integrations.Cloudflare/`
-- `src/Incursa.Integrations.Cloudflare.CustomDomains/`
-- `src/Incursa.Integrations.Cloudflare.Dns/`
-- `src/Incursa.Integrations.Cloudflare.KvProbe/`
-- `tests/Incursa.Integrations.Cloudflare.Tests/`
-- `tests/Incursa.Integrations.Cloudflare.IntegrationTests/`
-- `tests/Incursa.Platform.CustomDomains.Tests/`
-- `tests/Incursa.Platform.Dns.Tests/`
-
-## `C:\src\incursa\integrations-electronicnotary`
-
-Public provider implementations moved to `integrations-public`:
-
-- `src/Incursa.Integrations.ElectronicNotary/`
-- `src/Incursa.Integrations.ElectronicNotary.Abstractions/`
-- `src/Incursa.Integrations.ElectronicNotary.Proof/`
-- `src/Incursa.Integrations.ElectronicNotary.Proof.AspNetCore/`
-- `tests/Incursa.Integrations.ElectronicNotary.Tests/`
-
-## Summary
-
-- provider-neutral capability families remain in `platform`
-- public provider implementations now live in `integrations-public`
-- the extracted repos still use stable package identities, even when some moved packages keep `Incursa.Platform.*` names
+- `platform` must not depend on provider implementation repositories.
+- Provider repositories may depend on the public platform contracts they implement.
+- Source movement does not authorize a package rename, version reset, publication, or compatibility claim.
+- CI uses declared dependencies; local overrides must be explicit and must not assume a machine-specific sibling path.

@@ -1,76 +1,19 @@
-# Repository Split Summary
+# Repository boundary summary
 
-## What remained in `platform`
+## Platform ownership
 
-Source projects:
+`platform` owns provider-neutral abstractions, models, orchestration, hosting adapters, shared test utilities, analyzers, and helper CLIs.
 
-- `src/Incursa.Platform/`
-- `src/Incursa.Platform.Access/`
-- `src/Incursa.Platform.Access.AspNetCore/`
-- `src/Incursa.Platform.Access.Razor/`
-- `src/Incursa.Platform.Audit/`
-- `src/Incursa.Platform.Correlation/`
-- `src/Incursa.Platform.CustomDomains/`
-- `src/Incursa.Platform.Dns/`
-- `src/Incursa.Platform.Email/`
-- `src/Incursa.Platform.Email.AspNetCore/`
-- `src/Incursa.Platform.ExactlyOnce/`
-- `src/Incursa.Platform.Health/`
-- `src/Incursa.Platform.Health.AspNetCore/`
-- `src/Incursa.Platform.HealthProbe/`
-- `src/Incursa.Platform.Idempotency/`
-- `src/Incursa.Platform.Metrics.AspNetCore/`
-- `src/Incursa.Platform.Metrics.HttpServer/`
-- `src/Incursa.Platform.Modularity/`
-- `src/Incursa.Platform.Modularity.AspNetCore/`
-- `src/Incursa.Platform.Modularity.Razor/`
-- `src/Incursa.Platform.Observability/`
-- `src/Incursa.Platform.Operations/`
-- `src/Incursa.Platform.Storage/`
-- `src/Incursa.Platform.Webhooks/`
-- `src/Incursa.Platform.Webhooks.AspNetCore/`
+The source tree and [eng/package-catalog.json](../eng/package-catalog.json) are authoritative for the exact packable project inventory. Documentation should describe package families and boundaries rather than copying a point-in-time project count.
 
-Tests and tooling:
+## Provider ownership
 
-- `tests/Incursa.Platform.Access.AspNetCore.Tests/`
-- `tests/Incursa.Platform.Audit.Tests/`
-- `tests/Incursa.Platform.Correlation.Tests/`
-- `tests/Incursa.Platform.HealthProbe.Tests/`
-- `tests/Incursa.Platform.Observability.Tests/`
-- `tests/Incursa.Platform.Operations.Tests/`
-- `tests/Incursa.Platform.Storage.Tests/`
-- `tests/Incursa.Platform.Tests/`
-- `tests/Incursa.Platform.TestUtilities/`
-- `tests/Incursa.Platform.Webhooks.AspNetCore.Tests/`
-- `tests/Incursa.Platform.Webhooks.Tests/`
-- `tools/observability/src/Incursa.Platform.Observability.Analyzers/`
-- `tools/testdocs/src/Incursa.TestDocs.Analyzers/`
-- `tools/testdocs/src/Incursa.TestDocs.Cli/`
+Public provider implementations, their database dialects, vendor protocols, provider schemas, and focused provider tests live in [incursa/integrations-public](https://github.com/incursa/integrations-public). Proprietary providers belong in non-public integration repositories whose details are outside the public contract.
 
-## What moved to `integrations-public`
+## Dependency direction
 
-- `Incursa.Integrations.Cloudflare*`
-- `Incursa.Integrations.ElectronicNotary*`
-- `Incursa.Integrations.Storage.Azure`
-- `Incursa.Integrations.Stripe`
-- `Incursa.Integrations.WorkOS*`
-- `Incursa.Platform.Email.Postmark`
-- `Incursa.Platform.Email.Postgres`
-- `Incursa.Platform.Email.SqlServer`
-- `Incursa.Platform.InMemory`
-- `Incursa.Platform.Postgres`
-- `Incursa.Platform.SqlServer`
-- the tests and smoke hosts that primarily validate those implementations
-- `tools/migrations/src/Incursa.Platform.SchemaMigrations.Cli/`
+Integration repositories may depend on `platform`; `platform` must not depend on them. CI and releases consume declared package dependencies. Contributors may use explicit local overrides for coordinated work, but durable docs and project files must not assume a machine-specific sibling checkout.
 
-## Current dependency rule
+## Incubating code
 
-- `platform` is the stable base
-- `integrations-public` can depend on `platform`
-- `platform` must not depend on `integrations-public`
-
-## Unresolved follow-up work
-
-- replace sibling project references with package-based local development once publishing workflows are in place
-- continue evaluating whether any remaining mixed documentation should be split further as the repos stabilize
-- populate `integrations-private` when proprietary providers are isolated enough to move safely
+`incubating/` is a non-publishable staging area. Code moves into the public package surface only after its provider-neutral or public-provider boundary, support policy, tests, and package identity are explicit.
